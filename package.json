@@ -2,17 +2,24 @@
   "name": "smart-volley",
   "type": "module",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@nuxt/eslint": "^1.14.0",
     "nuxt": "^4.3.0",
     "vue": "^3.5.27",
     "vue-router": "^4.6.4"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.3.0",
+    "eslint-plugin-format": "^1.4.0"
+  }
 }
