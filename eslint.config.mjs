@@ -27,7 +27,6 @@ export default withNuxt(
                 'no-console': ['warn'],
                 'perfectionist/sort-imports': ['error', { tsconfig: { rootDir: '.' } }],
                 'ts/consistent-type-definitions': ['error', 'type'],
-                'unicorn/filename-case': ['error', { case: 'kebabCase', ignore: ['README.md'] }],
             },
         },
     ),
