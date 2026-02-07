@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/db/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Athlete {
+  id                          Int       @id @default(autoincrement())
+  full_name                   String
+  date_of_birth               DateTime  @db.Date
+  place_of_birth              String
+  residence_city              String
+  address                     String
+  tax_code                    String    @db.Char(16)
+  parent_full_name            String?
+  parent_tax_code             String?   @db.Char(16)
+  phone_number                String
+  email                       String    @unique
+  course_name                 String
+  volley_account              String?
+  volley_balance              Decimal?  @db.Decimal(10, 2)
+  volley_balance_secondary    Decimal?  @db.Decimal(10, 2)
+  first_installment           Decimal?  @db.Decimal(10, 2)
+  second_installment          Decimal?  @db.Decimal(10, 2)
+  third_installment           Decimal?  @db.Decimal(10, 2)
+  certificate_expiration_date DateTime? @db.Date
+  certificate_download_url    String?
+}

@@ -46,5 +46,11 @@
         "scss",
         "pcss",
         "postcss"
-    ]
+    ],
+
+    // Use the Prisma extension as the default formatter for Prisma files
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma",
+        "editor.formatOnSave": true
+    }
 }
