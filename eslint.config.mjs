@@ -26,7 +26,9 @@ export default withNuxt(
             rules: {
                 'no-console': ['warn'],
                 'perfectionist/sort-imports': ['error', { tsconfig: { rootDir: '.' } }],
+                'style/brace-style': ['error', '1tbs'],
                 'ts/consistent-type-definitions': ['error', 'type'],
+                'ts/no-redeclare': ['off'],
             },
         },
     ),
