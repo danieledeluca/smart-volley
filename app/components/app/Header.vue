@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const user = useSupabaseUser();
+</script>
+
 <template>
     <header>
         <nav class="container">
@@ -12,6 +16,14 @@
                 <li>
                     <NuxtLink to="/">
                         Anagrafica
+                    </NuxtLink>
+                </li>
+                <li>
+                    <NuxtLink v-if="user" to="/account">
+                        Account
+                    </NuxtLink>
+                    <NuxtLink v-else to="/account/login">
+                        Login
                     </NuxtLink>
                 </li>
             </ul>

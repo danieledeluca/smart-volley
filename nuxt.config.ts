@@ -4,7 +4,7 @@ import './lib/env';
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
-    modules: ['@nuxt/eslint'],
+    modules: ['@nuxt/eslint', '@nuxtjs/supabase'],
     eslint: {
         config: {
             standalone: false,
@@ -25,4 +25,11 @@ export default defineNuxtConfig({
         },
     },
     css: ['~/assets/main.css'],
+    supabase: {
+        redirectOptions: {
+            login: '/account/login',
+            callback: '',
+        },
+        types: false,
+    },
 });

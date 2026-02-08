@@ -29,6 +29,8 @@ export default withNuxt(
                 'style/brace-style': ['error', '1tbs'],
                 'ts/consistent-type-definitions': ['error', 'type'],
                 'ts/no-redeclare': ['off'],
+                'vue/no-multiple-template-root': ['off'],
+                'vue/max-attributes-per-line': ['error', { singleline: 3 }],
             },
         },
     ),
