@@ -52,5 +52,8 @@
     "[prisma]": {
         "editor.defaultFormatter": "Prisma.prisma",
         "editor.formatOnSave": true
-    }
+    },
+
+    // Set the default casing for Vue props
+    "vue.suggest.propNameCasing": "alwaysCamelCase"
 }
