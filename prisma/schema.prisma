@@ -7,30 +7,56 @@ datasource db {
   provider = "postgresql"
 }
 
-enum CourseName {
-  M
-  TB
+model Activity {
+  id       Int       @id @default(autoincrement())
+  name     String
+  athletes Athlete[]
+}
+
+model Season {
+  id          Int       @id @default(autoincrement())
+  starterYear Int       @db.SmallInt
+  endYear     Int       @db.SmallInt
+  athletes    Athlete[]
+}
+
+model Course {
+  id       Int       @id @default(autoincrement())
+  name     String
+  athletes Athlete[]
+}
+
+model Parent {
+  id       Int       @id @default(autoincrement())
+  name     String
+  taxCode  String    @db.Char(16)
+  athletes Athlete[]
 }
 
 model Athlete {
-  id                          Int        @id @default(autoincrement())
-  full_name                   String
-  date_of_birth               DateTime   @db.Date
-  place_of_birth              String
-  residence_city              String
-  address                     String
-  tax_code                    String     @db.Char(16)
-  parent_full_name            String?
-  parent_tax_code             String?    @db.Char(16)
-  phone_number                String
-  email                       String     @unique
-  course_name                 CourseName
-  volley_account              Decimal?   @db.Decimal(10, 2)
-  volley_balance              Decimal?   @db.Decimal(10, 2)
-  volley_balance_secondary    Decimal?   @db.Decimal(10, 2)
-  first_installment           Decimal?   @db.Decimal(10, 2)
-  second_installment          Decimal?   @db.Decimal(10, 2)
-  third_installment           Decimal?   @db.Decimal(10, 2)
-  certificate_expiration_date DateTime?  @db.Date
-  certificate_download_url    String?
+  id                        Int       @id @default(autoincrement())
+  name                      String
+  birthday                  DateTime  @db.Date
+  birthplace                String
+  taxCode                   String    @db.Char(16)
+  city                      String
+  address                   String
+  phoneNumber               String
+  email                     String    @unique
+  parent                    Parent?   @relation(fields: [parentId], references: [id])
+  parentId                  Int?
+  season                    Season    @relation(fields: [seasonId], references: [id])
+  seasonId                  Int
+  activity                  Activity  @relation(fields: [activityId], references: [id])
+  activityId                Int
+  course                    Course    @relation(fields: [courseId], references: [id])
+  courseId                  Int
+  volleyAccount             Decimal?  @db.Decimal(10, 2)
+  volleyBalance             Decimal?  @db.Decimal(10, 2)
+  volleyBalanceSecondary    Decimal?  @db.Decimal(10, 2)
+  firstInstallment          Decimal?  @db.Decimal(10, 2)
+  secondInstallment         Decimal?  @db.Decimal(10, 2)
+  thirdInstallment          Decimal?  @db.Decimal(10, 2)
+  certificateExpirationDate DateTime? @db.Date
+  certificateDownloadUrl    String?
 }
