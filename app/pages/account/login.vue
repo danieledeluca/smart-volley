@@ -1,19 +1,22 @@
 <script setup lang="ts">
+import type { FormSubmitEvent } from '@nuxt/ui';
+
 definePageMeta({
     middleware: 'auth',
 });
 
 const client = useSupabaseClient();
-const { state, errors, messages, isLoading, onSubmit } = useAuthForm(loginSchema, login);
+const { state, onSubmit } = useAuthForm(loginSchema, login);
 
-async function login(data: LoginSchema) {
+async function login(event: FormSubmitEvent<LoginSchema>) {
     const { data: response, error } = await client.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
+        email: event.data.email,
+        password: event.data.password,
     });
 
     if (response.user) {
-        return navigateTo('/');
+        navigateTo('/', { external: true });
+        return;
     }
 
     if (error) {
@@ -23,45 +26,48 @@ async function login(data: LoginSchema) {
 </script>
 
 <template>
-    <article>
-        <h1>Login</h1>
-        <form novalidate @submit.prevent="onSubmit">
-            <fieldset>
-                <FormField
-                    id="email"
-                    v-model="state.email"
-                    v-model:error="errors.email"
-                    label="Email"
-                    type="email"
-                />
-                <FormField
-                    id="password"
-                    v-model="state.password"
-                    v-model:error="errors.password"
-                    label="Password"
-                    type="password"
-                />
-            </fieldset>
-            <FormButton :isLoading="isLoading">
+    <UCard variant="subtle" class="max-w-xl mx-auto">
+        <template #header>
+            <h1 class="text-2xl">
                 Login
-            </FormButton>
-        </form>
-        <div>
+            </h1>
+        </template>
+
+        <UForm
+            :schema="loginSchema"
+            :state="state"
+            class="space-y-4"
+            novalidate
+            @submit="onSubmit"
+        >
+            <UFormField label="Email" name="email">
+                <UInput
+                    v-model="state.email"
+                    class="w-full"
+                    type="email"
+                    placeholder="Email"
+                />
+            </UFormField>
+
+            <UFormField label="Password" name="password">
+                <UInput
+                    v-model="state.password"
+                    type="password"
+                    class="w-full"
+                    placeholder="Password"
+                />
+            </UFormField>
+
+            <UButton type="submit" :loadingAuto="true">
+                Login
+            </UButton>
+        </UForm>
+
+        <template #footer>
             Don't have an account?
             <NuxtLink to="/account/register">
                 <strong>Register</strong>
             </NuxtLink>
-        </div>
-        <div v-if="messages.length" class="messages">
-            <AppMessage v-for="(message, index) in messages" :key="index" :type="message.type">
-                {{ message.text }}
-            </AppMessage>
-        </div>
-    </article>
+        </template>
+    </UCard>
 </template>
-
-<style scoped>
-.messages {
-    margin-top: var(--pico-block-spacing-vertical);
-}
-</style>

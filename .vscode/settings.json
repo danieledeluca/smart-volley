@@ -55,5 +55,17 @@
     },
 
     // Set the default casing for Vue props
-    "vue.suggest.propNameCasing": "alwaysCamelCase"
+    "vue.suggest.propNameCasing": "alwaysCamelCase",
+
+    // Configure Tailwind CSS
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "tailwindCSS.classAttributes": ["class", "ui"],
+    "tailwindCSS.experimental.classRegex": [
+        ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ]
 }

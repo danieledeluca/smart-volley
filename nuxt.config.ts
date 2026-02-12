@@ -4,24 +4,10 @@ import './lib/env';
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
-    modules: ['@nuxt/eslint', '@nuxtjs/supabase'],
+    modules: ['@nuxt/eslint', '@nuxtjs/supabase', '@nuxt/ui'],
     eslint: {
         config: {
             standalone: false,
-        },
-    },
-    app: {
-        head: {
-            link: [
-                {
-                    rel: 'stylesheet',
-                    href: 'https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css',
-                },
-                {
-                    rel: 'stylesheet',
-                    href: 'https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css',
-                },
-            ],
         },
     },
     css: ['~/assets/main.css'],
