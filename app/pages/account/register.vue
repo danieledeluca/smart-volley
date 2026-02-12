@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '@nuxt/ui';
+import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui';
 
 definePageMeta({
     middleware: 'auth',
@@ -7,84 +7,84 @@ definePageMeta({
 
 const client = useSupabaseClient();
 const toast = useToast();
-const { state, onSubmit } = useAuthForm(registerSchema, register);
 
-async function register(event: FormSubmitEvent<RegisterSchema>) {
-    const { data: response, error } = await client.auth.signUp({
-        email: event.data.email,
-        password: event.data.password,
-    });
+async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
+    try {
+        const { data: response, error } = await client.auth.signUp({
+            email: event.data.email,
+            password: event.data.password,
+        });
 
-    if (response.user) {
-        if (response.user.identities?.length) {
-            toast.add({
-                title: 'Check your email to confirm your account',
-                color: 'success',
-                icon: 'i-lucide-circle-check',
-            });
-        } else {
-            throw new Error('Email already used');
+        if (response.user) {
+            if (response.user.identities?.length) {
+                toast.add({
+                    title: 'Check your email to confirm your account',
+                    color: 'success',
+                    icon: 'i-lucide-circle-check',
+                });
+            } else {
+                throw new Error('Email already used');
+            }
         }
-    }
 
-    if (error) {
-        throw error;
+        if (error) {
+            throw error;
+        }
+    } catch (err) {
+        const error = err as Error;
+
+        toast.add({
+            title: error.message,
+            color: 'error',
+            icon: 'i-lucide-circle-x',
+        });
     }
 }
+
+const fields: AuthFormField[] = [
+    {
+        name: 'email',
+        type: 'email',
+        label: 'Email',
+        placeholder: 'Enter your email',
+        required: true,
+    },
+    {
+        name: 'password',
+        label: 'Password',
+        type: 'password',
+        placeholder: 'Enter your password',
+        required: true,
+    },
+    {
+        name: 'confirmPassword',
+        label: 'Confirm password',
+        type: 'password',
+        placeholder: 'Enter your confirm password',
+        required: true,
+    },
+];
 </script>
 
 <template>
-    <UCard variant="subtle" class="max-w-xl mx-auto">
-        <template #header>
-            <h1 class="text-2xl">
-                Register
-            </h1>
-        </template>
-
-        <UForm
+    <UPageCard class="max-w-md w-full mx-auto" variant="subtle">
+        <UAuthForm
             :schema="registerSchema"
-            :state="state"
-            class="space-y-4"
-            novalidate
+            title="Register"
+            icon="i-lucide-user-plus"
+            description="Create a new account."
+            :fields="fields"
+            :loadingAuto="true"
+            :submit="{
+                label: 'Create account',
+            }"
             @submit="onSubmit"
-        >
-            <UFormField label="Email" name="email">
-                <UInput
-                    v-model="state.email"
-                    class="w-full"
-                    type="email"
-                    placeholder="Email"
-                />
-            </UFormField>
-
-            <UFormField label="Password" name="password">
-                <UInput
-                    v-model="state.password"
-                    type="password"
-                    class="w-full"
-                    placeholder="Password"
-                />
-            </UFormField>
-
-            <UFormField label="Confirm password" name="confirmPassword">
-                <UInput
-                    v-model="state.confirmPassword"
-                    type="password"
-                    class="w-full"
-                    placeholder="Confirm password"
-                />
-            </UFormField>
-
-            <UButton type="submit" :loadingAuto="true">
-                Register
-            </UButton>
-        </UForm>
-
-        <template #footer>
+        />
+        <div class="text-sm text-muted">
             Already have an account?
             <NuxtLink to="/account/login">
                 <strong>Login</strong>
             </NuxtLink>
-        </template>
-    </UCard>
+        </div>
+    </UPageCard>
 </template>
