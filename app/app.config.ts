@@ -1,7 +1,7 @@
 export default defineAppConfig({
     ui: {
         main: {
-            base: 'min-h-[calc(100vh-var(--ui-header-height)-53px)]',
+            base: 'min-h-[calc(100vh-var(--ui-header-height)-var(--ui-footer-height))]',
         },
         footer: {
             slots: {
