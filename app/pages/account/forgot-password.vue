@@ -9,29 +9,22 @@ const client = useSupabaseClient();
 
 const messages = ref<Message[]>([]);
 
-async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
+async function onSubmit(event: FormSubmitEvent<ForgotPasswordSchema>) {
     messages.value = [];
 
     try {
-        const { data: response, error } = await client.auth.signUp({
-            email: event.data.email,
-            password: event.data.password,
+        const { error } = await client.auth.resetPasswordForEmail(event.data.email, {
+            redirectTo: `${window.location.origin}/account/reset-password`,
         });
-
-        if (response.user) {
-            if (response.user.identities?.length) {
-                messages.value.push({
-                    description: 'Check your email to confirm your account',
-                    color: 'success',
-                    icon: 'i-lucide-circle-check',
-                });
-            } else {
-                throw new Error('Email already used');
-            }
-        }
 
         if (error) {
             throw error;
+        } else {
+            messages.value.push({
+                description: 'Check your email to reset your password',
+                color: 'success',
+                icon: 'i-lucide-circle-check',
+            });
         }
     } catch (err) {
         const error = err as Error;
@@ -52,45 +45,24 @@ const fields: AuthFormField[] = [
         placeholder: 'Enter your email',
         required: true,
     },
-    {
-        name: 'password',
-        label: 'Password',
-        type: 'password',
-        placeholder: 'Enter your password',
-        required: true,
-    },
-    {
-        name: 'confirmPassword',
-        label: 'Confirm password',
-        type: 'password',
-        placeholder: 'Enter your confirm password',
-        required: true,
-    },
 ];
 </script>
 
 <template>
     <UPageCard class="max-w-md w-full mx-auto" variant="subtle">
         <UAuthForm
-            :schema="registerSchema"
-            title="Register"
-            icon="i-lucide-user-plus"
-            description="Create a new account."
+            :schema="forgotPasswordSchema"
+            title="Forgot password"
+            icon="i-lucide-lock-open"
             :fields="fields"
             :loadingAuto="true"
             :submit="{
-                label: 'Create account',
+                label: 'Reset password',
             }"
             @submit="onSubmit"
         >
             <template #description>
-                Already have an account?
-                <ULink to="/account/login" class="text-primary font-medium">
-                    Login
-                </ULink>
-            </template>
-            <template #password-help>
-                Must be at least 8 characters
+                Enter your email to recover your password
             </template>
             <template v-if="messages.length > 0" #validation>
                 <UAlert

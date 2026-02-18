@@ -9,25 +9,17 @@ const client = useSupabaseClient();
 
 const messages = ref<Message[]>([]);
 
-async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
+async function onSubmit(event: FormSubmitEvent<ResetPasswordSchema>) {
     messages.value = [];
 
     try {
-        const { data: response, error } = await client.auth.signUp({
-            email: event.data.email,
+        const { data: response, error } = await client.auth.updateUser({
             password: event.data.password,
         });
 
         if (response.user) {
-            if (response.user.identities?.length) {
-                messages.value.push({
-                    description: 'Check your email to confirm your account',
-                    color: 'success',
-                    icon: 'i-lucide-circle-check',
-                });
-            } else {
-                throw new Error('Email already used');
-            }
+            navigateTo('/', { external: true });
+            return;
         }
 
         if (error) {
@@ -45,13 +37,6 @@ async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
 }
 
 const fields: AuthFormField[] = [
-    {
-        name: 'email',
-        type: 'email',
-        label: 'Email',
-        placeholder: 'Enter your email',
-        required: true,
-    },
     {
         name: 'password',
         label: 'Password',
@@ -72,22 +57,18 @@ const fields: AuthFormField[] = [
 <template>
     <UPageCard class="max-w-md w-full mx-auto" variant="subtle">
         <UAuthForm
-            :schema="registerSchema"
-            title="Register"
-            icon="i-lucide-user-plus"
-            description="Create a new account."
+            :schema="resetPasswordSchema"
+            title="Reset password"
+            icon="i-lucide-lock-open"
             :fields="fields"
             :loadingAuto="true"
             :submit="{
-                label: 'Create account',
+                label: 'Reset password',
             }"
             @submit="onSubmit"
         >
             <template #description>
-                Already have an account?
-                <ULink to="/account/login" class="text-primary font-medium">
-                    Login
-                </ULink>
+                Enter your new password
             </template>
             <template #password-help>
                 Must be at least 8 characters

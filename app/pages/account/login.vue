@@ -6,9 +6,12 @@ definePageMeta({
 });
 
 const client = useSupabaseClient();
-const toast = useToast();
+
+const messages = ref<Message[]>([]);
 
 async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
+    messages.value = [];
+
     try {
         const { data: response, error } = await client.auth.signInWithPassword({
             email: event.data.email,
@@ -26,8 +29,8 @@ async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
     } catch (err) {
         const error = err as Error;
 
-        toast.add({
-            title: error.message,
+        messages.value.push({
+            description: error.message,
             color: 'error',
             icon: 'i-lucide-circle-x',
         });
@@ -57,7 +60,6 @@ const fields: AuthFormField[] = [
         <UAuthForm
             :schema="loginSchema"
             title="Login"
-            description="Enter your credentials to access your account."
             icon="i-lucide-user"
             :fields="fields"
             :loadingAuto="true"
@@ -65,12 +67,27 @@ const fields: AuthFormField[] = [
                 label: 'Login',
             }"
             @submit="onSubmit"
-        />
-        <div class="text-sm text-muted">
-            Don't have an account?
-            <NuxtLink to="/account/register">
-                <strong>Register</strong>
-            </NuxtLink>
-        </div>
+        >
+            <template #description>
+                Don't have an account?
+                <ULink to="/account/register" class="text-primary font-medium">
+                    Register
+                </ULink>
+            </template>
+            <template #password-hint>
+                <ULink to="/account/forgot-password" class="text-primary font-medium" tabindex="-1">
+                    Forgot password?
+                </ULink>
+            </template>
+            <template v-if="messages.length > 0" #validation>
+                <UAlert
+                    v-for="message in messages"
+                    :key="message.description"
+                    :color="message.color"
+                    :icon="message.icon"
+                    :description="message.description"
+                />
+            </template>
+        </UAuthForm>
     </UPageCard>
 </template>
