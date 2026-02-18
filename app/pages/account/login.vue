@@ -5,6 +5,10 @@ definePageMeta({
     middleware: 'auth',
 });
 
+useSeoMeta({
+    title: 'Login',
+});
+
 const client = useSupabaseClient();
 
 const messages = ref<Message[]>([]);

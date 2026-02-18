@@ -5,6 +5,10 @@ definePageMeta({
     middleware: 'auth',
 });
 
+useSeoMeta({
+    title: 'Register',
+});
+
 const client = useSupabaseClient();
 
 const messages = ref<Message[]>([]);

@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
 
+useHead({
+    titleTemplate: (titleChunk) => {
+        return titleChunk ? `${titleChunk} | Smart Volley` : 'Smart Volley';
+    },
+});
+
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 const route = useRoute();
