@@ -9,9 +9,6 @@ const { data: athletes, status } = await useFetch('/api/athletes', {
             id: athlete.id,
             label: athlete.name,
             icon: 'i-lucide-user',
-            onSelect() {
-                navigateTo(`/athletes/${athlete.id}`);
-            },
         }));
     },
     lazy: true,
@@ -21,7 +18,14 @@ const searchTerm = ref('');
 const groups = computed<CommandPaletteGroup[]>(() => [{
     id: 'athletes',
     label: searchTerm.value ? `Athletes matching “${searchTerm.value}”...` : 'Athletes',
-    items: athletes.value,
+    items: athletes.value?.map((athlete) => {
+        return {
+            ...athlete,
+            onSelect() {
+                navigateTo(`/athletes/${athlete.id}`);
+            },
+        };
+    }),
 }]);
 </script>
 
