@@ -82,7 +82,8 @@ if (user.value) {
     <UApp>
         <UHeader title="Smart Volley" mode="drawer">
             <template #title>
-                Smart Volley
+                <UIcon name="i-lucide-volleyball" class="text-primary size-7" />
+                <span>Smart Volley</span>
             </template>
 
             <UNavigationMenu :items="navigationMenuItems" />
@@ -94,7 +95,10 @@ if (user.value) {
                     <UButton
                         color="neutral"
                         variant="ghost"
-                        icon="i-lucide-circle-user-round"
+                        :avatar="user ? {
+                            src: `https://dummyjson.com/icon/${user.email}/40`,
+                        } : undefined"
+                        :icon="!user ? 'i-lucide-circle-user-round' : undefined"
                     />
                 </UDropdownMenu>
             </template>
