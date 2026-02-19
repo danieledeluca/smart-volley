@@ -53,7 +53,7 @@ const fields: AuthFormField[] = [
 </script>
 
 <template>
-    <UPageCard class="max-w-md w-full mx-auto" variant="subtle">
+    <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="forgotPasswordSchema"
             title="Forgot password"

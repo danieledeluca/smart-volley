@@ -82,7 +82,7 @@ if (user.value) {
     <UApp>
         <UHeader title="Smart Volley" mode="drawer">
             <template #title>
-                <UIcon name="i-lucide-volleyball" class="text-primary size-7" />
+                <UIcon name="i-lucide-volleyball" class="size-7 text-primary" />
                 <span>Smart Volley</span>
             </template>
 
@@ -113,7 +113,7 @@ if (user.value) {
             </UContainer>
         </UMain>
         <UFooter class="border-t border-t-accented">
-            <p class="text-muted text-sm">
+            <p class="text-sm text-muted">
                 &copy; {{ new Date().getFullYear() }} - Daniele De Luca
             </p>
         </UFooter>

@@ -27,7 +27,7 @@ const groups = computed<CommandPaletteGroup[]>(() => [{
 
 <template>
     <UModal>
-        <div class="flex justify-center h-full">
+        <div class="flex h-full justify-center">
             <UButton
                 label="Search athletes..."
                 color="neutral"

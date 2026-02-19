@@ -39,7 +39,7 @@ const state = reactive<Partial<AthleteFiltersSchema>>({
 </script>
 
 <template>
-    <UCard variant="subtle" class="max-w-md w-full mx-auto">
+    <UCard variant="subtle" class="mx-auto w-full max-w-md">
         <UForm
             :schema="athleteFiltersSchema"
             :state="state"

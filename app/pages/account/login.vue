@@ -60,7 +60,7 @@ const fields: AuthFormField[] = [
 </script>
 
 <template>
-    <UPageCard class="max-w-md w-full mx-auto" variant="subtle">
+    <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="loginSchema"
             title="Login"
@@ -74,12 +74,12 @@ const fields: AuthFormField[] = [
         >
             <template #description>
                 Don't have an account?
-                <ULink to="/account/register" class="text-primary font-medium">
+                <ULink to="/account/register" class="font-medium text-primary">
                     Register
                 </ULink>
             </template>
             <template #password-hint>
-                <ULink to="/account/forgot-password" class="text-primary font-medium" tabindex="-1">
+                <ULink to="/account/forgot-password" class="font-medium text-primary" tabindex="-1">
                     Forgot password?
                 </ULink>
             </template>

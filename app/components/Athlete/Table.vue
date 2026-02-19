@@ -17,14 +17,14 @@ const table = useTemplateRef('table');
 <template>
     <div v-if="isLoading || tableData.length > 0" class="mt-8 border-t border-accented pt-8">
         <template v-if="isLoading">
-            <USkeleton class="h-8 max-w-md mx-auto mb-8" />
+            <USkeleton class="mx-auto mb-8 h-8 max-w-md" />
             <USkeleton class="h-56" />
         </template>
         <template v-else-if="tableData.length > 0">
             <UInput
                 :modelValue="(table?.tableApi?.getColumn('name')?.getFilterValue() as string)"
                 placeholder="Filter athletes..."
-                class="max-w-md w-full mx-auto block mb-8"
+                class="mx-auto mb-8 block w-full max-w-md"
                 icon="i-lucide-search"
                 @update:model-value="table?.tableApi?.getColumn('name')?.setFilterValue($event)"
             />
@@ -34,7 +34,7 @@ const table = useTemplateRef('table');
                 :data="tableData"
                 :columns="tableColumns"
                 :meta="tableMeta"
-                class="rounded-md border border-accented max-h-[50dvh] [&_thead]:text-nowrap"
+                class="max-h-[50dvh] rounded-md border border-accented [&_thead]:text-nowrap"
                 :class="tableStriped ? '[&_tbody_tr]:odd:bg-elevated' : ''"
                 sticky
             />
@@ -44,7 +44,7 @@ const table = useTemplateRef('table');
             title="No athletes found"
             description="It looks like there are no athletes for this activity and season."
             icon="i-lucide-user"
-            class="max-w-md w-full mx-auto"
+            class="mx-auto w-full max-w-md"
             variant="subtle"
         />
     </div>
