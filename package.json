@@ -13,10 +13,13 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@iconify-json/lucide": "^1.2.90",
     "@nuxt/eslint": "^1.14.0",
     "@nuxt/ui": "^4.4.0",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "@tanstack/vue-table": "^8.21.3",
+    "@vueuse/core": "^14.2.1",
     "nuxt": "^4.3.0",
     "pg": "^8.18.0",
     "tailwindcss": "^4.1.18",

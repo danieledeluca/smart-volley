@@ -3,3 +3,5 @@ export type Message = {
     color: 'error' | 'success' | 'primary' | 'secondary' | 'info' | 'warning' | 'neutral';
     icon: string;
 };
+
+export type CertificateDateStatus = 'valid' | 'expired' | 'missing';

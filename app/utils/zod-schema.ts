@@ -36,7 +36,13 @@ export const resetPasswordSchema = z.object({
     confirmPassword: confirmPasswordSchema,
 }).refine((data) => data.password === data.confirmPassword, passwordMatch);
 
+export const athleteFiltersSchema = z.object({
+    season: z.number('Season is required'),
+    activity: z.number('Activity is required'),
+});
+
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
+export type AthleteFiltersSchema = z.infer<typeof athleteFiltersSchema>;

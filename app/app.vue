@@ -14,33 +14,27 @@ const route = useRoute();
 const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
     {
         label: 'Anagrafica',
-        to: '/anagrafica',
+        to: '/athletes',
         icon: 'i-lucide-users',
-        active: route.path === '/anagrafica',
+        active: route.path.startsWith('/athletes'),
     },
     {
         label: 'Pagamenti',
-        to: '/pagamenti',
+        to: '/payments',
         icon: 'i-lucide-credit-card',
-        active: route.path === '/pagamenti',
+        active: route.path === '/payments',
     },
     {
         label: 'Certificati',
-        to: '/certificati',
+        to: '/certificates',
         icon: 'i-lucide-file',
-        active: route.path === '/certificati',
+        active: route.path === '/certificates',
     },
     {
-        label: 'Rubrica',
-        to: '/rubrica',
+        label: 'Contatti',
+        to: '/contacts',
         icon: 'i-lucide-notebook',
-        active: route.path === '/rubrica',
-    },
-    {
-        label: 'Email',
-        to: '/email',
-        icon: 'i-lucide-mail',
-        active: route.path === '/email',
+        active: route.path === '/contacts',
     },
 ]);
 
