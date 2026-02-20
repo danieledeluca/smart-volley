@@ -7,9 +7,9 @@ useHead({
     },
 });
 
-const user = useSupabaseUser();
-const client = useSupabaseClient();
 const route = useRoute();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
     {
@@ -38,30 +38,29 @@ const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
     },
 ]);
 
-const dropdownMenuItems = ref<DropdownMenuItem[][]>([]);
-
-if (user.value) {
-    dropdownMenuItems.value.push(
-        [
-            {
-                label: user.value.email,
-                icon: 'i-lucide-user',
-                type: 'label',
-            },
-        ],
-        [
-            {
-                label: 'Log out',
-                icon: 'i-lucide-log-out',
-                async onSelect() {
-                    await client.auth.signOut();
-                    navigateTo('/', { external: true });
+const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
+    if (user.value) {
+        return [
+            [
+                {
+                    label: user.value.email,
+                    icon: 'i-lucide-user',
+                    type: 'label',
                 },
-            },
-        ],
-    );
-} else {
-    dropdownMenuItems.value.push(
+            ],
+            [
+                {
+                    label: 'Log out',
+                    icon: 'i-lucide-log-out',
+                    async onSelect() {
+                        await authStore.logOut();
+                    },
+                },
+            ],
+        ];
+    }
+
+    return [
         [
             {
                 label: 'Login',
@@ -74,8 +73,8 @@ if (user.value) {
                 icon: 'i-lucide-user-plus',
             },
         ],
-    );
-}
+    ];
+});
 </script>
 
 <template>
