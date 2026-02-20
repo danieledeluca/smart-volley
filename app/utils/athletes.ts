@@ -1,10 +1,11 @@
 import type { BadgeProps, TableColumn } from '@nuxt/ui';
 import type { Athlete } from '~~/lib/db/generated/prisma/client';
+import type { At } from 'vue-router/dist/router-CWoNjPRp.mjs';
 
 import UBadge from '@nuxt/ui/components/Badge.vue';
 import UButton from '@nuxt/ui/components/Button.vue';
 
-export function getCertificateDateStatus(date: string | null): CertificateDateStatus {
+export function getCertificateDateStatus(date: string | null | undefined): CertificateDateStatus {
     if (!date) {
         return 'missing';
     }
@@ -19,7 +20,7 @@ export function getCertificateDateStatus(date: string | null): CertificateDateSt
     return 'valid';
 }
 
-export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableColumn<T>[] {
+export function getTableColumns<T extends Partial<Athlete>>(keys: readonly (keyof T)[]): TableColumn<T>[] {
     const tableColumnsMap: Partial<Record<keyof Athlete, TableColumn<T>>> = {
         name: {
             accessorKey: 'name',
@@ -71,7 +72,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         volleyAccount: {
             accessorKey: 'volleyAccount',
             header: 'Acconto volley',
-            cell: ({ row }) => formatPrice(row.original.volleyAccount?.toString() || ''),
+            cell: ({ row }) => formatPrice(row.original.volleyAccount?.toString()),
             meta: {
                 class: {
                     th: 'text-center',
@@ -82,7 +83,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         volleyBalance: {
             accessorKey: 'volleyBalance',
             header: 'Saldo volley',
-            cell: ({ row }) => formatPrice(row.original.volleyBalance?.toString() || ''),
+            cell: ({ row }) => formatPrice(row.original.volleyBalance?.toString()),
             meta: {
                 class: {
                     th: 'text-center',
@@ -93,7 +94,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         volleyBalanceSecondary: {
             accessorKey: 'volleyBalanceSecondary',
             header: 'Saldo volley 2',
-            cell: ({ row }) => formatPrice(row.original.volleyBalanceSecondary?.toString() || ''),
+            cell: ({ row }) => formatPrice(row.original.volleyBalanceSecondary?.toString()),
             meta: {
                 class: {
                     th: 'text-center',
@@ -104,7 +105,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         firstInstallment: {
             accessorKey: 'firstInstallment',
             header: '1^ rata',
-            cell: ({ row }) => formatPrice(row.original.firstInstallment?.toString() || ''),
+            cell: ({ row }) => formatPrice(row.original.firstInstallment?.toString()),
             meta: {
                 class: {
                     th: 'text-center',
@@ -115,7 +116,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         secondInstallment: {
             accessorKey: 'secondInstallment',
             header: '2^ rata',
-            cell: ({ row }) => formatPrice(row.original.secondInstallment?.toString() || ''),
+            cell: ({ row }) => formatPrice(row.original.secondInstallment?.toString()),
             meta: {
                 class: {
                     th: 'text-center',
@@ -126,7 +127,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         thirdInstallment: {
             accessorKey: 'thirdInstallment',
             header: '3^ rata',
-            cell: ({ row }) => formatPrice(row.original.thirdInstallment?.toString() || ''),
+            cell: ({ row }) => formatPrice(row.original.thirdInstallment?.toString()),
             meta: {
                 class: {
                     th: 'text-center',
@@ -138,7 +139,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
             accessorKey: 'certificateExpirationDate',
             header: 'Scadenza certificato',
             cell: ({ row }) => {
-                const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString() || '');
+                const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
                 const colorMap: Record<CertificateDateStatus, string> = {
                     valid: 'text-success',
                     missing: 'text-warning',
@@ -153,7 +154,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
 
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UBadge, { color: badgeColorMap[status], class: 'capitalize' }, status),
-                    h('span', { class: `font-semibold ${colorMap[status]}` }, formatDate(row.original.certificateExpirationDate?.toString() || '')),
+                    h('span', { class: `font-semibold ${colorMap[status]}` }, formatDate(row.original.certificateExpirationDate?.toString())),
 
                 ]);
             },
@@ -176,5 +177,7 @@ export function getTableColumns<T = Partial<Athlete>>(keys: (keyof T)[]): TableC
         },
     };
 
-    return keys.filter((key) => key in tableColumnsMap).map((key) => tableColumnsMap[key as keyof typeof tableColumnsMap]!);
+    return keys
+        .filter((key): key is keyof Athlete => key in tableColumnsMap)
+        .map((key) => tableColumnsMap[key]!);
 }

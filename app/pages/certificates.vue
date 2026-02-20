@@ -6,12 +6,16 @@ const isLoading = ref(false);
 const isLoaded = ref(false);
 const tableData = ref<AthleteCertificate[]>([]);
 
-const tableColumns = getTableColumns<AthleteCertificate>(['name', 'certificateExpirationDate', 'certificateDownloadUrl']);
+const tableColumns = getTableColumns<AthleteCertificate>([
+    'name',
+    'certificateExpirationDate',
+    'certificateDownloadUrl',
+]);
 
 const tableMeta: TableMeta<AthleteCertificate> = {
     class: {
         tr: (row: Row<AthleteCertificate>) => {
-            const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString() || '');
+            const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
             const colorMap: Record<CertificateDateStatus, string> = {
                 valid: 'bg-success/10',
                 missing: 'bg-warning/10',

@@ -4,7 +4,7 @@ import './lib/env';
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
-    modules: ['@nuxt/eslint', '@nuxtjs/supabase', '@nuxt/ui'],
+    modules: ['@nuxt/eslint', '@nuxtjs/supabase', '@nuxt/ui', '@pinia/nuxt'],
     eslint: {
         config: {
             standalone: false,

@@ -1,35 +1,34 @@
 <script setup lang="ts">
 import type { FormSubmitEvent, SelectItem } from '@nuxt/ui';
-import type { Activity, Season } from '~~/lib/db/generated/prisma/client';
 
 const emit = defineEmits<{
     submit: [event: FormSubmitEvent<AthleteFiltersSchema>];
 }>();
 
-const { data: seasons, pending: seasonsPending } = useFetch('/api/seasons', {
-    key: 'seasons',
-    lazy: true,
-    transform: (data: Season[]): SelectItem[] => {
-        return data.map((season) => {
-            return {
-                label: `${season.starterYear} - ${season.endYear}`,
-                value: season.id,
-            };
-        });
-    },
+const athletesStore = useAthletesStore();
+const {
+    seasons: _seasons,
+    seasonsPending,
+    activities: _activities,
+    activitiesPending,
+} = storeToRefs(athletesStore);
+
+const seasons = computed(() => {
+    return _seasons.value?.map<SelectItem>((season) => {
+        return {
+            label: `${season.starterYear} - ${season.endYear}`,
+            value: season.id,
+        };
+    }) || [];
 });
 
-const { data: activities, pending: activitiesPending } = useFetch('/api/activities', {
-    key: 'activities',
-    lazy: true,
-    transform: (data: Activity[]): SelectItem[] => {
-        return data.map((activity) => {
-            return {
-                label: activity.name,
-                value: activity.id,
-            };
-        });
-    },
+const activities = computed(() => {
+    return _activities.value?.map<SelectItem>((activity) => {
+        return {
+            label: activity.name,
+            value: activity.id,
+        };
+    }) || [];
 });
 
 const state = reactive<Partial<AthleteFiltersSchema>>({

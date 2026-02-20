@@ -1,10 +1,10 @@
-export function formatDate(date: string | null) {
+export function formatDate(date: string | null | undefined) {
     const formatter = new Intl.DateTimeFormat('it-IT');
 
     return date ? formatter.format(new Date(date)) : EMPTY_VALUE;
 }
 
-export function formatPrice(price: string | null) {
+export function formatPrice(price: string | null | undefined) {
     const formatter = new Intl.NumberFormat('it-IT', {
         style: 'currency',
         currency: 'EUR',

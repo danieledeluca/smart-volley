@@ -5,7 +5,16 @@ const isLoading = ref(false);
 const isLoaded = ref(false);
 const tableData = ref<AthletePayment[]>([]);
 
-const tableColumns = getTableColumns<AthletePayment>(['name', 'phoneNumber', 'volleyAccount', 'volleyBalance', 'volleyBalanceSecondary', 'firstInstallment', 'secondInstallment', 'thirdInstallment']);
+const tableColumns = getTableColumns<AthletePayment>([
+    'name',
+    'phoneNumber',
+    'volleyAccount',
+    'volleyBalance',
+    'volleyBalanceSecondary',
+    'firstInstallment',
+    'secondInstallment',
+    'thirdInstallment',
+]);
 
 async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
     try {

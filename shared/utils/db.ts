@@ -1,4 +1,15 @@
-import type { AthleteGetPayload, AthleteSelect } from '~~/lib/db/generated/prisma/models';
+import type { AthleteGetPayload, AthleteInclude, AthleteSelect } from '~~/lib/db/generated/prisma/models';
+
+export const athletesInclude = {
+    activity: true,
+    course: true,
+    parent: true,
+    season: true,
+} satisfies AthleteInclude;
+
+export type AthleteView = AthleteGetPayload<{
+    include: typeof athletesInclude;
+}>;
 
 export const athletePaymentsSelect = {
     id: true,
