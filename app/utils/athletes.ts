@@ -1,9 +1,10 @@
 import type { BadgeProps, TableColumn } from '@nuxt/ui';
-import type { Athlete } from '~~/lib/db/generated/prisma/client';
-import type { At } from 'vue-router/dist/router-CWoNjPRp.mjs';
+import type { Column } from '@tanstack/vue-table';
 
 import UBadge from '@nuxt/ui/components/Badge.vue';
 import UButton from '@nuxt/ui/components/Button.vue';
+
+import TableSortDropdown from '~/components/Athlete/TableSortDropdown.vue';
 
 export function getCertificateDateStatus(date: string | null | undefined): CertificateDateStatus {
     if (!date) {
@@ -20,8 +21,12 @@ export function getCertificateDateStatus(date: string | null | undefined): Certi
     return 'valid';
 }
 
-export function getTableColumns<T extends Partial<Athlete>>(keys: readonly (keyof T)[]): TableColumn<T>[] {
-    const tableColumnsMap: Partial<Record<keyof Athlete, TableColumn<T>>> = {
+function getTableColumnHeader<T>(column: Column<T>, label: string) {
+    return h(TableSortDropdown, { column: column as Column<unknown>, label });
+}
+
+export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (keyof T)[]): TableColumn<T>[] {
+    const tableColumnsMap: Partial<Record<keyof FullAthlete, TableColumn<T>>> = {
         name: {
             accessorKey: 'name',
             header: 'Nome',
@@ -153,7 +158,7 @@ export function getTableColumns<T extends Partial<Athlete>>(keys: readonly (keyo
                 };
 
                 return h('div', { class: 'flex gap-2 items-center' }, [
-                    h(UBadge, { color: badgeColorMap[status], class: 'capitalize' }, status),
+                    h(UBadge, { color: badgeColorMap[status], class: 'capitalize', label: status }, undefined),
                     h('span', { class: `font-semibold ${colorMap[status]}` }, formatDate(row.original.certificateExpirationDate?.toString())),
 
                 ]);
@@ -175,9 +180,19 @@ export function getTableColumns<T extends Partial<Athlete>>(keys: readonly (keyo
                 return EMPTY_VALUE;
             },
         },
+        season: {
+            accessorKey: 'season',
+            header: ({ column }) => getTableColumnHeader(column, 'Stagione'),
+            cell: ({ row }) => `${row.original.season?.starterYear} - ${row.original.season?.endYear}`,
+        },
+        activity: {
+            accessorKey: 'activity',
+            header: ({ column }) => getTableColumnHeader(column, 'Attività'),
+            cell: ({ row }) => row.original.activity?.name,
+        },
     };
 
     return keys
-        .filter((key): key is keyof Athlete => key in tableColumnsMap)
+        .filter((key): key is keyof FullAthlete => key in tableColumnsMap)
         .map((key) => tableColumnsMap[key]!);
 }

@@ -1,10 +1,10 @@
 export default defineEventHandler(async (event) => {
-    const id = getRouterParam(event, 'id') as string;
+    const id = Number(getRouterParam(event, 'id') as string);
 
     const athlete = await prisma.athlete.findUnique({
-        include: athletesInclude,
+        include: athleteItemsInclude,
         where: {
-            id: Number(id),
+            id,
         },
     });
 

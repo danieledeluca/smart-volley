@@ -96,6 +96,8 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
                         variant="ghost"
                         :avatar="user ? {
                             src: `https://dummyjson.com/icon/${user.email}/40`,
+                            alt: user.email,
+                            loading: 'lazy',
                         } : undefined"
                         :icon="!user ? 'i-lucide-circle-user-round' : undefined"
                     />

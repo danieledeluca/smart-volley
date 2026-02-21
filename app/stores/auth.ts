@@ -84,7 +84,8 @@ export const useAuthStore = defineStore('auth', () => {
             });
 
             if (response.user) {
-                return navigateTo('/');
+                navigateTo('/');
+                return;
             }
 
             if (error) {
@@ -144,7 +145,8 @@ export const useAuthStore = defineStore('auth', () => {
             });
 
             if (response.user) {
-                return navigateTo('/');
+                navigateTo('/');
+                return;
             }
 
             if (error) {

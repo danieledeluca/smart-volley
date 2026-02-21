@@ -1,46 +1,40 @@
 <script setup lang="ts">
-import type { CommandPaletteGroup, CommandPaletteItem } from '@nuxt/ui';
+import type { FormSubmitEvent } from '@nuxt/ui';
 
-const athletesStore = useAthletesStore();
-const { athletes, athletesPending } = storeToRefs(athletesStore);
+const isLoading = ref(false);
+const isLoaded = ref(false);
+const tableData = ref<AthleteListItem[]>([]);
 
-const searchTerm = ref('');
-const groups = computed<CommandPaletteGroup[]>(() => [{
-    id: 'athletes',
-    label: searchTerm.value ? `Athletes matching “${searchTerm.value}”...` : 'Athletes',
-    items: athletes.value?.map<CommandPaletteItem>((athlete) => {
-        return {
-            id: athlete.id,
-            label: athlete.name,
-            icon: 'i-lucide-user',
-            onSelect() {
-                navigateTo(`/athletes/${athlete.id}`);
+const tableColumns = getTableColumns<AthleteListItem>(['name', 'season', 'activity']);
+
+async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
+    try {
+        isLoading.value = true;
+        isLoaded.value = false;
+
+        const athletes = await $fetch<AthleteListItem[]>('/api/athletes', {
+            query: {
+                name: event.data.mode === 'withName' ? event.data.name : '',
+                season: event.data.season,
+                activity: event.data.activity,
             },
-        };
-    }),
-}]);
+        });
+
+        tableData.value = athletes;
+    } finally {
+        isLoading.value = false;
+        isLoaded.value = true;
+    }
+}
 </script>
 
 <template>
-    <UModal>
-        <div class="flex h-full justify-center">
-            <UButton
-                label="Search athletes..."
-                color="neutral"
-                variant="subtle"
-                icon="i-lucide-search"
-                size="xl"
-            />
-        </div>
-
-        <template #content>
-            <UCommandPalette
-                v-model:searchTerm="searchTerm"
-                :loading="athletesPending"
-                :groups="groups"
-                placeholder="Search athletes..."
-                class="h-80"
-            />
-        </template>
-    </UModal>
+    <AthleteFilters showNameField @submit="onSubmit" />
+    <AthleteTable
+        :showSearchField="false"
+        :isLoading
+        :isLoaded
+        :tableData
+        :tableColumns
+    />
 </template>

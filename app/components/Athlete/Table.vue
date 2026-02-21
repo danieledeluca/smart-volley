@@ -2,7 +2,16 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { TableMeta } from '@tanstack/vue-table';
 
-const { isLoading, isLoaded, tableData, tableColumns, tableMeta, tableStriped = true } = defineProps<{
+const {
+    showSearchField = true,
+    isLoading,
+    isLoaded,
+    tableData,
+    tableColumns,
+    tableMeta,
+    tableStriped = true,
+} = defineProps<{
+    showSearchField?: boolean;
     isLoading: boolean;
     isLoaded: boolean;
     tableData: T[];
@@ -15,13 +24,14 @@ const table = useTemplateRef('table');
 </script>
 
 <template>
-    <div v-if="isLoading || tableData.length > 0" class="mt-8 border-t border-accented pt-8">
+    <div v-if="isLoading || isLoaded || tableData.length > 0" class="mt-8 border-t border-accented pt-8">
         <template v-if="isLoading">
-            <USkeleton class="mx-auto mb-8 h-8 max-w-md" />
+            <USkeleton v-if="showSearchField" class="mx-auto mb-8 h-8 max-w-md" />
             <USkeleton class="h-56" />
         </template>
         <template v-else-if="tableData.length > 0">
             <UInput
+                v-if="showSearchField"
                 :modelValue="(table?.tableApi?.getColumn('name')?.getFilterValue() as string)"
                 placeholder="Filter athletes..."
                 class="mx-auto mb-8 block w-full max-w-md"

@@ -11,7 +11,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         data: currentAthlete,
         pending: currentAthletePending,
         refresh: refreshCurrentAthlete,
-    } = useFetch<AthleteView>(athleteUrlWithId, {
+    } = useFetch<AthleteItem>(athleteUrlWithId, {
         lazy: true,
         immediate: false,
         watch: false,
