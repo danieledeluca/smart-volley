@@ -94,11 +94,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
                     <UButton
                         color="neutral"
                         variant="ghost"
-                        :avatar="user ? {
-                            src: `https://dummyjson.com/icon/${user.email}/40`,
-                            alt: user.email,
-                            loading: 'lazy',
-                        } : undefined"
+                        :avatar="user ? getAvatar(user.email) : undefined"
                         :icon="!user ? 'i-lucide-circle-user-round' : undefined"
                     />
                 </UDropdownMenu>

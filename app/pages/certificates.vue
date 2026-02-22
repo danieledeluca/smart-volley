@@ -2,6 +2,10 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import type { Row, TableMeta } from '@tanstack/vue-table';
 
+useSeoMeta({
+    title: 'Certificati',
+});
+
 const isLoading = ref(false);
 const isLoaded = ref(false);
 const tableData = ref<AthleteCertificate[]>([]);

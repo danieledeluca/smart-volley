@@ -1,5 +1,7 @@
 export function formatDate(date: string | null | undefined) {
-    const formatter = new Intl.DateTimeFormat('it-IT');
+    const formatter = new Intl.DateTimeFormat('it-IT', {
+        dateStyle: 'long',
+    });
 
     return date ? formatter.format(new Date(date)) : EMPTY_VALUE;
 }

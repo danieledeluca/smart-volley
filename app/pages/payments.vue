@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
 
+useSeoMeta({
+    title: 'Pagamenti',
+});
+
 const isLoading = ref(false);
 const isLoaded = ref(false);
 const tableData = ref<AthletePayment[]>([]);
