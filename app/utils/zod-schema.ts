@@ -1,20 +1,27 @@
+import type { core } from 'zod';
+
 import z from 'zod';
+
+// Constants
+export const PASSWORD_MIN_LENGTH = 8;
+export const NAME_MIN_LENGTH = 3;
 
 // Fields schema
 const emailSchema = z.email({
-    error: (issue) =>
-        issue.input ? 'Invalid email' : 'Email is required',
+    error: (issue) => issue.input ? $t('form.email.error') : $t('form.email.required'),
 });
-const passwordSchema = z.string('Password is required').min(8, 'Must be at least 8 characters');
-const confirmPasswordSchema = z.string('Confirm password is required');
-const passwordMatch = {
-    message: 'Passwords do not match',
+const passwordSchema = z.string($t('form.password.required'))
+    .min(PASSWORD_MIN_LENGTH, $t('form.password.error', { min: PASSWORD_MIN_LENGTH }));
+const confirmPasswordSchema = z.string($t('form.confirm_password.required'));
+const passwordMatch: core.$ZodCustomParams = {
+    message: 'form.confirm_password.error',
     path: ['confirmPassword'],
 };
 
-const seasonSchema = z.number('Season is required');
-const activitySchema = z.number('Activity is required');
-const nameSchema = z.string('Name is required').min(3, 'Must be at least 3 characters');
+const seasonSchema = z.number($t('form.season.required'));
+const activitySchema = z.number($t('form.activity.required'));
+const nameSchema = z.string($t('form.name.required'))
+    .min(NAME_MIN_LENGTH, $t('form.name.error', { min: NAME_MIN_LENGTH }));
 
 // Forms schema
 export const loginSchema = z.object({

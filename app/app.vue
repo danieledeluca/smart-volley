@@ -13,25 +13,25 @@ const { user } = storeToRefs(authStore);
 
 const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
     {
-        label: 'Anagrafica',
+        label: $t('menu.personal_data'),
         to: '/athletes',
         icon: 'i-lucide-users',
         active: route.path.startsWith('/athletes'),
     },
     {
-        label: 'Pagamenti',
+        label: $t('menu.payments'),
         to: '/payments',
         icon: 'i-lucide-credit-card',
         active: route.path === '/payments',
     },
     {
-        label: 'Certificati',
+        label: $t('menu.certificates'),
         to: '/certificates',
         icon: 'i-lucide-file',
         active: route.path === '/certificates',
     },
     {
-        label: 'Contatti',
+        label: $t('menu.contacts'),
         to: '/contacts',
         icon: 'i-lucide-notebook',
         active: route.path === '/contacts',
@@ -50,7 +50,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
             ],
             [
                 {
-                    label: 'Log out',
+                    label: $t('auth.log_out'),
                     icon: 'i-lucide-log-out',
                     async onSelect() {
                         await authStore.logOut();
@@ -63,12 +63,12 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
     return [
         [
             {
-                label: 'Login',
+                label: $t('auth.sing_in.default'),
                 to: '/account/login',
                 icon: 'i-lucide-log-in',
             },
             {
-                label: 'Register',
+                label: $t('auth.sign_up.default'),
                 to: '/account/register',
                 icon: 'i-lucide-user-plus',
             },

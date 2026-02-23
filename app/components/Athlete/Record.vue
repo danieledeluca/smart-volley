@@ -35,7 +35,7 @@ const actions = ref<HTMLElement | null>(null);
                     @click="async () => {
                         await copy(value || '');
                         toast.add({
-                            title: `${label} copied to clipboard`,
+                            title: $t('toast.clipboard', { name: label }),
                             color: 'success',
                             icon: 'i-lucide-circle-check',
                         });

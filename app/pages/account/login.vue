@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: 'Login',
+    title: $t('auth.sing_in.default'),
 });
 
 const authStore = useAuthStore();
@@ -15,27 +15,27 @@ const { messages } = storeToRefs(authStore);
     <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="loginSchema"
-            title="Sign in"
+            :title="$t('auth.sing_in.default')"
             icon="i-lucide-log-in"
             :fields="authStore.loginFields"
             :loadingAuto="true"
             :submit="{
-                label: 'Login',
+                label: $t('auth.sing_in.default'),
             }"
             @submit="authStore.login"
         >
             <template #description>
-                Don't have an account?
+                {{ $t('auth.sing_in.description') }}
                 <ULink to="/account/register" class="font-medium text-primary">
-                    Sign up
+                    {{ $t('auth.sign_up.default') }}
                 </ULink>
             </template>
             <template #password-hint>
                 <ULink to="/account/forgot-password" class="font-medium text-primary" tabindex="-1">
-                    Forgot password?
+                    {{ $t('auth.sing_in.password_hint') }}
                 </ULink>
             </template>
-            <template v-if="messages.length > 0" #validation>
+            <template #validation>
                 <UAlert
                     v-for="message in messages"
                     :key="message.title"

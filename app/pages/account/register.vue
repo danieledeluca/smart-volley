@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: 'Register',
+    title: $t('auth.sign_up.default'),
 });
 
 const authStore = useAuthStore();
@@ -15,26 +15,25 @@ const { messages } = storeToRefs(authStore);
     <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="registerSchema"
-            title="Sign up"
+            :title="$t('auth.sign_up.default')"
             icon="i-lucide-user-plus"
-            description="Create a new account."
             :fields="authStore.registerFields"
             :loadingAuto="true"
             :submit="{
-                label: 'Create account',
+                label: $t('auth.sign_up.submit'),
             }"
             @submit="authStore.register"
         >
             <template #description>
-                Already have an account?
+                {{ $t('auth.sign_up.description') }}
                 <ULink to="/account/login" class="font-medium text-primary">
-                    Sign in
+                    {{ $t('auth.sing_in.default') }}
                 </ULink>
             </template>
             <template #password-help>
-                Must be at least 8 characters
+                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH }) }}
             </template>
-            <template v-if="messages.length > 0" #validation>
+            <template #validation>
                 <UAlert
                     v-for="message in messages"
                     :key="message.title"

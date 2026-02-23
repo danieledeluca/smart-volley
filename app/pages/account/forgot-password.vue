@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: 'Forgot password',
+    title: $t('auth.forgot_password.meta_title'),
 });
 
 const authStore = useAuthStore();
@@ -15,19 +15,19 @@ const { messages } = storeToRefs(authStore);
     <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="forgotPasswordSchema"
-            title="Forgot your password?"
+            :title="$t('auth.forgot_password.title')"
             icon="i-lucide-key-round"
             :fields="authStore.forgotPasswordFields"
             :loadingAuto="true"
             :submit="{
-                label: 'Reset password',
+                label: $t('auth.reset_password.default'),
             }"
             @submit="authStore.forgotPassword"
         >
             <template #description>
-                Enter your email and we'll send you a recovery link.
+                {{ $t('auth.reset_password.default') }}
             </template>
-            <template v-if="messages.length > 0" #validation>
+            <template #validation>
                 <UAlert
                     v-for="message in messages"
                     :key="message.title"

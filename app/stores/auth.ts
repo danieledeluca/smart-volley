@@ -11,24 +11,24 @@ export const useAuthStore = defineStore('auth', () => {
         email: {
             name: 'email',
             type: 'email',
-            label: 'Email',
-            placeholder: 'Enter your email',
+            label: $t('form.email.label'),
+            placeholder: $t('form.email.placeholder'),
             required: true,
             autocomplete: 'username',
         },
         password: {
             name: 'password',
-            label: 'Password',
             type: 'password',
-            placeholder: 'Enter your password',
+            label: $t('form.password.label'),
+            placeholder: $t('form.password.placeholder'),
             required: true,
             autocomplete: 'new-password',
         },
         confirmPassword: {
             name: 'confirmPassword',
-            label: 'Confirm password',
             type: 'password',
-            placeholder: 'Enter your confirm password',
+            label: $t('form.confirm_password.label'),
+            placeholder: $t('form.confirm_password.placeholder'),
             required: true,
             autocomplete: 'new-password',
         },
@@ -51,12 +51,12 @@ export const useAuthStore = defineStore('auth', () => {
             if (response.user) {
                 if (response.user.identities?.length) {
                     messages.value.push({
-                        title: 'We\'ve sent you a confirmation email. Please check your inbox to activate your account.',
+                        title: $t('auth.sign_up.success'),
                         color: 'success',
                         icon: 'i-lucide-circle-check',
                     });
                 } else {
-                    throw new Error('Email already used');
+                    throw new Error($t('auth.sign_up.error'));
                 }
             }
 
@@ -120,7 +120,7 @@ export const useAuthStore = defineStore('auth', () => {
                 throw error;
             } else {
                 messages.value.push({
-                    title: 'We\'ve sent you a password reset email. Please check your inbox to continue.',
+                    title: $t('auth.forgot_password.success'),
                     color: 'success',
                     icon: 'i-lucide-circle-check',
                 });

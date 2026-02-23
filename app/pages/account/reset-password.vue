@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: 'Reset password',
+    title: $t('auth.reset_password.default'),
 });
 
 const authStore = useAuthStore();
@@ -15,22 +15,22 @@ const { messages } = storeToRefs(authStore);
     <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="resetPasswordSchema"
-            title="Create a new password"
+            :title="$t('auth.reset_password.title')"
             icon="i-lucide-lock-keyhole"
             :fields="authStore.resetPasswordFields"
             :loadingAuto="true"
             :submit="{
-                label: 'Reset password',
+                label: $t('auth.reset_password.default'),
             }"
             @submit="authStore.resetPassword"
         >
             <template #description>
-                Choose a strong password to secure your account.
+                {{ $t('auth.reset_password.description') }}
             </template>
             <template #password-help>
-                Must be at least 8 characters
+                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH }) }}
             </template>
-            <template v-if="messages.length > 0" #validation>
+            <template #validation>
                 <UAlert
                     v-for="message in messages"
                     :key="message.title"

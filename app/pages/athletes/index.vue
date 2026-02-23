@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 
 useSeoMeta({
-    title: 'Anagrafica',
+    title: $t('page.athletes.title'),
 });
 
 const isLoading = ref(false);

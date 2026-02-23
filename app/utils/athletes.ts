@@ -1,5 +1,5 @@
 import type { BadgeProps, TableColumn } from '@nuxt/ui';
-import type { Column } from '@tanstack/vue-table';
+import type { Column, ColumnMeta } from '@tanstack/vue-table';
 
 import UBadge from '@nuxt/ui/components/Badge.vue';
 import UButton from '@nuxt/ui/components/Button.vue';
@@ -25,11 +25,20 @@ function getTableColumnHeader<T>(column: Column<T>, label: string) {
     return h(TableSortDropdown, { column: column as Column<unknown>, label });
 }
 
+function getTableMetaPriceColumn(): ColumnMeta<any, any> {
+    return {
+        class: {
+            th: 'text-center',
+            td: 'text-center',
+        },
+    };
+}
+
 export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (keyof T)[]): TableColumn<T>[] {
     const tableColumnsMap: Partial<Record<keyof FullAthlete, TableColumn<T>>> = {
         name: {
             accessorKey: 'name',
-            header: 'Nome',
+            header: $t('table.athletes.columns.name'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UButton, { color: 'primary', variant: 'ghost', href: `/athletes/${row.original.id}`, icon: 'i-lucide-user' }),
@@ -39,7 +48,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         phoneNumber: {
             accessorKey: 'phoneNumber',
-            header: 'Numero di telefono',
+            header: $t('table.athletes.columns.phone_number'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UButton, {
@@ -61,7 +70,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         email: {
             accessorKey: 'email',
-            header: 'Email',
+            header: $t('table.athletes.columns.email'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UButton, {
@@ -76,73 +85,43 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         volleyAccount: {
             accessorKey: 'volleyAccount',
-            header: 'Acconto volley',
+            header: $t('table.athletes.columns.volley_account'),
             cell: ({ row }) => formatPrice(row.original.volleyAccount?.toString()),
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
+            meta: getTableMetaPriceColumn(),
         },
         volleyBalance: {
             accessorKey: 'volleyBalance',
-            header: 'Saldo volley',
+            header: $t('table.athletes.columns.volley_balance'),
             cell: ({ row }) => formatPrice(row.original.volleyBalance?.toString()),
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
+            meta: getTableMetaPriceColumn(),
         },
         volleyBalanceSecondary: {
             accessorKey: 'volleyBalanceSecondary',
-            header: 'Saldo volley 2',
+            header: $t('table.athletes.columns.volley_balance_secondary'),
             cell: ({ row }) => formatPrice(row.original.volleyBalanceSecondary?.toString()),
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
+            meta: getTableMetaPriceColumn(),
         },
         firstInstallment: {
             accessorKey: 'firstInstallment',
-            header: '1^ rata',
+            header: $t('table.athletes.columns.fist_installment'),
             cell: ({ row }) => formatPrice(row.original.firstInstallment?.toString()),
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
+            meta: getTableMetaPriceColumn(),
         },
         secondInstallment: {
             accessorKey: 'secondInstallment',
-            header: '2^ rata',
+            header: $t('table.athletes.columns.second_installment'),
             cell: ({ row }) => formatPrice(row.original.secondInstallment?.toString()),
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
+            meta: getTableMetaPriceColumn(),
         },
         thirdInstallment: {
             accessorKey: 'thirdInstallment',
-            header: '3^ rata',
+            header: $t('table.athletes.columns.third_installment'),
             cell: ({ row }) => formatPrice(row.original.thirdInstallment?.toString()),
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
+            meta: getTableMetaPriceColumn(),
         },
         certificateExpirationDate: {
             accessorKey: 'certificateExpirationDate',
-            header: 'Scadenza certificato',
+            header: $t('table.athletes.columns.certificate_expiration_date.label'),
             cell: ({ row }) => {
                 const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
                 const colorMap: Record<CertificateDateStatus, string> = {
@@ -157,8 +136,14 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
                     expired: 'error',
                 };
 
+                const badgeLabelMap: Record<CertificateDateStatus, string> = {
+                    valid: $t('table.athletes.columns.certificate_expiration_date.status.valid'),
+                    missing: $t('table.athletes.columns.certificate_expiration_date.status.missing'),
+                    expired: $t('table.athletes.columns.certificate_expiration_date.status.expired'),
+                };
+
                 return h('div', { class: 'flex gap-2 items-center' }, [
-                    h(UBadge, { color: badgeColorMap[status], class: 'capitalize', label: status }, undefined),
+                    h(UBadge, { color: badgeColorMap[status], class: 'capitalize', label: badgeLabelMap[status] }, undefined),
                     h('span', { class: `font-semibold ${colorMap[status]}` }, formatDate(row.original.certificateExpirationDate?.toString())),
 
                 ]);
@@ -182,12 +167,12 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         season: {
             accessorKey: 'season',
-            header: ({ column }) => getTableColumnHeader(column, 'Stagione'),
+            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.columns.season')),
             cell: ({ row }) => `${row.original.season?.starterYear} - ${row.original.season?.endYear}`,
         },
         activity: {
             accessorKey: 'activity',
-            header: ({ column }) => getTableColumnHeader(column, 'Attività'),
+            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.columns.activity')),
             cell: ({ row }) => row.original.activity?.name,
         },
     };

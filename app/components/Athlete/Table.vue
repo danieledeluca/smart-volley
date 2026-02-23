@@ -33,9 +33,10 @@ const table = useTemplateRef('table');
             <UInput
                 v-if="showSearchField"
                 :modelValue="(table?.tableApi?.getColumn('name')?.getFilterValue() as string)"
-                placeholder="Filter athletes..."
+                :placeholder="$t('table.athletes.form.search.placeholder')"
                 class="mx-auto mb-8 block w-full max-w-md"
                 icon="i-lucide-search"
+                variant="subtle"
                 @update:model-value="table?.tableApi?.getColumn('name')?.setFilterValue($event)"
             />
 
@@ -47,12 +48,13 @@ const table = useTemplateRef('table');
                 class="max-h-[50dvh] rounded-md border border-accented [&_thead]:text-nowrap"
                 :class="tableStriped ? '[&_tbody_tr]:odd:bg-elevated' : ''"
                 sticky
+                :empty="$t('table.athletes.empty')"
             />
         </template>
         <UEmpty
             v-else-if="isLoaded"
-            title="No athletes found"
-            description="It looks like there are no athletes for this activity and season."
+            :title="$t('empty.athletes.title')"
+            :description="$t('empty.athletes.description')"
             icon="i-lucide-user"
             class="mx-auto w-full max-w-md"
             variant="subtle"

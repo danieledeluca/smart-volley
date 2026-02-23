@@ -63,44 +63,46 @@ const state = reactive<Partial<AthleteFiltersSchema>>(
         >
             <UFormField
                 v-if="showNameField && state.mode === 'withName'"
-                label="Name"
+                :label="$t('form.name.label')"
                 name="name"
                 required
             >
                 <UInput
                     v-model="state.name"
                     class="w-full"
-                    placeholder="Search an athlete"
+                    :placeholder="$t('form.name.placeholder')"
                     icon="i-lucide-user"
                 />
             </UFormField>
 
-            <UFormField label="Season" name="season" :required="!showNameField">
+            <UFormField :label="$t('form.season.label')" name="season" :required="!showNameField">
                 <USelectMenu
                     v-model="state.season"
                     :items="seasons"
                     class="w-full"
-                    placeholder="Select a season"
+                    :placeholder="$t('form.season.placeholder')"
                     :loading="seasonsPending"
                     valueKey="id"
                     icon="i-lucide-calendar"
+                    :searchInput="{ placeholder: $t('form.search.placeholder') }"
                 />
             </UFormField>
 
-            <UFormField label="Activity" name="activity" :required="!showNameField">
+            <UFormField :label="$t('form.activity.label')" name="activity" :required="!showNameField">
                 <USelectMenu
                     v-model="state.activity"
                     :items="activities"
                     class="w-full"
-                    placeholder="Select an activity"
+                    :placeholder="$t('form.activity.placeholder')"
                     :loading="activitiesPending"
                     valueKey="id"
                     icon="i-lucide-zap"
+                    :searchInput="{ placeholder: $t('form.search.placeholder') }"
                 />
             </UFormField>
 
             <UButton type="submit" :loadingAuto="true" class="w-full justify-center">
-                Search
+                {{ $t('form.search.submit') }}
             </UButton>
         </UForm>
     </UCard>

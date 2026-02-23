@@ -26,7 +26,7 @@ export const useAthletesStore = defineStore('athletes', () => {
     });
 
     effect(() => {
-        if (route.name === 'athletes-id') {
+        if (route.name?.toString() === 'athletes-id') {
             if (currentAthlete.value?.id.toString() !== route.params.id) {
                 refreshCurrentAthlete();
             }
