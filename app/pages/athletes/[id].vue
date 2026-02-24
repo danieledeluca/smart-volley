@@ -23,10 +23,11 @@ useSeoMeta({
             <div class="space-y-8 lg:col-span-8">
                 <USkeleton class="h-64" />
                 <USkeleton class="h-48" />
+                <USkeleton class="h-64" />
             </div>
             <div class="space-y-8 lg:col-span-4">
-                <USkeleton class="h-64" />
-                <USkeleton class="h-48" />
+                <USkeleton class="h-72" />
+                <USkeleton class="h-96" />
             </div>
         </div>
     </template>

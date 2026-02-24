@@ -19,14 +19,7 @@ const tableColumns = getTableColumns<AthleteCertificate>([
 const tableMeta: TableMeta<AthleteCertificate> = {
     class: {
         tr: (row: Row<AthleteCertificate>) => {
-            const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
-            const colorMap: Record<CertificateDateStatus, string> = {
-                valid: 'bg-success/10',
-                missing: 'bg-warning/10',
-                expired: 'bg-error/10',
-            };
-
-            return colorMap[status];
+            return getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
         },
     },
 };
@@ -52,13 +45,17 @@ async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
 </script>
 
 <template>
-    <AthleteFilters @submit="onSubmit" />
+    <AthleteFilters
+        :title="$t('page.certificates.title')"
+        :isLoading
+        icon="i-lucide-file"
+        @submit="onSubmit"
+    />
     <AthleteTable
         :isLoading
         :isLoaded
         :tableData
         :tableColumns
         :tableMeta
-        :tableStriped="false"
     />
 </template>

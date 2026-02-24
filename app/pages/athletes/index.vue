@@ -33,7 +33,13 @@ async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
 </script>
 
 <template>
-    <AthleteFilters showNameField @submit="onSubmit" />
+    <AthleteFilters
+        :title="$t('page.athletes.title')"
+        :isLoading
+        icon="i-lucide-users"
+        showNameField
+        @submit="onSubmit"
+    />
     <AthleteTable
         :showSearchField="false"
         :isLoading

@@ -41,7 +41,12 @@ async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
 </script>
 
 <template>
-    <AthleteFilters @submit="onSubmit" />
+    <AthleteFilters
+        :title="$t('page.payments.title')"
+        :isLoading
+        icon="i-lucide-credit-card"
+        @submit="onSubmit"
+    />
     <AthleteTable
         :isLoading
         :isLoaded

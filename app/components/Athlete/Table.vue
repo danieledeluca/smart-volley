@@ -1,5 +1,5 @@
-<script setup lang="ts" generic="T">
-import type { TableColumn } from '@nuxt/ui';
+<script setup lang="ts" generic="T extends Partial<FullAthlete>">
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { TableMeta } from '@tanstack/vue-table';
 
 const {
@@ -9,7 +9,6 @@ const {
     tableData,
     tableColumns,
     tableMeta,
-    tableStriped = true,
 } = defineProps<{
     showSearchField?: boolean;
     isLoading: boolean;
@@ -17,10 +16,13 @@ const {
     tableData: T[];
     tableColumns?: TableColumn<T>[];
     tableMeta?: TableMeta<T>;
-    tableStriped?: boolean;
 }>();
 
 const table = useTemplateRef('table');
+
+function onSelect(_event: Event, row: TableRow<T>) {
+    navigateTo(`/athletes/${row.original.id}`);
+}
 </script>
 
 <template>
@@ -39,16 +41,15 @@ const table = useTemplateRef('table');
                 variant="subtle"
                 @update:model-value="table?.tableApi?.getColumn('name')?.setFilterValue($event)"
             />
-
             <UTable
                 ref="table"
                 :data="tableData"
                 :columns="tableColumns"
                 :meta="tableMeta"
-                class="max-h-[50dvh] rounded-md border border-accented [&_thead]:text-nowrap"
-                :class="tableStriped ? '[&_tbody_tr]:odd:bg-elevated' : ''"
+                class="athletes-table max-h-[50dvh] rounded-md border border-accented [&_thead]:text-nowrap"
                 sticky
                 :empty="$t('table.athletes.empty')"
+                @select="onSelect"
             />
         </template>
         <UEmpty

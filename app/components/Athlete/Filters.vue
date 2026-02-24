@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
 
-const { showNameField = false } = defineProps<{
+const { title, icon, isLoading, showNameField = false } = defineProps<{
+    title: string;
+    icon: string;
+    isLoading: boolean;
     showNameField?: boolean;
 }>();
 
@@ -51,11 +54,20 @@ const state = reactive<Partial<AthleteFiltersSchema>>(
                 activity: undefined,
             },
 );
+
+const form = ref<HTMLFormElement | null>(null);
 </script>
 
 <template>
     <UCard variant="subtle" class="mx-auto w-full max-w-md">
+        <template #header>
+            <h2 class="flex items-center gap-3 text-xl">
+                <UButton color="primary" variant="soft" :icon="icon" />
+                <span>{{ title }}</span>
+            </h2>
+        </template>
         <UForm
+            ref="form"
             :schema="schema"
             :state="state"
             class="space-y-5"
@@ -88,7 +100,12 @@ const state = reactive<Partial<AthleteFiltersSchema>>(
                 />
             </UFormField>
 
-            <UFormField :label="$t('form.activity.label')" name="activity" :required="!showNameField">
+            <UFormField
+                :label="$t('form.activity.label')"
+                name="activity"
+                :required="!showNameField"
+                class="mb-0"
+            >
                 <USelectMenu
                     v-model="state.activity"
                     :items="activities"
@@ -101,9 +118,23 @@ const state = reactive<Partial<AthleteFiltersSchema>>(
                 />
             </UFormField>
 
-            <UButton type="submit" :loadingAuto="true" class="w-full justify-center">
+            <UButton
+                type="submit"
+                :loading="isLoading"
+                class="hidden"
+            >
                 {{ $t('form.search.submit') }}
             </UButton>
         </UForm>
+        <template #footer>
+            <UButton
+                type="button"
+                :loading="isLoading"
+                class="w-full justify-center"
+                @click="form?.submit()"
+            >
+                {{ $t('form.search.submit') }}
+            </UButton>
+        </template>
     </UCard>
 </template>

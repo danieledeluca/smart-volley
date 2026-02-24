@@ -4,3 +4,27 @@
 :root {
     --ui-footer-height: 53px;
 }
+
+@layer components {
+    .athletes-table {
+        table {
+            tbody {
+                tr {
+                    @apply cursor-pointer odd:bg-elevated odd:hover:bg-neutral-600/50;
+
+                    &.valid {
+                        @apply odd:bg-success/20 odd:hover:bg-success/25! bg-success/10 hover:bg-success/15!;
+                    }
+
+                    &.missing {
+                        @apply odd:bg-warning/20 odd:hover:bg-warning/25! bg-warning/10 hover:bg-warning/15!;
+                    }
+
+                    &.expired {
+                        @apply odd:bg-error/20 odd:hover:bg-error/25! bg-error/10 hover:bg-error/15!;
+                    }
+                }
+            }
+        }
+    }
+}

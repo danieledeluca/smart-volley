@@ -40,6 +40,7 @@ export default withNuxt(
         {
             rules: {
                 'better-tailwindcss/enforce-consistent-line-wrapping': ['off'],
+                'better-tailwindcss/no-unknown-classes': ['error', { detectComponentClasses: true }],
                 'no-console': ['warn'],
                 'perfectionist/sort-imports': ['error', { tsconfig: { rootDir: '.' } }],
                 'style/arrow-parens': ['error', 'always'],

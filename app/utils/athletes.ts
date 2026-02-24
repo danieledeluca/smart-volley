@@ -3,6 +3,7 @@ import type { Column, ColumnMeta } from '@tanstack/vue-table';
 
 import UBadge from '@nuxt/ui/components/Badge.vue';
 import UButton from '@nuxt/ui/components/Button.vue';
+import UUser from '@nuxt/ui/components/User.vue';
 
 import TableSortDropdown from '~/components/Athlete/TableSortDropdown.vue';
 
@@ -21,7 +22,7 @@ export function getCertificateDateStatus(date: string | null | undefined): Certi
     return 'valid';
 }
 
-function getTableColumnHeader<T>(column: Column<T>, label: string) {
+function getTableSortColumnHeader<T>(column: Column<T>, label: string) {
     return h(TableSortDropdown, { column: column as Column<unknown>, label });
 }
 
@@ -40,15 +41,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
             accessorKey: 'name',
             header: $t('table.athletes.column.name'),
             cell: ({ row }) => {
-                return h('div', { class: 'flex gap-2 items-center' }, [
-                    h(UButton, {
-                        color: 'primary',
-                        variant: 'ghost',
-                        href: `/athletes/${row.original.id}`,
-                        icon: 'i-lucide-user',
-                    }),
-                    h('span', undefined, row.original.name),
-                ]);
+                return h(UUser, { name: row.original.name, avatar: { ...getAvatar(row.original.id?.toString(), 64) } });
             },
         },
         phoneNumber: {
@@ -126,7 +119,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         certificateExpirationDate: {
             accessorKey: 'certificateExpirationDate',
-            header: $t('table.athletes.column.certificate_expiration_date.label'),
+            header: ({ column }) => getTableSortColumnHeader(column, $t('table.athletes.column.certificate_expiration_date.label')),
             cell: ({ row }) => {
                 const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
                 const colorMap: Record<CertificateDateStatus, string> = {
@@ -177,12 +170,12 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         season: {
             accessorKey: 'season',
-            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.column.season')),
+            header: ({ column }) => getTableSortColumnHeader(column, $t('table.athletes.column.season')),
             cell: ({ row }) => `${row.original.season?.starterYear} - ${row.original.season?.endYear}`,
         },
         activity: {
             accessorKey: 'activity',
-            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.column.activity')),
+            header: ({ column }) => getTableSortColumnHeader(column, $t('table.athletes.column.activity')),
             cell: ({ row }) => row.original.activity?.name,
         },
     };

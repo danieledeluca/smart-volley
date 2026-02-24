@@ -32,7 +32,12 @@ async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
 </script>
 
 <template>
-    <AthleteFilters @submit="onSubmit" />
+    <AthleteFilters
+        :title="$t('page.contacts.title')"
+        :isLoading
+        icon="i-lucide-notebook"
+        @submit="onSubmit"
+    />
     <AthleteTable
         :isLoading
         :isLoaded
