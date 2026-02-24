@@ -81,6 +81,31 @@ const i18n = {
         athletes: {
             title: 'Anagrafica',
         },
+        home: {
+            card: {
+                certificates: {
+                    description: 'Controlla rapidamente lo stato di validità dei certificati medici degli atleti.',
+                    title: 'Certificati',
+                },
+                contacts: {
+                    description: 'Accedi ai recapiti degli atleti, con numeri di cellulare e indirizzi email.',
+                    title: 'Contatti',
+                },
+                payments: {
+                    description: 'Consulta la lista degli atleti con lo stato e i dettagli dei pagamenti effettuati.',
+                    title: 'Pagamenti',
+                },
+                personal_data: {
+                    description: 'Visualizza l\'elenco completo degli atleti iscritti.',
+                    title: 'Anagrafica',
+                },
+            },
+            hero: {
+                description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti. Consente di visualizzare informazioni anagrafiche, lo stato dei pagamenti e la validità del certificato medico',
+                head_line: 'Smart Volley',
+                title: 'Gestione atleti',
+            },
+        },
     },
     table: {
         athletes: {
