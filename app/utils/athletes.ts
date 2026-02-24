@@ -41,7 +41,12 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
             header: $t('table.athletes.column.name'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
-                    h(UButton, { color: 'primary', variant: 'ghost', href: `/athletes/${row.original.id}`, icon: 'i-lucide-user' }),
+                    h(UButton, {
+                        color: 'primary',
+                        variant: 'ghost',
+                        href: `/athletes/${row.original.id}`,
+                        icon: 'i-lucide-user',
+                    }),
                     h('span', undefined, row.original.name),
                 ]);
             },
@@ -143,9 +148,14 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
                 };
 
                 return h('div', { class: 'flex gap-2 items-center' }, [
-                    h(UBadge, { color: badgeColorMap[status], class: 'capitalize', label: badgeLabelMap[status] }, undefined),
-                    h('span', { class: `font-semibold ${colorMap[status]}` }, formatDate(row.original.certificateExpirationDate?.toString())),
-
+                    h(UBadge, {
+                        color: badgeColorMap[status],
+                        class: 'capitalize',
+                        label: badgeLabelMap[status],
+                    }, undefined),
+                    h('span', {
+                        class: `font-semibold ${colorMap[status]}`,
+                    }, formatDate(row.original.certificateExpirationDate?.toString())),
                 ]);
             },
         },

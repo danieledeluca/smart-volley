@@ -29,7 +29,10 @@ type PathValue<T, P extends string>
 type I18nKey = LeafKeyOf<typeof i18n>;
 type TranslationValue<K extends I18nKey> = PathValue<typeof i18n, K>;
 
-export function $t<K extends I18nKey>(key: K, ...args: ParamsObject<TranslationValue<K>> extends undefined ? [] : [params: ParamsObject<TranslationValue<K>>]) {
+export function $t<K extends I18nKey>(
+    key: K,
+    ...args: ParamsObject<TranslationValue<K>> extends undefined ? [] : [params: ParamsObject<TranslationValue<K>>]
+) {
     const value = key.split('.').reduce<unknown>((acc, key) => {
         if (typeof acc === 'object' && acc !== null && key in acc) {
             return (acc as Record<string, unknown>)[key];
@@ -41,7 +44,8 @@ export function $t<K extends I18nKey>(key: K, ...args: ParamsObject<TranslationV
     const params = args[0];
 
     if (params) {
-        return Object.entries(params).reduce((acc, [key, value]) => acc.replace(new RegExp(`{${key}}`, 'g'), String(value)), value);
+        return Object.entries(params)
+            .reduce((acc, [key, value]) => acc.replace(new RegExp(`{${key}}`, 'g'), String(value)), value);
     }
 
     return value;

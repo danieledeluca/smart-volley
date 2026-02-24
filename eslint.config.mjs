@@ -32,6 +32,12 @@ export default withNuxt(
             },
         },
         {
+            files: ['*.vue', '*.ts'],
+            rules: {
+                'style/max-len': ['error', { code: 120 }],
+            },
+        },
+        {
             rules: {
                 'better-tailwindcss/enforce-consistent-line-wrapping': ['off'],
                 'no-console': ['warn'],
