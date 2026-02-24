@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 import type { Row, TableMeta } from '@tanstack/vue-table';
 
 useSeoMeta({
-    title: 'Certificati',
+    title: $t('page.certificates.title'),
 });
 
 const isLoading = ref(false);

@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 
 useSeoMeta({
-    title: 'Pagamenti',
+    title: $t('page.payments.title'),
 });
 
 const isLoading = ref(false);

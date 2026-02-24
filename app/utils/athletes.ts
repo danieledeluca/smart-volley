@@ -38,7 +38,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
     const tableColumnsMap: Partial<Record<keyof FullAthlete, TableColumn<T>>> = {
         name: {
             accessorKey: 'name',
-            header: $t('table.athletes.columns.name'),
+            header: $t('table.athletes.column.name'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UButton, { color: 'primary', variant: 'ghost', href: `/athletes/${row.original.id}`, icon: 'i-lucide-user' }),
@@ -48,7 +48,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         phoneNumber: {
             accessorKey: 'phoneNumber',
-            header: $t('table.athletes.columns.phone_number'),
+            header: $t('table.athletes.column.phone_number'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UButton, {
@@ -70,7 +70,7 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         email: {
             accessorKey: 'email',
-            header: $t('table.athletes.columns.email'),
+            header: $t('table.athletes.column.email'),
             cell: ({ row }) => {
                 return h('div', { class: 'flex gap-2 items-center' }, [
                     h(UButton, {
@@ -85,43 +85,43 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         volleyAccount: {
             accessorKey: 'volleyAccount',
-            header: $t('table.athletes.columns.volley_account'),
+            header: $t('table.athletes.column.volley_account'),
             cell: ({ row }) => formatPrice(row.original.volleyAccount?.toString()),
             meta: getTableMetaPriceColumn(),
         },
         volleyBalance: {
             accessorKey: 'volleyBalance',
-            header: $t('table.athletes.columns.volley_balance'),
+            header: $t('table.athletes.column.volley_balance'),
             cell: ({ row }) => formatPrice(row.original.volleyBalance?.toString()),
             meta: getTableMetaPriceColumn(),
         },
         volleyBalanceSecondary: {
             accessorKey: 'volleyBalanceSecondary',
-            header: $t('table.athletes.columns.volley_balance_secondary'),
+            header: $t('table.athletes.column.volley_balance_secondary'),
             cell: ({ row }) => formatPrice(row.original.volleyBalanceSecondary?.toString()),
             meta: getTableMetaPriceColumn(),
         },
         firstInstallment: {
             accessorKey: 'firstInstallment',
-            header: $t('table.athletes.columns.fist_installment'),
+            header: $t('table.athletes.column.fist_installment'),
             cell: ({ row }) => formatPrice(row.original.firstInstallment?.toString()),
             meta: getTableMetaPriceColumn(),
         },
         secondInstallment: {
             accessorKey: 'secondInstallment',
-            header: $t('table.athletes.columns.second_installment'),
+            header: $t('table.athletes.column.second_installment'),
             cell: ({ row }) => formatPrice(row.original.secondInstallment?.toString()),
             meta: getTableMetaPriceColumn(),
         },
         thirdInstallment: {
             accessorKey: 'thirdInstallment',
-            header: $t('table.athletes.columns.third_installment'),
+            header: $t('table.athletes.column.third_installment'),
             cell: ({ row }) => formatPrice(row.original.thirdInstallment?.toString()),
             meta: getTableMetaPriceColumn(),
         },
         certificateExpirationDate: {
             accessorKey: 'certificateExpirationDate',
-            header: $t('table.athletes.columns.certificate_expiration_date.label'),
+            header: $t('table.athletes.column.certificate_expiration_date.label'),
             cell: ({ row }) => {
                 const status = getCertificateDateStatus(row.original.certificateExpirationDate?.toString());
                 const colorMap: Record<CertificateDateStatus, string> = {
@@ -137,9 +137,9 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
                 };
 
                 const badgeLabelMap: Record<CertificateDateStatus, string> = {
-                    valid: $t('table.athletes.columns.certificate_expiration_date.status.valid'),
-                    missing: $t('table.athletes.columns.certificate_expiration_date.status.missing'),
-                    expired: $t('table.athletes.columns.certificate_expiration_date.status.expired'),
+                    valid: $t('table.athletes.column.certificate_expiration_date.status.valid'),
+                    missing: $t('table.athletes.column.certificate_expiration_date.status.missing'),
+                    expired: $t('table.athletes.column.certificate_expiration_date.status.expired'),
                 };
 
                 return h('div', { class: 'flex gap-2 items-center' }, [
@@ -167,12 +167,12 @@ export function getTableColumns<T extends Partial<FullAthlete>>(keys: readonly (
         },
         season: {
             accessorKey: 'season',
-            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.columns.season')),
+            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.column.season')),
             cell: ({ row }) => `${row.original.season?.starterYear} - ${row.original.season?.endYear}`,
         },
         activity: {
             accessorKey: 'activity',
-            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.columns.activity')),
+            header: ({ column }) => getTableColumnHeader(column, $t('table.athletes.column.activity')),
             cell: ({ row }) => row.original.activity?.name,
         },
     };

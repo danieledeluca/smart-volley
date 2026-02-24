@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 
 useSeoMeta({
-    title: 'Contatti',
+    title: $t('page.contacts.title'),
 });
 
 const isLoading = ref(false);

@@ -3,7 +3,7 @@ const athletesStore = useAthletesStore();
 const { currentAthlete: athlete, currentAthletePending: pending } = storeToRefs(athletesStore);
 
 useSeoMeta({
-    title: 'Anagrafica',
+    title: $t('page.athlete.title'),
 });
 </script>
 
@@ -43,29 +43,48 @@ useSeoMeta({
         >
             <template #description>
                 <div class="flex flex-wrap gap-2">
-                    <UBadge variant="soft" color="neutral" :label="`${athlete.activity.name} (${athlete.course.name})`" />
-                    <UBadge variant="soft" color="neutral" :label="`${athlete.season.starterYear} - ${athlete.season.endYear}`" />
+                    <UBadge
+                        variant="soft"
+                        color="neutral"
+                        :label="`${athlete.activity.name} (${athlete.course.name})`"
+                    />
+                    <UBadge
+                        variant="soft"
+                        color="neutral"
+                        :label="`${athlete.season.starterYear} - ${athlete.season.endYear}`"
+                    />
                 </div>
             </template>
         </UUser>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
-                <AthleteCard title="Athlete data" icon="i-lucide-user">
-                    <AthleteRecord label="Nome" :value="athlete.name" />
-                    <AthleteRecord label="Data di nascita" :value="formatDate(athlete.birthday.toString())" />
-                    <AthleteRecord label="Luogo di nascita" :value="athlete.birthplace" />
-                    <AthleteRecord label="Codice fiscale" :value="athlete.taxCode" :showCopyButton="true" />
+                <AthleteCard :title="$t('page.athlete.card.athlete.title')" icon="i-lucide-user">
+                    <AthleteRecord :label="$t('page.athlete.record.name')" :value="athlete.name" />
+                    <AthleteRecord
+                        :label="$t('page.athlete.record.birthday')"
+                        :value="formatDate(athlete.birthday.toString())"
+                    />
+                    <AthleteRecord :label="$t('page.athlete.record.birthplace')" :value="athlete.birthplace" />
+                    <AthleteRecord
+                        :label="$t('page.athlete.record.tax_code')"
+                        :value="athlete.taxCode"
+                        :showCopyButton="true"
+                    />
                 </AthleteCard>
 
-                <AthleteCard v-if="athlete.parent" title="Parent data" icon="i-lucide-user">
-                    <AthleteRecord label="Nome" :value="athlete.parent.name" />
-                    <AthleteRecord label="Codice fiscale" :value="athlete.parent.taxCode" :showCopyButton="true" />
+                <AthleteCard v-if="athlete.parent" :title="$t('page.athlete.card.parent.title')" icon="i-lucide-user">
+                    <AthleteRecord :label="$t('page.athlete.record.parent_name')" :value="athlete.parent.name" />
+                    <AthleteRecord
+                        :label="$t('page.athlete.record.parent_tax_code')"
+                        :value="athlete.parent.taxCode"
+                        :showCopyButton="true"
+                    />
                 </AthleteCard>
 
-                <AthleteCard title="Address and contacts" icon="i-lucide-notebook">
-                    <AthleteRecord label="Città" :value="athlete.city" />
-                    <AthleteRecord label="Indirizzo" :value="athlete.address" />
-                    <AthleteRecord label="Numero di cellulare" :value="athlete.phoneNumber">
+                <AthleteCard :title="$t('page.athlete.card.address_contacts.title')" icon="i-lucide-notebook">
+                    <AthleteRecord :label="$t('page.athlete.record.city')" :value="athlete.city" />
+                    <AthleteRecord :label="$t('page.athlete.record.address')" :value="athlete.address" />
+                    <AthleteRecord :label="$t('page.athlete.record.phone_number')" :value="athlete.phoneNumber">
                         <UButton
                             color="primary"
                             variant="ghost"
@@ -80,7 +99,7 @@ useSeoMeta({
                             target="_blank"
                         />
                     </AthleteRecord>
-                    <AthleteRecord label="Email" :value="athlete.email">
+                    <AthleteRecord :label="$t('page.athlete.record.email')" :value="athlete.email">
                         <UButton
                             color="primary"
                             variant="ghost"
@@ -90,26 +109,53 @@ useSeoMeta({
                     </AthleteRecord>
                 </AthleteCard>
 
-                <AthleteCard title="Certificate" icon="i-lucide-file">
-                    <AthleteRecord label="Data scadenza certificato" :value="formatDate(athlete.certificateExpirationDate?.toString())" />
-                    <AthleteRecord label="Download certificato" :value="athlete.certificateDownloadUrl || EMPTY_VALUE" />
+                <AthleteCard :title="$t('page.athlete.card.certificate.title')" icon="i-lucide-file">
+                    <AthleteRecord
+                        :label="$t('page.athlete.record.certificate_expiration_date')"
+                        :value="formatDate(athlete.certificateExpirationDate?.toString())"
+                    />
+                    <AthleteRecord
+                        :label="$t('page.athlete.record.certificate_download_url')"
+                        :value="athlete.certificateDownloadUrl || EMPTY_VALUE"
+                    />
                 </AthleteCard>
             </div>
             <div class="lg:col-span-4">
                 <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
-                    <AthleteCard title="Sport" icon="i-lucide-volleyball">
-                        <AthleteRecord label="Stagione" :value="`${athlete.season.starterYear} - ${athlete.season.endYear}`" />
-                        <AthleteRecord label="Attività" :value="athlete.activity.name" />
-                        <AthleteRecord label="Corso" :value="athlete.course.name" />
+                    <AthleteCard :title="$t('page.athlete.card.sport.title')" icon="i-lucide-volleyball">
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.season')"
+                            :value="`${athlete.season.starterYear} - ${athlete.season.endYear}`"
+                        />
+                        <AthleteRecord :label="$t('page.athlete.record.activity')" :value="athlete.activity.name" />
+                        <AthleteRecord :label="$t('page.athlete.record.course')" :value="athlete.course.name" />
                     </AthleteCard>
 
-                    <AthleteCard title="Payment" icon="i-lucide-credit-card">
-                        <AthleteRecord label="Acconto volley" :value="formatPrice(athlete.volleyAccount?.toString())" />
-                        <AthleteRecord label="Saldo volley" :value="formatPrice(athlete.volleyBalance?.toString())" />
-                        <AthleteRecord label="Saldo volley 2" :value="formatPrice(athlete.volleyBalanceSecondary?.toString())" />
-                        <AthleteRecord label="1^ rata" :value="formatPrice(athlete.firstInstallment?.toString())" />
-                        <AthleteRecord label="2^ rata" :value="formatPrice(athlete.secondInstallment?.toString())" />
-                        <AthleteRecord label="3^ rata" :value="formatPrice(athlete.thirdInstallment?.toString())" />
+                    <AthleteCard :title="$t('page.athlete.card.payments.title')" icon="i-lucide-credit-card">
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.volley_account')"
+                            :value="formatPrice(athlete.volleyAccount?.toString())"
+                        />
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.volley_balance')"
+                            :value="formatPrice(athlete.volleyBalance?.toString())"
+                        />
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.volley_balance_second')"
+                            :value="formatPrice(athlete.volleyBalanceSecondary?.toString())"
+                        />
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.first_installment')"
+                            :value="formatPrice(athlete.firstInstallment?.toString())"
+                        />
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.second_installment')"
+                            :value="formatPrice(athlete.secondInstallment?.toString())"
+                        />
+                        <AthleteRecord
+                            :label="$t('page.athlete.record.third_installment')"
+                            :value="formatPrice(athlete.thirdInstallment?.toString())"
+                        />
                     </AthleteCard>
                 </div>
             </div>
