@@ -14,7 +14,7 @@ const actions = ref<HTMLElement | null>(null);
 </script>
 
 <template>
-    <div class="grid gap-x-2 @2xl:grid-cols-3">
+    <div class="grid gap-x-2 py-2 @2xl:grid-cols-3">
         <div class="truncate text-muted">
             {{ label }}
         </div>

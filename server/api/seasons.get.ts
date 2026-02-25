@@ -1,7 +1,7 @@
 export default defineEventHandler(async () => {
     const seasons = await prisma.season.findMany({
         orderBy: {
-            starterYear: 'desc',
+            starter_year: 'desc',
         },
     });
 

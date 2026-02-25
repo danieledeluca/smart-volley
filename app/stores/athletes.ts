@@ -25,12 +25,12 @@ export const useAthletesStore = defineStore('athletes', () => {
         lazy: true,
     });
 
-    effect(() => {
-        if (route.name?.toString() === 'athletes-id') {
-            if (currentAthlete.value?.id.toString() !== route.params.id) {
-                refreshCurrentAthlete();
-            }
+    watch(() => route.params.id, () => {
+        if (route.params.id) {
+            refreshCurrentAthlete();
         }
+    }, {
+        immediate: true,
     });
 
     return {

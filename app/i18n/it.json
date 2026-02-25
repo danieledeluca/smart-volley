@@ -111,8 +111,11 @@
                 "email": "Email",
                 "first_installment": "Prima rata",
                 "name": "Nome",
-                "parent_name": "Nome genitore",
-                "parent_tax_code": "Codice fiscale genitore",
+                "parent": {
+                    "email": "Email genitore",
+                    "name": "Nome genitore",
+                    "tax_code": "Codice fiscale genitore"
+                },
                 "phone_number": "Numero di cellulare",
                 "season": "Stagione",
                 "second_installment": "Seconda rata",
@@ -166,7 +169,10 @@
         "athletes": {
             "column": {
                 "activity": "Attività",
-                "certificate_download_url": "Download certificato",
+                "certificate_download_url": {
+                    "button": "Download",
+                    "label": "Download certificato"
+                },
                 "certificate_expiration_date": {
                     "label": "Scadenza certificato",
                     "status": {
@@ -176,7 +182,7 @@
                     }
                 },
                 "email": "Email",
-                "fist_installment": "Prima rata",
+                "first_installment": "Prima rata",
                 "name": "Nome",
                 "phone_number": "Numero di cellulare",
                 "season": "Stagione",

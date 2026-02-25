@@ -3,14 +3,16 @@ export default defineEventHandler(async (event) => {
     const seasonId = Number(query.season as string);
     const activityId = Number(query.activity as string);
 
-    const athletes = await prisma.athlete.findMany({
-        select: athletePaymentsSelect,
+    const athletes = await prisma.enrollment.findMany({
+        select: enrollmentPaymentsSelect,
         where: {
-            seasonId,
-            activityId,
+            season_id: seasonId,
+            activity_id: activityId,
         },
         orderBy: {
-            name: 'asc',
+            athlete: {
+                name: 'asc',
+            },
         },
     });
 

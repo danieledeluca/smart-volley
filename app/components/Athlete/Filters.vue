@@ -23,7 +23,7 @@ const {
 const seasons = computed(() => {
     return _seasons.value?.map<SelectMenuItem>((season) => {
         return {
-            label: `${season.starterYear} - ${season.endYear}`,
+            label: `${season.starter_year} - ${season.end_year}`,
             id: season.id,
 
         };

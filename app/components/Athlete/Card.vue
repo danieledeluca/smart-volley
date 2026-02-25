@@ -13,7 +13,7 @@ const { title, icon } = defineProps<{
                 <span>{{ title }}</span>
             </h2>
         </template>
-        <div class="*:py-2 *:not-last:border-b *:not-last:border-b-accented">
+        <div class="*:not-last:border-b *:not-last:border-b-accented">
             <slot />
         </div>
     </UCard>

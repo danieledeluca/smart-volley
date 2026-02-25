@@ -6,22 +6,44 @@
 }
 
 @layer components {
-    .athletes-table {
+    .striped-table {
+        @apply max-h-[50dvh] rounded-md border! border-accented!;
+
         table {
+            thead {
+                @apply text-nowrap;
+            }
+
             tbody {
                 tr {
-                    @apply cursor-pointer odd:bg-elevated odd:hover:bg-neutral-600/50;
+                    @apply odd:bg-elevated;
 
+                    &[data-selectable="true"] {
+                        @apply cursor-pointer odd:hover:bg-accented/50!;
+
+                        &.valid {
+                            @apply hover:bg-success/15! odd:hover:bg-success/25!;
+                        }
+
+                        &.missing {
+                            @apply hover:bg-warning/15! odd:hover:bg-warning/25!;
+                        }
+
+                        &.expired {
+                            @apply hover:bg-error/15! odd:hover:bg-error/25!;
+                        }
+                    }
+    
                     &.valid {
-                        @apply odd:bg-success/20 odd:hover:bg-success/25! bg-success/10 hover:bg-success/15!;
+                        @apply bg-success/10 odd:bg-success/20;
                     }
 
                     &.missing {
-                        @apply odd:bg-warning/20 odd:hover:bg-warning/25! bg-warning/10 hover:bg-warning/15!;
+                        @apply bg-warning/10 odd:bg-warning/20;
                     }
 
                     &.expired {
-                        @apply odd:bg-error/20 odd:hover:bg-error/25! bg-error/10 hover:bg-error/15!;
+                        @apply bg-error/10 odd:bg-error/20;
                     }
                 }
             }

@@ -8,55 +8,65 @@ datasource db {
 }
 
 model Activity {
-  id       Int       @id @default(autoincrement())
-  name     String
-  athletes Athlete[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  enrollments Enrollment[]
 }
 
 model Season {
-  id          Int       @id @default(autoincrement())
-  starterYear Int       @db.SmallInt
-  endYear     Int       @db.SmallInt
-  athletes    Athlete[]
+  id           Int          @id @default(autoincrement())
+  starter_year Int          @db.SmallInt
+  end_year     Int          @db.SmallInt
+  enrollments  Enrollment[]
 }
 
 model Course {
-  id       Int       @id @default(autoincrement())
-  name     String
-  athletes Athlete[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  enrollments Enrollment[]
 }
 
 model Parent {
   id       Int       @id @default(autoincrement())
   name     String
-  taxCode  String    @db.Char(16)
+  email    String?   @unique
+  tax_code String    @db.Char(16)
   athletes Athlete[]
 }
 
 model Athlete {
-  id                        Int       @id @default(autoincrement())
-  name                      String
-  birthday                  DateTime  @db.Date
-  birthplace                String
-  taxCode                   String    @db.Char(16)
-  city                      String
-  address                   String
-  phoneNumber               String
-  email                     String    @unique
-  parent                    Parent?   @relation(fields: [parentId], references: [id])
-  parentId                  Int?
-  season                    Season    @relation(fields: [seasonId], references: [id])
-  seasonId                  Int
-  activity                  Activity  @relation(fields: [activityId], references: [id])
-  activityId                Int
-  course                    Course    @relation(fields: [courseId], references: [id])
-  courseId                  Int
-  volleyAccount             Decimal?  @db.Decimal(10, 2)
-  volleyBalance             Decimal?  @db.Decimal(10, 2)
-  volleyBalanceSecondary    Decimal?  @db.Decimal(10, 2)
-  firstInstallment          Decimal?  @db.Decimal(10, 2)
-  secondInstallment         Decimal?  @db.Decimal(10, 2)
-  thirdInstallment          Decimal?  @db.Decimal(10, 2)
-  certificateExpirationDate DateTime? @db.Date
-  certificateDownloadUrl    String?
+  id           Int          @id @default(autoincrement())
+  name         String
+  birthday     DateTime     @db.Date
+  birthplace   String
+  tax_code     String       @db.Char(16)
+  city         String
+  address      String
+  phone_number String
+  email        String?      @unique
+  parent_id    Int?
+  parent       Parent?      @relation(fields: [parent_id], references: [id])
+  enrollments  Enrollment[]
+}
+
+model Enrollment {
+  id                          Int       @id @default(autoincrement())
+  athlete_id                  Int
+  athlete                     Athlete   @relation(fields: [athlete_id], references: [id])
+  season_id                   Int
+  season                      Season    @relation(fields: [season_id], references: [id])
+  activity_id                 Int
+  activity                    Activity  @relation(fields: [activity_id], references: [id])
+  course_id                   Int
+  course                      Course    @relation(fields: [course_id], references: [id])
+  volley_account              Decimal?  @db.Decimal(10, 2)
+  volley_balance              Decimal?  @db.Decimal(10, 2)
+  volley_balance_secondary    Decimal?  @db.Decimal(10, 2)
+  first_installment           Decimal?  @db.Decimal(10, 2)
+  second_installment          Decimal?  @db.Decimal(10, 2)
+  third_installment           Decimal?  @db.Decimal(10, 2)
+  certificate_expiration_date DateTime? @db.Date
+  certificate_download_url    String?
+
+  @@unique([athlete_id, season_id, activity_id, course_id])
 }

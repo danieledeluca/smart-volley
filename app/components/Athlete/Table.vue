@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends Partial<FullAthlete>">
+<script setup lang="ts" generic="T">
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { TableMeta } from '@tanstack/vue-table';
 
@@ -9,6 +9,7 @@ const {
     tableData,
     tableColumns,
     tableMeta,
+    onSelect,
 } = defineProps<{
     showSearchField?: boolean;
     isLoading: boolean;
@@ -16,13 +17,10 @@ const {
     tableData: T[];
     tableColumns?: TableColumn<T>[];
     tableMeta?: TableMeta<T>;
+    onSelect?: (event: Event, row: TableRow<T>) => void;
 }>();
 
 const table = useTemplateRef('table');
-
-function onSelect(_event: Event, row: TableRow<T>) {
-    navigateTo(`/athletes/${row.original.id}`);
-}
 </script>
 
 <template>
@@ -46,7 +44,7 @@ function onSelect(_event: Event, row: TableRow<T>) {
                 :data="tableData"
                 :columns="tableColumns"
                 :meta="tableMeta"
-                class="athletes-table max-h-[50dvh] rounded-md border border-accented [&_thead]:text-nowrap"
+                class="striped-table"
                 sticky
                 :empty="$t('table.athletes.empty')"
                 @select="onSelect"

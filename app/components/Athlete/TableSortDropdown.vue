@@ -1,9 +1,9 @@
-<script setup lang="ts" generic="T">
+<script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
 import type { Column } from '@tanstack/vue-table';
 
 const { column, label } = defineProps<{
-    column: Column<T>;
+    column: Column<any>;
     label: string;
 }>();
 

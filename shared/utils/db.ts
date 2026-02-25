@@ -1,10 +1,8 @@
-import type { AthleteGetPayload, AthleteInclude, AthleteSelect } from '~~/lib/db/generated/prisma/models';
+import type { AthleteGetPayload, AthleteInclude, AthleteSelect, EnrollmentGetPayload, EnrollmentSelect } from '~~/lib/db/generated/prisma/models';
 
 export const athleteListItemsSelect = {
     id: true,
     name: true,
-    activity: true,
-    season: true,
 } satisfies AthleteSelect;
 
 export type AthleteListItem = AthleteGetPayload<{
@@ -12,47 +10,61 @@ export type AthleteListItem = AthleteGetPayload<{
 }>;
 
 export const athleteItemsInclude = {
-    activity: true,
-    course: true,
     parent: true,
-    season: true,
+    enrollments: {
+        include: {
+            activity: true,
+            season: true,
+            course: true,
+        },
+    },
 } satisfies AthleteInclude;
 
 export type AthleteItem = AthleteGetPayload<{
     include: typeof athleteItemsInclude;
 }>;
 
-export const athletePaymentsSelect = {
+export const enrollmentPaymentsSelect = {
     id: true,
-    name: true,
-    phoneNumber: true,
-    volleyAccount: true,
-    volleyBalance: true,
-    volleyBalanceSecondary: true,
-    firstInstallment: true,
-    secondInstallment: true,
-    thirdInstallment: true,
-} satisfies AthleteSelect;
+    volley_account: true,
+    volley_balance: true,
+    volley_balance_secondary: true,
+    first_installment: true,
+    second_installment: true,
+    third_installment: true,
+    athlete: {
+        select: {
+            id: true,
+            name: true,
+            phone_number: true,
+        },
+    },
+} satisfies EnrollmentSelect;
 
-export type AthletePayment = AthleteGetPayload<{
-    select: typeof athletePaymentsSelect;
+export type EnrollmentPayment = EnrollmentGetPayload<{
+    select: typeof enrollmentPaymentsSelect;
 }>;
 
-export const athleteCertificatesSelect = {
+export const enrollmentCertificatesSelect = {
     id: true,
-    name: true,
-    certificateExpirationDate: true,
-    certificateDownloadUrl: true,
-} satisfies AthleteSelect;
+    certificate_expiration_date: true,
+    certificate_download_url: true,
+    athlete: {
+        select: {
+            id: true,
+            name: true,
+        },
+    },
+} satisfies EnrollmentSelect;
 
-export type AthleteCertificate = AthleteGetPayload<{
-    select: typeof athleteCertificatesSelect;
+export type EnrollmentCertificate = EnrollmentGetPayload<{
+    select: typeof enrollmentCertificatesSelect;
 }>;
 
 export const athleteContactsSelect = {
     id: true,
     name: true,
-    phoneNumber: true,
+    phone_number: true,
     email: true,
 } satisfies AthleteSelect;
 
