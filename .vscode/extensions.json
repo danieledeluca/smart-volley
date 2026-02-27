@@ -1,6 +1,6 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "Prisma.prisma"
-    ]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "Prisma.prisma"
+  ]
 }
