@@ -116,7 +116,7 @@ export const translations = {
     },
     menu: {
         athletes: 'Atleti',
-        certificates: 'Certificati',
+        certificates: 'Certificati medici',
         enrollments: 'Iscrizioni',
         payments: 'Pagamenti',
     },
@@ -126,17 +126,17 @@ export const translations = {
         },
         athletes: {
             header: {
-                description: 'Descrizione pagina atleti',
-                title: 'Titolo pagina atleti',
+                description: 'Una panoramica completa di tutti gli atleti iscritti alla società, con informazioni di contatto sempre aggiornate, come numero di cellulare ed email, per restare facilmente in contatto e gestire ogni esigenza della squadra.',
+                title: 'Elenco atleti',
             },
             title: 'Anagrafica',
         },
         certificates: {
             header: {
-                description: 'Descrizione pagina certificati',
-                title: 'Titolo pagina certificati',
+                description: 'Controlla rapidamente lo stato dei certificati medici degli atleti, con informazioni sulla data di scadenza e link diretti per scaricare i documenti, assicurando la regolarità di tutte le iscrizioni.',
+                title: 'Certificati medici',
             },
-            title: 'Certificati',
+            title: 'Certificati medici',
         },
         enrollment: {
             button: 'Vedi scheda atleta',
@@ -144,40 +144,40 @@ export const translations = {
         },
         enrollments: {
             header: {
-                description: 'Descrizione pagina iscrizioni',
-                title: 'Titolo pagina iscrizioni',
+                description: 'Tutte le iscrizioni degli atleti in un unico posto: consulta le stagioni di partecipazione, le attività e i corsi assegnati, per avere sotto controllo la partecipazione e la pianificazione delle squadre.',
+                title: 'Dettagli iscrizioni',
             },
             title: 'Iscrizioni',
         },
         home: {
             card: {
                 certificates: {
-                    description: 'Controlla rapidamente lo stato di validità dei certificati medici degli atleti.',
+                    description: 'Consulta lo stato di validità dei certificati medici degli atleti.',
                     title: 'Certificati',
                 },
-                contacts: {
-                    description: 'Accedi ai recapiti degli atleti, con numeri di cellulare e indirizzi email.',
-                    title: 'Contatti',
+                enrollments: {
+                    description: 'Consulta la lista completa delle iscrizioni degli atleti.',
+                    title: 'Iscrizioni',
                 },
                 payments: {
-                    description: 'Consulta la lista degli atleti con lo stato e i dettagli dei pagamenti effettuati.',
+                    description: 'Consulta la lista degli atleti con i dettagli dei pagamenti effettuati.',
                     title: 'Pagamenti',
                 },
-                personal_data: {
-                    description: 'Visualizza l\'elenco completo degli atleti iscritti.',
+                athletes: {
+                    description: 'Consulta la lista completa degli atleti iscritti.',
                     title: 'Anagrafica',
                 },
             },
             hero: {
                 description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti. Consente di visualizzare informazioni anagrafiche, lo stato dei pagamenti e la validità del certificato medico',
                 head_line: 'Smart Volley',
-                title: 'Gestione atleti Vis et Virtus',
+                title: 'Atleti della Vis et Virtus',
             },
         },
         payments: {
             header: {
-                description: 'Descrizione pagina pagamenti',
-                title: 'Titolo pagina pagamenti',
+                description: 'Gestisci e controlla lo storico dei pagamenti delle iscrizioni, con dettagli sui saldi, le scadenze e le transazioni, per avere sempre una visione chiara delle finanze della società.',
+                title: 'Pagamenti e saldi',
             },
             title: 'Pagamenti',
         },

@@ -13,6 +13,7 @@ export default defineAppConfig({
         pageHeader: {
             slots: {
                 root: 'pt-0',
+                description: 'text-balance',
             },
         },
         button: {

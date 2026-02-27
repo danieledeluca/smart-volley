@@ -3,10 +3,17 @@ import type { PageCardProps } from '@nuxt/ui';
 
 const cards: PageCardProps[] = [
     {
-        title: $t('page.home.card.personal_data.title'),
-        description: $t('page.home.card.personal_data.description'),
+        title: $t('page.home.card.athletes.title'),
+        description: $t('page.home.card.athletes.description'),
         icon: 'i-lucide-users',
         to: '/athletes',
+        variant: 'subtle',
+    },
+    {
+        title: $t('page.home.card.enrollments.title'),
+        description: $t('page.home.card.enrollments.description'),
+        icon: 'i-lucide-list',
+        to: '/enrollments',
         variant: 'subtle',
     },
     {
@@ -19,15 +26,8 @@ const cards: PageCardProps[] = [
     {
         title: $t('page.home.card.certificates.title'),
         description: $t('page.home.card.certificates.description'),
-        icon: 'i-lucide-file',
+        icon: 'i-lucide-briefcase-medical',
         to: '/certificates',
-        variant: 'subtle',
-    },
-    {
-        title: $t('page.home.card.contacts.title'),
-        description: $t('page.home.card.contacts.description'),
-        icon: 'i-lucide-notebook',
-        to: '/contacts',
         variant: 'subtle',
     },
 ];
