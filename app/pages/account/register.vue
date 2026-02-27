@@ -31,7 +31,7 @@ const { messages } = storeToRefs(authStore);
                 </ULink>
             </template>
             <template #password-help>
-                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH }) }}
+                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
             </template>
             <template #validation>
                 <UAlert

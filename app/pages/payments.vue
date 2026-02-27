@@ -20,7 +20,7 @@ const {
 const tableColumns: TableColumn<EnrollmentListItem>[] = [
     {
         accessorKey: 'athlete',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.athletes.column.name') }),
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
         cell: ({ row }) => h(UUser, {
             name: row.original.athlete.name,
             description: `#${row.original.id?.toString()}`,
@@ -29,7 +29,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'volley_account',
-        header: $t('table.athletes.column.volley_account'),
+        header: $t('table.column.volley_account'),
         cell: ({ row }) => formatPrice(row.original.volley_account?.toString()),
         meta: {
             class: {
@@ -40,7 +40,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'volley_balance',
-        header: $t('table.athletes.column.volley_balance'),
+        header: $t('table.column.volley_balance'),
         cell: ({ row }) => formatPrice(row.original.volley_balance?.toString()),
         meta: {
             class: {
@@ -51,7 +51,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'volley_balance_secondary',
-        header: $t('table.athletes.column.volley_balance_secondary'),
+        header: $t('table.column.volley_balance_secondary'),
         cell: ({ row }) => formatPrice(row.original.volley_balance_secondary?.toString()),
         meta: {
             class: {
@@ -62,7 +62,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'first_installment',
-        header: $t('table.athletes.column.first_installment'),
+        header: $t('table.column.first_installment'),
         cell: ({ row }) => formatPrice(row.original.first_installment?.toString()),
         meta: {
             class: {
@@ -73,7 +73,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'second_installment',
-        header: $t('table.athletes.column.second_installment'),
+        header: $t('table.column.second_installment'),
         cell: ({ row }) => formatPrice(row.original.second_installment?.toString()),
         meta: {
             class: {
@@ -84,7 +84,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'third_installment',
-        header: $t('table.athletes.column.third_installment'),
+        header: $t('table.column.third_installment'),
         cell: ({ row }) => formatPrice(row.original.third_installment?.toString()),
         meta: {
             class: {
@@ -102,8 +102,8 @@ function onSelect(_event: Event, row: TableRow<EnrollmentListItem>) {
 
 <template>
     <UPageHeader
-        title="Titolo pagina pagamenti"
-        description="A responsive page header with title, description and actions."
+        :title="$t('page.payments.header.title')"
+        :description="$t('page.payments.header.description')"
     />
     <ListFilters
         v-model:state="enrollmentsState"

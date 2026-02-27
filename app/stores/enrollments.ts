@@ -92,11 +92,11 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             },
             {
                 type: 'select',
-                label: 'Corso',
+                label: $t('form.course.label'),
                 name: 'course',
                 items: courses.value,
                 loading: coursesPending.value,
-                placeholder: 'Seleziona un corso',
+                placeholder: $t('form.course.placeholder'),
                 icon: 'i-lucide-dumbbell',
             },
         ];

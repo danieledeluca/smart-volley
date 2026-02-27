@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: $t('auth.reset_password.default'),
+    title: $t('auth.reset_password.meta_title'),
 });
 
 const authStore = useAuthStore();
@@ -16,19 +16,17 @@ const { messages } = storeToRefs(authStore);
         <UAuthForm
             :schema="resetPasswordSchema"
             :title="$t('auth.reset_password.title')"
+            :description="$t('auth.reset_password.description')"
             icon="i-lucide-lock-keyhole"
             :fields="authStore.resetPasswordFields"
             :loadingAuto="true"
             :submit="{
-                label: $t('auth.reset_password.default'),
+                label: $t('auth.reset_password.submit'),
             }"
             @submit="authStore.resetPassword"
         >
-            <template #description>
-                {{ $t('auth.reset_password.description') }}
-            </template>
             <template #password-help>
-                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH }) }}
+                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
             </template>
             <template #validation>
                 <UAlert

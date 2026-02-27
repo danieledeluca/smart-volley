@@ -51,7 +51,7 @@ watch(() => tableData, () => {
                 :columns="tableColumns"
                 class="striped-table rounded-md border border-accented has-[table+*]:rounded-b-none"
                 sticky
-                empty="Nessun risultato trovato"
+                :empty="$t('table.empty')"
                 :paginationOptions="{ getPaginationRowModel: getPaginationRowModel() }"
                 @select="onSelect"
             />
@@ -60,7 +60,11 @@ watch(() => tableData, () => {
                 class="flex items-center gap-4 rounded-md rounded-t-none border border-t-0 border-accented bg-elevated px-4 py-3.5 max-md:flex-col"
             >
                 <div class="text-sm text-muted">
-                    <span>Showing {{ currentPage.start }} to {{ currentPage.end }} of {{ tableData.length }}</span>
+                    {{ $t('table.pagination', {
+                        start: currentPage.start.toString(),
+                        end: currentPage.end.toString(),
+                        total: tableData.length.toString(),
+                    }) }}
                 </div>
                 <UPagination
                     class="md:ml-auto"

@@ -12,17 +12,17 @@ const { data: athlete, pending } = useLazyFetch<AthleteItem>(`/api/athletes/${ro
 const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
     {
         accessorKey: 'season',
-        header: $t('table.athletes.column.season'),
+        header: $t('table.column.season'),
         cell: ({ row }) => `${row.original.season.starter_year} - ${row.original.season.end_year}`,
     },
     {
         accessorKey: 'activity',
-        header: $t('table.athletes.column.activity'),
+        header: $t('table.column.activity'),
         cell: ({ row }) => row.original.activity.name,
     },
     {
         accessorKey: 'course',
-        header: 'Corso',
+        header: $t('table.column.course'),
         cell: ({ row }) => row.original.course.name,
     },
 ];
@@ -75,15 +75,15 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
         </UUser>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
-                <ItemCard :title="$t('page.athlete.card.athlete.title')" icon="i-lucide-user">
-                    <ItemCardRecord :label="$t('page.athlete.record.name')" :value="athlete.name" />
+                <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-user">
+                    <ItemCardRecord :label="$t('card.record.name')" :value="athlete.name" />
                     <ItemCardRecord
-                        :label="$t('page.athlete.record.birthday')"
+                        :label="$t('card.record.birthday')"
                         :value="formatDate(athlete.birthday.toString())"
                     />
-                    <ItemCardRecord :label="$t('page.athlete.record.birthplace')" :value="athlete.birthplace" />
+                    <ItemCardRecord :label="$t('card.record.birthplace')" :value="athlete.birthplace" />
                     <ItemCardRecord
-                        :label="$t('page.athlete.record.tax_code')"
+                        :label="$t('card.record.tax_code')"
                         :value="athlete.tax_code"
                         :showCopyButton="true"
                     />
@@ -91,9 +91,9 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
 
                 <ItemCard
                     v-if="athlete.enrollments.length > 0"
-                    title="Iscrizioni"
+                    :title="$t('card.enrollments.title')"
                     icon="i-lucide-history"
-                    :removePadding="true"
+                    class="**:data-[slot=body]:p-0"
                 >
                     <ListTable
                         :tableData="athlete.enrollments"
@@ -106,10 +106,10 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
             </div>
             <div class="lg:col-span-4">
                 <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
-                    <ItemCard :title="$t('page.athlete.card.address_contacts.title')" icon="i-lucide-notebook">
-                        <ItemCardRecord :label="$t('page.athlete.record.city')" :value="athlete.city" />
-                        <ItemCardRecord :label="$t('page.athlete.record.address')" :value="athlete.address" />
-                        <ItemCardRecord :label="$t('page.athlete.record.phone_number')" :value="athlete.phone_number">
+                    <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
+                        <ItemCardRecord :label="$t('card.record.city')" :value="athlete.city" />
+                        <ItemCardRecord :label="$t('card.record.address')" :value="athlete.address" />
+                        <ItemCardRecord :label="$t('card.record.phone_number')" :value="athlete.phone_number">
                             <UButton
                                 color="primary"
                                 variant="ghost"
@@ -124,11 +124,7 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                                 target="_blank"
                             />
                         </ItemCardRecord>
-                        <ItemCardRecord
-                            v-if="athlete.email"
-                            :label="$t('page.athlete.record.email')"
-                            :value="athlete.email"
-                        >
+                        <ItemCardRecord v-if="athlete.email" :label="$t('card.record.email')" :value="athlete.email">
                             <UButton
                                 color="primary"
                                 variant="ghost"
@@ -140,18 +136,18 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
 
                     <ItemCard
                         v-if="athlete.parent"
-                        :title="$t('page.athlete.card.parent.title')"
+                        :title="$t('card.parent.title')"
                         icon="i-lucide-user"
                     >
-                        <ItemCardRecord :label="$t('page.athlete.record.parent.name')" :value="athlete.parent.name" />
+                        <ItemCardRecord :label="$t('card.record.parent.name')" :value="athlete.parent.name" />
                         <ItemCardRecord
-                            :label="$t('page.athlete.record.parent.tax_code')"
+                            :label="$t('card.record.parent.tax_code')"
                             :value="athlete.parent.tax_code"
                             :showCopyButton="true"
                         />
                         <ItemCardRecord
                             v-if="athlete.parent.email"
-                            :label="$t('page.athlete.record.parent.email')"
+                            :label="$t('card.record.parent.email')"
                             :value="athlete.parent.email"
                         >
                             <UButton

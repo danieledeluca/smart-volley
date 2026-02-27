@@ -32,12 +32,6 @@ export default withNuxt(
             },
         },
         {
-            files: ['**/*.{js,ts,vue}'],
-            rules: {
-                'style/max-len': ['error', { code: 120, ignorePattern: 'class="[^"]*"' }],
-            },
-        },
-        {
             files: ['**/*.css'],
             rules: {
                 'format/prettier': ['error', { parser: 'css', singleQuote: false, tabWidth: 4 }],
@@ -51,6 +45,7 @@ export default withNuxt(
                 'perfectionist/sort-imports': ['error', { tsconfig: { rootDir: '.' } }],
                 'style/arrow-parens': ['error', 'always'],
                 'style/brace-style': ['error', '1tbs'],
+                'style/max-len': ['error', { code: 120, ignorePattern: 'class="[^"]*"', ignoreStrings: true }],
                 'ts/consistent-type-definitions': ['error', 'type'],
                 'ts/no-redeclare': ['off'],
                 'vue/attribute-hyphenation': ['error', 'never'],

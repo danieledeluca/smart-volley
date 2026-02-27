@@ -7,13 +7,13 @@ const { user } = storeToRefs(authStore);
 
 const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
     {
-        label: 'Atleti',
+        label: $t('menu.athletes'),
         to: '/athletes',
         icon: 'i-lucide-users',
         active: route.path.startsWith('/athletes'),
     },
     {
-        label: 'Iscrizioni',
+        label: $t('menu.enrollments'),
         to: '/enrollments',
         icon: 'i-lucide-list',
         active: route.path.startsWith('/enrollments'),

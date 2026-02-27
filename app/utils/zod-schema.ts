@@ -10,7 +10,7 @@ const emailSchema = z.email({
     error: (issue) => issue.input ? $t('form.email.error') : $t('form.email.required'),
 });
 const passwordSchema = z.string($t('form.password.required'))
-    .min(PASSWORD_MIN_LENGTH, $t('form.password.error', { min: PASSWORD_MIN_LENGTH }));
+    .min(PASSWORD_MIN_LENGTH, $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }));
 const confirmPasswordSchema = z.string($t('form.confirm_password.required'));
 const passwordMatch: core.$ZodCustomParams = {
     message: 'form.confirm_password.error',

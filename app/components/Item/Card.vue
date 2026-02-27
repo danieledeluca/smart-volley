@@ -1,17 +1,12 @@
 <script setup lang="ts">
-const { title, icon, removePadding = false } = defineProps<{
+const { title, icon } = defineProps<{
     title: string;
     icon: string;
-    removePadding?: boolean;
 }>();
 </script>
 
 <template>
-    <UCard
-        variant="subtle"
-        class="@container"
-        :ui="{ body: removePadding ? 'sm:p-0 p-0' : '' }"
-    >
+    <UCard variant="subtle" class="@container">
         <template #header>
             <h2 class="flex items-center gap-3 text-xl">
                 <UButton color="primary" variant="soft" :icon="icon" />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-    title: 'Dettaglio iscrizione',
+    title: $t('page.enrollment.title'),
 });
 
 const route = useRoute();
@@ -80,39 +80,57 @@ const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.
                 class="max-md:w-full max-md:justify-center md:ml-auto"
                 :to="`/athletes/${enrollment.athlete.id}`"
             >
-                Vedi scheda atleta
+                {{ $t('page.enrollment.button') }}
             </UButton>
         </div>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
-                <ItemCard title="Pagamenti" icon="i-lucide-credit-card">
-                    <ItemCardRecord label="Account volley" :value="formatPrice(enrollment.volley_account)" />
-                    <ItemCardRecord label="Saldo volley" :value="formatPrice(enrollment.volley_balance)" />
-                    <ItemCardRecord label="Saldo volley 2" :value="formatPrice(enrollment.volley_balance_secondary)" />
-                    <ItemCardRecord label="Prima rata" :value="formatPrice(enrollment.first_installment)" />
-                    <ItemCardRecord label="Seconda rata" :value="formatPrice(enrollment.second_installment)" />
-                    <ItemCardRecord label="Terza rata" :value="formatPrice(enrollment.third_installment)" />
+                <ItemCard :title="$t('card.payments.title')" icon="i-lucide-credit-card">
+                    <ItemCardRecord
+                        :label="$t('card.record.account_volley')"
+                        :value="formatPrice(enrollment.volley_account)"
+                    />
+                    <ItemCardRecord
+                        :label="$t('card.record.volley_balance')"
+                        :value="formatPrice(enrollment.volley_balance)"
+                    />
+                    <ItemCardRecord
+                        :label="$t('card.record.volley_balance_secondary')"
+                        :value="formatPrice(enrollment.volley_balance_secondary)"
+                    />
+                    <ItemCardRecord
+                        :label="$t('card.record.first_installment')"
+                        :value="formatPrice(enrollment.first_installment)"
+                    />
+                    <ItemCardRecord
+                        :label="$t('card.record.second_installment')"
+                        :value="formatPrice(enrollment.second_installment)"
+                    />
+                    <ItemCardRecord
+                        :label="$t('card.record.third_installment')"
+                        :value="formatPrice(enrollment.third_installment)"
+                    />
                 </ItemCard>
                 <ItemCard title="Certificato" icon="i-lucide-briefcase-medical">
                     <ItemCardRecord
-                        label="Scadenza certificato"
+                        :label="$t('card.record.certificates.expiration_date')"
                         :value="formatDate(enrollment.certificate_expiration_date)"
                     />
                     <ItemCardRecord
-                        label="Download certificato"
+                        :label="$t('card.record.certificates.download_url')"
                         :value="enrollment.certificate_download_url || EMPTY_VALUE"
                     />
                 </ItemCard>
             </div>
             <div class="lg:col-span-4">
                 <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
-                    <ItemCard title="Sport" icon="i-lucide-zap">
+                    <ItemCard :title="$t('card.sport.title')" icon="i-lucide-zap">
                         <ItemCardRecord
-                            label="Stagione"
+                            :label="$t('card.record.season')"
                             :value="`${enrollment.season.starter_year} - ${enrollment.season.end_year}`"
                         />
-                        <ItemCardRecord label="Attività" :value="enrollment.activity.name" />
-                        <ItemCardRecord label="Corso" :value="enrollment.course.name" />
+                        <ItemCardRecord :label="$t('card.record.activity')" :value="enrollment.activity.name" />
+                        <ItemCardRecord :label="$t('card.record.course')" :value="enrollment.course.name" />
                     </ItemCard>
                 </div>
             </div>

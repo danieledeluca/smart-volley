@@ -22,7 +22,7 @@ const {
 const tableColumns: TableColumn<EnrollmentListItem>[] = [
     {
         accessorKey: 'athlete',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.athletes.column.name') }),
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
         cell: ({ row }) => h(UUser, {
             name: row.original.athlete.name,
             description: `#${row.original.id?.toString()}`,
@@ -31,7 +31,7 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'certificate_expiration_date',
-        header: $t('table.athletes.column.certificate_expiration_date.label'),
+        header: $t('table.column.certificate.expiration_date.label'),
         cell: ({ row }) => {
             const status = getCertificateDateStatus(row.original.certificate_expiration_date?.toString());
             const colorMap: Record<CertificateDateStatus, string> = {
@@ -47,9 +47,9 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
             };
 
             const badgeLabelMap: Record<CertificateDateStatus, string> = {
-                valid: $t('table.athletes.column.certificate_expiration_date.status.valid'),
-                missing: $t('table.athletes.column.certificate_expiration_date.status.missing'),
-                expired: $t('table.athletes.column.certificate_expiration_date.status.expired'),
+                valid: $t('table.column.certificate.expiration_date.status.valid'),
+                missing: $t('table.column.certificate.expiration_date.status.missing'),
+                expired: $t('table.column.certificate.expiration_date.status.expired'),
             };
 
             return h('div', { class: 'flex gap-2 items-center' }, [
@@ -62,15 +62,15 @@ const tableColumns: TableColumn<EnrollmentListItem>[] = [
     },
     {
         accessorKey: 'certificate_download_url',
-        header: $t('table.athletes.column.certificate_download_url.label'),
+        header: $t('table.column.certificate.download_url.label'),
         cell: ({ row }) => {
             if (row.original.certificate_download_url) {
                 return h(UButton, {
-                    color: 'neutral',
-                    variant: 'ghost',
+                    color: 'primary',
+                    variant: 'soft',
                     to: row.original.certificate_download_url,
                     icon: 'i-lucide-download',
-                }, $t('table.athletes.column.certificate_download_url.button'));
+                }, $t('table.column.certificate.download_url.button'));
             }
 
             return EMPTY_VALUE;
@@ -85,8 +85,8 @@ function onSelect(_event: Event, row: TableRow<EnrollmentListItem>) {
 
 <template>
     <UPageHeader
-        title="Titolo pagina certificati"
-        description="A responsive page header with title, description and actions."
+        :title="$t('page.certificates.header.title')"
+        :description="$t('page.certificates.header.description')"
     />
     <ListFilters
         v-model:state="enrollmentsState"

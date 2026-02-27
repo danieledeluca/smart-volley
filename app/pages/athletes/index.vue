@@ -16,7 +16,7 @@ const { athletes, athletesPending, athletesState, athletesFields } = storeToRefs
 const tableColumns: TableColumn<AthleteListItem>[] = [
     {
         accessorKey: 'name',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.athletes.column.name') }),
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
         cell: ({ row }) => h(UUser, {
             name: row.original.name,
             description: `#${row.original.id?.toString()}`,
@@ -25,7 +25,7 @@ const tableColumns: TableColumn<AthleteListItem>[] = [
     },
     {
         accessorKey: 'phoneNumber',
-        header: $t('table.athletes.column.phone_number'),
+        header: $t('table.column.phone_number'),
         cell: ({ row }) => {
             return h('div', { class: 'flex gap-2 items-center' }, [
                 h(UButton, {
@@ -47,7 +47,7 @@ const tableColumns: TableColumn<AthleteListItem>[] = [
     },
     {
         accessorKey: 'email',
-        header: $t('table.athletes.column.email'),
+        header: $t('table.column.email'),
         cell: ({ row }) => {
             if (row.original.email) {
                 return h('div', { class: 'flex gap-2 items-center' }, [
@@ -73,8 +73,8 @@ function onSelect(_event: Event, row: TableRow<AthleteListItem>) {
 
 <template>
     <UPageHeader
-        title="Titolo pagina atleti"
-        description="A responsive page header with title, description and actions."
+        :title="$t('page.athletes.header.title')"
+        :description="$t('page.athletes.header.description')"
     />
     <ListFilters
         v-model:state="athletesState"

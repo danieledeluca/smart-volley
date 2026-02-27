@@ -10,7 +10,7 @@ const { label, value, showCopyButton = false } = defineProps<{
 const { copy } = useClipboard();
 const toast = useToast();
 
-const actions = ref<HTMLElement | null>(null);
+const actions = useTemplateRef('actions');
 </script>
 
 <template>

@@ -16,17 +16,15 @@ const { messages } = storeToRefs(authStore);
         <UAuthForm
             :schema="forgotPasswordSchema"
             :title="$t('auth.forgot_password.title')"
+            :description="$t('auth.forgot_password.description')"
             icon="i-lucide-key-round"
             :fields="authStore.forgotPasswordFields"
             :loadingAuto="true"
             :submit="{
-                label: $t('auth.reset_password.default'),
+                label: $t('auth.forgot_password.submit'),
             }"
             @submit="authStore.forgotPassword"
         >
-            <template #description>
-                {{ $t('auth.reset_password.default') }}
-            </template>
             <template #validation>
                 <UAlert
                     v-for="message in messages"

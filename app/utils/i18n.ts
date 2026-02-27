@@ -1,52 +1,47 @@
-import i18n from '~/i18n/it.json';
+import type { Translations } from './translations';
 
-type LeafKeyOf<T extends object> = {
-    [K in keyof T & string]:
-    T[K] extends object
-        ? `${K}.${LeafKeyOf<T[K]>}`
-        : `${K}`
-}[keyof T & string];
+import { translations } from './translations';
+
+type DotPaths<T, Prefix extends string = ''> = {
+    [K in keyof T]: T[K] extends object
+        ? DotPaths<T[K], `${Prefix}${K & string}.`>
+        : `${Prefix}${K & string}`;
+}[keyof T];
+
+type GetValue<T, Path extends string>
+    = Path extends `${infer Head}.${infer Tail}`
+        ? Head extends keyof T
+            ? GetValue<T[Head], Tail>
+            : never
+        : Path extends keyof T
+            ? T[Path]
+            : never;
 
 type ExtractParams<S extends string>
     = S extends `${string}{${infer Param}}${infer Rest}`
         ? Param | ExtractParams<Rest>
         : never;
 
-type ParamsObject<S extends string>
-    = ExtractParams<S> extends never
-        ? undefined
-        : Record<ExtractParams<S>, string | number>;
+type Params<S extends string> = {
+    [K in ExtractParams<S>]: string;
+};
 
-type PathValue<T, P extends string>
-    = P extends `${infer K}.${infer Rest}`
-        ? K extends keyof T
-            ? PathValue<T[K], Rest>
-            : never
-        : P extends keyof T
-            ? T[P]
-            : never;
+type TranslationKey = DotPaths<Translations>;
 
-type I18nKey = LeafKeyOf<typeof i18n>;
-type TranslationValue<K extends I18nKey> = PathValue<typeof i18n, K>;
-
-export function $t<K extends I18nKey>(
+export function $t<K extends TranslationKey>(
     key: K,
-    ...args: ParamsObject<TranslationValue<K>> extends undefined ? [] : [params: ParamsObject<TranslationValue<K>>]
-) {
-    const value = key.split('.').reduce<unknown>((acc, key) => {
-        if (typeof acc === 'object' && acc !== null && key in acc) {
-            return (acc as Record<string, unknown>)[key];
-        }
+    ...args: ExtractParams<GetValue<Translations, K> & string> extends never
+        ? []
+        : [params: Params<GetValue<Translations, K> & string>]
+): string {
+    const value = key.split('.').reduce<unknown>((obj, k) => {
+        return (obj as Record<string, unknown>)[k];
+    }, translations) as string;
 
-        return '';
-    }, i18n as Record<string, unknown>) as string;
+    if (!args[0])
+        return value;
 
-    const params = args[0];
-
-    if (params) {
-        return Object.entries(params)
-            .reduce((acc, [key, value]) => acc.replace(new RegExp(`{${key}}`, 'g'), String(value)), value);
-    }
-
-    return value;
+    return value.replace(/\{(\w+)\}/g, (_, param) => {
+        return (args[0] as Record<string, string>)[param] ?? `{${param}}`;
+    });
 }
