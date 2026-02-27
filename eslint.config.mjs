@@ -26,15 +26,21 @@ export default withNuxt(
             },
         },
         {
-            files: ['*.json'],
+            files: ['**/*.json'],
             rules: {
                 'jsonc/indent': ['error', 2],
             },
         },
         {
-            files: ['*.vue', '*.ts'],
+            files: ['**/*.{js,ts,vue}'],
             rules: {
-                'style/max-len': ['error', { code: 120 }],
+                'style/max-len': ['error', { code: 120, ignorePattern: 'class="[^"]*"' }],
+            },
+        },
+        {
+            files: ['**/*.css'],
+            rules: {
+                'format/prettier': ['error', { parser: 'css', singleQuote: false, tabWidth: 4 }],
             },
         },
         {

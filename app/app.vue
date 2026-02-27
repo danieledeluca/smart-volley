@@ -1,118 +1,19 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
-
 useHead({
     titleTemplate: (titleChunk) => {
         return titleChunk ? `${titleChunk} | Smart Volley` : 'Smart Volley';
     },
 });
-
-const route = useRoute();
-const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
-
-const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
-    {
-        label: $t('menu.personal_data'),
-        to: '/athletes',
-        icon: 'i-lucide-users',
-        active: route.path.startsWith('/athletes'),
-    },
-    {
-        label: $t('menu.payments'),
-        to: '/payments',
-        icon: 'i-lucide-credit-card',
-        active: route.path === '/payments',
-    },
-    {
-        label: $t('menu.certificates'),
-        to: '/certificates',
-        icon: 'i-lucide-file',
-        active: route.path === '/certificates',
-    },
-    {
-        label: $t('menu.contacts'),
-        to: '/contacts',
-        icon: 'i-lucide-notebook',
-        active: route.path === '/contacts',
-    },
-]);
-
-const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
-    if (user.value) {
-        return [
-            [
-                {
-                    label: user.value.email,
-                    icon: 'i-lucide-user',
-                    type: 'label',
-                },
-            ],
-            [
-                {
-                    label: $t('auth.log_out'),
-                    icon: 'i-lucide-log-out',
-                    async onSelect() {
-                        await authStore.logOut();
-                    },
-                },
-            ],
-        ];
-    }
-
-    return [
-        [
-            {
-                label: $t('auth.sing_in.default'),
-                to: '/account/login',
-                icon: 'i-lucide-log-in',
-            },
-            {
-                label: $t('auth.sign_up.default'),
-                to: '/account/register',
-                icon: 'i-lucide-user-plus',
-            },
-        ],
-    ];
-});
 </script>
 
 <template>
     <UApp>
-        <UHeader title="Smart Volley" mode="drawer">
-            <template #title>
-                <UIcon name="i-lucide-volleyball" class="size-7 text-primary" />
-                <span>Smart Volley</span>
-            </template>
-
-            <UNavigationMenu :items="navigationMenuItems" />
-
-            <template #right>
-                <UColorModeButton />
-
-                <UDropdownMenu :items="dropdownMenuItems" :modal="false" :content="{ align: 'end' }">
-                    <UButton
-                        color="neutral"
-                        variant="ghost"
-                        :avatar="user ? getAvatar(user.email) : undefined"
-                        :icon="!user ? 'i-lucide-circle-user-round' : undefined"
-                    />
-                </UDropdownMenu>
-            </template>
-
-            <template #body>
-                <UNavigationMenu :items="navigationMenuItems" orientation="vertical" class="-mx-2.5" />
-            </template>
-        </UHeader>
+        <AppHeader />
         <UMain class="py-8">
             <UContainer>
                 <NuxtPage />
             </UContainer>
         </UMain>
-        <UFooter class="border-t border-t-accented">
-            <p class="text-sm text-muted">
-                &copy; {{ new Date().getFullYear() }} - Daniele De Luca
-            </p>
-        </UFooter>
+        <AppFooter />
     </UApp>
 </template>

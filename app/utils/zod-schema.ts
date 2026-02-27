@@ -4,7 +4,6 @@ import z from 'zod';
 
 // Constants
 export const PASSWORD_MIN_LENGTH = 8;
-export const NAME_MIN_LENGTH = 3;
 
 // Fields schema
 const emailSchema = z.email({
@@ -18,10 +17,10 @@ const passwordMatch: core.$ZodCustomParams = {
     path: ['confirmPassword'],
 };
 
-const seasonSchema = z.number($t('form.season.required'));
-const activitySchema = z.number($t('form.activity.required'));
-const nameSchema = z.string($t('form.name.required'))
-    .min(NAME_MIN_LENGTH, $t('form.name.error', { min: NAME_MIN_LENGTH }));
+const nameSchema = z.string().optional();
+const seasonSchema = z.number().optional();
+const activitySchema = z.number().optional();
+const courseSchema = z.number().optional();
 
 // Forms schema
 export const loginSchema = z.object({
@@ -44,17 +43,15 @@ export const resetPasswordSchema = z.object({
     confirmPassword: confirmPasswordSchema,
 }).refine((data) => data.password === data.confirmPassword, passwordMatch);
 
-export const athleteFiltersWithoutNameSchema = z.object({
-    mode: z.literal('withoutName'),
-    season: seasonSchema,
-    activity: activitySchema,
+export const athletesFiltersSchema = z.object({
+    name: nameSchema,
 });
 
-export const athleteFiltersWithNameSchema = z.object({
-    mode: z.literal('withName'),
+export const enrollmentsFiltersSchema = z.object({
     name: nameSchema,
-    season: seasonSchema.optional(),
-    activity: activitySchema.optional(),
+    season: seasonSchema,
+    activity: activitySchema,
+    course: courseSchema,
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
@@ -62,6 +59,5 @@ export type RegisterSchema = z.infer<typeof registerSchema>;
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 
-export type AthleteFiltersWithoutNameSchema = z.infer<typeof athleteFiltersWithoutNameSchema>;
-export type AthleteFiltersWithNameSchema = z.infer<typeof athleteFiltersWithNameSchema>;
-export type AthleteFiltersSchema = AthleteFiltersWithoutNameSchema | AthleteFiltersWithNameSchema;
+export type AthletesFiltersSchema = z.infer<typeof athletesFiltersSchema>;
+export type EnrollmentsFiltersSchema = z.infer<typeof enrollmentsFiltersSchema>;

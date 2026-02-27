@@ -1,30 +1,37 @@
 <script setup lang="ts">
-import type { BadgeProps, FormSubmitEvent, TableColumn, TableRow } from '@nuxt/ui';
-import type { Row, TableMeta } from '@tanstack/vue-table';
+import type { BadgeProps, TableColumn, TableRow } from '@nuxt/ui';
 
 import UBadge from '@nuxt/ui/components/Badge.vue';
 import UButton from '@nuxt/ui/components/Button.vue';
 import UUser from '@nuxt/ui/components/User.vue';
 
-import TableSortDropdown from '~/components/Athlete/TableSortDropdown.vue';
+import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
 
 useSeoMeta({
     title: $t('page.certificates.title'),
 });
 
-const isLoading = ref(false);
-const isLoaded = ref(false);
-const tableData = ref<EnrollmentCertificate[]>([]);
+const enrollmentsStore = useEnrollmentsStore();
+const {
+    enrollments,
+    enrollmentsPending,
+    enrollmentsState,
+    enrollmentsFields,
+} = storeToRefs(enrollmentsStore);
 
-const tableColumns: TableColumn<EnrollmentCertificate>[] = [
+const tableColumns: TableColumn<EnrollmentListItem>[] = [
     {
         accessorKey: 'athlete',
-        header: $t('table.athletes.column.name'),
-        cell: ({ row }) => h(UUser, { name: row.original.athlete.name, avatar: { ...getAvatar(row.original.athlete.id.toString(), 64) } }),
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.athletes.column.name') }),
+        cell: ({ row }) => h(UUser, {
+            name: row.original.athlete.name,
+            description: `#${row.original.id?.toString()}`,
+            avatar: { ...getAvatar(row.original.athlete.id.toString(), 64) },
+        }),
     },
     {
         accessorKey: 'certificate_expiration_date',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.athletes.column.certificate_expiration_date.label') }),
+        header: $t('table.athletes.column.certificate_expiration_date.label'),
         cell: ({ row }) => {
             const status = getCertificateDateStatus(row.original.certificate_expiration_date?.toString());
             const colorMap: Record<CertificateDateStatus, string> = {
@@ -46,13 +53,9 @@ const tableColumns: TableColumn<EnrollmentCertificate>[] = [
             };
 
             return h('div', { class: 'flex gap-2 items-center' }, [
-                h(UBadge, {
-                    color: badgeColorMap[status],
-                    class: 'capitalize',
-                    label: badgeLabelMap[status],
-                }, undefined),
+                h(UBadge, { color: badgeColorMap[status], variant: 'soft' }, badgeLabelMap[status]),
                 h('span', {
-                    class: `font-semibold ${colorMap[status]}`,
+                    class: `${colorMap[status]}`,
                 }, formatDate(row.original.certificate_expiration_date?.toString())),
             ]);
         },
@@ -75,51 +78,27 @@ const tableColumns: TableColumn<EnrollmentCertificate>[] = [
     },
 ];
 
-const tableMeta: TableMeta<EnrollmentCertificate> = {
-    class: {
-        tr: (row: Row<EnrollmentCertificate>) => {
-            return getCertificateDateStatus(row.original.certificate_expiration_date?.toString());
-        },
-    },
-};
-
-async function onSubmit(event: FormSubmitEvent<AthleteFiltersSchema>) {
-    try {
-        isLoading.value = true;
-        isLoaded.value = false;
-
-        const athletesCertificates = await $fetch<EnrollmentCertificate[]>('/api/certificates', {
-            query: {
-                season: event.data.season,
-                activity: event.data.activity,
-            },
-        });
-
-        tableData.value = athletesCertificates;
-    } finally {
-        isLoading.value = false;
-        isLoaded.value = true;
-    }
-}
-
-function onSelect(_event: Event, row: TableRow<EnrollmentCertificate>) {
+function onSelect(_event: Event, row: TableRow<EnrollmentListItem>) {
     return navigateTo(`/enrollments/${row.original.id}`);
 }
 </script>
 
 <template>
-    <AthleteFilters
-        :title="$t('page.certificates.title')"
-        :isLoading
-        icon="i-lucide-file"
-        @submit="onSubmit"
+    <UPageHeader
+        title="Titolo pagina certificati"
+        description="A responsive page header with title, description and actions."
     />
-    <AthleteTable
-        :isLoading
-        :isLoaded
-        :tableData
+    <ListFilters
+        v-model:state="enrollmentsState"
+        :isLoading="enrollmentsPending"
+        :schema="enrollmentsFiltersSchema"
+        :fields="enrollmentsFields"
+        @submit="() => enrollmentsStore.refreshEnrollments()"
+    />
+    <ListTable
+        :isLoading="enrollmentsPending"
+        :tableData="enrollments"
         :tableColumns
-        :tableMeta
         :onSelect
     />
 </template>

@@ -29,7 +29,7 @@ model Course {
 model Parent {
   id       Int       @id @default(autoincrement())
   name     String
-  email    String?   @unique
+  email    String?
   tax_code String    @db.Char(16)
   athletes Athlete[]
 }
@@ -43,7 +43,7 @@ model Athlete {
   city         String
   address      String
   phone_number String
-  email        String?      @unique
+  email        String?
   parent_id    Int?
   parent       Parent?      @relation(fields: [parent_id], references: [id])
   enrollments  Enrollment[]

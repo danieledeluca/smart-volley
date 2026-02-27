@@ -10,6 +10,11 @@ export default defineAppConfig({
                 left: 'max-lg:mt-0',
             },
         },
+        pageHeader: {
+            slots: {
+                root: 'pt-0',
+            },
+        },
         button: {
             slots: {
                 base: 'disabled:opacity-50',

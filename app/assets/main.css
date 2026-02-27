@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import '@nuxt/ui';
+@import "tailwindcss";
+@import "@nuxt/ui";
 
 :root {
     --ui-footer-height: 53px;
@@ -7,43 +7,21 @@
 
 @layer components {
     .striped-table {
-        @apply max-h-[50dvh] rounded-md border! border-accented!;
-
         table {
             thead {
                 @apply text-nowrap;
+
+                tr {
+                    @apply bg-elevated;
+                }
             }
 
             tbody {
                 tr {
-                    @apply odd:bg-elevated;
+                    @apply odd:bg-elevated/50;
 
                     &[data-selectable="true"] {
-                        @apply cursor-pointer odd:hover:bg-accented/50!;
-
-                        &.valid {
-                            @apply hover:bg-success/15! odd:hover:bg-success/25!;
-                        }
-
-                        &.missing {
-                            @apply hover:bg-warning/15! odd:hover:bg-warning/25!;
-                        }
-
-                        &.expired {
-                            @apply hover:bg-error/15! odd:hover:bg-error/25!;
-                        }
-                    }
-    
-                    &.valid {
-                        @apply bg-success/10 odd:bg-success/20;
-                    }
-
-                    &.missing {
-                        @apply bg-warning/10 odd:bg-warning/20;
-                    }
-
-                    &.expired {
-                        @apply bg-error/10 odd:bg-error/20;
+                        @apply hover:bg-elevated/30! odd:hover:bg-elevated/70!;
                     }
                 }
             }

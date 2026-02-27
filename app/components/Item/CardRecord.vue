@@ -14,24 +14,23 @@ const actions = ref<HTMLElement | null>(null);
 </script>
 
 <template>
-    <div class="grid gap-x-2 py-2 @2xl:grid-cols-3">
-        <div class="truncate text-muted">
+    <div class="border-b border-b-accented pb-2 @max-2xl:last:border-b-0 @max-2xl:last:pb-0">
+        <div class="mb-1 truncate text-sm text-muted">
             {{ label }}
         </div>
-        <div class="relative flex gap-2 @2xl:col-span-2">
-            <strong
+        <div class="relative flex">
+            <div
                 class="truncate"
                 :style="{ 'max-width': `calc(100% - (var(--spacing) * 2) - ${actions?.clientWidth || 0}px)` }"
             >
                 {{ value }}
-            </strong>
+            </div>
             <div ref="actions" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
                 <UButton
                     v-if="showCopyButton"
                     color="primary"
                     variant="ghost"
                     trailingIcon="i-lucide-clipboard"
-                    class="cursor-pointer"
                     @click="async () => {
                         await copy(value || '');
                         toast.add({

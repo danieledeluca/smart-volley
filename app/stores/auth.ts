@@ -1,5 +1,7 @@
 import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui';
 
+type AuthFormFields = 'email' | 'password' | 'confirmPassword';
+
 export const useAuthStore = defineStore('auth', () => {
     const route = useRoute();
     const user = useSupabaseUser();

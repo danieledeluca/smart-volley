@@ -3,7 +3,11 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import process from 'node:process';
 import { Pool } from 'pg';
 
-import type { AthleteCreateManyInput, EnrollmentCreateManyInput, ParentCreateManyInput } from '../lib/db/generated/prisma/models';
+import type {
+    AthleteCreateManyInput,
+    EnrollmentCreateManyInput,
+    ParentCreateManyInput,
+} from '../lib/db/generated/prisma/models';
 
 import { PrismaClient } from '../lib/db/generated/prisma/client';
 import env from '../lib/env';
@@ -164,7 +168,7 @@ async function main() {
         data: parentUsers.map<ParentCreateManyInput>((user) => {
             return {
                 name: `${user.firstName} ${user.lastName}`,
-                email: user.email,
+                email: random(() => user.email),
                 tax_code: generateTaxCode(),
             };
         }),
@@ -182,13 +186,13 @@ async function main() {
                 city: user.address.city,
                 address: user.address.address,
                 phone_number: user.phone,
-                email: user.email,
+                email: random(() => user.email),
                 parent_id: random(() => parents[Math.floor(Math.random() * parents.length)].id),
             };
         }),
     });
 
-    // Athletes
+    // Enrollments
     await prisma.enrollment.createMany({
         data: athletes.map<EnrollmentCreateManyInput>((athlete) => {
             const season = seasons[Math.floor(Math.random() * seasons.length)];
@@ -204,7 +208,9 @@ async function main() {
                 first_installment: random(() => generateDecimal(100, 250)),
                 second_installment: random(() => generateDecimal(100, 250)),
                 third_installment: random(() => generateDecimal(100, 250)),
-                certificate_expiration_date: random(() => generateDate(new Date(season.starter_year, 0), new Date(season.end_year + 1, 0))),
+                certificate_expiration_date: random(() =>
+                    generateDate(new Date(season.starter_year, 0), new Date(season.end_year + 1, 0)),
+                ),
                 certificate_download_url: null,
             };
         }),
