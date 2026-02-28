@@ -45,7 +45,7 @@ export default withNuxt(
                 'perfectionist/sort-imports': ['error', { tsconfig: { rootDir: '.' } }],
                 'style/arrow-parens': ['error', 'always'],
                 'style/brace-style': ['error', '1tbs'],
-                'style/max-len': ['error', { code: 120, ignorePattern: 'class="[^"]*"', ignoreStrings: true }],
+                'style/max-len': ['error', { code: 120, ignorePattern: 'class="[^"]*"' }],
                 'ts/consistent-type-definitions': ['error', 'type'],
                 'ts/no-redeclare': ['off'],
                 'vue/attribute-hyphenation': ['error', 'never'],

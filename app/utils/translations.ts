@@ -1,3 +1,4 @@
+/* eslint-disable style/max-len */
 export const translations = {
     auth: {
         forgot_password: {
@@ -151,6 +152,10 @@ export const translations = {
         },
         home: {
             card: {
+                athletes: {
+                    description: 'Consulta la lista completa degli atleti iscritti.',
+                    title: 'Anagrafica',
+                },
                 certificates: {
                     description: 'Consulta lo stato di validità dei certificati medici degli atleti.',
                     title: 'Certificati',
@@ -163,13 +168,9 @@ export const translations = {
                     description: 'Consulta la lista degli atleti con i dettagli dei pagamenti effettuati.',
                     title: 'Pagamenti',
                 },
-                athletes: {
-                    description: 'Consulta la lista completa degli atleti iscritti.',
-                    title: 'Anagrafica',
-                },
             },
             hero: {
-                description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti. Consente di visualizzare informazioni anagrafiche, lo stato dei pagamenti e la validità del certificato medico',
+                description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti. Consente di visualizzare informazioni anagrafiche, lo stato dei pagamenti e la validità del certificato medico.',
                 head_line: 'Smart Volley',
                 title: 'Atleti della Vis et Virtus',
             },
@@ -202,6 +203,7 @@ export const translations = {
             course: 'Corso',
             email: 'Email',
             first_installment: 'Prima rata',
+            id: 'ID',
             name: 'Nome',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',
