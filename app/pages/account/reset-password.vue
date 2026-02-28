@@ -8,7 +8,7 @@ useSeoMeta({
 });
 
 const authStore = useAuthStore();
-const { messages } = storeToRefs(authStore);
+const { alerts } = storeToRefs(authStore);
 </script>
 
 <template>
@@ -29,13 +29,7 @@ const { messages } = storeToRefs(authStore);
                 {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
             </template>
             <template #validation>
-                <UAlert
-                    v-for="message in messages"
-                    :key="message.title"
-                    :color="message.color"
-                    :icon="message.icon"
-                    :title="message.title"
-                />
+                <UAlert v-for="(alert, index) in alerts" :key="index" v-bind="alert" />
             </template>
         </UAuthForm>
     </UPageCard>

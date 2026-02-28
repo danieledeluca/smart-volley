@@ -26,6 +26,9 @@ export const translations = {
             default: 'Accedi',
             description: 'Non hai un account?',
             password_hint: 'Password dimenticata?',
+            error: {
+                invalid_credentials: 'Email o password non validi',
+            },
         },
     },
     card: {

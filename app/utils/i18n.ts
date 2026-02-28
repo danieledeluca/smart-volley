@@ -33,15 +33,20 @@ export function $t<K extends TranslationKey>(
     ...args: ExtractParams<GetValue<Translations, K> & string> extends never
         ? []
         : [params: Params<GetValue<Translations, K> & string>]
-): string {
+): string;
+export function $t<K extends string>(
+    key: K extends TranslationKey ? never : K,
+    params?: Record<string, string>,
+): string;
+export function $t(key: string, params?: Record<string, string>): string {
     const value = key.split('.').reduce<unknown>((obj, k) => {
         return (obj as Record<string, unknown>)[k];
     }, translations) as string;
 
-    if (!args[0])
-        return value;
+    if (!params)
+        return value ?? key;
 
     return value.replace(/\{(\w+)\}/g, (_, param) => {
-        return (args[0] as Record<string, string>)[param] ?? `{${param}}`;
+        return params[param] ?? `{${param}}`;
     });
 }

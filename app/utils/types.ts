@@ -1,10 +1,4 @@
-import type { AlertProps, InputProps, SelectProps } from '@nuxt/ui';
-
-export type Message = {
-    title: string;
-    color: AlertProps['color'];
-    icon: string;
-};
+import type { InputProps, SelectProps } from '@nuxt/ui';
 
 export type CertificateDateStatus = 'valid' | 'expired' | 'missing';
 
