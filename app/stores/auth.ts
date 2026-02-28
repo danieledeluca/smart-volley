@@ -1,4 +1,4 @@
-import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui';
+import type { AlertProps, AuthFormField, FormSubmitEvent } from '@nuxt/ui';
 
 type AuthFormFields = 'email' | 'password' | 'confirmPassword';
 
@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
     const user = useSupabaseUser();
     const client = useSupabaseClient();
 
-    const messages = ref<Message[]>([]);
+    const alerts = ref<AlertProps[]>([]);
 
     const formFields: Record<AuthFormFields, AuthFormField> = {
         email: {
@@ -42,7 +42,7 @@ export const useAuthStore = defineStore('auth', () => {
     const resetPasswordFields = [formFields.password, formFields.confirmPassword];
 
     async function register(event: FormSubmitEvent<RegisterSchema>) {
-        messages.value = [];
+        alerts.value = [];
 
         try {
             const { data: response, error } = await client.auth.signUp({
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (response.user) {
                 if (response.user.identities?.length) {
-                    messages.value.push({
+                    alerts.value.push({
                         title: $t('auth.sign_up.success'),
                         color: 'success',
                         icon: 'i-lucide-circle-check',
@@ -68,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (err) {
             const error = err as Error;
 
-            messages.value.push({
+            alerts.value.push({
                 title: error.message,
                 color: 'error',
                 icon: 'i-lucide-circle-x',
@@ -77,7 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function login(event: FormSubmitEvent<LoginSchema>) {
-        messages.value = [];
+        alerts.value = [];
 
         try {
             const { data: response, error } = await client.auth.signInWithPassword({
@@ -91,12 +91,12 @@ export const useAuthStore = defineStore('auth', () => {
             }
 
             if (error) {
-                throw error;
+                throw new Error($t(`auth.sing_in.error.${error.code}`));
             }
         } catch (err) {
             const error = err as Error;
 
-            messages.value.push({
+            alerts.value.push({
                 title: error.message,
                 color: 'error',
                 icon: 'i-lucide-circle-x',
@@ -107,11 +107,11 @@ export const useAuthStore = defineStore('auth', () => {
     async function logOut() {
         await client.auth.signOut();
 
-        return navigateTo('/account/login');
+        return navigateTo('/');
     }
 
     async function forgotPassword(event: FormSubmitEvent<ForgotPasswordSchema>) {
-        messages.value = [];
+        alerts.value = [];
 
         try {
             const { error } = await client.auth.resetPasswordForEmail(event.data.email, {
@@ -121,7 +121,7 @@ export const useAuthStore = defineStore('auth', () => {
             if (error) {
                 throw error;
             } else {
-                messages.value.push({
+                alerts.value.push({
                     title: $t('auth.forgot_password.success'),
                     color: 'success',
                     icon: 'i-lucide-circle-check',
@@ -130,7 +130,7 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (err) {
             const error = err as Error;
 
-            messages.value.push({
+            alerts.value.push({
                 title: error.message,
                 color: 'error',
                 icon: 'i-lucide-circle-x',
@@ -139,7 +139,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function resetPassword(event: FormSubmitEvent<ResetPasswordSchema>) {
-        messages.value = [];
+        alerts.value = [];
 
         try {
             const { data: response, error } = await client.auth.updateUser({
@@ -157,7 +157,7 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (err) {
             const error = err as Error;
 
-            messages.value.push({
+            alerts.value.push({
                 title: error.message,
                 color: 'error',
                 icon: 'i-lucide-circle-x',
@@ -167,14 +167,14 @@ export const useAuthStore = defineStore('auth', () => {
 
     effect(() => {
         if (route.name?.toString().startsWith('account')) {
-            messages.value = [];
+            alerts.value = [];
         }
     });
 
     return {
         user,
         client,
-        messages,
+        alerts,
         loginFields,
         registerFields,
         forgotPasswordFields,
