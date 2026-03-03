@@ -4,7 +4,7 @@ useSeoMeta({
 });
 
 const enrollmentsStore = useEnrollmentsStore();
-const { athletes, athletesPending, athletesState, athletesFields } = storeToRefs(enrollmentsStore);
+const { athletes, athletesPending, athletesState, athletesFiltersFields } = storeToRefs(enrollmentsStore);
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const { athletes, athletesPending, athletesState, athletesFields } = storeToRefs
         v-model:state="athletesState"
         :isLoading="athletesPending"
         :schema="athletesFiltersSchema"
-        :fields="athletesFields"
+        :fields="athletesFiltersFields"
         @submit="() => enrollmentsStore.refreshAthletes()"
     />
     <ListTable

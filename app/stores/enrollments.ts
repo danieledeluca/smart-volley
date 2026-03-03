@@ -63,7 +63,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         },
     });
 
-    const enrollmentsFields = computed<FilterField<EnrollmentsFiltersSchema>[]>(() => {
+    const enrollmentsFiltersFields = computed<FilterField<EnrollmentsFiltersSchema>[]>(() => {
         return [
             {
                 type: 'input',
@@ -102,7 +102,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         ];
     });
 
-    const athletesFields = computed<FilterField<AthletesFiltersSchema>[]>(() => {
+    const athletesFiltersFields = computed<FilterField<AthletesFiltersSchema>[]>(() => {
         return [
             {
                 type: 'input',
@@ -119,12 +119,12 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         enrollmentsPending,
         refreshEnrollments,
         enrollmentsState,
-        enrollmentsFields,
+        enrollmentsFiltersFields,
         athletes,
         athletesPending,
         refreshAthletes,
         athletesState,
-        athletesFields,
+        athletesFiltersFields,
         seasons,
         seasonsPending,
         activities,

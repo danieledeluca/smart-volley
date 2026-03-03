@@ -37,9 +37,12 @@ const formRef = useTemplateRef('form');
                 v-model="state[field.name]"
                 :field
             />
-            <UButton type="submit" :loading="isLoading" class="hidden">
-                {{ $t('form.search.submit') }}
-            </UButton>
+            <UButton
+                type="submit"
+                :loading="isLoading"
+                class="hidden"
+                :label="$t('form.search.submit')"
+            />
         </UForm>
         <template #footer>
             <UButton
@@ -47,10 +50,9 @@ const formRef = useTemplateRef('form');
                 :loading="isLoading"
                 icon="i-lucide-search"
                 block
+                :label="$t('form.search.submit')"
                 @click="formRef?.submit()"
-            >
-                {{ $t('form.search.submit') }}
-            </UButton>
+            />
         </template>
     </UCard>
 </template>

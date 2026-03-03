@@ -67,9 +67,7 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
         >
             <template #description>
                 <div class="mt-1 flex flex-wrap gap-2">
-                    <UBadge variant="soft" color="neutral">
-                        #{{ athlete.id }}
-                    </UBadge>
+                    <UBadge variant="soft" color="neutral" :label="`#${athlete.id}`" />
                 </div>
             </template>
         </UUser>

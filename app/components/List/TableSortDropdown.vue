@@ -52,8 +52,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
                     : 'i-lucide-arrow-down-wide-narrow'
                 : 'i-lucide-arrow-up-down'"
             class="-mx-2.5 data-[state=open]:bg-elevated"
-        >
-            {{ label }}
-        </UButton>
+            :label
+        />
     </UDropdownMenu>
 </template>

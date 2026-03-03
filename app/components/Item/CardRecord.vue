@@ -32,7 +32,7 @@ const actions = useTemplateRef('actions');
                     variant="ghost"
                     trailingIcon="i-lucide-clipboard"
                     @click="async () => {
-                        await copy(value || '');
+                        await copy(value);
                         toast.add({
                             title: $t('toast.clipboard', { name: label }),
                             color: 'success',

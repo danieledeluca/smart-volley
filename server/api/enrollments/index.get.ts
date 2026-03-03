@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const activityId = Number(query.activity as string) || undefined;
     const courseId = Number(query.course as string) || undefined;
 
-    const athletes = await prisma.enrollment.findMany({
+    const enrollments = await prisma.enrollment.findMany({
         select: enrollmentListItemsSelect,
         where: {
             season_id: seasonId,
@@ -25,5 +25,18 @@ export default defineEventHandler(async (event) => {
         },
     });
 
-    return athletes;
+    const updatedEnrollments = await Promise.all(
+        enrollments.map(async (enrollment) => {
+            const signedUrl = await getCertificateSignedUrl(
+                event,
+                `${enrollment.season.starter_year}-${enrollment.season.end_year}`,
+                `${enrollment.id}`,
+                enrollment.athlete.name,
+            );
+
+            return { ...enrollment, certificate_download_url: signedUrl ?? null };
+        }),
+    );
+
+    return updatedEnrollments;
 });

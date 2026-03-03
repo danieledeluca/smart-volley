@@ -221,7 +221,8 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
                         variant: 'soft',
                         to: row.original.certificate_download_url,
                         icon: 'i-lucide-download',
-                    }, $t('table.column.certificate.download_url.button'));
+                        label: $t('table.column.certificate.download_url.button'),
+                    });
                 }
 
                 return EMPTY_VALUE;

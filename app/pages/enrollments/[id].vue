@@ -29,16 +29,13 @@ const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
                 <div class="@container">
-                    <USkeleton class="h-62.5 @max-2xl:h-97" />
+                    <USkeleton class="h-83 @max-2xl:h-141.5" />
                 </div>
                 <div class="@container">
-                    <USkeleton class="h-110 @max-2xl:h-119" />
+                    <USkeleton class="h-44.5 @max-2xl:h-62.5" />
                 </div>
             </div>
             <div class="space-y-8 lg:col-span-4">
-                <div class="@container">
-                    <USkeleton class="h-62.75 @max-2xl:h-101" />
-                </div>
                 <div class="@container">
                     <USkeleton class="h-62.75 @max-2xl:h-80.75" />
                 </div>
@@ -57,21 +54,18 @@ const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.
                         <UBadge
                             variant="soft"
                             color="neutral"
-                        >
-                            #{{ enrollment.id }}
-                        </UBadge>
+                            :label="`#${enrollment.id}`"
+                        />
                         <UBadge
                             variant="soft"
                             color="neutral"
-                        >
-                            {{ enrollment.season.starter_year }} - {{ enrollment.season.end_year }}
-                        </UBadge>
+                            :label="`${enrollment.season.starter_year} - ${enrollment.season.end_year}`"
+                        />
                         <UBadge
                             variant="soft"
                             color="neutral"
-                        >
-                            {{ enrollment.activity.name }} ({{ enrollment.course.name }})
-                        </UBadge>
+                            :label="`${enrollment.activity.name} (${enrollment.course.name})`"
+                        />
                     </div>
                 </template>
             </UUser>
@@ -79,9 +73,8 @@ const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.
                 trailingIcon="i-lucide-arrow-right"
                 class="max-md:w-full max-md:justify-center md:ml-auto"
                 :to="`/athletes/${enrollment.athlete.id}`"
-            >
-                {{ $t('page.enrollment.button') }}
-            </UButton>
+                :label="$t('page.enrollment.button')"
+            />
         </div>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
@@ -118,8 +111,19 @@ const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.
                     />
                     <ItemCardRecord
                         :label="$t('card.record.certificates.download_url')"
-                        :value="enrollment.certificate_download_url || EMPTY_VALUE"
-                    />
+                        :value="enrollment.certificate_download_url
+                            ? enrollment.certificate_download_url.split('&download=')[1]!
+                            : EMPTY_VALUE"
+                    >
+                        <template v-if="enrollment.certificate_download_url">
+                            <UButton
+                                color="primary"
+                                variant="ghost"
+                                icon="i-lucide-download"
+                                :to="enrollment.certificate_download_url"
+                            />
+                        </template>
+                    </ItemCardRecord>
                 </ItemCard>
             </div>
             <div class="lg:col-span-4">
