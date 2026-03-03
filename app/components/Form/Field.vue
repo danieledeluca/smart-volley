@@ -7,7 +7,10 @@ const model = defineModel<string | number>();
 </script>
 
 <template>
-    <div class="flex items-end gap-2">
+    <div
+        v-if="field.type === 'input' || (field.type === 'select' && field.items?.length)"
+        class="flex items-start gap-2"
+    >
         <UFormField
             :name="field.name"
             :label="field.label"
@@ -21,11 +24,10 @@ const model = defineModel<string | number>();
                 class="w-full"
             />
             <USelect
-                v-if="field.type === 'select'"
+                v-else-if="field.type === 'select'"
                 v-bind="field"
                 v-model="model"
                 class="w-full"
-                valueKey="id"
             />
         </UFormField>
         <UButton
@@ -33,6 +35,7 @@ const model = defineModel<string | number>();
             icon="i-lucide-x"
             variant="outline"
             color="error"
+            class="mt-6"
             @click.stop="model = undefined"
         />
     </div>

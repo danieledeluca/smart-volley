@@ -1,16 +1,19 @@
 <script setup lang="ts" generic="T">
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { PaginationState } from '@tanstack/vue-table';
+import type { FetchError } from 'ofetch';
 
 import { getPaginationRowModel } from '@tanstack/vue-table';
 
 const {
     isLoading,
+    error,
     tableData,
     tableColumns,
     onSelect,
 } = defineProps<{
     isLoading: boolean;
+    error?: FetchError;
     tableData: T[] | undefined;
     tableColumns?: TableColumn<T>[];
     onSelect?: (event: Event, row: TableRow<T>) => void;
@@ -40,9 +43,8 @@ watch(() => tableData, () => {
 
 <template>
     <div class="not-empty:mt-8">
-        <template v-if="isLoading">
-            <USkeleton class="h-116.75" />
-        </template>
+        <USkeleton v-if="isLoading" class="h-116.75" />
+        <AppError v-else-if="error" :error />
         <template v-else-if="tableData">
             <UTable
                 ref="table"

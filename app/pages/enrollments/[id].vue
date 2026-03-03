@@ -5,9 +5,7 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.id}`, {
-    lazy: true,
-});
+const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${route.params.id}`);
 </script>
 
 <template>
@@ -42,6 +40,7 @@ const { data: enrollment, pending } = useFetch(`/api/enrollments/${route.params.
             </div>
         </div>
     </template>
+    <AppError v-else-if="error" :error />
     <template v-else-if="enrollment">
         <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
             <UUser

@@ -11,6 +11,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     const {
         data: enrollments,
         pending: enrollmentsPending,
+        error: enrollmentsError,
         refresh: refreshEnrollments,
     } = useLazyFetch<EnrollmentListItem[]>('/api/enrollments', {
         query: enrollmentsState,
@@ -24,6 +25,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     const {
         data: athletes,
         pending: athletesPending,
+        error: athletesError,
         refresh: refreshAthletes,
     } = useLazyFetch<AthleteListItem[]>('/api/athletes', {
         query: athletesState,
@@ -35,7 +37,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             return seasons.map<SelectItem>((season) => {
                 return {
                     label: `${season.starter_year} - ${season.end_year}`,
-                    id: season.id,
+                    value: season.id,
                 };
             });
         },
@@ -46,7 +48,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             return activities.map<SelectItem>((activity) => {
                 return {
                     label: activity.name,
-                    id: activity.id,
+                    value: activity.id,
                 };
             });
         },
@@ -57,7 +59,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             return courses.map<SelectItem>((course) => {
                 return {
                     label: course.name,
-                    id: course.id,
+                    value: course.id,
                 };
             });
         },
@@ -117,19 +119,15 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     return {
         enrollments,
         enrollmentsPending,
+        enrollmentsError,
         refreshEnrollments,
         enrollmentsState,
         enrollmentsFiltersFields,
         athletes,
         athletesPending,
+        athletesError,
         refreshAthletes,
         athletesState,
         athletesFiltersFields,
-        seasons,
-        seasonsPending,
-        activities,
-        activitiesPending,
-        courses,
-        coursesPending,
     };
 });

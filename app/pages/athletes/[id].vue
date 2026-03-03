@@ -7,7 +7,7 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: athlete, pending } = useLazyFetch<AthleteItem>(`/api/athletes/${route.params.id}`);
+const { data: athlete, pending, error } = useLazyFetch<AthleteItem>(`/api/athletes/${route.params.id}`);
 
 const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
     {
@@ -58,6 +58,7 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
             </div>
         </div>
     </template>
+    <AppError v-else-if="error" :error />
     <template v-else-if="athlete">
         <UUser
             :name="athlete.name"

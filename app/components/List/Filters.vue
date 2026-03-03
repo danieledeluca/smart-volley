@@ -27,7 +27,7 @@ const formRef = useTemplateRef('form');
             ref="form"
             :schema="schema"
             :state="state"
-            class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4"
+            class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] items-start gap-4"
             @submit="emit('submit', $event)"
         >
             <!-- @vue-ignore -->

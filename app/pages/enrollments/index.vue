@@ -7,6 +7,7 @@ const enrollmentsStore = useEnrollmentsStore();
 const {
     enrollments,
     enrollmentsPending,
+    enrollmentsError,
     enrollmentsState,
     enrollmentsFiltersFields,
 } = storeToRefs(enrollmentsStore);
@@ -26,6 +27,7 @@ const {
     />
     <ListTable
         :isLoading="enrollmentsPending"
+        :error="enrollmentsError"
         :tableData="enrollments"
         :tableColumns="getEnrollmentsTableColumns(['athlete', 'season', 'activity', 'course'])"
         :onSelect="onEnrollmentSelect"

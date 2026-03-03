@@ -4,7 +4,13 @@ useSeoMeta({
 });
 
 const enrollmentsStore = useEnrollmentsStore();
-const { athletes, athletesPending, athletesState, athletesFiltersFields } = storeToRefs(enrollmentsStore);
+const {
+    athletes,
+    athletesPending,
+    athletesError,
+    athletesState,
+    athletesFiltersFields,
+} = storeToRefs(enrollmentsStore);
 </script>
 
 <template>
@@ -21,6 +27,7 @@ const { athletes, athletesPending, athletesState, athletesFiltersFields } = stor
     />
     <ListTable
         :isLoading="athletesPending"
+        :error="athletesError"
         :tableData="athletes"
         :tableColumns="getAthletesTableColumns(['name', 'phone_number', 'email'])"
         :onSelect="onAthleteSelect"

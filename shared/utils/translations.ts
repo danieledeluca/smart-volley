@@ -25,10 +25,10 @@ export const translations = {
         sing_in: {
             default: 'Accedi',
             description: 'Non hai un account?',
-            password_hint: 'Password dimenticata?',
             error: {
                 invalid_credentials: 'Email o password non validi',
             },
+            password_hint: 'Password dimenticata?',
         },
     },
     card: {
@@ -126,6 +126,7 @@ export const translations = {
     },
     page: {
         athlete: {
+            error: 'Atleta non trovato',
             title: 'Dettagli atleta',
         },
         athletes: {
@@ -144,6 +145,7 @@ export const translations = {
         },
         enrollment: {
             button: 'Vedi scheda atleta',
+            error: 'Iscrizione non trovata',
             title: 'Dettagli iscrizione',
         },
         enrollments: {

@@ -9,7 +9,10 @@ export default defineEventHandler(async (event) => {
     });
 
     if (!enrollment) {
-        throw createError({ statusCode: 404, statusMessage: 'Enrollment not found' });
+        throw createError({
+            statusCode: 404,
+            statusMessage: $t('page.enrollment.error'),
+        });
     }
 
     const signedUrl = await getCertificateSignedUrl(

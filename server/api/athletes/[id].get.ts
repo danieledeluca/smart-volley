@@ -8,5 +8,12 @@ export default defineEventHandler(async (event) => {
         },
     });
 
+    if (!athlete) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: $t('page.athlete.error'),
+        });
+    }
+
     return athlete;
 });
