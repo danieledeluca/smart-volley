@@ -5,7 +5,7 @@ import type {
     EnrollmentGetPayload,
     EnrollmentInclude,
     EnrollmentSelect,
-} from '~~/lib/db/generated/prisma/models';
+} from '~~/prisma/generated/prisma/models';
 
 export const enrollmentListItemsSelect = {
     id: true,

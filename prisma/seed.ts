@@ -7,10 +7,10 @@ import type {
     AthleteCreateManyInput,
     EnrollmentCreateManyInput,
     ParentCreateManyInput,
-} from '../lib/db/generated/prisma/models';
+} from '../prisma/generated/prisma/models';
 
-import { PrismaClient } from '../lib/db/generated/prisma/client';
-import env from '../lib/env';
+import { PrismaClient } from '../prisma/generated/prisma/client';
+import env from '../shared/utils/env';
 
 const connectionString = `${env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
