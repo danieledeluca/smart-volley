@@ -1,5 +1,3 @@
-import type { core } from 'zod';
-
 import z from 'zod';
 
 // Constants
@@ -10,17 +8,21 @@ const emailSchema = z.email({
     error: (issue) => issue.input ? $t('form.email.error') : $t('form.email.required'),
 });
 const passwordSchema = z.string($t('form.password.required'))
-    .min(PASSWORD_MIN_LENGTH, $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }));
+    .min(PASSWORD_MIN_LENGTH, {
+        error: (issue) => issue.input
+            ? $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() })
+            : $t('form.password.required'),
+    });
 const confirmPasswordSchema = z.string($t('form.confirm_password.required'));
-const passwordMatch: core.$ZodCustomParams = {
+const passwordMatch: z.core.$ZodCustomParams = {
     message: $t('form.confirm_password.error'),
     path: ['confirmPassword'],
 };
 
-const nameSchema = z.string().optional();
-const seasonSchema = z.number().optional();
-const activitySchema = z.number().optional();
-const courseSchema = z.number().optional();
+const filtersNameSchema = z.string().optional();
+const filtersSeasonSchema = z.number().optional();
+const filtersActivitySchema = z.number().optional();
+const filtersCourseSchema = z.number().optional();
 
 // Forms schema
 export const loginSchema = z.object({
@@ -44,14 +46,14 @@ export const resetPasswordSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, passwordMatch);
 
 export const athletesFiltersSchema = z.object({
-    name: nameSchema,
+    name: filtersNameSchema,
 });
 
 export const enrollmentsFiltersSchema = z.object({
-    name: nameSchema,
-    season: seasonSchema,
-    activity: activitySchema,
-    course: courseSchema,
+    name: filtersNameSchema,
+    season: filtersSeasonSchema,
+    activity: filtersActivitySchema,
+    course: filtersCourseSchema,
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;

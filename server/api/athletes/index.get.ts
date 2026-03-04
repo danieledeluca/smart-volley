@@ -1,4 +1,4 @@
-export default defineEventHandler(async (event) => {
+export default defineAuthenticatedEventHandler(async (event) => {
     const query = getQuery(event);
     const name = query.name as string;
 

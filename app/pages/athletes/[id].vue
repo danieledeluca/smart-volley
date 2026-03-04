@@ -7,7 +7,9 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: athlete, pending, error } = useLazyFetch<AthleteItem>(`/api/athletes/${route.params.id}`);
+const { data: athlete, pending, error } = useLazyFetch<AthleteItem>(`/api/athletes/${route.params.id}`, {
+    headers: useRequestHeaders(['cookie']),
+});
 
 const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
     {

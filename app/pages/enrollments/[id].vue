@@ -5,7 +5,9 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${route.params.id}`);
+const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${route.params.id}`, {
+    headers: useRequestHeaders(['cookie']),
+});
 </script>
 
 <template>

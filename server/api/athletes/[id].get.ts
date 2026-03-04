@@ -1,4 +1,4 @@
-export default defineEventHandler(async (event) => {
+export default defineAuthenticatedEventHandler(async (event) => {
     const id = Number(getRouterParam(event, 'id') as string);
 
     const athlete = await prisma.athlete.findUnique({

@@ -14,6 +14,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         error: enrollmentsError,
         refresh: refreshEnrollments,
     } = useLazyFetch<EnrollmentListItem[]>('/api/enrollments', {
+        headers: useRequestHeaders(['cookie']),
         query: enrollmentsState,
         watch: false,
     });
@@ -28,11 +29,13 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         error: athletesError,
         refresh: refreshAthletes,
     } = useLazyFetch<AthleteListItem[]>('/api/athletes', {
+        headers: useRequestHeaders(['cookie']),
         query: athletesState,
         watch: false,
     });
 
     const { data: seasons, pending: seasonsPending } = useLazyFetch('/api/seasons', {
+        headers: useRequestHeaders(['cookie']),
         transform: (seasons) => {
             return seasons.map<SelectItem>((season) => {
                 return {
@@ -44,6 +47,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     });
 
     const { data: activities, pending: activitiesPending } = useLazyFetch('/api/activities', {
+        headers: useRequestHeaders(['cookie']),
         transform: (activities) => {
             return activities.map<SelectItem>((activity) => {
                 return {
@@ -55,6 +59,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     });
 
     const { data: courses, pending: coursesPending } = useLazyFetch('/api/course', {
+        headers: useRequestHeaders(['cookie']),
         transform: (courses) => {
             return courses.map<SelectItem>((course) => {
                 return {
