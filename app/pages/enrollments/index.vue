@@ -20,10 +20,9 @@ const {
     />
     <ListFilters
         v-model:state="enrollmentsState"
-        :isLoading="enrollmentsPending"
         :schema="enrollmentsFiltersSchema"
         :fields="enrollmentsFiltersFields"
-        @submit="() => enrollmentsStore.refreshEnrollments()"
+        @update="() => enrollmentsStore.refreshEnrollments()"
     />
     <ListTable
         :isLoading="enrollmentsPending"

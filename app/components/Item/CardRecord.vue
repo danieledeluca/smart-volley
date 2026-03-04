@@ -10,7 +10,7 @@ const { label, value, showCopyButton = false } = defineProps<{
 const { copy } = useClipboard();
 const toast = useToast();
 
-const actions = useTemplateRef('actions');
+const actionsRef = useTemplateRef('actions');
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const actions = useTemplateRef('actions');
         <div class="relative flex">
             <div
                 class="truncate"
-                :style="{ 'max-width': `calc(100% - (var(--spacing) * 2) - ${actions?.clientWidth || 0}px)` }"
+                :style="{ 'max-width': `calc(100% - (var(--spacing) * 2) - ${actionsRef?.clientWidth || 0}px)` }"
             >
                 {{ value }}
             </div>

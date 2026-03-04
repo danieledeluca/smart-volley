@@ -111,7 +111,8 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
                     <ItemCardRecord
                         :label="$t('card.record.certificates.download_url')"
                         :value="enrollment.certificate_download_url
-                            ? enrollment.certificate_download_url.split('&download=')[1]!
+                            ? `${enrollment.athlete.name}
+                                (${enrollment.season.starter_year}-${enrollment.season.end_year})`
                             : EMPTY_VALUE"
                     >
                         <template v-if="enrollment.certificate_download_url">

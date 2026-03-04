@@ -19,7 +19,7 @@ const {
     onSelect?: (event: Event, row: TableRow<T>) => void;
 }>();
 
-const table = useTemplateRef('table');
+const tableRef = useTemplateRef('table');
 
 const pagination = ref<PaginationState>({
     pageIndex: 0,
@@ -70,10 +70,10 @@ watch(() => tableData, () => {
                 </div>
                 <UPagination
                     class="md:ml-auto"
-                    :page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-                    :itemsPerPage="table?.tableApi?.getState().pagination.pageSize"
-                    :total="table?.tableApi?.getFilteredRowModel().rows.length"
-                    @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+                    :page="(tableRef?.tableApi?.getState().pagination.pageIndex || 0) + 1"
+                    :itemsPerPage="tableRef?.tableApi?.getState().pagination.pageSize"
+                    :total="tableRef?.tableApi?.getFilteredRowModel().rows.length"
+                    @update:page="(p) => tableRef?.tableApi?.setPageIndex(p - 1)"
                 />
             </div>
         </template>

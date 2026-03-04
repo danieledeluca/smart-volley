@@ -1,5 +1,8 @@
 export default defineAppConfig({
     ui: {
+        colors: {
+            primary: 'cyan',
+        },
         main: {
             base: 'min-h-[calc(100vh-var(--ui-header-height)-var(--ui-footer-height))]',
         },
@@ -12,7 +15,7 @@ export default defineAppConfig({
         },
         pageHeader: {
             slots: {
-                root: 'pt-0',
+                root: 'pt-0 border-b-0',
                 description: 'text-balance',
             },
         },

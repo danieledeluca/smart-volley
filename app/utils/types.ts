@@ -13,4 +13,5 @@ type FilterSelectField = SelectProps & {
 export type FilterField<T> = {
     label: string;
     name: keyof T;
+    debounce?: boolean;
 } & (FilterInputField | FilterSelectField);

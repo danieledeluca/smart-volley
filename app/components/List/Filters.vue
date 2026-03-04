@@ -1,34 +1,43 @@
 <script setup lang="ts" generic="T extends z.ZodType">
-import type { FormSubmitEvent, InferInput } from '@nuxt/ui';
+import type { InferInput } from '@nuxt/ui';
 import type z from 'zod';
+
+import { useDebounceFn } from '@vueuse/core';
 
 type FormData = InferInput<T>;
 
-const { isLoading, schema, fields } = defineProps<{
-    isLoading: boolean;
+const { schema, fields } = defineProps<{
     schema: T;
     fields: FilterField<FormData>[];
 }>();
 
 const emit = defineEmits<{
-    submit: [event: FormSubmitEvent<FormData>];
+    update: [];
 }>();
 
 const state = defineModel<Partial<FormData>>('state', {
     required: true,
 });
 
-const formRef = useTemplateRef('form');
+const debouncedEmitUpdate = useDebounceFn(() => {
+    emit('update');
+}, 500);
+
+function handleFormFieldUpdate(field: FilterField<FormData>) {
+    if (field.debounce) {
+        debouncedEmitUpdate();
+    } else {
+        emit('update');
+    }
+}
 </script>
 
 <template>
     <UCard variant="subtle">
         <UForm
-            ref="form"
             :schema="schema"
             :state="state"
             class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] items-start gap-4"
-            @submit="emit('submit', $event)"
         >
             <!-- @vue-ignore -->
             <FormField
@@ -36,23 +45,8 @@ const formRef = useTemplateRef('form');
                 :key="index"
                 v-model="state[field.name]"
                 :field
-            />
-            <UButton
-                type="submit"
-                :loading="isLoading"
-                class="hidden"
-                :label="$t('form.search.submit')"
+                @update:model-value="handleFormFieldUpdate(field)"
             />
         </UForm>
-        <template #footer>
-            <UButton
-                type="button"
-                :loading="isLoading"
-                icon="i-lucide-search"
-                block
-                :label="$t('form.search.submit')"
-                @click="formRef?.submit()"
-            />
-        </template>
     </UCard>
 </template>

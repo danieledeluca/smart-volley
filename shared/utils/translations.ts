@@ -110,9 +110,6 @@ export const translations = {
             placeholder: 'Inserisci la tua password',
             required: 'La password è obbligatoria',
         },
-        search: {
-            submit: 'Cerca',
-        },
         season: {
             label: 'Stagione',
             placeholder: 'Seleziona una stagione',

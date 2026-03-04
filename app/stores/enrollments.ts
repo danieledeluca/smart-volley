@@ -73,6 +73,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 name: 'name',
                 placeholder: $t('form.name.placeholder'),
                 icon: 'i-lucide-user',
+                debounce: true,
             },
             {
                 type: 'select',
@@ -112,6 +113,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 name: 'name',
                 placeholder: $t('form.name.placeholder'),
                 icon: 'i-lucide-user',
+                debounce: true,
             },
         ];
     });
