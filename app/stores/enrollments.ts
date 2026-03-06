@@ -1,6 +1,12 @@
-import type { SelectItem } from '@nuxt/ui';
-
 export const useEnrollmentsStore = defineStore('enrollments', () => {
+    const seasonsStore = useSeasonsStore();
+    const activitiesStore = useActivitiesStore();
+    const coursesStore = useCoursesStore();
+
+    const { seasons, seasonsPending } = storeToRefs(seasonsStore);
+    const { activities, activitiesPending } = storeToRefs(activitiesStore);
+    const { courses, coursesPending } = storeToRefs(coursesStore);
+
     const enrollmentsState = reactive<Partial<EnrollmentsFiltersSchema>>({
         name: undefined,
         season: undefined,
@@ -17,69 +23,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         headers: useRequestHeaders(['cookie']),
         query: enrollmentsState,
         watch: false,
-    });
-
-    const athletesState = reactive<AthletesFiltersSchema>({
-        name: undefined,
-    });
-
-    const {
-        data: athletes,
-        pending: athletesPending,
-        error: athletesError,
-        refresh: refreshAthletes,
-    } = useLazyFetch<AthleteListItem[]>('/api/athletes', {
-        headers: useRequestHeaders(['cookie']),
-        query: athletesState,
-        watch: false,
-    });
-
-    const { data: seasons, pending: seasonsPending } = useLazyFetch('/api/seasons', {
-        headers: useRequestHeaders(['cookie']),
-        transform: (seasons) => {
-            return seasons.map<SelectItem>((season) => {
-                return {
-                    label: `${season.starter_year} - ${season.end_year}`,
-                    value: season.id,
-                };
-            });
-        },
-    });
-
-    const { data: activities, pending: activitiesPending } = useLazyFetch('/api/activities', {
-        headers: useRequestHeaders(['cookie']),
-        transform: (activities) => {
-            return activities.map<SelectItem>((activity) => {
-                return {
-                    label: activity.name,
-                    value: activity.id,
-                };
-            });
-        },
-    });
-
-    const { data: courses, pending: coursesPending } = useLazyFetch('/api/course', {
-        headers: useRequestHeaders(['cookie']),
-        transform: (courses) => {
-            return courses.map<SelectItem>((course) => {
-                return {
-                    label: course.name,
-                    value: course.id,
-                };
-            });
-        },
-    });
-
-    const { data: parents, pending: parentsPending } = useLazyFetch('/api/parents', {
-        headers: useRequestHeaders(['cookie']),
-        transform: (parent) => {
-            return parent.map<SelectItem>((parent) => {
-                return {
-                    label: parent.name,
-                    value: parent.id,
-                };
-            });
-        },
     });
 
     const enrollmentsFiltersFields = computed<FormField<EnrollmentsFiltersSchema>[]>(() => {
@@ -122,19 +65,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         ];
     });
 
-    const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[]>(() => {
-        return [
-            {
-                renderAs: 'input',
-                label: $t('form.name.label'),
-                name: 'name',
-                placeholder: $t('form.name.placeholder'),
-                icon: 'i-lucide-user',
-                debounce: true,
-            },
-        ];
-    });
-
     return {
         enrollments,
         enrollmentsPending,
@@ -142,13 +72,5 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         refreshEnrollments,
         enrollmentsState,
         enrollmentsFiltersFields,
-        athletes,
-        athletesPending,
-        athletesError,
-        refreshAthletes,
-        athletesState,
-        athletesFiltersFields,
-        parents,
-        parentsPending,
     };
 });

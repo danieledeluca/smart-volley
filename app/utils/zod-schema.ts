@@ -1,3 +1,5 @@
+import type { AthleteUncheckedCreateInput } from '~~/prisma/generated/prisma/models';
+
 import z from 'zod';
 
 // Constants
@@ -56,6 +58,19 @@ export const enrollmentsFiltersSchema = z.object({
     course: filtersCourseSchema,
 });
 
+export const addAthleteSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object({
+    name: z.string('Name is required').nonempty('Name is required').transform((name) => name.toUpperCase()),
+    birthday: z.coerce.date('Birthday is required').max(new Date(), 'Birthday must be in the past'),
+    birthplace: z.string('Birthplace is required').nonempty('Birthplace is required'),
+    tax_code: z.string('Tax Code is required')
+        .regex(/^[A-Z]{6}\d{2}[A-EHLMPR-T](\d{2})[A-Z]\d{3}[A-Z]$/, 'Invalid Fiscal Code format'),
+    city: z.string('City is required').nonempty('City is required'),
+    address: z.string('Address is required').nonempty('Address is required'),
+    phone_number: z.string('Phone number is required').nonempty('Phone number is required'),
+    email: z.string().optional(),
+    parent_id: z.number().optional(),
+});
+
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
@@ -63,3 +78,5 @@ export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 
 export type AthletesFiltersSchema = z.infer<typeof athletesFiltersSchema>;
 export type EnrollmentsFiltersSchema = z.infer<typeof enrollmentsFiltersSchema>;
+
+export type AddAthleteSchema = z.infer<typeof addAthleteSchema>;

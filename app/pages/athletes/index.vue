@@ -5,14 +5,14 @@ useSeoMeta({
     title: $t('page.athletes.title'),
 });
 
-const enrollmentsStore = useEnrollmentsStore();
+const athletesStore = useAthletesStore();
 const {
     athletes,
     athletesPending,
     athletesError,
     athletesState,
     athletesFiltersFields,
-} = storeToRefs(enrollmentsStore);
+} = storeToRefs(athletesStore);
 
 const pageHeaderLinks: ButtonProps[] = [
     {
@@ -35,7 +35,7 @@ const pageHeaderLinks: ButtonProps[] = [
         v-model:state="athletesState"
         :schema="athletesFiltersSchema"
         :fields="athletesFiltersFields"
-        @update="() => enrollmentsStore.refreshAthletes()"
+        @update="() => athletesStore.refreshAthletes()"
     />
     <ListTable
         :isLoading="athletesPending"
