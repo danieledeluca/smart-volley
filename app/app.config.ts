@@ -24,5 +24,10 @@ export default defineAppConfig({
                 base: 'disabled:opacity-50',
             },
         },
+        inputDate: {
+            slots: {
+                base: 'has-[+[data-slot="error"]]:ring-error',
+            },
+        },
     },
 });

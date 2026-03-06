@@ -4,7 +4,13 @@ generator client {
 }
 
 generator zod {
-  provider = "prisma-zod-generator"
+  provider                         = "zod-prisma-types"
+  useTypeAssertions                = true
+  createInputTypes                 = true
+  createModelTypes                 = true
+  addInputTypeValidation           = false
+  createOptionalDefaultValuesTypes = true
+  prismaJsonNullability            = false
 }
 
 datasource db {
@@ -34,7 +40,7 @@ model Parent {
   id       Int       @id @default(autoincrement())
   name     String
   email    String?
-  tax_code String    @db.Char(16)
+  tax_code String    @unique @db.Char(16)
   athletes Athlete[]
 }
 
@@ -43,7 +49,7 @@ model Athlete {
   name         String
   birthday     DateTime     @db.Date
   birthplace   String
-  tax_code     String       @db.Char(16)
+  tax_code     String       @unique @db.Char(16)
   city         String
   address      String
   phone_number String
@@ -63,12 +69,12 @@ model Enrollment {
   activity                    Activity  @relation(fields: [activity_id], references: [id])
   course_id                   Int
   course                      Course    @relation(fields: [course_id], references: [id])
-  volley_account              Decimal?  @db.Decimal(10, 2)
-  volley_balance              Decimal?  @db.Decimal(10, 2)
-  volley_balance_secondary    Decimal?  @db.Decimal(10, 2)
-  first_installment           Decimal?  @db.Decimal(10, 2)
-  second_installment          Decimal?  @db.Decimal(10, 2)
-  third_installment           Decimal?  @db.Decimal(10, 2)
+  volley_account              Float?
+  volley_balance              Float?
+  volley_balance_secondary    Float?
+  first_installment           Float?
+  second_installment          Float?
+  third_installment           Float?
   certificate_expiration_date DateTime? @db.Date
   certificate_download_url    String?
 

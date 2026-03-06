@@ -16,6 +16,7 @@ export default withNuxt(
                 quotes: 'single',
                 semi: true,
             },
+            ignores: ['prisma/generated'],
         },
         {
             ...eslintPluginBetterTailwindcss.configs.recommended,

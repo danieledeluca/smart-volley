@@ -117,7 +117,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         volley_account: {
             accessorKey: 'volley_account',
             header: $t('table.column.volley_account'),
-            cell: ({ row }) => formatPrice(row.original.volley_account?.toString()),
+            cell: ({ row }) => formatPrice(row.original.volley_account),
             meta: {
                 class: {
                     th: 'text-center',
@@ -128,7 +128,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         volley_balance: {
             accessorKey: 'volley_balance',
             header: $t('table.column.volley_balance'),
-            cell: ({ row }) => formatPrice(row.original.volley_balance?.toString()),
+            cell: ({ row }) => formatPrice(row.original.volley_balance),
             meta: {
                 class: {
                     th: 'text-center',
@@ -139,7 +139,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         volley_balance_secondary: {
             accessorKey: 'volley_balance_secondary',
             header: $t('table.column.volley_balance_secondary'),
-            cell: ({ row }) => formatPrice(row.original.volley_balance_secondary?.toString()),
+            cell: ({ row }) => formatPrice(row.original.volley_balance_secondary),
             meta: {
                 class: {
                     th: 'text-center',
@@ -150,7 +150,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         first_installment: {
             accessorKey: 'first_installment',
             header: $t('table.column.first_installment'),
-            cell: ({ row }) => formatPrice(row.original.first_installment?.toString()),
+            cell: ({ row }) => formatPrice(row.original.first_installment),
             meta: {
                 class: {
                     th: 'text-center',
@@ -161,7 +161,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         second_installment: {
             accessorKey: 'second_installment',
             header: $t('table.column.second_installment'),
-            cell: ({ row }) => formatPrice(row.original.second_installment?.toString()),
+            cell: ({ row }) => formatPrice(row.original.second_installment),
             meta: {
                 class: {
                     th: 'text-center',
@@ -172,7 +172,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         third_installment: {
             accessorKey: 'third_installment',
             header: $t('table.column.third_installment'),
-            cell: ({ row }) => formatPrice(row.original.third_installment?.toString()),
+            cell: ({ row }) => formatPrice(row.original.third_installment),
             meta: {
                 class: {
                     th: 'text-center',

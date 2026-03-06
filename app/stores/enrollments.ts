@@ -70,10 +70,22 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         },
     });
 
-    const enrollmentsFiltersFields = computed<FilterField<EnrollmentsFiltersSchema>[]>(() => {
+    const { data: parents, pending: parentsPending } = useLazyFetch('/api/parents', {
+        headers: useRequestHeaders(['cookie']),
+        transform: (parent) => {
+            return parent.map<SelectItem>((parent) => {
+                return {
+                    label: parent.name,
+                    value: parent.id,
+                };
+            });
+        },
+    });
+
+    const enrollmentsFiltersFields = computed<FormField<EnrollmentsFiltersSchema>[]>(() => {
         return [
             {
-                type: 'input',
+                renderAs: 'input',
                 label: $t('form.name.label'),
                 name: 'name',
                 placeholder: $t('form.name.placeholder'),
@@ -81,7 +93,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 debounce: true,
             },
             {
-                type: 'select',
+                renderAs: 'select-menu',
                 label: $t('form.season.label'),
                 name: 'season',
                 items: seasons.value,
@@ -90,7 +102,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 icon: 'i-lucide-calendar',
             },
             {
-                type: 'select',
+                renderAs: 'select-menu',
                 label: $t('form.activity.label'),
                 name: 'activity',
                 items: activities.value,
@@ -99,7 +111,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 icon: 'i-lucide-zap',
             },
             {
-                type: 'select',
+                renderAs: 'select-menu',
                 label: $t('form.course.label'),
                 name: 'course',
                 items: courses.value,
@@ -110,10 +122,10 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         ];
     });
 
-    const athletesFiltersFields = computed<FilterField<AthletesFiltersSchema>[]>(() => {
+    const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[]>(() => {
         return [
             {
-                type: 'input',
+                renderAs: 'input',
                 label: $t('form.name.label'),
                 name: 'name',
                 placeholder: $t('form.name.placeholder'),
@@ -136,5 +148,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         refreshAthletes,
         athletesState,
         athletesFiltersFields,
+        parents,
+        parentsPending,
     };
 });

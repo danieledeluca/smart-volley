@@ -56,7 +56,7 @@ function generateTaxCode() {
 }
 
 function generateDecimal(min: number, max: number) {
-    return (Math.random() * (max - min) + min).toFixed(2);
+    return Number((Math.random() * (max - min) + min).toFixed(2));
 }
 
 function generateDate(start: Date, end: Date) {

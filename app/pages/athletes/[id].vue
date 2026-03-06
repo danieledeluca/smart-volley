@@ -91,7 +91,6 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                 </ItemCard>
 
                 <ItemCard
-                    v-if="athlete.enrollments.length > 0"
                     :title="$t('card.enrollments.title')"
                     icon="i-lucide-history"
                     class="**:data-[slot=body]:p-0"
@@ -117,13 +116,15 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                                 trailingIcon="i-lucide-phone"
                                 :to="`tel:${athlete.phone_number}`"
                             />
+                            <!-- eslint-disable style/max-len -->
                             <UButton
                                 color="primary"
                                 variant="ghost"
                                 trailingIcon="i-ic-baseline-whatsapp"
-                                :to="`https://api.whatsapp.com/send?phone=${athlete.phone_number}`"
+                                :to="`https://api.whatsapp.com/send?phone=${athlete.phone_number.replace(/[^0-9]/g, '')}`"
                                 target="_blank"
                             />
+                            <!-- eslint-enable style/max-len -->
                         </ItemCardRecord>
                         <ItemCardRecord v-if="athlete.email" :label="$t('card.record.email')" :value="athlete.email">
                             <UButton

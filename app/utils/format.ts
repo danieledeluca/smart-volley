@@ -6,7 +6,7 @@ export function formatDate(date: string | null | undefined) {
     return date ? formatter.format(new Date(date)) : EMPTY_VALUE;
 }
 
-export function formatPrice(price: string | null | undefined) {
+export function formatPrice(price: string | number | null | undefined) {
     const formatter = new Intl.NumberFormat('it-IT', {
         style: 'currency',
         currency: 'EUR',

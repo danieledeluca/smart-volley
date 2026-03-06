@@ -8,7 +8,7 @@ type FormData = InferInput<T>;
 
 const { schema, fields } = defineProps<{
     schema: T;
-    fields: FilterField<FormData>[];
+    fields: FormField<FormData>[];
 }>();
 
 const emit = defineEmits<{
@@ -23,7 +23,7 @@ const debouncedEmitUpdate = useDebounceFn(() => {
     emit('update');
 }, 500);
 
-function handleFormFieldUpdate(field: FilterField<FormData>) {
+function handleFormFieldUpdate(field: FormField<FormData>) {
     if (field.debounce) {
         debouncedEmitUpdate();
     } else {
@@ -39,7 +39,6 @@ function handleFormFieldUpdate(field: FilterField<FormData>) {
             :state="state"
             class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] items-start gap-4"
         >
-            <!-- @vue-ignore -->
             <FormField
                 v-for="(field, index) in fields"
                 :key="index"

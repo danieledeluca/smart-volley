@@ -10,10 +10,12 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "typecheck": "nuxi typecheck"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.90",
+    "@internationalized/date": "^3.11.0",
     "@nuxt/eslint": "^1.14.0",
     "@nuxt/ui": "^4.4.0",
     "@pinia/nuxt": "^0.11.3",
@@ -38,11 +40,11 @@
     "eslint-plugin-format": "^1.4.0",
     "lint-staged": "^16.2.7",
     "prisma": "^7.3.0",
-    "prisma-zod-generator": "^2.1.4",
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.2.5",
+    "zod-prisma-types": "^3.3.11"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

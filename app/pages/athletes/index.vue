@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ButtonProps } from '@nuxt/ui';
+
 useSeoMeta({
     title: $t('page.athletes.title'),
 });
@@ -11,12 +13,23 @@ const {
     athletesState,
     athletesFiltersFields,
 } = storeToRefs(enrollmentsStore);
+
+const pageHeaderLinks: ButtonProps[] = [
+    {
+        label: 'Add new athlete',
+        icon: 'i-lucide-user-plus',
+        to: '/athletes/add',
+        variant: 'solid',
+        color: 'primary',
+    },
+];
 </script>
 
 <template>
     <UPageHeader
         :title="$t('page.athletes.header.title')"
         :description="$t('page.athletes.header.description')"
+        :links="pageHeaderLinks"
     />
     <ListFilters
         v-model:state="athletesState"

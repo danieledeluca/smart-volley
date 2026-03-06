@@ -1,17 +1,27 @@
-import type { InputProps, SelectProps } from '@nuxt/ui';
+import type { InputDateProps, InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
 
 export type CertificateDateStatus = 'valid' | 'expired' | 'missing';
 
-type FilterInputField = InputProps & {
-    type: 'input';
+export type FormFieldModelType = string | number | undefined;
+
+type nputField = InputProps & {
+    renderAs: 'input';
 };
 
-type FilterSelectField = SelectProps & {
-    type: 'select';
+type FormInputDateField = InputDateProps & {
+    renderAs: 'input-date';
 };
 
-export type FilterField<T> = {
+type FormSelectField = SelectProps & {
+    renderAs: 'select';
+};
+
+type FormSelectMenuField = SelectMenuProps & {
+    renderAs: 'select-menu';
+};
+
+export type FormField<T> = {
     label: string;
     name: keyof T;
     debounce?: boolean;
-} & (FilterInputField | FilterSelectField);
+} & (nputField | FormInputDateField | FormSelectField | FormSelectMenuField);

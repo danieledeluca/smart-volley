@@ -7,7 +7,7 @@ const { label, value, showCopyButton = false } = defineProps<{
     showCopyButton?: boolean;
 }>();
 
-const { copy } = useClipboard();
+const { copy, copied } = useClipboard();
 const toast = useToast();
 
 const actionsRef = useTemplateRef('actions');
@@ -30,7 +30,7 @@ const actionsRef = useTemplateRef('actions');
                     v-if="showCopyButton"
                     color="primary"
                     variant="ghost"
-                    trailingIcon="i-lucide-clipboard"
+                    :icon="copied ? 'i-lucide-clipboard-check' : 'i-lucide-clipboard'"
                     @click="async () => {
                         await copy(value);
                         toast.add({
