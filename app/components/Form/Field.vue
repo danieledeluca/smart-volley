@@ -1,4 +1,6 @@
 <script setup lang="ts" generic="T extends Record<string, FormFieldModelType>">
+import type { InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
+
 const { field } = defineProps<{
     field: FormField<T>;
 }>();
@@ -6,6 +8,15 @@ const { field } = defineProps<{
 const slots = defineSlots();
 
 const model = defineModel<T[keyof T]>();
+
+const fieldInputProps = computed(() => {
+    const { renderAs, label, required, name, ...rest } = field;
+    return rest;
+});
+
+const inputProps = computed(() => fieldInputProps.value as InputProps);
+const selectProps = computed(() => fieldInputProps.value as SelectProps);
+const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps);
 </script>
 
 <template>
@@ -20,7 +31,7 @@ const model = defineModel<T[keyof T]>();
                 <UInput
                     v-if="field.renderAs === 'input'"
                     v-model="model"
-                    :placeholder="field.placeholder"
+                    v-bind="inputProps"
                     class="w-full"
                 />
                 <FormFieldDate v-else-if="field.renderAs === 'input-date'" v-model="model" :fieldName="field.name" />
@@ -29,19 +40,13 @@ const model = defineModel<T[keyof T]>();
                 <USelect
                     v-if="field.renderAs === 'select'"
                     v-model="model"
-                    :placeholder="field.placeholder"
-                    :loading="field.loading"
-                    :items="field.items"
-                    :disabled="field.items?.length === 0"
+                    v-bind="selectProps"
                     class="w-full"
                 />
                 <USelectMenu
                     v-if="field.renderAs === 'select-menu'"
                     v-model="model"
-                    :placeholder="field.placeholder"
-                    :loading="field.loading"
-                    :items="field.items"
-                    :disabled="field.items?.length === 0"
+                    v-bind="selectMenuProps"
                     class="w-full"
                     valueKey="value"
                     :searchInput="{

@@ -131,6 +131,7 @@ export const useAthletesStore = defineStore('athletes', () => {
                 name: 'parent_id',
                 items: parents.value,
                 loading: parentsPending.value,
+                disabled: parents.value?.length === 0,
                 placeholder: 'Select your parent',
             },
         ];
