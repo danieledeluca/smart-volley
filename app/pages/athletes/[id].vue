@@ -32,13 +32,18 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
 
 <template>
     <template v-if="pending">
-        <div class="mb-8 flex gap-3">
-            <USkeleton class="size-12 rounded-full" />
-            <div>
-                <USkeleton class="h-7 w-62.5" />
-                <div class="mt-1 flex gap-2">
-                    <USkeleton class="h-6 w-11" />
+        <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
+            <div class="flex gap-3">
+                <USkeleton class="size-12 rounded-full" />
+                <div>
+                    <USkeleton class="h-7 w-62.5" />
+                    <div class="mt-1 flex gap-2">
+                        <USkeleton class="h-6 w-11" />
+                    </div>
                 </div>
+            </div>
+            <div class="flex flex-wrap gap-4 md:ml-auto">
+                <USkeleton class="h-8 w-full max-md:w-full md:w-50" />
             </div>
         </div>
         <div class="grid gap-8 lg:grid-cols-12">
@@ -62,18 +67,28 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
     </template>
     <AppError v-else-if="error" :error />
     <template v-else-if="athlete">
-        <UUser
-            :name="athlete.name"
-            size="3xl"
-            :avatar="getAvatar(athlete.id.toString(), 96)"
-            class="mb-8"
-        >
-            <template #description>
-                <div class="mt-1 flex flex-wrap gap-2">
-                    <UBadge variant="soft" color="neutral" :label="`#${athlete.id}`" />
-                </div>
-            </template>
-        </UUser>
+        <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
+            <UUser
+                :name="athlete.name"
+                size="3xl"
+                :avatar="getAvatar(athlete.id.toString(), 96)"
+            >
+                <template #description>
+                    <div class="mt-1 flex flex-wrap gap-2">
+                        <UBadge variant="soft" color="neutral" :label="`#${athlete.id}`" />
+                    </div>
+                </template>
+            </UUser>
+            <div class="flex flex-wrap gap-4 md:ml-auto">
+                <UButton
+                    icon="i-lucide-arrow-left"
+                    class="max-md:w-full max-md:justify-center"
+                    to="/athletes"
+                    label="Torna alla lista degli atleti"
+                    variant="soft"
+                />
+            </div>
+        </div>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
                 <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-user">

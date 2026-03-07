@@ -4,7 +4,16 @@ import type { FetchError } from 'ofetch';
 export const useParentsStore = defineStore('parents', () => {
     const toast = useToast();
 
+    const showParentAddForm = ref(false);
     const isAddingParent = ref(false);
+
+    const parentAddInitialState: Partial<ParentAddSchema> = {
+        name: undefined,
+        tax_code: undefined,
+        email: undefined,
+    };
+
+    const parentAddState = reactive<Partial<ParentAddSchema>>({ ...parentAddInitialState });
 
     const { data: parents, pending: parentsPending, refresh: refreshParents } = useLazyFetch('/api/parents', {
         headers: useRequestHeaders(['cookie']),
@@ -18,7 +27,18 @@ export const useParentsStore = defineStore('parents', () => {
         },
     });
 
-    const addParent = async (event: FormSubmitEvent<AddParentSchema>) => {
+    const closeParentAddForm = () => {
+        // Hide form
+        showParentAddForm.value = false;
+
+        // Reset form
+        Object.assign(parentAddState, parentAddInitialState);
+
+        // Refresh parents
+        refreshParents();
+    };
+
+    const addParent = async (event: FormSubmitEvent<ParentAddSchema>) => {
         isAddingParent.value = true;
 
         try {
@@ -27,7 +47,7 @@ export const useParentsStore = defineStore('parents', () => {
                 body: event.data,
             });
 
-            refreshParents();
+            closeParentAddForm();
 
             toast.add({
                 title: 'Parent added successfully',
@@ -48,7 +68,7 @@ export const useParentsStore = defineStore('parents', () => {
         }
     };
 
-    const parentsAddFields = computed<FormField<AddParentSchema>[]>(() => {
+    const parentsAddFields = computed<FormField<ParentAddSchema>[]>(() => {
         return [
             {
                 renderAs: 'input',
@@ -79,7 +99,9 @@ export const useParentsStore = defineStore('parents', () => {
         parentsPending,
         refreshParents,
         addParent,
+        showParentAddForm,
         isAddingParent,
+        parentAddState,
         parentsAddFields,
     };
 });

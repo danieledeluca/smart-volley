@@ -14,7 +14,7 @@ const actionsRef = useTemplateRef('actions');
 </script>
 
 <template>
-    <div class="border-b border-b-accented pb-2 @max-2xl:last:border-b-0 @max-2xl:last:pb-0">
+    <div class="border-b border-b-accented pb-2">
         <div class="mb-1 truncate text-sm text-muted">
             {{ label }}
         </div>

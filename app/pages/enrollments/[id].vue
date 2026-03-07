@@ -24,7 +24,10 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
                     </div>
                 </div>
             </div>
-            <USkeleton class="h-8 w-40 max-md:w-full md:ml-auto" />
+            <div class="flex flex-wrap gap-4 md:ml-auto">
+                <USkeleton class="h-8 w-full max-md:w-full md:w-50" />
+                <USkeleton class="h-8 w-full max-md:w-full md:w-40" />
+            </div>
         </div>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
@@ -70,12 +73,21 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
                     </div>
                 </template>
             </UUser>
-            <UButton
-                trailingIcon="i-lucide-arrow-right"
-                class="max-md:w-full max-md:justify-center md:ml-auto"
-                :to="`/athletes/${enrollment.athlete.id}`"
-                :label="$t('page.enrollment.button')"
-            />
+            <div class="flex flex-wrap gap-4 md:ml-auto">
+                <UButton
+                    icon="i-lucide-arrow-left"
+                    class="max-md:w-full max-md:justify-center"
+                    to="/enrollments"
+                    label="Torna alla lista delle iscrizioni"
+                    variant="soft"
+                />
+                <UButton
+                    trailingIcon="i-lucide-arrow-right"
+                    class="max-md:w-full max-md:justify-center"
+                    :to="`/athletes/${enrollment.athlete.id}`"
+                    :label="$t('page.enrollment.button')"
+                />
+            </div>
         </div>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">

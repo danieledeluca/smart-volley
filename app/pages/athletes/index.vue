@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ButtonProps } from '@nuxt/ui';
-
 useSeoMeta({
     title: $t('page.athletes.title'),
 });
@@ -10,29 +8,43 @@ const {
     athletes,
     athletesPending,
     athletesError,
-    athletesState,
+    athletesFiltersState,
     athletesFiltersFields,
+    showAthleteAddForm,
+    isAddingAthlete,
 } = storeToRefs(athletesStore);
 
-const pageHeaderLinks: ButtonProps[] = [
-    {
-        label: 'Add new athlete',
-        icon: 'i-lucide-user-plus',
-        to: '/athletes/add',
-        variant: 'solid',
-        color: 'primary',
-    },
-];
+const formRef = useTemplateRef('form');
 </script>
 
 <template>
-    <UPageHeader
-        :title="$t('page.athletes.header.title')"
-        :description="$t('page.athletes.header.description')"
-        :links="pageHeaderLinks"
-    />
+    <UPageHeader :title="$t('page.athletes.header.title')" :description="$t('page.athletes.header.description')">
+        <template #links>
+            <USlideover v-model:open="showAthleteAddForm" title="Add new athlete">
+                <UButton
+                    label="Add new athlete"
+                    color="primary"
+                    variant="solid"
+                    icon="i-lucide-user-plus"
+                />
+
+                <template #body>
+                    <FormAddAthlete ref="form" />
+                </template>
+                <template #footer>
+                    <UButton
+                        type="submit"
+                        label="Submit"
+                        :loading="isAddingAthlete"
+                        block
+                        @click="formRef?.submit()"
+                    />
+                </template>
+            </USlideover>
+        </template>
+    </UPageHeader>
     <ListFilters
-        v-model:state="athletesState"
+        v-model:state="athletesFiltersState"
         :schema="athletesFiltersSchema"
         :fields="athletesFiltersFields"
         @update="() => athletesStore.refreshAthletes()"

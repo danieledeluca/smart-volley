@@ -4,7 +4,7 @@ export type CertificateDateStatus = 'valid' | 'expired' | 'missing';
 
 export type FormFieldModelType = string | number | undefined;
 
-type nputField = InputProps & {
+type InputField = InputProps & {
     renderAs: 'input';
 };
 
@@ -24,4 +24,10 @@ export type FormField<T> = {
     label: string;
     name: keyof T;
     debounce?: boolean;
-} & (nputField | FormInputDateField | FormSelectField | FormSelectMenuField);
+} & (InputField | FormInputDateField | FormSelectField | FormSelectMenuField);
+
+export type GroupFormField<T> = {
+    title: string;
+    icon: string;
+    fields: FormField<T>[];
+};

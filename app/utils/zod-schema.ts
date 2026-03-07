@@ -57,7 +57,7 @@ export const enrollmentsFiltersSchema = z.object({
     course: z.number().optional(),
 });
 
-export const addAthleteSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object({
+export const athleteAddSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object({
     name: nameSchema,
     birthday: z.coerce.date('Birthday is required').max(new Date(), 'Birthday must be in the past'),
     birthplace: z.string('Birthplace is required').nonempty('Birthplace is required'),
@@ -69,7 +69,7 @@ export const addAthleteSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object
     parent_id: z.number().optional(),
 });
 
-export const addParentSchema: z.ZodType<ParentUncheckedCreateInput> = z.object({
+export const parentAddSchema: z.ZodType<ParentUncheckedCreateInput> = z.object({
     name: nameSchema,
     tax_code: taxCodeSchema,
     email: z.string().optional(),
@@ -83,5 +83,5 @@ export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 export type AthletesFiltersSchema = z.infer<typeof athletesFiltersSchema>;
 export type EnrollmentsFiltersSchema = z.infer<typeof enrollmentsFiltersSchema>;
 
-export type AddAthleteSchema = z.infer<typeof addAthleteSchema>;
-export type AddParentSchema = z.infer<typeof addParentSchema>;
+export type AthleteAddSchema = z.infer<typeof athleteAddSchema>;
+export type ParentAddSchema = z.infer<typeof parentAddSchema>;
