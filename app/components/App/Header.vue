@@ -74,8 +74,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
 <template>
     <UHeader title="Smart Volley" mode="drawer">
         <template #title>
-            <UIcon name="i-lucide-volleyball" class="size-7 text-primary" />
-            <span>Smart Volley</span>
+            <UColorModeImage light="logo-light.png" dark="logo-dark.png" class="h-12" />
         </template>
 
         <UNavigationMenu :items="navigationMenuItems" />

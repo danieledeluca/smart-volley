@@ -2,13 +2,13 @@
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
-    modules: ['@nuxt/eslint', '@nuxtjs/supabase', '@nuxt/ui', '@pinia/nuxt'],
+    modules: ['@nuxt/eslint', '@nuxtjs/supabase', '@nuxt/ui', '@pinia/nuxt', '@nuxt/image'],
     eslint: {
         config: {
             standalone: false,
         },
     },
-    css: ['~/assets/main.css'],
+    css: ['~/assets/css/main.css'],
     supabase: {
         redirectOptions: {
             login: '/account/login',
