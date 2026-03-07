@@ -24,6 +24,7 @@ const passwordMatch: z.core.$ZodCustomParams = {
 const nameSchema = z.string('Name is required').nonempty('Name is required');
 const taxCodeSchema = z.string('Tax Code is required')
     .regex(/^[A-Z]{6}\d{2}[A-EHLMPR-T](\d{2})[A-Z]\d{3}[A-Z]$/, 'Invalid Fiscal Code format');
+const phoneNumberSchema = z.string('Phone number is required').nonempty('Phone number is required');
 
 // Forms schema
 export const loginSchema = z.object({
@@ -64,7 +65,7 @@ export const athleteAddSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object
     tax_code: taxCodeSchema,
     city: z.string('City is required').nonempty('City is required'),
     address: z.string('Address is required').nonempty('Address is required'),
-    phone_number: z.string('Phone number is required').nonempty('Phone number is required'),
+    phone_number: phoneNumberSchema,
     email: z.string().optional(),
     parent_id: z.number().optional(),
 });
@@ -72,6 +73,7 @@ export const athleteAddSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object
 export const parentAddSchema: z.ZodType<ParentUncheckedCreateInput> = z.object({
     name: nameSchema,
     tax_code: taxCodeSchema,
+    phone_number: phoneNumberSchema,
     email: z.string().optional(),
 });
 

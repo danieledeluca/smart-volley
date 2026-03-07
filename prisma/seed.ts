@@ -168,6 +168,7 @@ async function main() {
         data: parentUsers.map<ParentCreateManyInput>((user) => {
             return {
                 name: `${user.firstName} ${user.lastName}`,
+                phone_number: user.phone,
                 email: random(() => user.email),
                 tax_code: generateTaxCode(),
             };
@@ -193,28 +194,47 @@ async function main() {
     });
 
     // Enrollments
-    await prisma.enrollment.createMany({
-        data: athletes.map<EnrollmentCreateManyInput>((athlete) => {
-            const season = seasons[Math.floor(Math.random() * seasons.length)];
+    const enrollmentsData = (
+        await Promise.all(athletes.flatMap((athlete) =>
+            Array.from({ length: 5 }, async () => {
+                const season = seasons[Math.floor(Math.random() * seasons.length)];
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                const course = courses[Math.floor(Math.random() * courses.length)];
 
-            return {
-                athlete_id: athlete.id,
-                season_id: season.id,
-                activity_id: activities[Math.floor(Math.random() * activities.length)].id,
-                course_id: courses[Math.floor(Math.random() * courses.length)].id,
-                volley_account: random(() => generateDecimal(300, 700)),
-                volley_balance: random(() => generateDecimal(50, 250)),
-                volley_balance_secondary: random(() => generateDecimal(0, 100)),
-                first_installment: random(() => generateDecimal(100, 250)),
-                second_installment: random(() => generateDecimal(100, 250)),
-                third_installment: random(() => generateDecimal(100, 250)),
-                certificate_expiration_date: random(() =>
-                    generateDate(new Date(season.starter_year, 0), new Date(season.end_year + 1, 0)),
-                ),
-                certificate_download_url: null,
-            };
-        }),
-    });
+                const currentEnrollment = await prisma.enrollment.findFirst({
+                    where: {
+                        athlete_id: athlete.id,
+                        activity_id: activity.id,
+                        course_id: course.id,
+                        season_id: season.id,
+                    },
+                });
+
+                if (currentEnrollment) {
+                    return null;
+                }
+
+                return {
+                    athlete_id: athlete.id,
+                    season_id: season.id,
+                    activity_id: activity.id,
+                    course_id: course.id,
+                    volley_account: random(() => generateDecimal(300, 700)),
+                    volley_balance: random(() => generateDecimal(50, 250)),
+                    volley_balance_secondary: random(() => generateDecimal(0, 100)),
+                    first_installment: random(() => generateDecimal(100, 250)),
+                    second_installment: random(() => generateDecimal(100, 250)),
+                    third_installment: random(() => generateDecimal(100, 250)),
+                    certificate_expiration_date: random(() =>
+                        generateDate(new Date(season.starter_year, 0), new Date(season.end_year + 1, 0)),
+                    ),
+                    certificate_download_url: null,
+                } satisfies EnrollmentCreateManyInput;
+            }),
+        ))
+    ).filter((enrollment) => enrollment !== null);
+
+    await prisma.enrollment.createMany({ data: enrollmentsData, skipDuplicates: true });
 }
 main()
     .then(async () => {

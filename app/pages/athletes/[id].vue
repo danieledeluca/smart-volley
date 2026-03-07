@@ -124,31 +124,17 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                     <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
                         <ItemCardRecord :label="$t('card.record.city')" :value="athlete.city" />
                         <ItemCardRecord :label="$t('card.record.address')" :value="athlete.address" />
-                        <ItemCardRecord :label="$t('card.record.phone_number')" :value="athlete.phone_number">
-                            <UButton
-                                color="primary"
-                                variant="ghost"
-                                trailingIcon="i-lucide-phone"
-                                :to="`tel:${athlete.phone_number}`"
-                            />
-                            <!-- eslint-disable style/max-len -->
-                            <UButton
-                                color="primary"
-                                variant="ghost"
-                                trailingIcon="i-ic-baseline-whatsapp"
-                                :to="`https://api.whatsapp.com/send?phone=${athlete.phone_number.replace(/[^0-9]/g, '')}`"
-                                target="_blank"
-                            />
-                            <!-- eslint-enable style/max-len -->
-                        </ItemCardRecord>
-                        <ItemCardRecord v-if="athlete.email" :label="$t('card.record.email')" :value="athlete.email">
-                            <UButton
-                                color="primary"
-                                variant="ghost"
-                                trailingIcon="i-lucide-mail"
-                                :to="`mailto:${athlete.email}`"
-                            />
-                        </ItemCardRecord>
+                        <ItemCardRecord
+                            :label="$t('card.record.phone_number')"
+                            :value="athlete.phone_number"
+                            :showPhoneNumberButtons="true"
+                        />
+                        <ItemCardRecord
+                            v-if="athlete.email"
+                            :label="$t('card.record.email')"
+                            :value="athlete.email"
+                            :showEmailButton="true"
+                        />
                     </ItemCard>
 
                     <ItemCard
@@ -163,17 +149,16 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                             :showCopyButton="true"
                         />
                         <ItemCardRecord
+                            :label="$t('card.record.phone_number')"
+                            :value="athlete.parent.phone_number"
+                            :showPhoneNumberButtons="true"
+                        />
+                        <ItemCardRecord
                             v-if="athlete.parent.email"
                             :label="$t('card.record.parent.email')"
                             :value="athlete.parent.email"
-                        >
-                            <UButton
-                                color="primary"
-                                variant="ghost"
-                                trailingIcon="i-lucide-mail"
-                                :to="`mailto:${athlete.parent.email}`"
-                            />
-                        </ItemCardRecord>
+                            :showEmailButton="true"
+                        />
                     </ItemCard>
                 </div>
             </div>

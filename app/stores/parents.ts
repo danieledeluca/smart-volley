@@ -86,6 +86,14 @@ export const useParentsStore = defineStore('parents', () => {
             },
             {
                 renderAs: 'input',
+                label: 'Phone number',
+                type: 'tel',
+                name: 'phone_number',
+                placeholder: 'Enter your phone number',
+                required: true,
+            },
+            {
+                renderAs: 'input',
                 label: 'Email',
                 type: 'email',
                 name: 'email',

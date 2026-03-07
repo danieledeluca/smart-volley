@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core';
 
-const { label, value, showCopyButton = false } = defineProps<{
+const { label, value, showCopyButton = false, showPhoneNumberButtons = false, showEmailButton = false } = defineProps<{
     label: string;
     value: string;
     showCopyButton?: boolean;
+    showPhoneNumberButtons?: boolean;
+    showEmailButton?: boolean;
 }>();
 
 const { copy, copied } = useClipboard();
@@ -39,6 +41,28 @@ const actionsRef = useTemplateRef('actions');
                             icon: 'i-lucide-circle-check',
                         });
                     }"
+                />
+                <template v-if="showPhoneNumberButtons">
+                    <UButton
+                        color="primary"
+                        variant="ghost"
+                        trailingIcon="i-lucide-phone"
+                        :to="`tel:${value}`"
+                    />
+                    <UButton
+                        color="primary"
+                        variant="ghost"
+                        trailingIcon="i-ic-baseline-whatsapp"
+                        :to="`https://api.whatsapp.com/send?phone=${value.replace(/[^0-9]/g, '')}`"
+                        target="_blank"
+                    />
+                </template>
+                <UButton
+                    v-if="showEmailButton"
+                    color="primary"
+                    variant="ghost"
+                    trailingIcon="i-lucide-mail"
+                    :to="`mailto:${value}`"
                 />
                 <slot />
             </div>

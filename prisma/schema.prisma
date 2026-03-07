@@ -37,11 +37,12 @@ model Course {
 }
 
 model Parent {
-  id       Int       @id @default(autoincrement())
-  name     String
-  email    String?
-  tax_code String    @unique @db.Char(16)
-  athletes Athlete[]
+  id           Int       @id @default(autoincrement())
+  name         String
+  phone_number String
+  email        String?
+  tax_code     String    @unique @db.Char(16)
+  athletes     Athlete[]
 }
 
 model Athlete {
