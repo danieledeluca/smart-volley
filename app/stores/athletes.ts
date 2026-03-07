@@ -26,6 +26,7 @@ export const useAthletesStore = defineStore('athletes', () => {
 
     const addAthlete = async (event: FormSubmitEvent<AddAthleteSchema>) => {
         isAddingAthlete.value = true;
+
         try {
             await $fetch('/api/athletes/add', {
                 method: 'POST',

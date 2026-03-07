@@ -2,7 +2,11 @@
 const athletesStore = useAthletesStore();
 const { isAddingAthlete, athleteAddFields } = storeToRefs(athletesStore);
 
+const parentsStore = useParentsStore();
+const { isAddingParent } = storeToRefs(parentsStore);
+
 const formRef = useTemplateRef('form');
+const parentFormRef = useTemplateRef('parentForm');
 
 const state = reactive<Partial<AddAthleteSchema>>({
     name: undefined,
@@ -18,7 +22,7 @@ const state = reactive<Partial<AddAthleteSchema>>({
 </script>
 
 <template>
-    <UPageHeader title="New athletes" />
+    <UPageHeader title="Add new athletes" />
     <UCard class="lg:max-w-lg" variant="subtle">
         <UForm
             ref="form"
@@ -30,9 +34,32 @@ const state = reactive<Partial<AddAthleteSchema>>({
             <FormField
                 v-for="(field, index) in athleteAddFields"
                 :key="index"
-                v-model="state[field.name] as FormFieldModelType"
+                v-model="(state[field.name] as FormFieldModelType)"
                 :field
-            />
+            >
+                <template #parent_id-hint>
+                    <UModal title="Add new parent" :ui="{ footer: 'justify-end' }">
+                        <UButton
+                            label="Add new parent"
+                            color="primary"
+                            variant="link"
+                            class="p-0"
+                        />
+                        <template #body>
+                            <ParentAddForm ref="parentForm" />
+                        </template>
+                        <template #footer>
+                            <UButton
+                                type="button"
+                                label="Submit"
+                                :loading="isAddingParent"
+                                block
+                                @click="parentFormRef?.[0]?.submit()"
+                            />
+                        </template>
+                    </UModal>
+                </template>
+            </FormField>
             <UButton
                 type="submit"
                 label="Submit"

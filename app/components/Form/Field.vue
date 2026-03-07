@@ -3,6 +3,8 @@ const { field } = defineProps<{
     field: FormField<T>;
 }>();
 
+const slots = defineSlots();
+
 const model = defineModel<T[keyof T]>();
 </script>
 
@@ -50,6 +52,9 @@ const model = defineModel<T[keyof T]>();
                         Nessun risultato trovato
                     </template>
                 </USelectMenu>
+            </template>
+            <template v-if="!!slots[`${field.name}-hint`]" #hint>
+                <slot :name="`${field.name}-hint`" />
             </template>
         </UFormField>
         <UButton
