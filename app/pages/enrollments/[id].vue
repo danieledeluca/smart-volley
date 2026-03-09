@@ -45,7 +45,12 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
             </div>
         </div>
     </template>
-    <AppError v-else-if="error" :error />
+    <UAlert
+        v-else-if="error"
+        :title="error.statusMessage"
+        color="error"
+        icon="i-lucide-circle-x"
+    />
     <template v-else-if="enrollment">
         <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
             <UUser

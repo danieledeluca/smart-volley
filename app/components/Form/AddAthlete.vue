@@ -35,7 +35,7 @@ defineExpose({
                 :class="group.fields.length === 1 ? 'col-span-2' : ''"
             >
                 <template #parent_id-hint>
-                    <UModal v-model:open="showParentAddForm" title="Add new parent" :ui="{ footer: 'justify-end' }">
+                    <UModal v-model:open="showParentAddForm" title="Add new parent">
                         <UButton
                             label="Add new parent"
                             color="primary"

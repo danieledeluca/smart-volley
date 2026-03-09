@@ -42,7 +42,19 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
                     v-model="model"
                     v-bind="selectProps"
                     class="w-full"
-                />
+                    :ui="{ trailing: model ? 'pr-1' : '' }"
+                >
+                    <template #trailing>
+                        <UButton
+                            v-if="model"
+                            icon="i-lucide-x"
+                            variant="link"
+                            color="error"
+                            size="sm"
+                            @click.stop="model = undefined"
+                        />
+                    </template>
+                </USelect>
                 <USelectMenu
                     v-if="field.renderAs === 'select-menu'"
                     v-model="model"
@@ -52,7 +64,18 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
                     :searchInput="{
                         placeholder: 'Cerca...',
                     }"
+                    :ui="{ trailing: model ? 'pr-1' : '' }"
                 >
+                    <template #trailing>
+                        <UButton
+                            v-if="model"
+                            icon="i-lucide-x"
+                            variant="link"
+                            color="error"
+                            size="sm"
+                            @click.stop="model = undefined"
+                        />
+                    </template>
                     <template #empty>
                         Nessun risultato trovato
                     </template>
@@ -62,12 +85,5 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
                 <slot :name="`${field.name}-hint`" />
             </template>
         </UFormField>
-        <UButton
-            v-if="field.renderAs.startsWith('select') && model"
-            icon="i-lucide-x"
-            variant="outline"
-            color="error"
-            @click.stop="model = undefined"
-        />
     </div>
 </template>

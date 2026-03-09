@@ -44,7 +44,12 @@ watch(() => tableData, () => {
 <template>
     <div class="not-empty:mt-8">
         <USkeleton v-if="isLoading" class="h-116.75" />
-        <AppError v-else-if="error" :error />
+        <UAlert
+            v-else-if="error"
+            :title="error.statusMessage"
+            color="error"
+            icon="i-lucide-circle-x"
+        />
         <template v-else-if="tableData">
             <UTable
                 ref="table"

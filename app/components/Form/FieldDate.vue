@@ -48,7 +48,12 @@ const calendarModel = computed({
 </script>
 
 <template>
-    <UInputDate v-model="calendarModel" :maxValue="maxDate" class="w-full">
+    <UInputDate
+        v-model="calendarModel"
+        :maxValue="maxDate"
+        class="w-full"
+        :ui="{ trailing: 'pr-1' }"
+    >
         <template #trailing>
             <UPopover>
                 <UButton
@@ -56,7 +61,6 @@ const calendarModel = computed({
                     variant="link"
                     size="sm"
                     icon="i-lucide-calendar"
-                    class="px-0"
                 />
 
                 <template #content>
