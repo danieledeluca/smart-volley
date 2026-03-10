@@ -4,6 +4,8 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const seasonId = Number(query.season as string) || undefined;
     const activityId = Number(query.activity as string) || undefined;
     const courseId = Number(query.course as string) || undefined;
+    const payment = query.payment as string;
+    const certificateStatus = query.certificateStatus as CertificateDateStatus | undefined;
 
     const enrollments = await prisma.enrollment.findMany({
         select: enrollmentListItemsSelect,
@@ -11,6 +13,18 @@ export default defineAuthenticatedEventHandler(async (event) => {
             season_id: seasonId,
             activity_id: activityId,
             course_id: courseId,
+            volley_account: payment === 'volley_account' ? null : undefined,
+            volley_balance: payment === 'volley_balance' ? null : undefined,
+            volley_balance_secondary: payment === 'volley_balance_secondary' ? null : undefined,
+            first_installment: payment === 'first_installment' ? null : undefined,
+            second_installment: payment === 'second_installment' ? null : undefined,
+            third_installment: payment === 'third_installment' ? null : undefined,
+            certificate_expiration_date: certificateStatus === 'missing'
+                ? null
+                : {
+                        gt: certificateStatus === 'valid' ? new Date() : undefined,
+                        lt: certificateStatus === 'expired' ? new Date() : undefined,
+                    },
             athlete: {
                 name: {
                     contains: name,
@@ -18,12 +32,21 @@ export default defineAuthenticatedEventHandler(async (event) => {
                 },
             },
         },
-        orderBy: {
-            athlete: {
-                name: 'asc',
+        orderBy: [
+            {
+                athlete: {
+                    name: 'asc',
+                },
             },
-        },
+            {
+                season: {
+                    end_year: 'desc',
+                },
+            },
+        ],
     });
+
+    return enrollments;
 
     const updatedEnrollments = await Promise.all(
         enrollments.map(async (enrollment) => {

@@ -17,6 +17,8 @@ const fieldInputProps = computed(() => {
 const inputProps = computed(() => fieldInputProps.value as InputProps);
 const selectProps = computed(() => fieldInputProps.value as SelectProps);
 const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps);
+
+const hasValue = computed(() => Array.isArray(model.value) ? model.value.length > 0 : !!model.value);
 </script>
 
 <template>
@@ -24,7 +26,7 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
         <UFormField
             :name="field.name"
             :label="field.label"
-            class="flex-1"
+            class="min-w-0 flex-1"
             :required="field.required"
         >
             <template v-if="field.renderAs.startsWith('input')">
@@ -42,19 +44,7 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
                     v-model="model"
                     v-bind="selectProps"
                     class="w-full"
-                    :ui="{ trailing: model ? 'pr-1' : '' }"
-                >
-                    <template #trailing>
-                        <UButton
-                            v-if="model"
-                            icon="i-lucide-x"
-                            variant="link"
-                            color="error"
-                            size="sm"
-                            @click.stop="model = undefined"
-                        />
-                    </template>
-                </USelect>
+                />
                 <USelectMenu
                     v-if="field.renderAs === 'select-menu'"
                     v-model="model"
@@ -64,18 +54,7 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
                     :searchInput="{
                         placeholder: 'Cerca...',
                     }"
-                    :ui="{ trailing: model ? 'pr-1' : '' }"
                 >
-                    <template #trailing>
-                        <UButton
-                            v-if="model"
-                            icon="i-lucide-x"
-                            variant="link"
-                            color="error"
-                            size="sm"
-                            @click.stop="model = undefined"
-                        />
-                    </template>
                     <template #empty>
                         Nessun risultato trovato
                     </template>
@@ -85,5 +64,12 @@ const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps)
                 <slot :name="`${field.name}-hint`" />
             </template>
         </UFormField>
+        <UButton
+            v-if="field.renderAs.startsWith('select') && hasValue"
+            icon="i-lucide-x"
+            variant="subtle"
+            color="error"
+            @click.stop="model = undefined"
+        />
     </div>
 </template>

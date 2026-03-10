@@ -56,6 +56,8 @@ export const enrollmentsFiltersSchema = z.object({
     season: z.number().optional(),
     activity: z.number().optional(),
     course: z.number().optional(),
+    payment: z.string().optional(),
+    certificateStatus: z.string().optional(),
 });
 
 export const athleteAddSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object({

@@ -13,7 +13,7 @@ export const useParentsStore = defineStore('parents', () => {
         email: undefined,
     };
 
-    const parentAddState = reactive<Partial<ParentAddSchema>>({ ...parentAddInitialState });
+    const parentAddState = reactive({ ...parentAddInitialState });
 
     const { data: parents, pending: parentsPending, refresh: refreshParents } = useLazyFetch('/api/parents', {
         headers: useRequestHeaders(['cookie']),

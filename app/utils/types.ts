@@ -1,7 +1,5 @@
 import type { InputDateProps, InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
 
-export type CertificateDateStatus = 'valid' | 'expired' | 'missing';
-
 export type FormFieldModelType = string | number | undefined;
 
 type InputField = InputProps & {

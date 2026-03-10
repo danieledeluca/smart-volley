@@ -8,7 +8,7 @@ const {
     enrollments,
     enrollmentsPending,
     enrollmentsError,
-    enrollmentsState,
+    enrollmentsFiltersState,
     enrollmentsFiltersFields,
 } = storeToRefs(enrollmentsStore);
 </script>
@@ -19,10 +19,11 @@ const {
         :description="$t('page.enrollments.header.description')"
     />
     <ListFilters
-        v-model:state="enrollmentsState"
+        v-model:state="enrollmentsFiltersState"
         :schema="enrollmentsFiltersSchema"
         :fields="enrollmentsFiltersFields"
-        @update="() => enrollmentsStore.refreshEnrollments()"
+        @update="enrollmentsStore.refreshEnrollments"
+        @clear="enrollmentsStore.clearEnrollmentsFilters"
     />
     <ListTable
         :isLoading="enrollmentsPending"

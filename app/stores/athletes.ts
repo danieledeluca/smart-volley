@@ -10,9 +10,11 @@ export const useAthletesStore = defineStore('athletes', () => {
     const showAthleteAddForm = ref(false);
     const isAddingAthlete = ref(false);
 
-    const athletesFiltersState = reactive<AthletesFiltersSchema>({
+    const athletesFiltersInitialState: AthletesFiltersSchema = {
         name: undefined,
-    });
+    };
+
+    const athletesFiltersState = reactive({ ...athletesFiltersInitialState });
 
     const athleteAddInitialState: Partial<AthleteAddSchema> = {
         name: undefined,
@@ -26,7 +28,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         parent_id: undefined,
     };
 
-    const athleteAddState = reactive<Partial<AthleteAddSchema>>({ ...athleteAddInitialState });
+    const athleteAddState = reactive({ ...athleteAddInitialState });
 
     const {
         data: athletes,
@@ -38,6 +40,14 @@ export const useAthletesStore = defineStore('athletes', () => {
         query: athletesFiltersState,
         watch: false,
     });
+
+    const clearAthletesFilters = () => {
+        // Reset filters
+        Object.assign(athletesFiltersState, athletesFiltersInitialState);
+
+        // Refresh athletes
+        refreshAthletes();
+    };
 
     const closeAthleteAddForm = () => {
         // Hide form
@@ -79,16 +89,18 @@ export const useAthletesStore = defineStore('athletes', () => {
         }
     };
 
-    const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[]>(() => {
+    const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[][]>(() => {
         return [
-            {
-                renderAs: 'input',
-                label: $t('form.name.label'),
-                name: 'name',
-                placeholder: $t('form.name.placeholder'),
-                icon: 'i-lucide-user',
-                debounce: true,
-            },
+            [
+                {
+                    renderAs: 'input',
+                    label: $t('form.name.label'),
+                    name: 'name',
+                    placeholder: $t('form.name.placeholder'),
+                    icon: 'i-lucide-user',
+                    debounce: true,
+                },
+            ],
         ];
     });
 
@@ -178,6 +190,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         athletesPending,
         athletesError,
         refreshAthletes,
+        clearAthletesFilters,
         addAthlete,
         showAthleteAddForm,
         isAddingAthlete,

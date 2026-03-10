@@ -47,7 +47,8 @@ const formRef = useTemplateRef('form');
         v-model:state="athletesFiltersState"
         :schema="athletesFiltersSchema"
         :fields="athletesFiltersFields"
-        @update="() => athletesStore.refreshAthletes()"
+        @update="athletesStore.refreshAthletes"
+        @clear="athletesStore.clearAthletesFilters"
     />
     <ListTable
         :isLoading="athletesPending"
