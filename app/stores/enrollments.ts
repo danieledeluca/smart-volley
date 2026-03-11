@@ -41,42 +41,42 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
 
     const paymentItems: Array<SelectMenuItem & { value: PaymentFilters }> = [
         {
-            label: 'Volley account',
+            label: $t('form.field.payment.item.volley_account'),
             value: 'volley_account',
         },
         {
-            label: 'Volley balance',
+            label: $t('form.field.payment.item.volley_balance'),
             value: 'volley_balance',
         },
         {
-            label: 'Volley balance 2',
+            label: $t('form.field.payment.item.volley_balance_secondary'),
             value: 'volley_balance_secondary',
         },
         {
-            label: 'First installment',
+            label: $t('form.field.payment.item.first_installment'),
             value: 'first_installment',
         },
         {
-            label: 'Second installment',
+            label: $t('form.field.payment.item.second_installment'),
             value: 'second_installment',
         },
         {
-            label: 'Third installment',
+            label: $t('form.field.payment.item.third_installment'),
             value: 'third_installment',
         },
     ];
 
     const certificateStatusItems: Array<SelectMenuItem & { value: CertificateDateStatus }> = [
         {
-            label: 'Valid',
+            label: $t('form.field.certificate_status.item.valid'),
             value: 'valid',
         },
         {
-            label: 'Expired',
+            label: $t('form.field.certificate_status.item.expired'),
             value: 'expired',
         },
         {
-            label: 'Missing',
+            label: $t('form.field.certificate_status.item.missing'),
             value: 'missing',
         },
     ];
@@ -86,9 +86,9 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             [
                 {
                     renderAs: 'input',
-                    label: $t('form.name.label'),
+                    label: $t('form.field.name.label'),
                     name: 'name',
-                    placeholder: $t('form.name.placeholder'),
+                    placeholder: $t('form.field.name.placeholder'),
                     icon: 'i-lucide-user',
                     debounce: true,
                 },
@@ -96,45 +96,45 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             [
                 {
                     renderAs: 'select-menu',
-                    label: $t('form.season.label'),
+                    label: $t('form.field.season.label'),
                     name: 'season',
                     items: seasons.value,
                     loading: seasonsPending.value,
-                    placeholder: $t('form.season.placeholder'),
+                    placeholder: $t('form.field.season.placeholder'),
                     icon: 'i-lucide-calendar',
                 },
                 {
                     renderAs: 'select-menu',
-                    label: $t('form.activity.label'),
+                    label: $t('form.field.activity.label'),
                     name: 'activity',
                     items: activities.value,
                     loading: activitiesPending.value,
-                    placeholder: $t('form.activity.placeholder'),
+                    placeholder: $t('form.field.activity.placeholder'),
                     icon: 'i-lucide-zap',
                 },
                 {
                     renderAs: 'select-menu',
-                    label: $t('form.course.label'),
+                    label: $t('form.field.course.label'),
                     name: 'course',
                     items: courses.value,
                     loading: coursesPending.value,
-                    placeholder: $t('form.course.placeholder'),
+                    placeholder: $t('form.field.course.placeholder'),
                     icon: 'i-lucide-dumbbell',
                 },
                 {
                     renderAs: 'select-menu',
-                    label: 'Payment',
+                    label: $t('form.field.payment.label'),
                     name: 'payment',
                     items: paymentItems,
-                    placeholder: 'Select missing payments',
+                    placeholder: $t('form.field.payment.placeholder'),
                     icon: 'i-lucide-credit-card',
                 },
                 {
                     renderAs: 'select-menu',
-                    label: 'Certificate status',
+                    label: $t('form.field.certificate_status.label'),
                     name: 'certificateStatus',
                     items: certificateStatusItems,
-                    placeholder: 'Select certificate status',
+                    placeholder: $t('form.field.certificate_status.placeholder'),
                     icon: 'i-lucide-briefcase-medical',
                 },
             ],

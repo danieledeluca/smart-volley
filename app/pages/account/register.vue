@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: $t('auth.sign_up.default'),
+    title: $t('auth.sign_up.title'),
 });
 
 const authStore = useAuthStore();
@@ -15,7 +15,7 @@ const { alerts } = storeToRefs(authStore);
     <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
             :schema="registerSchema"
-            :title="$t('auth.sign_up.default')"
+            :title="$t('auth.sign_up.title')"
             icon="i-lucide-user-plus"
             :fields="authStore.registerFields"
             :loadingAuto="true"
@@ -27,11 +27,11 @@ const { alerts } = storeToRefs(authStore);
             <template #description>
                 {{ $t('auth.sign_up.description') }}
                 <ULink to="/account/login" class="font-medium text-primary">
-                    {{ $t('auth.sing_in.default') }}
+                    {{ $t('auth.sing_in.title') }}
                 </ULink>
             </template>
             <template #password-help>
-                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
+                {{ $t('form.field.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
             </template>
             <template #validation>
                 <UAlert v-for="(alert, index) in alerts" :key="index" v-bind="alert" />

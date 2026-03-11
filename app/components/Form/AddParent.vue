@@ -25,7 +25,7 @@ defineExpose({
         />
         <UButton
             type="submit"
-            label="Submit"
+            :label="$t('form.button.add')"
             class="hidden"
             :loading="isAddingParent"
             block

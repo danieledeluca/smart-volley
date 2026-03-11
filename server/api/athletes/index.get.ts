@@ -1,6 +1,6 @@
 export default defineAuthenticatedEventHandler(async (event) => {
     const query = getQuery(event);
-    const name = query.name as string;
+    const name = query.name as string | undefined;
 
     const athletes = await prisma.athlete.findMany({
         select: athleteListItemsSelect,

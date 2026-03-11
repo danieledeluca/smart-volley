@@ -26,7 +26,7 @@ const { alerts } = storeToRefs(authStore);
             @submit="authStore.resetPassword"
         >
             <template #password-help>
-                {{ $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
+                {{ $t('form.field.password.error', { min: PASSWORD_MIN_LENGTH.toString() }) }}
             </template>
             <template #validation>
                 <UAlert v-for="(alert, index) in alerts" :key="index" v-bind="alert" />

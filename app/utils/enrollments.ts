@@ -22,12 +22,9 @@ export function getCertificateDateStatus(date: string | null | undefined): Certi
 }
 
 export function getAthletesTableColumns(keys: (keyof AthleteListItem)[]) {
-    const tableColumns: Record<keyof AthleteListItem, TableColumn<AthleteListItem>> = {
-        id: {
-            accessorKey: 'id',
-            header: $t('table.column.id'),
-            cell: ({ row }) => `#${row.original.id}`,
-        },
+    type TableColumns = Partial<Record<keyof AthleteListItem, TableColumn<AthleteListItem>>>;
+
+    const tableColumns: TableColumns = {
         name: {
             accessorKey: 'name',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
@@ -80,16 +77,40 @@ export function getAthletesTableColumns(keys: (keyof AthleteListItem)[]) {
         },
     };
 
-    return keys.map((key) => tableColumns[key]);
+    return keys.map((key) => tableColumns[key]).filter((column) => !!column);
+}
+
+export function getAthleteEnrollmentsTableColumns(keys: (keyof AthleteItem['enrollments'][number])[]) {
+    type TableColumns = Partial<Record<
+        keyof AthleteItem['enrollments'][number],
+        TableColumn<AthleteItem['enrollments'][number]>
+    >>;
+
+    const tableColumns: TableColumns = {
+        season: {
+            accessorKey: 'season',
+            header: $t('table.column.season'),
+            cell: ({ row }) => `${row.original.season.starter_year} - ${row.original.season.end_year}`,
+        },
+        activity: {
+            accessorKey: 'activity',
+            header: $t('table.column.activity'),
+            cell: ({ row }) => row.original.activity.name,
+        },
+        course: {
+            accessorKey: 'course',
+            header: $t('table.column.course'),
+            cell: ({ row }) => row.original.course.name,
+        },
+    };
+
+    return keys.map((key) => tableColumns[key]).filter((column) => !!column);
 }
 
 export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
-    const tableColumns: Record<keyof EnrollmentListItem, TableColumn<EnrollmentListItem>> = {
-        id: {
-            accessorKey: 'id',
-            header: $t('table.column.id'),
-            cell: ({ row }) => `#${row.original.id}`,
-        },
+    type TableColumns = Partial<Record<keyof EnrollmentListItem, TableColumn<EnrollmentListItem>>>;
+
+    const tableColumns: TableColumns = {
         athlete: {
             accessorKey: 'athlete',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
@@ -230,7 +251,7 @@ export function getEnrollmentsTableColumns(keys: (keyof EnrollmentListItem)[]) {
         },
     };
 
-    return keys.map((key) => tableColumns[key]);
+    return keys.map((key) => tableColumns[key]).filter((column) => !!column);
 }
 
 export function onAthleteSelect(_event: Event, row: TableRow<AthleteListItem>) {

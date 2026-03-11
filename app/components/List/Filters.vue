@@ -49,8 +49,8 @@ function handleFormFieldUpdate(field: FormField<FormData>) {
     }
 }
 
-function handleClear() {
-    if (hasActiveFilters.value) {
+function handleClear(force = false) {
+    if (hasActiveFilters.value || force) {
         emit('clear');
     }
 }
@@ -72,10 +72,10 @@ function handleClear() {
                 @update:model-value="handleFormFieldUpdate(field)"
             />
             <div>
-                <USlideover v-if="secondFieldsGroup && secondFieldsGroup.length > 0" title="Filters">
+                <USlideover v-if="secondFieldsGroup && secondFieldsGroup.length > 0" :title="$t('form.filter.title')">
                     <UChip :show="hasActiveFilters" class="w-full">
                         <UButton
-                            label="Open filters"
+                            :label="$t('form.filter.button.open')"
                             variant="subtle"
                             color="neutral"
                             icon="i-lucide-filter"
@@ -96,10 +96,10 @@ function handleClear() {
                     <template #footer>
                         <UButton
                             variant="solid"
-                            label="Clear filters"
+                            :label="$t('form.filter.button.clear')"
                             icon="i-lucide-filter-x"
                             block
-                            @click="handleClear"
+                            @click="() => handleClear()"
                         />
                     </template>
                 </USlideover>
@@ -107,10 +107,10 @@ function handleClear() {
                     v-else
                     variant="subtle"
                     color="neutral"
-                    label="Clear filters"
+                    :label="$t('form.filter.button.clear')"
                     icon="i-lucide-filter-x"
                     block
-                    @click="handleClear"
+                    @click="handleClear(true)"
                 />
             </div>
         </UForm>

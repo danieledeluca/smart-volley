@@ -50,7 +50,7 @@ export const useParentsStore = defineStore('parents', () => {
             closeParentAddForm();
 
             toast.add({
-                title: 'Parent added successfully',
+                title: $t('form.add_parent.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
 
@@ -72,32 +72,32 @@ export const useParentsStore = defineStore('parents', () => {
         return [
             {
                 renderAs: 'input',
-                label: 'Nome e cognome',
+                label: $t('form.field.name.label'),
                 name: 'name',
-                placeholder: 'Enter your name',
+                placeholder: $t('form.field.name.placeholder'),
                 required: true,
             },
             {
                 renderAs: 'input',
-                label: 'Tax code',
+                label: $t('form.field.tax_code.label'),
                 name: 'tax_code',
-                placeholder: 'Enter your tax code',
+                placeholder: $t('form.field.tax_code.placeholder'),
                 required: true,
             },
             {
                 renderAs: 'input',
-                label: 'Phone number',
+                label: $t('form.field.phone_number.label'),
                 type: 'tel',
                 name: 'phone_number',
-                placeholder: 'Enter your phone number',
+                placeholder: $t('form.field.phone_number.placeholder'),
                 required: true,
             },
             {
                 renderAs: 'input',
-                label: 'Email',
+                label: $t('form.field.email.label'),
                 type: 'email',
                 name: 'email',
-                placeholder: 'Enter your email',
+                placeholder: $t('form.field.email.placeholder'),
             },
         ];
     });

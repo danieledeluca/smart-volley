@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { TableColumn } from '@nuxt/ui';
-
 useSeoMeta({
     title: $t('page.athlete.title'),
 });
@@ -11,23 +9,7 @@ const { data: athlete, pending, error } = useLazyFetch<AthleteItem>(`/api/athlet
     headers: useRequestHeaders(['cookie']),
 });
 
-const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
-    {
-        accessorKey: 'season',
-        header: $t('table.column.season'),
-        cell: ({ row }) => `${row.original.season.starter_year} - ${row.original.season.end_year}`,
-    },
-    {
-        accessorKey: 'activity',
-        header: $t('table.column.activity'),
-        cell: ({ row }) => row.original.activity.name,
-    },
-    {
-        accessorKey: 'course',
-        header: $t('table.column.course'),
-        cell: ({ row }) => row.original.course.name,
-    },
-];
+const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
 </script>
 
 <template>
@@ -89,7 +71,7 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                     icon="i-lucide-arrow-left"
                     class="max-md:w-full max-md:justify-center"
                     to="/athletes"
-                    label="Torna alla lista degli atleti"
+                    :label="$t('page.athlete.button.back')"
                     variant="soft"
                 />
             </div>
@@ -154,7 +136,7 @@ const tableColumns: TableColumn<AthleteItem['enrollments'][number]>[] = [
                             :showCopyButton="true"
                         />
                         <ItemCardRecord
-                            :label="$t('card.record.phone_number')"
+                            :label="$t('card.record.parent.phone_number')"
                             :value="athlete.parent.phone_number"
                             :showPhoneNumberButtons="true"
                         />

@@ -56,7 +56,7 @@ watch(() => tableData, () => {
                 v-model:pagination="pagination"
                 :data="tableData"
                 :columns="tableColumns"
-                class="striped-table rounded-md border border-accented has-[table+*]:rounded-b-none"
+                class="striped-table rounded-md border border-accented has-[+*]:rounded-b-none"
                 sticky
                 :empty="$t('table.empty')"
                 :paginationOptions="{ getPaginationRowModel: getPaginationRowModel() }"

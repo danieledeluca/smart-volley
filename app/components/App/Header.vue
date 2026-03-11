@@ -57,12 +57,12 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
     return [
         [
             {
-                label: $t('auth.sing_in.default'),
+                label: $t('auth.sing_in.title'),
                 to: '/account/login',
                 icon: 'i-lucide-log-in',
             },
             {
-                label: $t('auth.sign_up.default'),
+                label: $t('auth.sign_up.title'),
                 to: '/account/register',
                 icon: 'i-lucide-user-plus',
             },

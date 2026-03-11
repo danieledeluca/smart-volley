@@ -11,6 +11,8 @@ const {
     enrollmentsFiltersState,
     enrollmentsFiltersFields,
 } = storeToRefs(enrollmentsStore);
+
+const tableColumns = getEnrollmentsTableColumns(['athlete', 'season', 'activity', 'course']);
 </script>
 
 <template>
@@ -29,7 +31,7 @@ const {
         :isLoading="enrollmentsPending"
         :error="enrollmentsError"
         :tableData="enrollments"
-        :tableColumns="getEnrollmentsTableColumns(['athlete', 'season', 'activity', 'course'])"
+        :tableColumns
         :onSelect="onEnrollmentSelect"
     />
 </template>

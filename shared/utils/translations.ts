@@ -16,19 +16,19 @@ export const translations = {
             title: 'Crea una nuova password',
         },
         sign_up: {
-            default: 'Registrati',
             description: 'Hai già un account?',
             error: 'Email già utilizzata',
             submit: 'Crea un account',
             success: 'Ti abbiamo inviato un\'email di conferma. Controlla la tua casella di posta per attivare il tuo account.',
+            title: 'Registrati',
         },
         sing_in: {
-            default: 'Accedi',
             description: 'Non hai un account?',
             error: {
                 invalid_credentials: 'Email o password non validi',
             },
             password_hint: 'Password dimenticata?',
+            title: 'Accedi',
         },
     },
     card: {
@@ -36,19 +36,19 @@ export const translations = {
             title: 'Indirizzo e contatti',
         },
         athlete: {
-            title: 'Atleta',
+            title: 'Informazioni personali',
         },
         enrollments: {
             title: 'Iscrizioni',
         },
         parent: {
-            title: 'Genitore',
+            title: 'Informazioni genitore',
         },
         payments: {
             title: 'Pagamenti',
         },
         record: {
-            account_volley: 'Account volley',
+            account_volley: 'Acconto volley',
             activity: 'Attività',
             address: 'Indirizzo',
             birthday: 'Data di nascita',
@@ -61,13 +61,14 @@ export const translations = {
             course: 'Corso',
             email: 'Email',
             first_installment: 'Prima rata',
-            name: 'Nome',
+            name: 'Nome e cognome',
             parent: {
                 email: 'Email genitore',
                 name: 'Nome genitore',
+                phone_number: 'Numero cellulare genitore',
                 tax_code: 'Codice fiscale genitore',
             },
-            phone_number: 'Numero di cellulare',
+            phone_number: 'Numero cellulare',
             season: 'Stagione',
             second_installment: 'Seconda rata',
             tax_code: 'Codice fiscale',
@@ -80,39 +81,123 @@ export const translations = {
         },
     },
     form: {
-        activity: {
-            label: 'Attività',
-            placeholder: 'Seleziona un\'attività',
+        add_athlete: {
+            button: {
+                add_parent: 'Nuovo genitore',
+            },
+            group: {
+                parent_information: 'Informazioni genitore',
+                personal_information: 'Informazioni personali',
+            },
+            success: 'Atleta aggiunto con successo',
+            title: 'Aggiungi nuovo atleta',
         },
-        confirm_password: {
-            error: 'Le password non corrispondono',
-            label: 'Conferma password',
-            placeholder: 'Inserisci di nuovo la password',
-            required: 'La conferma password è obbligatoria',
+        add_parent: {
+            success: 'Genitore aggiunto con successo',
+            title: 'Aggiungi nuovo genitore',
         },
-        course: {
-            label: 'Corso',
-            placeholder: 'Seleziona un corso',
+        button: {
+            add: 'Aggiungi',
         },
-        email: {
-            error: 'L\'email non valida',
-            label: 'Email',
-            placeholder: 'Inserisci la tua email',
-            required: 'L\'email è obbligatoria',
+        field: {
+            activity: {
+                label: 'Attività',
+                placeholder: 'Seleziona un\'attività',
+            },
+            address: {
+                label: 'Indirizzo',
+                placeholder: 'Inserisci l\'indirizzo',
+                required: 'L\'indirizzo è obbligatorio',
+            },
+            birthday: {
+                error: 'La data di nascita deve essere nel passato',
+                label: 'Data di nascita',
+                required: 'La data di nascita è obbligatoria',
+            },
+            birthplace: {
+                label: 'Luogo di nascita',
+                placeholder: 'Inserisci il luogo di nascita',
+                required: 'Il luogo di nascita è obbligatorio',
+            },
+            certificate_status: {
+                item: {
+                    expired: 'Scaduto',
+                    missing: 'Mancante',
+                    valid: 'Valido',
+                },
+                label: 'Certificato',
+                placeholder: 'Seleziona uno stato',
+            },
+            city: {
+                label: 'Città',
+                placeholder: 'Inserisci la città',
+                required: 'La città è obbligatoria',
+            },
+            confirm_password: {
+                error: 'Le password non corrispondono',
+                label: 'Conferma password',
+                placeholder: 'Inserisci di nuovo la password',
+                required: 'La conferma password è obbligatoria',
+            },
+            course: {
+                label: 'Corso',
+                placeholder: 'Seleziona un corso',
+            },
+            email: {
+                error: 'L\'email non valida',
+                label: 'Email',
+                placeholder: 'Inserisci la tua email',
+                required: 'L\'email è obbligatoria',
+            },
+            name: {
+                label: 'Nome',
+                placeholder: 'Inserisci il nome',
+                required: 'Il nome è obbligatorio',
+            },
+            parent: {
+                label: 'Genitore',
+                placeholder: 'Seleziona un genitore',
+            },
+            password: {
+                error: 'Deve essere almeno di {min} caratteri',
+                label: 'Password',
+                placeholder: 'Inserisci la tua password',
+                required: 'La password è obbligatoria',
+            },
+            payment: {
+                item: {
+                    first_installment: 'Prima rata',
+                    second_installment: 'Seconda rata',
+                    third_installment: 'Terza rata',
+                    volley_account: 'Acconto volley',
+                    volley_balance: 'Saldo volley',
+                    volley_balance_secondary: 'Saldo volley 2',
+                },
+                label: 'Pagamenti',
+                placeholder: 'Seleziona un pagamento',
+            },
+            phone_number: {
+                label: 'Numero cellulare',
+                placeholder: 'Inserisci il numero cellulare',
+                required: 'Il numero cellulare è obbligatorio',
+            },
+            season: {
+                label: 'Stagione',
+                placeholder: 'Seleziona una stagione',
+            },
+            tax_code: {
+                error: 'Il codice fiscale non è valido',
+                label: 'Codice fiscale',
+                placeholder: 'Inserisci il codice fiscale',
+                required: 'Il codice fiscale è obbligatorio',
+            },
         },
-        name: {
-            label: 'Nome',
-            placeholder: 'Inserisci il nome',
-        },
-        password: {
-            error: 'Deve essere almeno di {min} caratteri',
-            label: 'Password',
-            placeholder: 'Inserisci la tua password',
-            required: 'La password è obbligatoria',
-        },
-        season: {
-            label: 'Stagione',
-            placeholder: 'Seleziona una stagione',
+        filter: {
+            button: {
+                clear: 'Cancella',
+                open: 'Filtri',
+            },
+            title: 'Filtri',
         },
     },
     menu: {
@@ -123,15 +208,21 @@ export const translations = {
     },
     page: {
         athlete: {
+            button: {
+                back: 'Torna alla lista degli atleti',
+            },
             error: 'Atleta non trovato',
             title: 'Dettagli atleta',
         },
         athletes: {
+            button: {
+                add: 'Aggiungi nuovo atleta',
+            },
             header: {
                 description: 'Una panoramica completa di tutti gli atleti iscritti alla società, con informazioni di contatto sempre aggiornate, come numero di cellulare ed email, per restare facilmente in contatto e gestire ogni esigenza della squadra.',
                 title: 'Elenco atleti',
             },
-            title: 'Anagrafica',
+            title: 'Atleti',
         },
         certificates: {
             header: {
@@ -141,7 +232,10 @@ export const translations = {
             title: 'Certificati medici',
         },
         enrollment: {
-            button: 'Vedi scheda atleta',
+            button: {
+                athlete: 'Vedi scheda atleta',
+                back: 'Torna alla lista delle iscrizioni',
+            },
             error: 'Iscrizione non trovata',
             title: 'Dettagli iscrizione',
         },
@@ -156,11 +250,11 @@ export const translations = {
             card: {
                 athletes: {
                     description: 'Consulta la lista completa degli atleti iscritti.',
-                    title: 'Anagrafica',
+                    title: 'Atleti',
                 },
                 certificates: {
                     description: 'Consulta lo stato di validità dei certificati medici degli atleti.',
-                    title: 'Certificati',
+                    title: 'Certificati medici',
                 },
                 enrollments: {
                     description: 'Consulta la lista completa delle iscrizioni degli atleti.',
@@ -172,9 +266,9 @@ export const translations = {
                 },
             },
             hero: {
-                description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti. Consente di visualizzare informazioni anagrafiche, lo stato dei pagamenti e la validità del certificato medico.',
+                description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti, lo stato dei pagamenti e la validità del certificato medico.',
                 head_line: 'Smart Volley',
-                title: 'Atleti della Vis et Virtus',
+                title: 'Vis et Virtus',
             },
         },
         payments: {
@@ -206,17 +300,21 @@ export const translations = {
             email: 'Email',
             first_installment: 'Prima rata',
             id: 'ID',
-            name: 'Nome',
+            name: 'Nome e cognome',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',
             second_installment: 'Seconda rata',
             third_installment: 'Terza rata',
-            volley_account: 'Account volley',
+            volley_account: 'Acconto volley',
             volley_balance: 'Saldo volley',
             volley_balance_secondary: 'Saldo volley 2',
         },
         empty: 'Nessun risultato trovato',
         pagination: 'Visualizzati {start}-{end} di {total}',
+        sort: {
+            asc: 'Ascendente',
+            desc: 'Discendente',
+        },
     },
     toast: {
         clipboard: '{name} copiato negli appunti',

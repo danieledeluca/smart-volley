@@ -35,20 +35,15 @@ defineExpose({
                 :class="group.fields.length === 1 ? 'col-span-2' : ''"
             >
                 <template #parent_id-hint>
-                    <UModal v-model:open="showParentAddForm" title="Add new parent">
-                        <UButton
-                            label="Add new parent"
-                            color="primary"
-                            variant="link"
-                            class="p-0"
-                        />
+                    <UModal v-model:open="showParentAddForm" :title="$t('form.add_parent.title')">
+                        <UButton :label="$t('form.add_athlete.button.add_parent')" variant="link" class="p-0" />
                         <template #body>
                             <FormAddParent ref="parentForm" />
                         </template>
                         <template #footer>
                             <UButton
                                 type="button"
-                                label="Submit"
+                                :label="$t('form.button.add')"
                                 :loading="isAddingParent"
                                 block
                                 @click="parentFormRef?.[0]?.submit()"
@@ -60,7 +55,7 @@ defineExpose({
         </ItemCard>
         <UButton
             type="submit"
-            label="Submit"
+            :label="$t('form.button.add')"
             class="hidden"
             :loading="isAddingAthlete"
             block

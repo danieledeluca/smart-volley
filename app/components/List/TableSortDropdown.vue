@@ -12,7 +12,7 @@ const isSorted = computed(() => column.getIsSorted());
 const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
     return [
         {
-            label: 'Asc',
+            label: $t('table.sort.asc'),
             type: 'checkbox',
             icon: 'i-lucide-arrow-up-narrow-wide',
             checked: isSorted.value === 'asc',
@@ -25,7 +25,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
             },
         },
         {
-            label: 'Desc',
+            label: $t('table.sort.desc'),
             icon: 'i-lucide-arrow-down-wide-narrow',
             type: 'checkbox',
             checked: isSorted.value === 'desc',

@@ -1,10 +1,10 @@
 export default defineAuthenticatedEventHandler(async (event) => {
     const query = getQuery(event);
-    const name = query.name as string;
-    const seasonId = Number(query.season as string) || undefined;
-    const activityId = Number(query.activity as string) || undefined;
-    const courseId = Number(query.course as string) || undefined;
-    const payment = query.payment as string;
+    const name = query.name as string | undefined;
+    const seasonId = Number(query.season as string | undefined) || undefined;
+    const activityId = Number(query.activity as string | undefined) || undefined;
+    const courseId = Number(query.course as string | undefined) || undefined;
+    const payment = query.payment as string | undefined;
     const certificateStatus = query.certificateStatus as CertificateDateStatus | undefined;
 
     const enrollments = await prisma.enrollment.findMany({
@@ -45,8 +45,6 @@ export default defineAuthenticatedEventHandler(async (event) => {
             },
         ],
     });
-
-    return enrollments;
 
     const updatedEnrollments = await Promise.all(
         enrollments.map(async (enrollment) => {

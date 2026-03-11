@@ -2,29 +2,27 @@ import type { AthleteUncheckedCreateInput, ParentUncheckedCreateInput } from '~~
 
 import z from 'zod';
 
-// Constants
-export const PASSWORD_MIN_LENGTH = 8;
-
 // Fields schema
 const emailSchema = z.email({
-    error: (issue) => issue.input ? $t('form.email.error') : $t('form.email.required'),
+    error: (issue) => issue.input ? $t('form.field.email.error') : $t('form.field.email.required'),
 });
-const passwordSchema = z.string($t('form.password.required'))
+const passwordSchema = z.string($t('form.field.password.required'))
     .min(PASSWORD_MIN_LENGTH, {
         error: (issue) => issue.input
-            ? $t('form.password.error', { min: PASSWORD_MIN_LENGTH.toString() })
-            : $t('form.password.required'),
+            ? $t('form.field.password.error', { min: PASSWORD_MIN_LENGTH.toString() })
+            : $t('form.field.password.required'),
     });
-const confirmPasswordSchema = z.string($t('form.confirm_password.required'));
+const confirmPasswordSchema = z.string($t('form.field.confirm_password.required'));
 const passwordMatch: z.core.$ZodCustomParams = {
-    message: $t('form.confirm_password.error'),
+    message: $t('form.field.confirm_password.error'),
     path: ['confirmPassword'],
 };
 
-const nameSchema = z.string('Name is required').nonempty('Name is required');
-const taxCodeSchema = z.string('Tax Code is required')
-    .regex(/^[A-Z]{6}\d{2}[A-EHLMPR-T](\d{2})[A-Z]\d{3}[A-Z]$/, 'Invalid Fiscal Code format');
-const phoneNumberSchema = z.string('Phone number is required').nonempty('Phone number is required');
+const nameSchema = z.string($t('form.field.name.required')).nonempty($t('form.field.name.required'));
+const taxCodeSchema = z.string($t('form.field.tax_code.required'))
+    .regex(/^[A-Z]{6}\d{2}[A-EHLMPR-T](\d{2})[A-Z]\d{3}[A-Z]$/, $t('form.field.tax_code.error'));
+const phoneNumberSchema = z.string($t('form.field.phone_number.required'))
+    .nonempty($t('form.field.phone_number.required'));
 
 // Forms schema
 export const loginSchema = z.object({
@@ -62,11 +60,11 @@ export const enrollmentsFiltersSchema = z.object({
 
 export const athleteAddSchema: z.ZodType<AthleteUncheckedCreateInput> = z.object({
     name: nameSchema,
-    birthday: z.coerce.date('Birthday is required').max(new Date(), 'Birthday must be in the past'),
-    birthplace: z.string('Birthplace is required').nonempty('Birthplace is required'),
+    birthday: z.coerce.date($t('form.field.birthday.required')).max(new Date(), $t('form.field.birthday.error')),
+    birthplace: z.string($t('form.field.birthplace.required')).nonempty($t('form.field.birthplace.required')),
     tax_code: taxCodeSchema,
-    city: z.string('City is required').nonempty('City is required'),
-    address: z.string('Address is required').nonempty('Address is required'),
+    city: z.string($t('form.field.city.required')).nonempty($t('form.field.city.required')),
+    address: z.string($t('form.field.address.required')).nonempty($t('form.field.address.required')),
     phone_number: phoneNumberSchema,
     email: z.string().optional(),
     parent_id: z.number().optional(),

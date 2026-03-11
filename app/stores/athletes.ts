@@ -72,7 +72,7 @@ export const useAthletesStore = defineStore('athletes', () => {
             closeAthleteAddForm();
 
             toast.add({
-                title: 'Athlete added successfully',
+                title: $t('form.add_athlete.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });
@@ -94,9 +94,9 @@ export const useAthletesStore = defineStore('athletes', () => {
             [
                 {
                     renderAs: 'input',
-                    label: $t('form.name.label'),
+                    label: $t('form.field.name.label'),
                     name: 'name',
-                    placeholder: $t('form.name.placeholder'),
+                    placeholder: $t('form.field.name.placeholder'),
                     icon: 'i-lucide-user',
                     debounce: true,
                 },
@@ -107,78 +107,78 @@ export const useAthletesStore = defineStore('athletes', () => {
     const athleteAddFields = computed<GroupFormField<AthleteAddSchema>[]>(() => {
         return [
             {
-                title: 'Personal information',
+                title: $t('form.add_athlete.group.personal_information'),
                 icon: 'i-lucide-user',
                 fields: [
                     {
                         renderAs: 'input',
-                        label: 'Nome e cognome',
+                        label: $t('form.field.name.label'),
                         name: 'name',
-                        placeholder: 'Enter your name',
+                        placeholder: $t('form.field.name.placeholder'),
                         required: true,
                     },
                     {
                         renderAs: 'input-date',
-                        label: 'Birthday',
+                        label: $t('form.field.birthday.label'),
                         name: 'birthday',
                         required: true,
                     },
                     {
                         renderAs: 'input',
-                        label: 'Birthplace',
+                        label: $t('form.field.birthplace.label'),
                         name: 'birthplace',
-                        placeholder: 'Enter your birthplace',
+                        placeholder: $t('form.field.birthplace.placeholder'),
                         required: true,
                     },
                     {
                         renderAs: 'input',
-                        label: 'Tax code',
+                        label: $t('form.field.tax_code.label'),
                         name: 'tax_code',
-                        placeholder: 'Enter your tax code',
+                        placeholder: $t('form.field.tax_code.placeholder'),
                         required: true,
                     },
                     {
                         renderAs: 'input',
-                        label: 'City',
+                        label: $t('form.field.city.label'),
                         name: 'city',
-                        placeholder: 'Enter your city',
+                        placeholder: $t('form.field.city.placeholder'),
                         required: true,
                     },
                     {
                         renderAs: 'input',
-                        label: 'Address',
+                        label: $t('form.field.address.label'),
                         name: 'address',
-                        placeholder: 'Enter your address',
+                        placeholder: $t('form.field.address.placeholder'),
                         required: true,
                     },
                     {
                         renderAs: 'input',
-                        label: 'Phone number',
+                        label: $t('form.field.phone_number.label'),
                         type: 'tel',
                         name: 'phone_number',
-                        placeholder: 'Enter your phone number',
+                        placeholder: $t('form.field.phone_number.placeholder'),
                         required: true,
                     },
                     {
                         renderAs: 'input',
-                        label: 'Email',
+                        label: $t('form.field.email.label'),
                         type: 'email',
                         name: 'email',
-                        placeholder: 'Enter your email',
+                        placeholder: $t('form.field.email.placeholder'),
                     },
                 ],
             },
             {
-                title: 'Parent information',
+                title: $t('form.add_athlete.group.parent_information'),
                 icon: 'i-lucide-user',
                 fields: [
                     {
                         renderAs: 'select-menu',
-                        label: 'Parent',
+                        label: $t('form.field.parent.label'),
                         name: 'parent_id',
                         items: parents.value,
                         loading: parentsPending.value,
-                        placeholder: 'Select your parent',
+                        placeholder: $t('form.field.parent.placeholder'),
                     },
                 ],
             },

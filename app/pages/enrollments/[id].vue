@@ -83,14 +83,14 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
                     icon="i-lucide-arrow-left"
                     class="max-md:w-full max-md:justify-center"
                     to="/enrollments"
-                    label="Torna alla lista delle iscrizioni"
+                    :label="$t('page.enrollment.button.back')"
                     variant="soft"
                 />
                 <UButton
                     trailingIcon="i-lucide-arrow-right"
                     class="max-md:w-full max-md:justify-center"
                     :to="`/athletes/${enrollment.athlete.id}`"
-                    :label="$t('page.enrollment.button')"
+                    :label="$t('page.enrollment.button.athlete')"
                 />
             </div>
         </div>

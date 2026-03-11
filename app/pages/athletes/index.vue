@@ -14,15 +14,17 @@ const {
     isAddingAthlete,
 } = storeToRefs(athletesStore);
 
+const tableColumns = getAthletesTableColumns(['name', 'phone_number', 'email']);
+
 const formRef = useTemplateRef('form');
 </script>
 
 <template>
     <UPageHeader :title="$t('page.athletes.header.title')" :description="$t('page.athletes.header.description')">
         <template #links>
-            <USlideover v-model:open="showAthleteAddForm" title="Add new athlete">
+            <USlideover v-model:open="showAthleteAddForm" :title="$t('form.add_athlete.title')">
                 <UButton
-                    label="Add new athlete"
+                    :label="$t('page.athletes.button.add')"
                     color="primary"
                     variant="solid"
                     icon="i-lucide-user-plus"
@@ -34,7 +36,7 @@ const formRef = useTemplateRef('form');
                 <template #footer>
                     <UButton
                         type="submit"
-                        label="Submit"
+                        :label="$t('form.button.add')"
                         :loading="isAddingAthlete"
                         block
                         @click="formRef?.submit()"
@@ -54,7 +56,7 @@ const formRef = useTemplateRef('form');
         :isLoading="athletesPending"
         :error="athletesError"
         :tableData="athletes"
-        :tableColumns="getAthletesTableColumns(['name', 'phone_number', 'email'])"
+        :tableColumns
         :onSelect="onAthleteSelect"
     />
 </template>

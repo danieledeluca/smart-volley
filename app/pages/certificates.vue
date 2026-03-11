@@ -11,6 +11,8 @@ const {
     enrollmentsFiltersState,
     enrollmentsFiltersFields,
 } = storeToRefs(enrollmentsStore);
+
+const tableColumns = getEnrollmentsTableColumns(['athlete', 'certificate_expiration_date', 'certificate_download_url']);
 </script>
 
 <template>
@@ -30,11 +32,7 @@ const {
         :isLoading="enrollmentsPending"
         :error="enrollmentsError"
         :tableData="enrollments"
-        :tableColumns="getEnrollmentsTableColumns([
-            'athlete',
-            'certificate_expiration_date',
-            'certificate_download_url',
-        ])"
+        :tableColumns
         :onSelect="onEnrollmentSelect"
     />
 </template>
