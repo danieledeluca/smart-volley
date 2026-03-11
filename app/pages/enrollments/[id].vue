@@ -136,7 +136,6 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
                     >
                         <template v-if="enrollment.certificate_download_url">
                             <UButton
-                                color="primary"
                                 variant="ghost"
                                 icon="i-lucide-download"
                                 :to="enrollment.certificate_download_url"

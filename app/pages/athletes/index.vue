@@ -23,13 +23,7 @@ const formRef = useTemplateRef('form');
     <UPageHeader :title="$t('page.athletes.header.title')" :description="$t('page.athletes.header.description')">
         <template #links>
             <USlideover v-model:open="showAthleteAddForm" :title="$t('form.add_athlete.title')">
-                <UButton
-                    :label="$t('page.athletes.button.add')"
-                    color="primary"
-                    variant="solid"
-                    icon="i-lucide-user-plus"
-                />
-
+                <UButton :label="$t('page.athletes.button.add')" variant="solid" icon="i-lucide-user-plus" />
                 <template #body>
                     <FormAddAthlete ref="form" />
                 </template>
@@ -38,6 +32,7 @@ const formRef = useTemplateRef('form');
                         type="submit"
                         :label="$t('form.button.add')"
                         :loading="isAddingAthlete"
+                        icon="i-lucide-plus"
                         block
                         @click="formRef?.submit()"
                     />

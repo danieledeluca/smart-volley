@@ -76,6 +76,7 @@ export const useParentsStore = defineStore('parents', () => {
                 name: 'name',
                 placeholder: $t('form.field.name.placeholder'),
                 required: true,
+                variant: 'subtle',
             },
             {
                 renderAs: 'input',
@@ -83,6 +84,7 @@ export const useParentsStore = defineStore('parents', () => {
                 name: 'tax_code',
                 placeholder: $t('form.field.tax_code.placeholder'),
                 required: true,
+                variant: 'subtle',
             },
             {
                 renderAs: 'input',
@@ -91,6 +93,7 @@ export const useParentsStore = defineStore('parents', () => {
                 name: 'phone_number',
                 placeholder: $t('form.field.phone_number.placeholder'),
                 required: true,
+                variant: 'subtle',
             },
             {
                 renderAs: 'input',
@@ -98,6 +101,7 @@ export const useParentsStore = defineStore('parents', () => {
                 type: 'email',
                 name: 'email',
                 placeholder: $t('form.field.email.placeholder'),
+                variant: 'subtle',
             },
         ];
     });

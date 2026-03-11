@@ -30,7 +30,6 @@ const actionsRef = useTemplateRef('actions');
             <div ref="actions" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
                 <UButton
                     v-if="showCopyButton"
-                    color="primary"
                     variant="ghost"
                     :icon="copied ? 'i-lucide-clipboard-check' : 'i-lucide-clipboard'"
                     @click="async () => {
@@ -44,13 +43,11 @@ const actionsRef = useTemplateRef('actions');
                 />
                 <template v-if="showPhoneNumberButtons">
                     <UButton
-                        color="primary"
                         variant="ghost"
                         trailingIcon="i-lucide-phone"
                         :to="`tel:${value}`"
                     />
                     <UButton
-                        color="primary"
                         variant="ghost"
                         trailingIcon="i-ic-baseline-whatsapp"
                         :to="`https://api.whatsapp.com/send?phone=${value.replace(/[^0-9]/g, '')}`"
@@ -59,7 +56,6 @@ const actionsRef = useTemplateRef('actions');
                 </template>
                 <UButton
                     v-if="showEmailButton"
-                    color="primary"
                     variant="ghost"
                     trailingIcon="i-lucide-mail"
                     :to="`mailto:${value}`"

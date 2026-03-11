@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import type { InputDateProps } from '@nuxt/ui';
+
 import { CalendarDate, GregorianCalendar } from '@internationalized/date';
 
-const { fieldName } = defineProps<{
-    fieldName: string;
+const { inputDateProps } = defineProps<{
+    inputDateProps: InputDateProps;
 }>();
 
 const model = defineModel<FormFieldModelType>();
 
-const { emitFormBlur } = useFormField({ name: fieldName });
+const { emitFormBlur } = useFormField({ name: inputDateProps.name });
 
 const currentDate = new Date();
 const maxDate = new CalendarDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
@@ -50,6 +52,7 @@ const calendarModel = computed({
 <template>
     <UInputDate
         v-model="calendarModel"
+        v-bind="inputDateProps"
         :maxValue="maxDate"
         class="w-full"
         :ui="{ trailing: 'pr-1' }"
@@ -64,7 +67,11 @@ const calendarModel = computed({
                 />
 
                 <template #content>
-                    <UCalendar v-model="calendarModel" class="p-2" :maxValue="maxDate" />
+                    <UCalendar
+                        v-model="calendarModel"
+                        class="p-2"
+                        :maxValue="maxDate"
+                    />
                 </template>
             </UPopover>
         </template>

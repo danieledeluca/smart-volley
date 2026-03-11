@@ -102,6 +102,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     loading: seasonsPending.value,
                     placeholder: $t('form.field.season.placeholder'),
                     icon: 'i-lucide-calendar',
+                    variant: 'subtle',
                 },
                 {
                     renderAs: 'select-menu',
@@ -111,6 +112,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     loading: activitiesPending.value,
                     placeholder: $t('form.field.activity.placeholder'),
                     icon: 'i-lucide-zap',
+                    variant: 'subtle',
                 },
                 {
                     renderAs: 'select-menu',
@@ -120,6 +122,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     loading: coursesPending.value,
                     placeholder: $t('form.field.course.placeholder'),
                     icon: 'i-lucide-dumbbell',
+                    variant: 'subtle',
                 },
                 {
                     renderAs: 'select-menu',
@@ -128,6 +131,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     items: paymentItems,
                     placeholder: $t('form.field.payment.placeholder'),
                     icon: 'i-lucide-credit-card',
+                    variant: 'subtle',
                 },
                 {
                     renderAs: 'select-menu',
@@ -136,6 +140,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     items: certificateStatusItems,
                     placeholder: $t('form.field.certificate_status.placeholder'),
                     icon: 'i-lucide-briefcase-medical',
+                    variant: 'subtle',
                 },
             ],
         ];

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, FormFieldModelType>">
-import type { InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
+import type { InputDateProps, InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
 
 const { field } = defineProps<{
     field: FormField<T>;
@@ -10,11 +10,12 @@ const slots = defineSlots();
 const model = defineModel<T[keyof T]>();
 
 const fieldInputProps = computed(() => {
-    const { renderAs, label, required, name, ...rest } = field;
+    const { renderAs, label, required, name, debounce, ...rest } = field;
     return rest;
 });
 
 const inputProps = computed(() => fieldInputProps.value as InputProps);
+const inputDateProps = computed(() => fieldInputProps.value as InputDateProps);
 const selectProps = computed(() => fieldInputProps.value as SelectProps);
 const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps);
 
@@ -36,7 +37,7 @@ const hasValue = computed(() => Array.isArray(model.value) ? model.value.length 
                     v-bind="inputProps"
                     class="w-full"
                 />
-                <FormFieldDate v-else-if="field.renderAs === 'input-date'" v-model="model" :fieldName="field.name" />
+                <FormFieldDate v-else-if="field.renderAs === 'input-date'" v-model="model" :inputDateProps />
             </template>
             <template v-else-if="field.renderAs.startsWith('select')">
                 <USelect
