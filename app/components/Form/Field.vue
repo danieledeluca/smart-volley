@@ -51,14 +51,7 @@ const hasValue = computed(() => Array.isArray(model.value) ? model.value.length 
                     v-bind="selectMenuProps"
                     class="w-full"
                     valueKey="value"
-                    :searchInput="{
-                        placeholder: 'Cerca...',
-                    }"
-                >
-                    <template #empty>
-                        Nessun risultato trovato
-                    </template>
-                </USelectMenu>
+                />
             </template>
             <template v-if="!!slots[`${field.name}-hint`]" #hint>
                 <slot :name="`${field.name}-hint`" />

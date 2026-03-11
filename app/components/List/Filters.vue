@@ -49,8 +49,8 @@ function handleFormFieldUpdate(field: FormField<FormData>) {
     }
 }
 
-function handleClear(force = false) {
-    if (hasActiveFilters.value || force) {
+function handleClear() {
+    if (hasActiveFilters.value) {
         emit('clear');
     }
 }
@@ -99,19 +99,10 @@ function handleClear(force = false) {
                             :label="$t('form.filter.button.clear')"
                             icon="i-lucide-filter-x"
                             block
-                            @click="() => handleClear()"
+                            @click="handleClear"
                         />
                     </template>
                 </USlideover>
-                <UButton
-                    v-else
-                    variant="subtle"
-                    color="neutral"
-                    :label="$t('form.filter.button.clear')"
-                    icon="i-lucide-filter-x"
-                    block
-                    @click="handleClear(true)"
-                />
             </div>
         </UForm>
     </UCard>

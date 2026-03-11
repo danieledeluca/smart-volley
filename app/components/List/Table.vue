@@ -58,7 +58,6 @@ watch(() => tableData, () => {
                 :columns="tableColumns"
                 class="striped-table rounded-md border border-accented has-[+*]:rounded-b-none"
                 sticky
-                :empty="$t('table.empty')"
                 :paginationOptions="{ getPaginationRowModel: getPaginationRowModel() }"
                 @select="onSelect"
             />

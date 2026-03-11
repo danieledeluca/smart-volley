@@ -194,7 +194,7 @@ export const translations = {
         },
         filter: {
             button: {
-                clear: 'Cancella',
+                clear: 'Cancella tutto',
                 open: 'Filtri',
             },
             title: 'Filtri',
@@ -309,7 +309,6 @@ export const translations = {
             volley_balance: 'Saldo volley',
             volley_balance_secondary: 'Saldo volley 2',
         },
-        empty: 'Nessun risultato trovato',
         pagination: 'Visualizzati {start}-{end} di {total}',
         sort: {
             asc: 'Ascendente',
