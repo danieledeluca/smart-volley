@@ -17,12 +17,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model Activity {
-  id          Int          @id @default(autoincrement())
-  name        String
-  enrollments Enrollment[]
-}
-
 model Season {
   id           Int          @id @default(autoincrement())
   starter_year Int          @db.SmallInt
@@ -32,9 +26,15 @@ model Season {
   @@unique([starter_year, end_year])
 }
 
+model Activity {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  enrollments Enrollment[]
+}
+
 model Course {
   id          Int          @id @default(autoincrement())
-  name        String
+  name        String       @unique
   enrollments Enrollment[]
 }
 
