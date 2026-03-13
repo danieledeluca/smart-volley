@@ -28,6 +28,8 @@ model Season {
   starter_year Int          @db.SmallInt
   end_year     Int          @db.SmallInt
   enrollments  Enrollment[]
+
+  @@unique([starter_year, end_year])
 }
 
 model Course {
