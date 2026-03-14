@@ -1,119 +1,95 @@
-import type { FormSubmitEvent, SelectItem } from '@nuxt/ui';
-import type { FetchError } from 'ofetch';
+import type { SelectItem } from '@nuxt/ui';
 
 export const useParentsStore = defineStore('parents', () => {
-    const toast = useToast();
-
-    const showParentAddForm = ref(false);
-    const isAddingParent = ref(false);
-
     const parentAddInitialState: Partial<ParentAddSchema> = {
         name: undefined,
         tax_code: undefined,
         email: undefined,
     };
 
-    const parentAddState = reactive({ ...parentAddInitialState });
-
     const { data: parents, pending: parentsPending, refresh: refreshParents } = useLazyFetch('/api/parents', {
         headers: useRequestHeaders(['cookie']),
-        transform: (parents) => {
-            return parents.map<SelectItem>((parent) => {
-                return {
-                    label: parent.name,
-                    value: parent.id,
-                };
-            });
-        },
     });
 
-    const closeParentAddForm = () => {
-        // Hide form
-        showParentAddForm.value = false;
+    const parentsItems = computed(() => {
+        return parents.value?.map<SelectItem>((parent) => {
+            return {
+                label: parent.name,
+                value: parent.id,
+            };
+        });
+    });
 
-        // Reset form
-        Object.assign(parentAddState, parentAddInitialState);
+    const {
+        showAddForm: showParentAddForm,
+        isAdding: isAddingParent,
+        state: parentAddState,
+        add: addParent,
+    } = useAddForm(
+        parentAddInitialState,
+        refreshParents,
+        '/api/parents/add',
+        $t('form.add_parent.success'),
+    );
 
-        // Refresh parents
-        refreshParents();
-    };
-
-    const addParent = async (event: FormSubmitEvent<ParentAddSchema>) => {
-        isAddingParent.value = true;
-
-        try {
-            await $fetch('/api/parents/add', {
-                method: 'POST',
-                body: event.data,
-            });
-
-            closeParentAddForm();
-
-            toast.add({
-                title: $t('form.add_parent.success'),
-                color: 'success',
-                icon: 'i-lucide-circle-check',
-
-            });
-        } catch (err) {
-            const error = err as FetchError;
-
-            toast.add({
-                title: error.message,
-                color: 'error',
-                icon: 'i-lucide-circle-x',
-            });
-        } finally {
-            isAddingParent.value = false;
-        }
-    };
-
-    const parentsAddFields = computed<FormField<ParentAddSchema>[]>(() => {
+    const parentAddFields = computed<GroupFormField<ParentAddSchema>[]>(() => {
         return [
             {
-                renderAs: 'input',
-                label: $t('form.field.name.label'),
-                name: 'name',
-                placeholder: $t('form.field.name.placeholder'),
-                required: true,
-                variant: 'subtle',
+                title: $t('form.add_parent.group.personal_information'),
+                icon: 'i-lucide-user',
+                fields: [
+                    {
+                        renderAs: 'input',
+                        label: $t('form.field.name.label'),
+                        name: 'name',
+                        placeholder: $t('form.field.name.placeholder'),
+                        required: true,
+                        variant: 'subtle',
+                    },
+                    {
+                        renderAs: 'input',
+                        label: $t('form.field.tax_code.label'),
+                        name: 'tax_code',
+                        placeholder: $t('form.field.tax_code.placeholder'),
+                        required: true,
+                        variant: 'subtle',
+                    },
+                ],
             },
             {
-                renderAs: 'input',
-                label: $t('form.field.tax_code.label'),
-                name: 'tax_code',
-                placeholder: $t('form.field.tax_code.placeholder'),
-                required: true,
-                variant: 'subtle',
-            },
-            {
-                renderAs: 'input',
-                label: $t('form.field.phone_number.label'),
-                type: 'tel',
-                name: 'phone_number',
-                placeholder: $t('form.field.phone_number.placeholder'),
-                required: true,
-                variant: 'subtle',
-            },
-            {
-                renderAs: 'input',
-                label: $t('form.field.email.label'),
-                type: 'email',
-                name: 'email',
-                placeholder: $t('form.field.email.placeholder'),
-                variant: 'subtle',
+                title: $t('form.add_parent.group.contacts'),
+                icon: 'i-lucide-notebook',
+                fields: [
+                    {
+                        renderAs: 'input',
+                        label: $t('form.field.phone_number.label'),
+                        type: 'tel',
+                        name: 'phone_number',
+                        placeholder: $t('form.field.phone_number.placeholder'),
+                        required: true,
+                        variant: 'subtle',
+                    },
+                    {
+                        renderAs: 'input',
+                        label: $t('form.field.email.label'),
+                        type: 'email',
+                        name: 'email',
+                        placeholder: $t('form.field.email.placeholder'),
+                        variant: 'subtle',
+                    },
+                ],
             },
         ];
     });
 
     return {
         parents,
+        parentsItems,
         parentsPending,
-        refreshParents,
         addParent,
         showParentAddForm,
         isAddingParent,
         parentAddState,
-        parentsAddFields,
+        parentAddFields,
     };
 });

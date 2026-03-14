@@ -29,5 +29,10 @@ export default defineAppConfig({
                 base: 'has-[+[data-slot="error"]]:ring-error',
             },
         },
+        inputNumber: {
+            slots: {
+                root: '[&:has(+[data-slot="error"])_[data-slot="base"]]:ring-error',
+            },
+        },
     },
 });

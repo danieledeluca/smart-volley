@@ -1,9 +1,9 @@
 export default defineAuthenticatedEventHandler(async () => {
-    const activities = await prisma.course.findMany({
+    const courses = await prisma.course.findMany({
         orderBy: {
             name: 'asc',
         },
     });
 
-    return activities;
+    return courses;
 });

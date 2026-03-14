@@ -1,9 +1,9 @@
 export default defineAuthenticatedEventHandler(async () => {
-    const activities = await prisma.parent.findMany({
+    const parents = await prisma.parent.findMany({
         orderBy: {
             name: 'asc',
         },
     });
 
-    return activities;
+    return parents;
 });

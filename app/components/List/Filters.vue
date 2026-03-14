@@ -20,6 +20,8 @@ const state = defineModel<Partial<FormData>>('state', {
     required: true,
 });
 
+const open = ref(false);
+
 const firstFieldsGroup = computed(() => fields.at(0));
 const secondFieldsGroup = computed(() => fields.at(1));
 
@@ -72,7 +74,12 @@ function handleClear() {
                 @update:model-value="handleFormFieldUpdate(field)"
             />
             <div>
-                <USlideover v-if="secondFieldsGroup && secondFieldsGroup.length > 0" :title="$t('form.filter.title')">
+                <USlideover
+                    v-if="secondFieldsGroup && secondFieldsGroup.length > 0"
+                    v-model:open="open"
+                    :title="$t('form.filter.title')"
+                    :description="$t('form.filter.description')"
+                >
                     <UChip :show="hasActiveFilters" class="w-full">
                         <UButton
                             :label="$t('form.filter.button.open')"
@@ -95,11 +102,18 @@ function handleClear() {
                     </template>
                     <template #footer>
                         <UButton
-                            variant="solid"
+                            variant="outline"
+                            color="neutral"
                             :label="$t('form.filter.button.clear')"
                             icon="i-lucide-filter-x"
                             block
                             @click="handleClear"
+                        />
+                        <UButton
+                            variant="solid"
+                            :label="$t('form.filter.button.close')"
+                            block
+                            @click="open = false"
                         />
                     </template>
                 </USlideover>

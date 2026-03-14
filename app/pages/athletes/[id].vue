@@ -78,7 +78,7 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
         </div>
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
-                <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-user">
+                <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-id-card">
                     <ItemCardRecord :label="$t('card.record.name')" :value="athlete.name" />
                     <ItemCardRecord
                         :label="$t('card.record.birthday')"

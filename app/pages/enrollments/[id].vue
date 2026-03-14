@@ -5,7 +5,7 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${route.params.id}`, {
+const { data: enrollment, pending, error } = useLazyFetch<EnrollmentItem>(`/api/enrollments/${route.params.id}`, {
     headers: useRequestHeaders(['cookie']),
 });
 </script>
@@ -125,7 +125,7 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
                 <ItemCard title="Certificato" icon="i-lucide-briefcase-medical">
                     <ItemCardRecord
                         :label="$t('card.record.certificates.expiration_date')"
-                        :value="formatDate(enrollment.certificate_expiration_date)"
+                        :value="formatDate(enrollment.certificate_expiration_date?.toString())"
                     />
                     <ItemCardRecord
                         :label="$t('card.record.certificates.download_url')"

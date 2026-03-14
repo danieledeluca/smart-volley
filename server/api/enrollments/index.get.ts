@@ -46,6 +46,8 @@ export default defineAuthenticatedEventHandler(async (event) => {
         ],
     });
 
+    return enrollments;
+
     const updatedEnrollments = await Promise.all(
         enrollments.map(async (enrollment) => {
             const signedUrl = await getCertificateSignedUrl(

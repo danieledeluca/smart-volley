@@ -22,22 +22,17 @@ const formRef = useTemplateRef('form');
 <template>
     <UPageHeader :title="$t('page.athletes.header.title')" :description="$t('page.athletes.header.description')">
         <template #links>
-            <USlideover v-model:open="showAthleteAddForm" :title="$t('form.add_athlete.title')">
-                <UButton :label="$t('page.athletes.button.add')" variant="solid" icon="i-lucide-user-plus" />
-                <template #body>
-                    <FormAddAthlete ref="form" />
-                </template>
-                <template #footer>
-                    <UButton
-                        type="submit"
-                        :label="$t('form.button.add')"
-                        :loading="isAddingAthlete"
-                        icon="i-lucide-plus"
-                        block
-                        @click="formRef?.submit()"
-                    />
-                </template>
-            </USlideover>
+            <FormSlideOverAdd
+                v-model:open="showAthleteAddForm"
+                v-model:adding="isAddingAthlete"
+                :title="$t('form.add_athlete.title')"
+                :description="$t('form.add_athlete.description')"
+                :buttonLabel="$t('page.athletes.button.add')"
+                buttonIcon="i-lucide-user-plus"
+                :formRef
+            >
+                <FormAddAthlete ref="form" />
+            </FormSlideOverAdd>
         </template>
     </UPageHeader>
     <ListFilters

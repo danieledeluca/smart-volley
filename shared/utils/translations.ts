@@ -81,33 +81,81 @@ export const translations = {
         },
     },
     form: {
+        add_activity: {
+            description: 'Compila i campi per creare una nuova attività.',
+            title: 'Aggiungi nuova attività',
+        },
         add_athlete: {
             button: {
-                add_parent: 'Nuovo genitore',
+                add_parent: 'Aggiungi nuovo genitore',
             },
+            description: 'Compila i campi per creare un nuovo atleta.',
             group: {
-                parent_information: 'Informazioni genitore',
+                address_contacts: 'Indirizzo e contatti',
+                parent: 'Genitore',
                 personal_information: 'Informazioni personali',
             },
             success: 'Atleta aggiunto con successo',
             title: 'Aggiungi nuovo atleta',
         },
+        add_course: {
+            description: 'Compila i campi per creare un nuovo corso.',
+            title: 'Aggiungi nuovo corso',
+        },
+        add_enrollment: {
+            button: {
+                add_activity: 'Aggiungi nuova attività',
+                add_athlete: 'Aggiungi nuovo atleta',
+                add_course: 'Aggiungi nuovo corso',
+                add_season: 'Aggiungi nuova stagione',
+            },
+            description: 'Compila i campi per creare una nuova iscrizione.',
+            group: {
+                activity: 'Attività',
+                athlete: 'Atleta',
+                course: 'Corso',
+                payment_information: 'Informazioni di pagamento',
+                season: 'Stagione',
+            },
+            success: 'Iscrizione aggiunta con successo',
+            title: 'Aggiungi nuova iscrizione',
+        },
         add_parent: {
+            description: 'Compila i campi per creare un nuovo genitore.',
+            group: {
+                contacts: 'Contatti',
+                personal_information: 'Informazioni personali',
+            },
             success: 'Genitore aggiunto con successo',
             title: 'Aggiungi nuovo genitore',
         },
+        add_season: {
+            description: 'Compila i campi per creare una nuova stagione.',
+            title: 'Aggiungi nuova stagione',
+        },
         button: {
             add: 'Aggiungi',
+            cancel: 'Annulla',
         },
         field: {
             activity: {
                 label: 'Attività',
                 placeholder: 'Seleziona un\'attività',
+                required: 'L\'attività è obbligatoria',
+            },
+            activity_name: {
+                label: 'Nome attività',
+                placeholder: 'Inserisci il nome',
             },
             address: {
                 label: 'Indirizzo',
                 placeholder: 'Inserisci l\'indirizzo',
                 required: 'L\'indirizzo è obbligatorio',
+            },
+            athlete: {
+                label: 'Atleta',
+                placeholder: 'Seleziona un atleta',
+                required: 'L\'atleta è obbligatorio',
             },
             birthday: {
                 error: 'La data di nascita deve essere nel passato',
@@ -125,7 +173,7 @@ export const translations = {
                     missing: 'Mancante',
                     valid: 'Valido',
                 },
-                label: 'Certificato',
+                label: 'Stato del certificato',
                 placeholder: 'Seleziona uno stato',
             },
             city: {
@@ -142,6 +190,11 @@ export const translations = {
             course: {
                 label: 'Corso',
                 placeholder: 'Seleziona un corso',
+                required: 'Il corso è obbligatorio',
+            },
+            course_name: {
+                label: 'Nome corso',
+                placeholder: 'Inserisci il nome',
             },
             email: {
                 error: 'L\'email non valida',
@@ -149,8 +202,19 @@ export const translations = {
                 placeholder: 'Inserisci la tua email',
                 required: 'L\'email è obbligatoria',
             },
+            end_year: {
+                error: 'L\'anno di fine deve essere un anno dopo l\'anno di partenza',
+                label: 'Anno di fine',
+                placeholder: 'Inserisci l\'anno di fine',
+                required: 'L\'anno di fine è obbligatorio',
+            },
+            first_installment: {
+                error: 'La prima rata deve essere maggiore di {min}',
+                label: 'Prima rata',
+                placeholder: 'Inserisci la prima rata',
+            },
             name: {
-                label: 'Nome',
+                label: 'Nome e cognome',
                 placeholder: 'Inserisci il nome',
                 required: 'Il nome è obbligatorio',
             },
@@ -165,15 +229,7 @@ export const translations = {
                 required: 'La password è obbligatoria',
             },
             payment: {
-                item: {
-                    first_installment: 'Prima rata',
-                    second_installment: 'Seconda rata',
-                    third_installment: 'Terza rata',
-                    volley_account: 'Acconto volley',
-                    volley_balance: 'Saldo volley',
-                    volley_balance_secondary: 'Saldo volley 2',
-                },
-                label: 'Pagamenti',
+                label: 'Pagamenti mancanti',
                 placeholder: 'Seleziona un pagamento',
             },
             phone_number: {
@@ -184,6 +240,17 @@ export const translations = {
             season: {
                 label: 'Stagione',
                 placeholder: 'Seleziona una stagione',
+                required: 'La stagione è obbligatoria',
+            },
+            second_installment: {
+                error: 'La seconda rata deve essere maggiore di {min}',
+                label: 'Seconda rata',
+                placeholder: 'Inserisci la seconda rata',
+            },
+            starter_year: {
+                label: 'Anno di partenza',
+                placeholder: 'Inserisci l\'anno di partenza',
+                required: 'L\'anno di partenza è obbligatorio',
             },
             tax_code: {
                 error: 'Il codice fiscale non è valido',
@@ -191,12 +258,34 @@ export const translations = {
                 placeholder: 'Inserisci il codice fiscale',
                 required: 'Il codice fiscale è obbligatorio',
             },
+            third_installment: {
+                error: 'La terza rata deve essere maggiore di {min}',
+                label: 'Terza rata',
+                placeholder: 'Inserisci la terza rata',
+            },
+            volley_account: {
+                error: 'L\'acconto volley deve essere maggiore di {min}',
+                label: 'Acconto volley',
+                placeholder: 'Inserisci l\'acconto volley',
+            },
+            volley_balance: {
+                error: 'Il saldo volley deve essere maggiore di {min}',
+                label: 'Saldo volley',
+                placeholder: 'Inserisci il saldo volley',
+            },
+            volley_balance_secondary: {
+                error: 'Il saldo volley 2 deve essere maggiore di {min}',
+                label: 'Saldo volley 2',
+                placeholder: 'Inserisci il saldo volley 2',
+            },
         },
         filter: {
             button: {
                 clear: 'Cancella tutto',
+                close: 'Chiudi',
                 open: 'Filtri',
             },
+            description: 'Applica i filtri per restringere i risultati.',
             title: 'Filtri',
         },
     },
@@ -240,6 +329,9 @@ export const translations = {
             title: 'Dettagli iscrizione',
         },
         enrollments: {
+            button: {
+                add: 'Aggiungi nuova iscrizione',
+            },
             header: {
                 description: 'Tutte le iscrizioni degli atleti in un unico posto: consulta le stagioni di partecipazione, le attività e i corsi assegnati, per avere sotto controllo la partecipazione e la pianificazione delle squadre.',
                 title: 'Dettagli iscrizioni',

@@ -67,6 +67,11 @@ export const athleteItemsInclude = {
             season: true,
             course: true,
         },
+        orderBy: {
+            season: {
+                end_year: 'desc',
+            },
+        },
     },
 } satisfies AthleteInclude;
 

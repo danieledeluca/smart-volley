@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, FormFieldModelType>">
-import type { InputDateProps, InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
+import type { InputDateProps, InputNumberProps, InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
 
 const { field } = defineProps<{
     field: FormField<T>;
@@ -13,57 +13,63 @@ const fieldInputProps = computed(() => {
     const { renderAs, label, required, name, debounce, ...rest } = field;
     return rest;
 });
-
-const inputProps = computed(() => fieldInputProps.value as InputProps);
-const inputDateProps = computed(() => fieldInputProps.value as InputDateProps);
-const selectProps = computed(() => fieldInputProps.value as SelectProps);
-const selectMenuProps = computed(() => fieldInputProps.value as SelectMenuProps);
-
-const hasValue = computed(() => Array.isArray(model.value) ? model.value.length > 0 : !!model.value);
 </script>
 
 <template>
-    <div class="flex items-end gap-2">
-        <UFormField
-            :name="field.name"
-            :label="field.label"
-            class="min-w-0 flex-1"
-            :required="field.required"
-        >
-            <template v-if="field.renderAs.startsWith('input')">
-                <UInput
-                    v-if="field.renderAs === 'input'"
-                    v-model="model"
-                    v-bind="inputProps"
-                    class="w-full"
-                />
-                <FormFieldDate v-else-if="field.renderAs === 'input-date'" v-model="model" :inputDateProps />
-            </template>
-            <template v-else-if="field.renderAs.startsWith('select')">
-                <USelect
-                    v-if="field.renderAs === 'select'"
-                    v-model="model"
-                    v-bind="selectProps"
-                    class="w-full"
-                />
-                <USelectMenu
-                    v-if="field.renderAs === 'select-menu'"
-                    v-model="model"
-                    v-bind="selectMenuProps"
-                    class="w-full"
-                    valueKey="value"
-                />
-            </template>
-            <template v-if="!!slots[`${field.name}-hint`]" #hint>
-                <slot :name="`${field.name}-hint`" />
-            </template>
-        </UFormField>
-        <UButton
-            v-if="field.renderAs.startsWith('select') && hasValue"
-            icon="i-lucide-x"
-            variant="subtle"
-            color="error"
-            @click.stop="model = undefined"
-        />
+    <div>
+        <div class="flex items-end gap-2">
+            <UFormField
+                :name="field.name"
+                :label="field.label"
+                class="min-w-0 flex-1"
+                :required="field.required"
+            >
+                <template v-if="field.renderAs.startsWith('input')">
+                    <UInput
+                        v-if="field.renderAs === 'input'"
+                        v-model="model"
+                        v-bind="(fieldInputProps as InputProps)"
+                        class="w-full"
+                    />
+                    <FormFIeldNumber
+                        v-else-if="field.renderAs === 'input-number'"
+                        v-model="model"
+                        :inputProps="(fieldInputProps as InputNumberProps)"
+                    />
+                    <FormFieldDate
+                        v-else-if="field.renderAs === 'input-date'"
+                        v-model="model"
+                        :inputProps="(fieldInputProps as InputDateProps)"
+                    />
+                </template>
+                <template v-else-if="field.renderAs.startsWith('select')">
+                    <USelect
+                        v-if="field.renderAs === 'select'"
+                        v-model="model"
+                        v-bind="(fieldInputProps as SelectProps)"
+                        class="w-full"
+                    />
+                    <USelectMenu
+                        v-if="field.renderAs === 'select-menu'"
+                        v-model="model"
+                        v-bind="(fieldInputProps as SelectMenuProps)"
+                        class="w-full"
+                        valueKey="value"
+                    />
+                </template>
+            </UFormField>
+            <UButton
+                v-if="field.renderAs.startsWith('select') && model"
+                icon="i-lucide-x"
+                variant="subtle"
+                color="error"
+                @click.stop="model = undefined"
+            />
+        </div>
+        <template v-if="!!slots[`${field.name}-post`]">
+            <div class="mt-2">
+                <slot :name="`${field.name}-post`" />
+            </div>
+        </template>
     </div>
 </template>

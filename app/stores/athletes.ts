@@ -1,14 +1,9 @@
-import type { FormSubmitEvent } from '@nuxt/ui';
-import type { FetchError } from 'ofetch';
+import type { SelectItem } from '@nuxt/ui';
 
 export const useAthletesStore = defineStore('athletes', () => {
-    const toast = useToast();
     const parentsStore = useParentsStore();
 
-    const { parents, parentsPending } = storeToRefs(parentsStore);
-
-    const showAthleteAddForm = ref(false);
-    const isAddingAthlete = ref(false);
+    const { parentsItems, parentsPending } = storeToRefs(parentsStore);
 
     const athletesFiltersInitialState: AthletesFiltersSchema = {
         name: undefined,
@@ -28,8 +23,6 @@ export const useAthletesStore = defineStore('athletes', () => {
         parent_id: undefined,
     };
 
-    const athleteAddState = reactive({ ...athleteAddInitialState });
-
     const {
         data: athletes,
         pending: athletesPending,
@@ -41,52 +34,33 @@ export const useAthletesStore = defineStore('athletes', () => {
         watch: false,
     });
 
+    const athletesItems = computed(() => {
+        return athletes.value?.map<SelectItem>((athlete) => {
+            return {
+                label: athlete.name,
+                value: athlete.id,
+            };
+        });
+    });
+
+    const {
+        showAddForm: showAthleteAddForm,
+        isAdding: isAddingAthlete,
+        state: athleteAddState,
+        add: addAthlete,
+    } = useAddForm(
+        athleteAddInitialState,
+        refreshAthletes,
+        '/api/athletes/add',
+        $t('form.add_athlete.success'),
+    );
+
     const clearAthletesFilters = () => {
         // Reset filters
         Object.assign(athletesFiltersState, athletesFiltersInitialState);
 
         // Refresh athletes
         refreshAthletes();
-    };
-
-    const closeAthleteAddForm = () => {
-        // Hide form
-        showAthleteAddForm.value = false;
-
-        // Reset form
-        Object.assign(athleteAddState, athleteAddInitialState);
-
-        // Refresh athletes
-        refreshAthletes();
-    };
-
-    const addAthlete = async (event: FormSubmitEvent<AthleteAddSchema>) => {
-        isAddingAthlete.value = true;
-
-        try {
-            await $fetch('/api/athletes/add', {
-                method: 'POST',
-                body: event.data,
-            });
-
-            closeAthleteAddForm();
-
-            toast.add({
-                title: $t('form.add_athlete.success'),
-                color: 'success',
-                icon: 'i-lucide-circle-check',
-            });
-        } catch (err) {
-            const error = err as FetchError;
-
-            toast.add({
-                title: error.message,
-                color: 'error',
-                icon: 'i-lucide-circle-x',
-            });
-        } finally {
-            isAddingAthlete.value = false;
-        }
     };
 
     const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[][]>(() => {
@@ -108,7 +82,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         return [
             {
                 title: $t('form.add_athlete.group.personal_information'),
-                icon: 'i-lucide-user',
+                icon: 'i-lucide-id-card',
                 fields: [
                     {
                         renderAs: 'input',
@@ -141,6 +115,12 @@ export const useAthletesStore = defineStore('athletes', () => {
                         required: true,
                         variant: 'subtle',
                     },
+                ],
+            },
+            {
+                title: $t('form.add_athlete.group.address_contacts'),
+                icon: 'i-lucide-notebook',
+                fields: [
                     {
                         renderAs: 'input',
                         label: $t('form.field.city.label'),
@@ -177,14 +157,14 @@ export const useAthletesStore = defineStore('athletes', () => {
                 ],
             },
             {
-                title: $t('form.add_athlete.group.parent_information'),
+                title: $t('form.add_athlete.group.parent'),
                 icon: 'i-lucide-user',
                 fields: [
                     {
                         renderAs: 'select-menu',
                         label: $t('form.field.parent.label'),
                         name: 'parent_id',
-                        items: parents.value,
+                        items: parentsItems.value,
                         loading: parentsPending.value,
                         placeholder: $t('form.field.parent.placeholder'),
                         variant: 'subtle',
@@ -196,6 +176,7 @@ export const useAthletesStore = defineStore('athletes', () => {
 
     return {
         athletes,
+        athletesItems,
         athletesPending,
         athletesError,
         refreshAthletes,
