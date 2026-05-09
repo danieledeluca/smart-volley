@@ -1,19 +1,11 @@
+import { findAthletes } from '~~/lib/db/queries/athletes';
+
 export default defineAuthenticatedEventHandler(async (event) => {
-    const query = getQuery(event);
-    const name = query.name as string | undefined;
+    const result = await getValidatedQuery(event, AthletesFiltersSchema.safeParse);
 
-    const athletes = await prisma.athlete.findMany({
-        select: athleteListItemsSelect,
-        where: {
-            name: {
-                contains: name,
-                mode: 'insensitive',
-            },
-        },
-        orderBy: {
-            name: 'asc',
-        },
-    });
+    if (!result.success) {
+        return sendZodError(event, result.error);
+    }
 
-    return athletes;
+    return await findAthletes(result.data.name);
 });

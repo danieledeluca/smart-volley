@@ -1,8 +1,18 @@
 <script setup lang="ts">
-const parentsStore = useParentsStore();
-const { isAddingParent, parentAddState, parentAddFields } = storeToRefs(parentsStore);
+import { InsertParent } from '~~/lib/db/schema';
 
-const formRef = useTemplateRef('form');
+const { showSubmitButton = false } = defineProps<{
+    showSubmitButton?: boolean;
+}>();
+
+const parentsStore = useParentsStore();
+const { isAddingParent, addingParentErrors, parentAddState, parentAddFields } = storeToRefs(parentsStore);
+
+const formRef = useTemplateRef('formRef');
+
+watch(addingParentErrors, (newErrors) => {
+    formRef.value?.setErrors(newErrors);
+});
 
 defineExpose({
     submit: () => formRef.value?.submit(),
@@ -11,25 +21,30 @@ defineExpose({
 
 <template>
     <UForm
-        ref="form"
-        :schema="parentAddSchema"
+        ref="formRef"
+        :schema="InsertParent"
         :state="parentAddState"
         class="grid gap-8"
         @submit="parentsStore.addParent"
     >
-        <FormFieldGroup v-for="(group, index) in parentAddFields" :key="index" :group>
+        <FormFieldGroup
+            v-for="(group, index) in parentAddFields"
+            :key="index"
+            :title="group.title"
+            :icon="group.icon"
+        >
             <FormField
                 v-for="(field, fieldIndex) in group.fields"
                 :key="fieldIndex"
-                v-model="(parentAddState[field.name] as FormFieldModelType)"
+                v-model="parentAddState[field.formFieldProps.name]"
                 :field
             />
         </FormFieldGroup>
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            class="hidden"
             :loading="isAddingParent"
+            :class="{ hidden: !showSubmitButton }"
             block
         />
     </UForm>

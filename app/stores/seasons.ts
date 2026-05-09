@@ -1,72 +1,121 @@
-import type { SelectItem } from '@nuxt/ui';
+import type { FormError, FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+import type { InsertSeason } from '~~/lib/db/schema';
+import type { FetchError } from 'ofetch';
 
 export const useSeasonsStore = defineStore('seasons', () => {
-    const seasonAddInitialState: Partial<SeasonAddSchema> = {
-        starter_year: new Date().getFullYear(),
-        end_year: new Date().getFullYear() + 1,
+    const { $csrfFetch } = useNuxtApp();
+    const toast = useToast();
+
+    const isAddingSeason = ref(false);
+    const addingSeasonErrors = ref<FormError[]>([]);
+
+    const seasonAddInitialState: Partial<InsertSeason> = {
+        startYear: new Date().getFullYear(),
+        endYear: new Date().getFullYear() + 1,
     };
 
-    const { data: seasons, pending: seasonsPending, refresh: refreshSeasons } = useLazyFetch('/api/seasons', {
+    const seasonAddState = reactive({ ...seasonAddInitialState });
+
+    const {
+        data: seasons,
+        pending: seasonsPending,
+        error: seasonsError,
+        refresh: refreshSeasons,
+    } = useLazyFetch('/api/seasons', {
         headers: useRequestHeaders(['cookie']),
     });
 
     const seasonsItems = computed(() => {
-        return seasons.value?.map<SelectItem>((season) => {
+        return seasons.value?.map<SelectMenuItem>((season) => {
             return {
-                label: `${season.starter_year} - ${season.end_year}`,
+                label: `${season.startYear} - ${season.endYear}`,
                 value: season.id,
             };
         });
     });
 
-    const {
-        showAddForm: showSeasonAddForm,
-        isAdding: isAddingSeason,
-        state: seasonAddState,
-        add: addSeason,
-    } = useAddForm(
-        seasonAddInitialState,
-        refreshSeasons,
-        '/api/seasons/add',
-        'Season added successfully',
-    );
+    const clearSeasonAddForm = () => {
+        Object.assign(seasonAddState, seasonAddInitialState);
 
-    const seasonAddFields = computed<FormField<SeasonAddSchema>[]>(() => {
+        refreshSeasons();
+    };
+
+    const addSeason = async (event: FormSubmitEvent<InsertSeason>) => {
+        try {
+            isAddingSeason.value = true;
+
+            await $csrfFetch('/api/seasons', {
+                method: 'POST',
+                body: event.data,
+            });
+
+            clearSeasonAddForm();
+
+            toast.add({
+                description: $t('form.add_season.success'),
+                color: 'success',
+            });
+        } catch (err) {
+            const error = err as FetchError;
+
+            if (error.data?.data) {
+                addingSeasonErrors.value = error.data?.data;
+            } else {
+                toast.add({
+                    description: error.statusMessage || 'An unknown error occurred.',
+                    color: 'error',
+                });
+            }
+        }
+
+        isAddingSeason.value = false;
+    };
+
+    const seasonAddFields = computed<FormField<InsertSeason>[]>(() => {
         return [
             {
                 renderAs: 'input-number',
-                label: $t('form.field.starter_year.label'),
-                name: 'starter_year',
-                placeholder: $t('form.field.starter_year.placeholder'),
-                required: true,
-                variant: 'subtle',
-                formatOptions: {
-                    useGrouping: false,
+                formFieldProps: {
+                    label: $t('form.field.start_year.label'),
+                    name: 'startYear',
+                    required: true,
+                },
+                inputProps: {
+                    placeholder: $t('form.field.start_year.placeholder'),
+                    variant: 'subtle',
+                    formatOptions: {
+                        useGrouping: false,
+                    },
                 },
             },
             {
                 renderAs: 'input-number',
-                label: $t('form.field.end_year.label'),
-                name: 'end_year',
-                placeholder: $t('form.field.end_year.placeholder'),
-                required: true,
-                variant: 'subtle',
-                formatOptions: {
-                    useGrouping: false,
+                formFieldProps: {
+                    label: $t('form.field.end_year.label'),
+                    name: 'endYear',
+                    required: true,
+                },
+                inputProps: {
+                    placeholder: $t('form.field.end_year.placeholder'),
+                    variant: 'subtle',
+                    formatOptions: {
+                        useGrouping: false,
+                    },
                 },
             },
-
         ];
     });
 
     return {
+        isAddingSeason,
+        addingSeasonErrors,
         seasons,
         seasonsItems,
         seasonsPending,
-        addSeason,
-        showSeasonAddForm,
-        isAddingSeason,
+        seasonsError,
         seasonAddState,
         seasonAddFields,
+        refreshSeasons,
+        addSeason,
     };
 });

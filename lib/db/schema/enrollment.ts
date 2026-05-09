@@ -1,0 +1,76 @@
+import type { SerializeObject } from 'nitropack';
+
+import { relations } from 'drizzle-orm';
+import { date, integer, numeric, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
+import { createInsertSchema } from 'drizzle-zod';
+import z from 'zod';
+
+import type { findEnrollments } from '../queries/enrollments';
+
+import { $t } from '../../../shared/utils/i18n';
+import { activity } from './activity';
+import { athlete } from './athlete';
+import { course } from './course';
+import { season } from './season';
+
+export const enrollment = pgTable('enrollment', {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    athleteId: integer().notNull().references(() => athlete.id),
+    seasonId: integer().notNull().references(() => season.id),
+    activityId: integer().notNull().references(() => activity.id),
+    courseId: integer().notNull().references(() => course.id),
+    volleyAccount: numeric({ precision: 10, scale: 2 }),
+    volleyBalance: numeric({ precision: 10, scale: 2 }),
+    volleyBalanceSecondary: numeric({ precision: 10, scale: 2 }),
+    firstInstallment: numeric({ precision: 10, scale: 2 }),
+    secondInstallment: numeric({ precision: 10, scale: 2 }),
+    thirdInstallment: numeric({ precision: 10, scale: 2 }),
+    certificateExpirationDate: date(),
+    certificateStorageKey: text(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
+}, (table) => [
+    unique().on(table.athleteId, table.seasonId, table.activityId, table.courseId),
+]);
+
+export const enrollmentRelations = relations(enrollment, ({ one }) => ({
+    athlete: one(athlete, {
+        fields: [enrollment.athleteId],
+        references: [athlete.id],
+    }),
+    season: one(season, {
+        fields: [enrollment.seasonId],
+        references: [season.id],
+    }),
+    activity: one(activity, {
+        fields: [enrollment.activityId],
+        references: [activity.id],
+    }),
+    course: one(course, {
+        fields: [enrollment.courseId],
+        references: [course.id],
+    }),
+}));
+
+const NumericSchema = z.string().transform((value) => !Number(value) ? undefined : value).optional();
+
+export const InsertEnrollment = createInsertSchema(enrollment, {
+    athleteId: z.coerce.number($t('form.field.athlete_id.required')),
+    seasonId: z.coerce.number($t('form.field.season_id.required')),
+    activityId: z.coerce.number($t('form.field.activity_id.required')),
+    courseId: z.coerce.number($t('form.field.course_id.required')),
+    volleyAccount: NumericSchema,
+    volleyBalance: NumericSchema,
+    volleyBalanceSecondary: NumericSchema,
+    firstInstallment: NumericSchema,
+    secondInstallment: NumericSchema,
+    thirdInstallment: NumericSchema,
+    certificateExpirationDate: z.string().optional(),
+}).omit({
+    certificateStorageKey: true,
+    createdAt: true,
+    updatedAt: true,
+});
+
+export type InsertEnrollment = z.infer<typeof InsertEnrollment>;
+export type FindEnrollments = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;

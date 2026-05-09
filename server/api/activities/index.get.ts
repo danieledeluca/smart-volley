@@ -1,9 +1,5 @@
-export default defineAuthenticatedEventHandler(async () => {
-    const activities = await prisma.activity.findMany({
-        orderBy: {
-            name: 'asc',
-        },
-    });
+import { findActivities } from '~~/lib/db/queries/activities';
 
-    return activities;
+export default defineAuthenticatedEventHandler(async () => {
+    return await findActivities();
 });

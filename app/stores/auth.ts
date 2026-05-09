@@ -1,11 +1,19 @@
 import type { AlertProps, AuthFormField, FormSubmitEvent } from '@nuxt/ui';
 
+import { createAuthClient } from 'better-auth/vue';
+
+import type { LoginSchema, RegisterSchema } from '#imports';
+
 type AuthFormFields = 'email' | 'password' | 'confirmPassword';
+
+const authClient = createAuthClient();
 
 export const useAuthStore = defineStore('auth', () => {
     const route = useRoute();
-    const user = useSupabaseUser();
-    const client = useSupabaseClient();
+
+    const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(null);
+    const user = computed(() => session.value?.data?.user);
+    const isLoading = computed(() => session.value?.isPending);
 
     const alerts = ref<AlertProps[]>([]);
 
@@ -38,131 +46,87 @@ export const useAuthStore = defineStore('auth', () => {
 
     const loginFields = [formFields.email, formFields.password];
     const registerFields = [formFields.email, formFields.password, formFields.confirmPassword];
-    const forgotPasswordFields = [formFields.email];
-    const resetPasswordFields = [formFields.password, formFields.confirmPassword];
+
+    async function init() {
+        const data = await authClient.useSession(useFetch);
+        session.value = data;
+    }
+
+    function getHeaders() {
+        const { csrf } = useCsrf();
+        const headers = new Headers();
+        headers.append('csrf-token', csrf);
+
+        return headers;
+    }
 
     async function register(event: FormSubmitEvent<RegisterSchema>) {
         alerts.value = [];
 
-        try {
-            const { data: response, error } = await client.auth.signUp({
-                email: event.data.email,
-                password: event.data.password,
-            });
-
-            if (response.user) {
-                if (response.user.identities?.length) {
+        await authClient.signUp.email({
+            name: event.data.email,
+            email: event.data.email,
+            password: event.data.password,
+            image: getAvatar(event.data.email, 40).src,
+            fetchOptions: {
+                headers: getHeaders(),
+                onSuccess: () => {
+                    navigateTo('/');
+                },
+                onError: (ctx) => {
                     alerts.value.push({
-                        title: $t('auth.sign_up.success'),
-                        color: 'success',
-                        icon: 'i-lucide-circle-check',
+                        title: ctx.error.statusText,
+                        color: 'error',
+                        icon: 'i-lucide-circle-x',
                     });
-                } else {
-                    throw new Error($t('auth.sign_up.error'));
-                }
-            }
-
-            if (error) {
-                throw error;
-            }
-        } catch (err) {
-            const error = err as Error;
-
-            alerts.value.push({
-                title: error.message,
-                color: 'error',
-                icon: 'i-lucide-circle-x',
-            });
-        }
+                },
+            },
+        });
     }
 
     async function login(event: FormSubmitEvent<LoginSchema>) {
         alerts.value = [];
 
-        try {
-            const { data: response, error } = await client.auth.signInWithPassword({
-                email: event.data.email,
-                password: event.data.password,
-            });
-
-            if (response.user) {
-                navigateTo('/');
-                return;
-            }
-
-            if (error) {
-                throw new Error($t(`auth.sing_in.error.${error.code}`));
-            }
-        } catch (err) {
-            const error = err as Error;
-
-            alerts.value.push({
-                title: error.message,
-                color: 'error',
-                icon: 'i-lucide-circle-x',
-            });
-        }
+        await authClient.signIn.email({
+            email: event.data.email,
+            password: event.data.password,
+            rememberMe: true,
+            fetchOptions: {
+                headers: getHeaders(),
+                onSuccess: () => {
+                    navigateTo('/');
+                },
+                onError: (ctx) => {
+                    alerts.value.push({
+                        title: ctx.error.statusText,
+                        color: 'error',
+                        icon: 'i-lucide-circle-x',
+                    });
+                },
+            },
+        });
     }
 
-    async function logOut() {
-        await client.auth.signOut();
+    async function logout() {
+        await authClient.signOut(
+            {
+                fetchOptions: {
+                    headers: getHeaders(),
+                    onSuccess: () => {
+                        navigateTo('/');
+                    },
+                    onError: (ctx) => {
+                        const toast = useToast();
 
-        return navigateTo('/');
-    }
-
-    async function forgotPassword(event: FormSubmitEvent<ForgotPasswordSchema>) {
-        alerts.value = [];
-
-        try {
-            const { error } = await client.auth.resetPasswordForEmail(event.data.email, {
-                redirectTo: `${window.location.origin}/account/reset-password`,
-            });
-
-            if (error) {
-                throw error;
-            } else {
-                alerts.value.push({
-                    title: $t('auth.forgot_password.success'),
-                    color: 'success',
-                    icon: 'i-lucide-circle-check',
-                });
-            }
-        } catch (err) {
-            const error = err as Error;
-
-            alerts.value.push({
-                title: error.message,
-                color: 'error',
-                icon: 'i-lucide-circle-x',
-            });
-        }
-    }
-
-    async function resetPassword(event: FormSubmitEvent<ResetPasswordSchema>) {
-        alerts.value = [];
-
-        try {
-            const { data: response, error } = await client.auth.updateUser({
-                password: event.data.password,
-            });
-
-            if (response.user) {
-                navigateTo('/');
-                return;
-            }
-
-            if (error) {
-                throw error;
-            }
-        } catch (err) {
-            const error = err as Error;
-
-            alerts.value.push({
-                title: error.message,
-                color: 'error',
-                icon: 'i-lucide-circle-x',
-            });
-        }
+                        toast.add({
+                            title: ctx.error.statusText,
+                            color: 'error',
+                            icon: 'i-lucide-circle-x',
+                        });
+                    },
+                },
+            },
+        );
     }
 
     effect(() => {
@@ -172,17 +136,15 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     return {
+        init,
+        session,
         user,
-        client,
-        alerts,
+        isLoading,
         loginFields,
         registerFields,
-        forgotPasswordFields,
-        resetPasswordFields,
         register,
         login,
-        logOut,
-        forgotPassword,
-        resetPassword,
+        logout,
+        alerts,
     };
 });

@@ -6,6 +6,9 @@ useHead({
         return titleChunk ? `${titleChunk} | Smart Volley` : 'Smart Volley';
     },
 });
+
+const authStore = useAuthStore();
+await authStore.init();
 </script>
 
 <template>

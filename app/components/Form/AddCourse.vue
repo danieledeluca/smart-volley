@@ -1,8 +1,18 @@
 <script setup lang="ts">
-const coursesStore = useCoursesStore();
-const { isAddingCourse, courseAddState, courseAddFields } = storeToRefs(coursesStore);
+import { InsertCourse } from '~~/lib/db/schema';
 
-const formRef = useTemplateRef('form');
+const { showSubmitButton = false } = defineProps<{
+    showSubmitButton?: boolean;
+}>();
+
+const coursesStore = useCoursesStore();
+const { isAddingCourse, addingCourseErrors, courseAddState, courseAddFields } = storeToRefs(coursesStore);
+
+const formRef = useTemplateRef('formRef');
+
+watch(addingCourseErrors, (newErrors) => {
+    formRef.value?.setErrors(newErrors);
+});
 
 defineExpose({
     submit: () => formRef.value?.submit(),
@@ -11,8 +21,8 @@ defineExpose({
 
 <template>
     <UForm
-        ref="form"
-        :schema="courseAddSchema"
+        ref="formRef"
+        :schema="InsertCourse"
         :state="courseAddState"
         class="grid gap-8"
         @submit="coursesStore.addCourse"
@@ -20,14 +30,14 @@ defineExpose({
         <FormField
             v-for="(field, index) in courseAddFields"
             :key="index"
-            v-model="(courseAddState[field.name] as FormFieldModelType)"
+            v-model="courseAddState[field.formFieldProps.name]"
             :field
         />
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            class="hidden"
             :loading="isAddingCourse"
+            :class="{ hidden: !showSubmitButton }"
             block
         />
     </UForm>

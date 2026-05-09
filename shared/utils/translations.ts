@@ -1,94 +1,83 @@
 /* eslint-disable style/max-len */
 export const translations = {
     auth: {
-        forgot_password: {
-            description: 'Inserisci la tua email e ti invieremo un link di recupero.',
-            meta_title: 'Password dimenticata',
-            submit: 'Reimposta password',
-            success: 'Ti abbiamo inviato un\'e-mail per reimpostare la password. Controlla la tua casella di posta per continuare.',
-            title: 'Hai dimenticato la password?',
-        },
         log_out: 'Esci',
-        reset_password: {
-            description: 'Scegli una password complessa per proteggere il tuo account.',
-            meta_title: 'Reimposta password',
-            submit: 'Reimposta password',
-            title: 'Crea una nuova password',
-        },
         sign_up: {
             description: 'Hai già un account?',
-            error: 'Email già utilizzata',
             submit: 'Crea un account',
-            success: 'Ti abbiamo inviato un\'email di conferma. Controlla la tua casella di posta per attivare il tuo account.',
             title: 'Registrati',
         },
         sing_in: {
             description: 'Non hai un account?',
-            error: {
-                invalid_credentials: 'Email o password non validi',
-            },
             password_hint: 'Password dimenticata?',
             title: 'Accedi',
         },
     },
     card: {
         address_contacts: {
+            record: {
+                address: 'Indirizzo',
+                city: 'Città',
+                email: 'Email',
+                phone_number: 'Numero cellulare',
+            },
             title: 'Indirizzo e contatti',
         },
         athlete: {
+            record: {
+                birthdate: 'Data di nascita',
+                birthplace: 'Luogo di nascita',
+                fiscal_code: 'Codice fiscale',
+                name: 'Nome e cognome',
+            },
             title: 'Informazioni personali',
+        },
+        certificate: {
+            record: {
+                download_url: 'Download certificato',
+                expiration_date: 'Scadenza certificato',
+            },
+            title: 'Certificato medico',
         },
         enrollments: {
             title: 'Iscrizioni',
         },
         parent: {
+            record: {
+                email: 'Email genitore',
+                fiscal_code: 'Codice fiscale genitore',
+                name: 'Nome genitore',
+                phone_number: 'Numero cellulare genitore',
+            },
             title: 'Informazioni genitore',
         },
         payments: {
+            record: {
+                account_volley: 'Acconto volley',
+                first_installment: 'Prima rata',
+                second_installment: 'Seconda rata',
+                third_installment: 'Terza rata',
+                volley_balance: 'Saldo volley',
+                volley_balance_secondary: 'Saldo volley 2',
+            },
             title: 'Pagamenti',
         },
-        record: {
-            account_volley: 'Acconto volley',
-            activity: 'Attività',
-            address: 'Indirizzo',
-            birthday: 'Data di nascita',
-            birthplace: 'Luogo di nascita',
-            certificates: {
-                download_url: 'Download certificato',
-                expiration_date: 'Scadenza certificato',
-            },
-            city: 'Città',
-            course: 'Corso',
-            email: 'Email',
-            first_installment: 'Prima rata',
-            name: 'Nome e cognome',
-            parent: {
-                email: 'Email genitore',
-                name: 'Nome genitore',
-                phone_number: 'Numero cellulare genitore',
-                tax_code: 'Codice fiscale genitore',
-            },
-            phone_number: 'Numero cellulare',
-            season: 'Stagione',
-            second_installment: 'Seconda rata',
-            tax_code: 'Codice fiscale',
-            third_installment: 'Terza rata',
-            volley_balance: 'Saldo volley',
-            volley_balance_secondary: 'Saldo volley 2',
-        },
         sport: {
+            record: {
+                activity: 'Attività',
+                course: 'Corso',
+                season: 'Stagione',
+            },
             title: 'Sport',
         },
     },
     form: {
         add_activity: {
             description: 'Compila i campi per creare una nuova attività.',
+            success: 'Attività aggiunta con successo',
             title: 'Aggiungi nuova attività',
         },
         add_athlete: {
-            button: {
-                add_parent: 'Aggiungi nuovo genitore',
-            },
             description: 'Compila i campi per creare un nuovo atleta.',
             group: {
                 address_contacts: 'Indirizzo e contatti',
@@ -100,19 +89,15 @@ export const translations = {
         },
         add_course: {
             description: 'Compila i campi per creare un nuovo corso.',
+            success: 'Corso aggiunto con successo',
             title: 'Aggiungi nuovo corso',
         },
         add_enrollment: {
-            button: {
-                add_activity: 'Aggiungi nuova attività',
-                add_athlete: 'Aggiungi nuovo atleta',
-                add_course: 'Aggiungi nuovo corso',
-                add_season: 'Aggiungi nuova stagione',
-            },
             description: 'Compila i campi per creare una nuova iscrizione.',
             group: {
                 activity: 'Attività',
                 athlete: 'Atleta',
+                certificate: 'Certificato medico',
                 course: 'Corso',
                 payment_information: 'Informazioni di pagamento',
                 season: 'Stagione',
@@ -131,6 +116,7 @@ export const translations = {
         },
         add_season: {
             description: 'Compila i campi per creare una nuova stagione.',
+            success: 'Stagione aggiunta con successo',
             title: 'Aggiungi nuova stagione',
         },
         button: {
@@ -138,26 +124,30 @@ export const translations = {
             cancel: 'Annulla',
         },
         field: {
-            activity: {
+            activity_id: {
                 label: 'Attività',
+                not_found: 'Attività non trovata',
                 placeholder: 'Seleziona un\'attività',
                 required: 'L\'attività è obbligatoria',
             },
             activity_name: {
+                duplicate: 'L\'attività esiste già',
                 label: 'Nome attività',
-                placeholder: 'Inserisci il nome',
+                placeholder: 'Inserisci il nome dell\'attività',
+                required: 'Il nome dell\'attività è obbligatoria',
             },
             address: {
                 label: 'Indirizzo',
                 placeholder: 'Inserisci l\'indirizzo',
                 required: 'L\'indirizzo è obbligatorio',
             },
-            athlete: {
+            athlete_id: {
                 label: 'Atleta',
-                placeholder: 'Seleziona un atleta',
+                not_found: 'Atleta non trovato',
+                placeholder: 'Seleziona un\'atleta',
                 required: 'L\'atleta è obbligatorio',
             },
-            birthday: {
+            birthdate: {
                 error: 'La data di nascita deve essere nel passato',
                 label: 'Data di nascita',
                 required: 'La data di nascita è obbligatoria',
@@ -166,6 +156,9 @@ export const translations = {
                 label: 'Luogo di nascita',
                 placeholder: 'Inserisci il luogo di nascita',
                 required: 'Il luogo di nascita è obbligatorio',
+            },
+            certificate_expiration_date: {
+                label: 'Data scadenza certificato',
             },
             certificate_status: {
                 item: {
@@ -187,19 +180,27 @@ export const translations = {
                 placeholder: 'Inserisci di nuovo la password',
                 required: 'La conferma password è obbligatoria',
             },
-            course: {
+            course_description: {
+                label: 'Descrizione corso',
+                placeholder: 'Inserisci la descrizione del corso',
+            },
+            course_id: {
                 label: 'Corso',
+                not_found: 'Corso non trovato',
                 placeholder: 'Seleziona un corso',
                 required: 'Il corso è obbligatorio',
             },
             course_name: {
+                duplicate: 'Il corso esiste già',
                 label: 'Nome corso',
-                placeholder: 'Inserisci il nome',
+                placeholder: 'Inserisci il nome del corso',
+                required: 'Il nome del corso è obbligatorio',
             },
             email: {
+                duplicate: 'L\'email esiste già',
                 error: 'L\'email non valida',
                 label: 'Email',
-                placeholder: 'Inserisci la tua email',
+                placeholder: 'Inserisci l\'email',
                 required: 'L\'email è obbligatoria',
             },
             end_year: {
@@ -208,81 +209,86 @@ export const translations = {
                 placeholder: 'Inserisci l\'anno di fine',
                 required: 'L\'anno di fine è obbligatorio',
             },
+            enrollment: {
+                duplicate: 'L\'iscrizione per questo/a atleta, stagione, attività e corso esiste già',
+            },
             first_installment: {
-                error: 'La prima rata deve essere maggiore di {min}',
                 label: 'Prima rata',
                 placeholder: 'Inserisci la prima rata',
+            },
+            fiscal_code: {
+                duplicate: 'Il codice fiscale esiste già',
+                error: 'Il codice fiscale non è valido',
+                label: 'Codice fiscale',
+                placeholder: 'Inserisci il codice fiscale',
+                required: 'Il codice fiscale è obbligatorio',
+            },
+            missing_payment: {
+                label: 'Pagamento mancante',
+                placeholder: 'Seleziona un pagamento',
             },
             name: {
                 label: 'Nome e cognome',
                 placeholder: 'Inserisci il nome',
                 required: 'Il nome è obbligatorio',
             },
-            parent: {
+            parent_id: {
                 label: 'Genitore',
+                not_found: 'Genitore non trovato',
                 placeholder: 'Seleziona un genitore',
             },
             password: {
                 error: 'Deve essere almeno di {min} caratteri',
                 label: 'Password',
-                placeholder: 'Inserisci la tua password',
+                placeholder: 'Inserisci la password',
                 required: 'La password è obbligatoria',
             },
-            payment: {
-                label: 'Pagamenti mancanti',
-                placeholder: 'Seleziona un pagamento',
-            },
             phone_number: {
+                duplicate: 'Il numero cellulare esiste già',
+                error: 'Il numero cellulare non è valido',
                 label: 'Numero cellulare',
                 placeholder: 'Inserisci il numero cellulare',
                 required: 'Il numero cellulare è obbligatorio',
             },
             season: {
+                duplicate: 'La stagione per questo arco di tempo esiste già',
+            },
+            season_id: {
                 label: 'Stagione',
+                not_found: 'Stagione non trovata',
                 placeholder: 'Seleziona una stagione',
                 required: 'La stagione è obbligatoria',
             },
             second_installment: {
-                error: 'La seconda rata deve essere maggiore di {min}',
                 label: 'Seconda rata',
                 placeholder: 'Inserisci la seconda rata',
             },
-            starter_year: {
-                label: 'Anno di partenza',
-                placeholder: 'Inserisci l\'anno di partenza',
-                required: 'L\'anno di partenza è obbligatorio',
-            },
-            tax_code: {
-                error: 'Il codice fiscale non è valido',
-                label: 'Codice fiscale',
-                placeholder: 'Inserisci il codice fiscale',
-                required: 'Il codice fiscale è obbligatorio',
+            start_year: {
+                label: 'Anno d\'inizio',
+                placeholder: 'Inserisci l\'anno d\'inizio',
+                required: 'L\'anno d\'inizio è obbligatorio',
             },
             third_installment: {
-                error: 'La terza rata deve essere maggiore di {min}',
                 label: 'Terza rata',
                 placeholder: 'Inserisci la terza rata',
             },
             volley_account: {
-                error: 'L\'acconto volley deve essere maggiore di {min}',
                 label: 'Acconto volley',
                 placeholder: 'Inserisci l\'acconto volley',
             },
             volley_balance: {
-                error: 'Il saldo volley deve essere maggiore di {min}',
                 label: 'Saldo volley',
                 placeholder: 'Inserisci il saldo volley',
             },
             volley_balance_secondary: {
-                error: 'Il saldo volley 2 deve essere maggiore di {min}',
                 label: 'Saldo volley 2',
                 placeholder: 'Inserisci il saldo volley 2',
             },
         },
         filter: {
             button: {
+                apply: 'Applica',
                 clear: 'Cancella tutto',
-                close: 'Chiudi',
                 open: 'Filtri',
             },
             description: 'Applica i filtri per restringere i risultati.',
@@ -374,6 +380,8 @@ export const translations = {
     table: {
         column: {
             activity: 'Attività',
+            athlete: 'Atleta',
+            // TODO: refactor
             certificate: {
                 download_url: {
                     button: 'Download',
@@ -391,7 +399,6 @@ export const translations = {
             course: 'Corso',
             email: 'Email',
             first_installment: 'Prima rata',
-            id: 'ID',
             name: 'Nome e cognome',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',

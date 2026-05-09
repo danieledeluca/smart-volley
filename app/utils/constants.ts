@@ -1,10 +1,3 @@
 export const EMPTY_VALUE = 'N/A';
 
 export const PASSWORD_MIN_LENGTH = 8;
-
-export const VOLLEY_ACCOUNT_MIN_VALUE = 0;
-export const VOLLEY_BALANCE_MIN_VALUE = 0;
-export const VOLLEY_BALANCE_SECONDARY_MIN_VALUE = 0;
-export const FIRST_INSTALLMENT_MIN_VALUE = 0;
-export const SECOND_INSTALLMENT_MIN_VALUE = 0;
-export const THIRD_INSTALLMENT_MIN_VALUE = 0;

@@ -1,14 +1,14 @@
 import type { H3Event } from 'h3';
 
-import { serverSupabaseUser } from '#supabase/server';
+import { auth } from '~~/lib/auth';
 
-export default function defineAuthenticatedEventHandler<T>(
-    handler: (event: H3Event) => T,
-) {
+export default function defineAuthenticatedEventHandler<T>(handler: (event: H3Event) => T) {
     return defineEventHandler(async (event) => {
-        const user = await serverSupabaseUser(event);
+        const session = await auth.api.getSession({
+            headers: event.headers,
+        });
 
-        if (!user) {
+        if (!session) {
             throw createError({
                 statusCode: 401,
                 statusMessage: 'Unauthorized',

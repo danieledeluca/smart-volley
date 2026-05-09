@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import { InsertAthlete } from '~~/lib/db/schema';
+
+const { showSubmitButton = false } = defineProps<{
+    showSubmitButton?: boolean;
+}>();
+
 const athletesStore = useAthletesStore();
 const parentsStore = useParentsStore();
 
-const { isAddingAthlete, athleteAddState, athleteAddFields } = storeToRefs(athletesStore);
-const { showParentAddForm, isAddingParent } = storeToRefs(parentsStore);
+const { isAddingAthlete, addingAthleteErrors, athleteAddState, athleteAddFields } = storeToRefs(athletesStore);
+const { isAddingParent } = storeToRefs(parentsStore);
 
-const athleteFormRef = useTemplateRef('athleteForm');
-const parentFormRef = useTemplateRef('parentForm');
+const athleteFormRef = useTemplateRef('athleteFormRef');
+const parentFormRef = useTemplateRef('parentFormRef');
+
+watch(addingAthleteErrors, (newErrors) => {
+    athleteFormRef.value?.setErrors(newErrors);
+});
 
 defineExpose({
     submit: () => athleteFormRef.value?.submit(),
@@ -15,38 +25,42 @@ defineExpose({
 
 <template>
     <UForm
-        ref="athleteForm"
-        :schema="athleteAddSchema"
+        ref="athleteFormRef"
+        :schema="InsertAthlete"
         :state="athleteAddState"
         class="grid gap-8"
         @submit="athletesStore.addAthlete"
     >
-        <FormFieldGroup v-for="(group, index) in athleteAddFields" :key="index" :group>
+        <FormFieldGroup
+            v-for="(group, index) in athleteAddFields"
+            :key="index"
+            :title="group.title"
+            :icon="group.icon"
+        >
             <FormField
                 v-for="(field, fieldIndex) in group.fields"
                 :key="fieldIndex"
-                v-model="(athleteAddState[field.name] as FormFieldModelType)"
+                v-model="athleteAddState[field.formFieldProps.name]"
                 :field
             >
-                <template #parent_id-post>
-                    <FormModalAdd
-                        v-model:open="showParentAddForm"
-                        v-model:adding="isAddingParent"
+                <template #parentId-post>
+                    <FormAddModal
                         :title="$t('form.add_parent.title')"
                         :description="$t('form.add_parent.description')"
-                        :buttonLabel="$t('form.add_athlete.button.add_parent')"
-                        :formRef="parentFormRef"
+                        :buttonLabel="$t('form.add_parent.title')"
+                        :isLoading="isAddingParent"
+                        @submit="parentFormRef?.[0]?.submit()"
                     >
-                        <FormAddParent ref="parentForm" />
-                    </FormModalAdd>
+                        <FormAddParent ref="parentFormRef" />
+                    </FormAddModal>
                 </template>
             </FormField>
         </FormFieldGroup>
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            class="hidden"
             :loading="isAddingAthlete"
+            :class="{ hidden: !showSubmitButton }"
             block
         />
     </UForm>

@@ -16,9 +16,7 @@ const emit = defineEmits<{
     clear: [];
 }>();
 
-const state = defineModel<Partial<FormData>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<FormData>>('state', { required: true });
 
 const open = ref(false);
 
@@ -26,17 +24,13 @@ const firstFieldsGroup = computed(() => fields.at(0));
 const secondFieldsGroup = computed(() => fields.at(1));
 
 const hasActiveFilters = computed(() => {
-    if (secondFieldsGroup.value) {
-        const hiddenFiltersName = secondFieldsGroup.value.map((field) => field.name);
-
-        const filteredState = (Object.keys(state.value) as (keyof FormData & string)[]).filter((key) => {
-            return hiddenFiltersName.includes(key);
-        });
-
-        return filteredState.some((name) => !!state.value[name]);
+    if (!secondFieldsGroup.value) {
+        return false;
     }
 
-    return false;
+    const filtersName = secondFieldsGroup.value.map((field) => field.formFieldProps.name);
+
+    return filtersName.some((name) => Boolean(state.value[name]));
 });
 
 const debouncedEmitUpdate = useDebounceFn(() => {
@@ -60,22 +54,17 @@ function handleClear() {
 
 <template>
     <UCard variant="subtle">
-        <UForm
-            :schema="schema"
-            :state="state"
-            class="flex gap-4 max-md:flex-col md:items-end"
-        >
+        <UForm :schema :state class="flex gap-4 max-md:flex-col md:items-end">
             <FormField
                 v-for="(field, index) in firstFieldsGroup"
                 :key="index"
-                v-model="state[field.name]"
+                v-model="state[field.formFieldProps.name]"
                 :field
                 class="flex-1"
-                @update:model-value="handleFormFieldUpdate(field)"
+                @update:modelValue="handleFormFieldUpdate(field)"
             />
-            <div>
+            <div v-if="secondFieldsGroup && secondFieldsGroup.length > 0">
                 <USlideover
-                    v-if="secondFieldsGroup && secondFieldsGroup.length > 0"
                     v-model:open="open"
                     :title="$t('form.filter.title')"
                     :description="$t('form.filter.description')"
@@ -89,29 +78,30 @@ function handleClear() {
                             block
                         />
                     </UChip>
+
                     <template #body>
                         <div class="space-y-4">
                             <FormField
                                 v-for="(field, index) in secondFieldsGroup"
                                 :key="index"
-                                v-model="state[field.name]"
+                                v-model="state[field.formFieldProps.name]"
                                 :field
-                                @update:model-value="handleFormFieldUpdate(field)"
+                                @update:modelValue="handleFormFieldUpdate(field)"
                             />
                         </div>
                     </template>
                     <template #footer>
                         <UButton
+                            :label="$t('form.filter.button.clear')"
                             variant="outline"
                             color="neutral"
-                            :label="$t('form.filter.button.clear')"
                             icon="i-lucide-filter-x"
                             block
                             @click="handleClear"
                         />
                         <UButton
+                            :label="$t('form.filter.button.apply')"
                             variant="solid"
-                            :label="$t('form.filter.button.close')"
                             block
                             @click="open = false"
                         />

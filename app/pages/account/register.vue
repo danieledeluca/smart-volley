@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-    middleware: 'auth',
-});
-
 useSeoMeta({
     title: $t('auth.sign_up.title'),
 });
@@ -14,7 +10,7 @@ const { alerts } = storeToRefs(authStore);
 <template>
     <UPageCard class="mx-auto w-full max-w-md" variant="subtle">
         <UAuthForm
-            :schema="registerSchema"
+            :schema="RegisterSchema"
             :title="$t('auth.sign_up.title')"
             icon="i-lucide-user-plus"
             :fields="authStore.registerFields"

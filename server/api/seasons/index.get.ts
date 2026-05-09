@@ -1,9 +1,5 @@
-export default defineAuthenticatedEventHandler(async () => {
-    const seasons = await prisma.season.findMany({
-        orderBy: {
-            starter_year: 'desc',
-        },
-    });
+import { findSeasons } from '~~/lib/db/queries/seasons';
 
-    return seasons;
+export default defineAuthenticatedEventHandler(async () => {
+    return await findSeasons();
 });

@@ -1,14 +1,15 @@
-<script setup lang="ts" generic="T">
-const { group } = defineProps<{
-    group: GroupFormField<T>;
+<script setup lang="ts">
+const { title, icon } = defineProps<{
+    title: string;
+    icon: string;
 }>();
 </script>
 
 <template>
     <div>
         <div class="mb-4 flex items-center gap-3 border-b border-b-accented pb-2 text-xl">
-            <UButton variant="soft" :icon="group.icon" />
-            <div>{{ group.title }}</div>
+            <UButton variant="soft" :icon="icon" />
+            <div>{{ title }}</div>
         </div>
         <div class="space-y-4">
             <slot />

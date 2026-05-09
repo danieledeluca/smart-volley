@@ -1,66 +1,104 @@
-import type { SelectItem } from '@nuxt/ui';
+import type { FormError, FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+import type { InsertAthlete } from '~~/lib/db/schema';
+import type { FetchError } from 'ofetch';
+
+import { CalendarDate } from '@internationalized/date';
+
+import type { AthletesFiltersSchema } from '#imports';
 
 export const useAthletesStore = defineStore('athletes', () => {
+    const { $csrfFetch } = useNuxtApp();
+    const toast = useToast();
+
     const parentsStore = useParentsStore();
 
     const { parentsItems, parentsPending } = storeToRefs(parentsStore);
+
+    const isAddingAthlete = ref(false);
+    const addingAthleteErrors = ref<FormError[]>([]);
 
     const athletesFiltersInitialState: AthletesFiltersSchema = {
         name: undefined,
     };
 
-    const athletesFiltersState = reactive({ ...athletesFiltersInitialState });
-
-    const athleteAddInitialState: Partial<AthleteAddSchema> = {
+    const athleteAddInitialState: Partial<InsertAthlete> = {
         name: undefined,
-        birthday: undefined,
+        birthdate: undefined,
         birthplace: undefined,
-        tax_code: undefined,
+        fiscalCode: undefined,
         city: undefined,
         address: undefined,
-        phone_number: undefined,
+        phoneNumber: undefined,
         email: undefined,
-        parent_id: undefined,
+        parentId: undefined,
     };
+
+    const athletesFiltersState = reactive({ ...athletesFiltersInitialState });
+
+    const athleteAddState = reactive({ ...athleteAddInitialState });
 
     const {
         data: athletes,
         pending: athletesPending,
         error: athletesError,
         refresh: refreshAthletes,
-    } = useLazyFetch<AthleteListItem[]>('/api/athletes', {
+    } = useLazyFetch('/api/athletes', {
         headers: useRequestHeaders(['cookie']),
         query: athletesFiltersState,
         watch: false,
     });
 
     const athletesItems = computed(() => {
-        return athletes.value?.map<SelectItem>((athlete) => {
+        return athletes.value?.map<SelectMenuItem>((athlete) => {
             return {
                 label: athlete.name,
+                description: athlete.fiscalCode,
                 value: athlete.id,
             };
         });
     });
 
-    const {
-        showAddForm: showAthleteAddForm,
-        isAdding: isAddingAthlete,
-        state: athleteAddState,
-        add: addAthlete,
-    } = useAddForm(
-        athleteAddInitialState,
-        refreshAthletes,
-        '/api/athletes/add',
-        $t('form.add_athlete.success'),
-    );
-
     const clearAthletesFilters = () => {
-        // Reset filters
         Object.assign(athletesFiltersState, athletesFiltersInitialState);
 
-        // Refresh athletes
         refreshAthletes();
+    };
+
+    const clearAthleteAddForm = () => {
+        Object.assign(athleteAddState, athleteAddInitialState);
+
+        refreshAthletes();
+    };
+
+    const addAthlete = async (event: FormSubmitEvent<InsertAthlete>) => {
+        try {
+            isAddingAthlete.value = true;
+
+            await $csrfFetch('/api/athletes', {
+                method: 'POST',
+                body: event.data,
+            });
+
+            clearAthleteAddForm();
+
+            toast.add({
+                description: $t('form.add_athlete.success'),
+                color: 'success',
+            });
+        } catch (err) {
+            const error = err as FetchError;
+
+            if (error.data?.data) {
+                addingAthleteErrors.value = error.data?.data;
+            } else {
+                toast.add({
+                    description: error.statusMessage || 'An unknown error occurred.',
+                    color: 'error',
+                });
+            }
+        }
+
+        isAddingAthlete.value = false;
     };
 
     const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[][]>(() => {
@@ -68,17 +106,24 @@ export const useAthletesStore = defineStore('athletes', () => {
             [
                 {
                     renderAs: 'input',
-                    label: $t('form.field.name.label'),
-                    name: 'name',
-                    placeholder: $t('form.field.name.placeholder'),
-                    icon: 'i-lucide-user',
                     debounce: true,
+                    formFieldProps: {
+                        label: $t('form.field.name.label'),
+                        name: 'name',
+                    },
+                    inputProps: {
+                        placeholder: $t('form.field.name.placeholder'),
+                        icon: 'i-lucide-user',
+                    },
                 },
             ],
         ];
     });
 
-    const athleteAddFields = computed<GroupFormField<AthleteAddSchema>[]>(() => {
+    const currentDate = new Date();
+    const maxDate = new CalendarDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+
+    const athleteAddFields = computed<FormFieldGroup<InsertAthlete>[]>(() => {
         return [
             {
                 title: $t('form.add_athlete.group.personal_information'),
@@ -86,34 +131,55 @@ export const useAthletesStore = defineStore('athletes', () => {
                 fields: [
                     {
                         renderAs: 'input',
-                        label: $t('form.field.name.label'),
-                        name: 'name',
-                        placeholder: $t('form.field.name.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.name.label'),
+                            name: 'name',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.name.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input-date',
-                        label: $t('form.field.birthday.label'),
-                        name: 'birthday',
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.birthdate.label'),
+                            name: 'birthdate',
+                            required: true,
+                        },
+                        inputProps: {
+                            variant: 'subtle',
+                            maxValue: maxDate,
+                        },
+                        calendarProps: {
+                            variant: 'soft',
+                            maxValue: maxDate,
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.birthplace.label'),
-                        name: 'birthplace',
-                        placeholder: $t('form.field.birthplace.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.birthplace.label'),
+                            name: 'birthplace',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.birthplace.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.tax_code.label'),
-                        name: 'tax_code',
-                        placeholder: $t('form.field.tax_code.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.fiscal_code.label'),
+                            name: 'fiscalCode',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.fiscal_code.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                 ],
             },
@@ -123,36 +189,49 @@ export const useAthletesStore = defineStore('athletes', () => {
                 fields: [
                     {
                         renderAs: 'input',
-                        label: $t('form.field.city.label'),
-                        name: 'city',
-                        placeholder: $t('form.field.city.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.city.label'),
+                            name: 'city',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.city.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.address.label'),
-                        name: 'address',
-                        placeholder: $t('form.field.address.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.address.label'),
+                            name: 'address',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.address.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.phone_number.label'),
-                        type: 'tel',
-                        name: 'phone_number',
-                        placeholder: $t('form.field.phone_number.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.phone_number.label'),
+                            name: 'phoneNumber',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.phone_number.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.email.label'),
-                        type: 'email',
-                        name: 'email',
-                        placeholder: $t('form.field.email.placeholder'),
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.email.label'),
+                            name: 'email',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.email.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                 ],
             },
@@ -162,12 +241,16 @@ export const useAthletesStore = defineStore('athletes', () => {
                 fields: [
                     {
                         renderAs: 'select-menu',
-                        label: $t('form.field.parent.label'),
-                        name: 'parent_id',
-                        items: parentsItems.value,
-                        loading: parentsPending.value,
-                        placeholder: $t('form.field.parent.placeholder'),
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.parent_id.label'),
+                            name: 'parentId',
+                        },
+                        selectProps: {
+                            placeholder: $t('form.field.parent_id.placeholder'),
+                            variant: 'subtle',
+                            items: parentsItems.value,
+                            loading: parentsPending.value,
+                        },
                     },
                 ],
             },
@@ -175,18 +258,18 @@ export const useAthletesStore = defineStore('athletes', () => {
     });
 
     return {
+        isAddingAthlete,
+        addingAthleteErrors,
         athletes,
         athletesItems,
         athletesPending,
         athletesError,
-        refreshAthletes,
-        clearAthletesFilters,
-        addAthlete,
-        showAthleteAddForm,
-        isAddingAthlete,
         athletesFiltersState,
         athletesFiltersFields,
         athleteAddState,
         athleteAddFields,
+        refreshAthletes,
+        clearAthletesFilters,
+        addAthlete,
     };
 });

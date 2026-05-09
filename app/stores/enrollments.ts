@@ -1,6 +1,19 @@
-import type { SelectMenuItem } from '@nuxt/ui';
+import type { FormError, FormSubmitEvent, InputNumberProps, SelectItem } from '@nuxt/ui';
+import type { InsertEnrollment } from '~~/lib/db/schema';
+import type { FetchError } from 'ofetch';
+
+import type {
+    CertificateStatusEnum,
+    EnrollmentsFiltersSchema,
+    FormField,
+    FormFieldGroup,
+    MissingPaymentEnum,
+} from '#imports';
 
 export const useEnrollmentsStore = defineStore('enrollments', () => {
+    const { $csrfFetch } = useNuxtApp();
+    const toast = useToast();
+
     const athletesStore = useAthletesStore();
     const seasonsStore = useSeasonsStore();
     const activitiesStore = useActivitiesStore();
@@ -11,90 +24,118 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     const { activitiesItems, activitiesPending } = storeToRefs(activitiesStore);
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
-    const enrollmentsFiltersInitialState: Partial<EnrollmentsFiltersSchema> = {
-        name: undefined,
-        season: undefined,
-        activity: undefined,
-        course: undefined,
-        payment: undefined,
+    const isAddingEnrollment = ref(false);
+    const addingEnrollmentErrors = ref<FormError[]>([]);
+
+    const enrollmentsFiltersInitialState: EnrollmentsFiltersSchema = {
+        athleteName: undefined,
+        seasonId: undefined,
+        activityId: undefined,
+        courseId: undefined,
+        missingPayment: undefined,
         certificateStatus: undefined,
+    };
+
+    const enrollmentAddInitialState: Partial<InsertEnrollment> = {
+        athleteId: undefined,
+        seasonId: undefined,
+        activityId: undefined,
+        courseId: undefined,
+        volleyAccount: undefined,
+        volleyBalance: undefined,
+        volleyBalanceSecondary: undefined,
+        firstInstallment: undefined,
+        secondInstallment: undefined,
+        thirdInstallment: undefined,
+        certificateExpirationDate: undefined,
     };
 
     const enrollmentsFiltersState = reactive({ ...enrollmentsFiltersInitialState });
 
-    const enrollmentAddInitialState: Partial<EnrollmentAddSchema> = {
-        athlete_id: undefined,
-        season_id: undefined,
-        activity_id: undefined,
-        course_id: undefined,
-        volley_account: undefined,
-        volley_balance: undefined,
-        volley_balance_secondary: undefined,
-        first_installment: undefined,
-        second_installment: undefined,
-        third_installment: undefined,
-        certificate_expiration_date: undefined,
-    };
+    const enrollmentAddState = reactive({ ...enrollmentAddInitialState });
 
     const {
         data: enrollments,
         pending: enrollmentsPending,
         error: enrollmentsError,
         refresh: refreshEnrollments,
-    } = useLazyFetch<EnrollmentListItem[]>('/api/enrollments', {
+    } = useLazyFetch('/api/enrollments', {
         headers: useRequestHeaders(['cookie']),
         query: enrollmentsFiltersState,
         watch: false,
     });
 
-    const {
-        showAddForm: showEnrollmentAddForm,
-        isAdding: isAddingEnrollment,
-        state: enrollmentAddState,
-        add: addEnrollment,
-    } = useAddForm(
-        enrollmentAddInitialState,
-        refreshEnrollments,
-        '/api/enrollments/add',
-        'Enrollment added successfully',
-    );
-
     const clearEnrollmentsFilters = () => {
-        // Reset filters
         Object.assign(enrollmentsFiltersState, enrollmentsFiltersInitialState);
 
-        // Refresh enrollments
         refreshEnrollments();
     };
 
-    const paymentItems: Array<SelectMenuItem & { value: PaymentFilters }> = [
+    const clearEnrollmentAddForm = () => {
+        Object.assign(enrollmentAddState, enrollmentAddInitialState);
+
+        refreshEnrollments();
+    };
+
+    const addEnrollment = async (event: FormSubmitEvent<InsertEnrollment>) => {
+        try {
+            isAddingEnrollment.value = true;
+
+            await $csrfFetch('/api/enrollments', {
+                method: 'POST',
+                body: event.data,
+            });
+
+            clearEnrollmentAddForm();
+
+            toast.add({
+                description: $t('form.add_enrollment.success'),
+                color: 'success',
+            });
+        } catch (err) {
+            const error = err as FetchError;
+
+            if (error.data?.data) {
+                addingEnrollmentErrors.value = error.data?.data;
+            } else {
+                toast.add({
+                    description: error.statusMessage || 'An unknown error occurred.',
+                    color: 'error',
+                });
+            }
+        }
+
+        isAddingEnrollment.value = false;
+    };
+
+    const missingPaymentItems: Array<SelectItem & { value: MissingPaymentEnum }> = [
         {
             label: $t('form.field.volley_account.label'),
-            value: 'volley_account',
+            value: 'volleyAccount',
         },
         {
             label: $t('form.field.volley_balance.label'),
-            value: 'volley_balance',
+            value: 'volleyBalance',
         },
         {
             label: $t('form.field.volley_balance_secondary.label'),
-            value: 'volley_balance_secondary',
+            value: 'volleyBalanceSecondary',
         },
         {
             label: $t('form.field.first_installment.label'),
-            value: 'first_installment',
+            value: 'firstInstallment',
         },
         {
             label: $t('form.field.second_installment.label'),
-            value: 'second_installment',
+            value: 'secondInstallment',
         },
         {
             label: $t('form.field.third_installment.label'),
-            value: 'third_installment',
+            value: 'thirdInstallment',
         },
     ];
 
-    const certificateStatusItems: Array<SelectMenuItem & { value: CertificateDateStatus }> = [
+    const certificateStatusItems: Array<SelectItem & { value: CertificateStatusEnum }> = [
         {
             label: $t('form.field.certificate_status.item.valid'),
             value: 'valid',
@@ -114,67 +155,102 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             [
                 {
                     renderAs: 'input',
-                    label: $t('form.field.name.label'),
-                    name: 'name',
-                    placeholder: $t('form.field.name.placeholder'),
-                    icon: 'i-lucide-user',
                     debounce: true,
+                    formFieldProps: {
+                        label: $t('form.field.name.label'),
+                        name: 'athleteName',
+                    },
+                    inputProps: {
+                        placeholder: $t('form.field.name.placeholder'),
+                        icon: 'i-lucide-user',
+                    },
                 },
             ],
             [
                 {
                     renderAs: 'select-menu',
-                    label: $t('form.field.season.label'),
-                    name: 'season',
-                    items: seasonsItems.value,
-                    loading: seasonsPending.value,
-                    placeholder: $t('form.field.season.placeholder'),
-                    icon: 'i-lucide-calendar',
-                    variant: 'subtle',
-                },
-                {
-                    renderAs: 'select',
-                    label: $t('form.field.activity.label'),
-                    name: 'activity',
-                    items: activitiesItems.value,
-                    loading: activitiesPending.value,
-                    placeholder: $t('form.field.activity.placeholder'),
-                    icon: 'i-lucide-zap',
-                    variant: 'subtle',
+                    formFieldProps: {
+                        label: $t('form.field.season_id.label'),
+                        name: 'seasonId',
+                    },
+                    selectProps: {
+                        placeholder: $t('form.field.season_id.placeholder'),
+                        variant: 'subtle',
+                        icon: 'i-lucide-calendar',
+                        items: seasonsItems.value,
+                        loading: seasonsPending.value,
+                    },
                 },
                 {
                     renderAs: 'select-menu',
-                    label: $t('form.field.course.label'),
-                    name: 'course',
-                    items: coursesItems.value,
-                    loading: coursesPending.value,
-                    placeholder: $t('form.field.course.placeholder'),
-                    icon: 'i-lucide-dumbbell',
-                    variant: 'subtle',
+                    formFieldProps: {
+                        label: $t('form.field.activity_id.label'),
+                        name: 'activityId',
+                    },
+                    selectProps: {
+                        placeholder: $t('form.field.activity_id.placeholder'),
+                        variant: 'subtle',
+                        icon: 'i-lucide-zap',
+                        items: activitiesItems.value,
+                        loading: activitiesPending.value,
+                    },
+                },
+                {
+                    renderAs: 'select-menu',
+                    formFieldProps: {
+                        label: $t('form.field.course_id.label'),
+                        name: 'courseId',
+                    },
+                    selectProps: {
+                        placeholder: $t('form.field.course_id.placeholder'),
+                        variant: 'subtle',
+                        icon: 'i-lucide-dumbbell',
+                        items: coursesItems.value,
+                        loading: coursesPending.value,
+                    },
                 },
                 {
                     renderAs: 'select',
-                    label: $t('form.field.payment.label'),
-                    name: 'payment',
-                    items: paymentItems,
-                    placeholder: $t('form.field.payment.placeholder'),
-                    icon: 'i-lucide-credit-card',
-                    variant: 'subtle',
+                    formFieldProps: {
+                        label: $t('form.field.missing_payment.label'),
+                        name: 'missingPayment',
+                    },
+                    selectProps: {
+                        placeholder: $t('form.field.missing_payment.placeholder'),
+                        variant: 'subtle',
+                        icon: 'i-lucide-credit-card',
+                        items: missingPaymentItems,
+                    },
                 },
                 {
                     renderAs: 'select',
-                    label: $t('form.field.certificate_status.label'),
-                    name: 'certificateStatus',
-                    items: certificateStatusItems,
-                    placeholder: $t('form.field.certificate_status.placeholder'),
-                    icon: 'i-lucide-briefcase-medical',
-                    variant: 'subtle',
+                    formFieldProps: {
+                        label: $t('form.field.certificate_status.label'),
+                        name: 'certificateStatus',
+                    },
+                    selectProps: {
+                        placeholder: $t('form.field.certificate_status.placeholder'),
+                        variant: 'subtle',
+                        icon: 'i-lucide-briefcase-medical',
+                        items: certificateStatusItems,
+                    },
                 },
             ],
         ];
     });
 
-    const enrollmentAddFields = computed<GroupFormField<EnrollmentAddSchema>[]>(() => {
+    const paymentFieldsProps: InputNumberProps = {
+        step: 10,
+        min: 0,
+        formatOptions: {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+            currencySign: 'accounting',
+        },
+    };
+
+    const enrollmentAddFields = computed<FormFieldGroup<InsertEnrollment>[]>(() => {
         return [
             {
                 title: $t('form.add_enrollment.group.athlete'),
@@ -182,13 +258,17 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 fields: [
                     {
                         renderAs: 'select-menu',
-                        label: $t('form.field.athlete.label'),
-                        name: 'athlete_id',
-                        items: athletesItems.value,
-                        loading: athletesPending.value,
-                        placeholder: $t('form.field.athlete.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.athlete_id.label'),
+                            name: 'athleteId',
+                            required: true,
+                        },
+                        selectProps: {
+                            placeholder: $t('form.field.athlete_id.placeholder'),
+                            variant: 'subtle',
+                            items: athletesItems.value,
+                            loading: athletesPending.value,
+                        },
                     },
                 ],
             },
@@ -198,13 +278,17 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 fields: [
                     {
                         renderAs: 'select-menu',
-                        label: $t('form.field.season.label'),
-                        name: 'season_id',
-                        items: seasonsItems.value,
-                        loading: seasonsPending.value,
-                        placeholder: $t('form.field.season.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.season_id.label'),
+                            name: 'seasonId',
+                            required: true,
+                        },
+                        selectProps: {
+                            placeholder: $t('form.field.season_id.placeholder'),
+                            variant: 'subtle',
+                            items: seasonsItems.value,
+                            loading: seasonsPending.value,
+                        },
                     },
                 ],
             },
@@ -213,14 +297,18 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 icon: 'i-lucide-zap',
                 fields: [
                     {
-                        renderAs: 'select',
-                        label: $t('form.field.activity.label'),
-                        name: 'activity_id',
-                        items: activitiesItems.value,
-                        loading: activitiesPending.value,
-                        placeholder: $t('form.field.activity.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        renderAs: 'select-menu',
+                        formFieldProps: {
+                            label: $t('form.field.activity_id.label'),
+                            name: 'activityId',
+                            required: true,
+                        },
+                        selectProps: {
+                            placeholder: $t('form.field.activity_id.placeholder'),
+                            variant: 'subtle',
+                            items: activitiesItems.value,
+                            loading: activitiesPending.value,
+                        },
                     },
                 ],
             },
@@ -230,13 +318,17 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 fields: [
                     {
                         renderAs: 'select-menu',
-                        label: $t('form.field.course.label'),
-                        name: 'course_id',
-                        items: coursesItems.value,
-                        loading: coursesPending.value,
-                        placeholder: $t('form.field.course.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.course_id.label'),
+                            name: 'courseId',
+                            required: true,
+                        },
+                        selectProps: {
+                            placeholder: $t('form.field.course_id.placeholder'),
+                            variant: 'subtle',
+                            items: coursesItems.value,
+                            loading: coursesPending.value,
+                        },
                     },
                 ],
             },
@@ -246,92 +338,90 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 fields: [
                     {
                         renderAs: 'input-number',
-                        label: $t('form.field.volley_account.label'),
-                        name: 'volley_account',
-                        placeholder: $t('form.field.volley_account.placeholder'),
-                        variant: 'subtle',
-                        step: 0.10,
-                        min: VOLLEY_ACCOUNT_MIN_VALUE,
-                        formatOptions: {
-                            style: 'currency',
-                            currency: 'EUR',
-                            currencyDisplay: 'code',
-                            currencySign: 'accounting',
+                        formFieldProps: {
+                            label: $t('form.field.volley_account.label'),
+                            name: 'volleyAccount',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.volley_account.placeholder'),
+                            variant: 'subtle',
+                            ...paymentFieldsProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
-                        label: $t('form.field.volley_balance.label'),
-                        name: 'volley_balance',
-                        placeholder: $t('form.field.volley_balance.placeholder'),
-                        variant: 'subtle',
-                        step: 0.10,
-                        min: VOLLEY_BALANCE_MIN_VALUE,
-                        formatOptions: {
-                            style: 'currency',
-                            currency: 'EUR',
-                            currencyDisplay: 'code',
-                            currencySign: 'accounting',
+                        formFieldProps: {
+                            label: $t('form.field.volley_balance.label'),
+                            name: 'volleyBalance',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.volley_balance.placeholder'),
+                            variant: 'subtle',
+                            ...paymentFieldsProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
-                        label: $t('form.field.volley_balance_secondary.label'),
-                        name: 'volley_balance_secondary',
-                        placeholder: $t('form.field.volley_balance_secondary.placeholder'),
-                        variant: 'subtle',
-                        step: 0.10,
-                        min: VOLLEY_BALANCE_SECONDARY_MIN_VALUE,
-                        formatOptions: {
-                            style: 'currency',
-                            currency: 'EUR',
-                            currencyDisplay: 'code',
-                            currencySign: 'accounting',
+                        formFieldProps: {
+                            label: $t('form.field.volley_balance_secondary.label'),
+                            name: 'volleyBalanceSecondary',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.volley_balance_secondary.placeholder'),
+                            variant: 'subtle',
+                            ...paymentFieldsProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
-                        label: $t('form.field.first_installment.label'),
-                        name: 'first_installment',
-                        placeholder: $t('form.field.first_installment.placeholder'),
-                        variant: 'subtle',
-                        step: 0.10,
-                        min: FIRST_INSTALLMENT_MIN_VALUE,
-                        formatOptions: {
-                            style: 'currency',
-                            currency: 'EUR',
-                            currencyDisplay: 'code',
-                            currencySign: 'accounting',
+                        formFieldProps: {
+                            label: $t('form.field.first_installment.label'),
+                            name: 'firstInstallment',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.first_installment.placeholder'),
+                            variant: 'subtle',
+                            ...paymentFieldsProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
-                        label: $t('form.field.second_installment.label'),
-                        name: 'second_installment',
-                        placeholder: $t('form.field.second_installment.placeholder'),
-                        variant: 'subtle',
-                        step: 0.10,
-                        min: SECOND_INSTALLMENT_MIN_VALUE,
-                        formatOptions: {
-                            style: 'currency',
-                            currency: 'EUR',
-                            currencyDisplay: 'code',
-                            currencySign: 'accounting',
+                        formFieldProps: {
+                            label: $t('form.field.second_installment.label'),
+                            name: 'secondInstallment',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.second_installment.placeholder'),
+                            variant: 'subtle',
+                            ...paymentFieldsProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
-                        label: $t('form.field.third_installment.label'),
-                        name: 'third_installment',
-                        placeholder: $t('form.field.third_installment.placeholder'),
-                        variant: 'subtle',
-                        step: 0.10,
-                        min: THIRD_INSTALLMENT_MIN_VALUE,
-                        formatOptions: {
-                            style: 'currency',
-                            currency: 'EUR',
-                            currencyDisplay: 'code',
-                            currencySign: 'accounting',
+                        formFieldProps: {
+                            label: $t('form.field.third_installment.label'),
+                            name: 'thirdInstallment',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.third_installment.placeholder'),
+                            variant: 'subtle',
+                            ...paymentFieldsProps,
+                        },
+                    },
+                ],
+            },
+            {
+                title: $t('form.add_enrollment.group.certificate'),
+                icon: 'i-lucide-briefcase-medical',
+                fields: [
+                    {
+                        renderAs: 'input-date',
+                        formFieldProps: {
+                            label: $t('form.field.certificate_expiration_date.label'),
+                            name: 'certificateExpirationDate',
+                        },
+                        inputProps: {
+                            variant: 'subtle',
                         },
                     },
                 ],
@@ -340,17 +430,17 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     });
 
     return {
+        isAddingEnrollment,
+        addingEnrollmentErrors,
         enrollments,
         enrollmentsPending,
         enrollmentsError,
-        refreshEnrollments,
-        clearEnrollmentsFilters,
-        addEnrollment,
-        showEnrollmentAddForm,
-        isAddingEnrollment,
         enrollmentsFiltersState,
         enrollmentsFiltersFields,
         enrollmentAddState,
         enrollmentAddFields,
+        refreshEnrollments,
+        clearEnrollmentsFilters,
+        addEnrollment,
     };
 });

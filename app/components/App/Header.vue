@@ -2,8 +2,9 @@
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
 
 const route = useRoute();
+
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { user, isLoading } = storeToRefs(authStore);
 
 const navigationMenuItems = computed <NavigationMenuItem[]> (() => [
     {
@@ -37,7 +38,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
         return [
             [
                 {
-                    label: user.value.email,
+                    label: user.value.name,
                     icon: 'i-lucide-user',
                     type: 'label',
                 },
@@ -47,7 +48,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
                     label: $t('auth.log_out'),
                     icon: 'i-lucide-log-out',
                     async onSelect() {
-                        await authStore.logOut();
+                        await authStore.logout();
                     },
                 },
             ],
@@ -86,8 +87,13 @@ const dropdownMenuItems = computed<DropdownMenuItem[][]>(() => {
                 <UButton
                     color="neutral"
                     variant="ghost"
-                    :avatar="user ? getAvatar(user.email) : undefined"
+                    :avatar="user && user.image ? {
+                        src: user.image,
+                        alt: user.name,
+                        loading: 'lazy',
+                    } : undefined"
                     :icon="!user ? 'i-lucide-circle-user-round' : undefined"
+                    :loading="isLoading"
                 />
             </UDropdownMenu>
         </template>

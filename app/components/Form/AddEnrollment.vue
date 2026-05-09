@@ -1,21 +1,36 @@
 <script setup lang="ts">
+import { InsertEnrollment } from '~~/lib/db/schema';
+
+const { showSubmitButton = false } = defineProps<{
+    showSubmitButton?: boolean;
+}>();
+
 const enrollmentsStore = useEnrollmentsStore();
 const athletesStore = useAthletesStore();
 const seasonsStore = useSeasonsStore();
 const activitiesStore = useActivitiesStore();
 const coursesStore = useCoursesStore();
 
-const { isAddingEnrollment, enrollmentAddState, enrollmentAddFields } = storeToRefs(enrollmentsStore);
-const { showAthleteAddForm, isAddingAthlete } = storeToRefs(athletesStore);
-const { showSeasonAddForm, isAddingSeason } = storeToRefs(seasonsStore);
-const { showActivityAddForm, isAddingActivity } = storeToRefs(activitiesStore);
-const { showCourseAddForm, isAddingCourse } = storeToRefs(coursesStore);
+const {
+    isAddingEnrollment,
+    addingEnrollmentErrors,
+    enrollmentAddState,
+    enrollmentAddFields,
+} = storeToRefs(enrollmentsStore);
+const { isAddingAthlete } = storeToRefs(athletesStore);
+const { isAddingSeason } = storeToRefs(seasonsStore);
+const { isAddingActivity } = storeToRefs(activitiesStore);
+const { isAddingCourse } = storeToRefs(coursesStore);
 
-const enrollmentFormRef = useTemplateRef('enrollmentForm');
-const athleteFormRef = useTemplateRef('athleteForm');
-const seasonFormRef = useTemplateRef('seasonForm');
-const activityFormRef = useTemplateRef('activityForm');
-const courseFormRef = useTemplateRef('courseForm');
+const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
+const athleteFormRef = useTemplateRef('athleteFormRef');
+const seasonFormRef = useTemplateRef('seasonFormRef');
+const activityFormRef = useTemplateRef('activityFormRef');
+const courseFormRef = useTemplateRef('courseFormRef');
+
+watch(addingEnrollmentErrors, (newErrors) => {
+    enrollmentFormRef.value?.setErrors(newErrors);
+});
 
 defineExpose({
     submit: () => enrollmentFormRef.value?.submit(),
@@ -24,74 +39,75 @@ defineExpose({
 
 <template>
     <UForm
-        ref="enrollmentForm"
-        :schema="enrollmentAddSchema"
+        ref="enrollmentFormRef"
+        :schema="InsertEnrollment"
         :state="enrollmentAddState"
         class="grid gap-8"
         @submit="enrollmentsStore.addEnrollment"
     >
-        <FormFieldGroup v-for="(group, index) in enrollmentAddFields" :key="index" :group>
+        <FormFieldGroup
+            v-for="(group, index) in enrollmentAddFields"
+            :key="index"
+            :title="group.title"
+            :icon="group.icon"
+        >
             <FormField
                 v-for="(field, fieldIndex) in group.fields"
                 :key="fieldIndex"
-                v-model="(enrollmentAddState[field.name] as FormFieldModelType)"
+                v-model="enrollmentAddState[field.formFieldProps.name]"
                 :field
             >
-                <template #athlete_id-post>
-                    <FormModalAdd
-                        v-model:open="showAthleteAddForm"
-                        v-model:adding="isAddingAthlete"
+                <template #athleteId-post>
+                    <FormAddModal
                         :title="$t('form.add_athlete.title')"
                         :description="$t('form.add_athlete.description')"
-                        :buttonLabel="$t('form.add_enrollment.button.add_athlete')"
-                        :formRef="athleteFormRef"
+                        :buttonLabel="$t('form.add_athlete.title')"
+                        :isLoading="isAddingAthlete"
+                        @submit="athleteFormRef?.[0]?.submit"
                     >
-                        <FormAddAthlete ref="athleteForm" />
-                    </FormModalAdd>
+                        <FormAddAthlete ref="athleteFormRef" />
+                    </FormAddModal>
                 </template>
-                <template #season_id-post>
-                    <FormModalAdd
-                        v-model:open="showSeasonAddForm"
-                        v-model:adding="isAddingSeason"
+                <template #seasonId-post>
+                    <FormAddModal
                         :title="$t('form.add_season.title')"
                         :description="$t('form.add_season.description')"
-                        :buttonLabel="$t('form.add_enrollment.button.add_season')"
-                        :formRef="seasonFormRef"
+                        :buttonLabel="$t('form.add_season.title')"
+                        :isLoading="isAddingSeason"
+                        @submit="seasonFormRef?.[0]?.submit"
                     >
-                        <FormAddSeason ref="seasonForm" />
-                    </FormModalAdd>
+                        <FormAddSeason ref="seasonFormRef" />
+                    </FormAddModal>
                 </template>
-                <template #activity_id-post>
-                    <FormModalAdd
-                        v-model:open="showActivityAddForm"
-                        v-model:adding="isAddingActivity"
+                <template #activityId-post>
+                    <FormAddModal
                         :title="$t('form.add_activity.title')"
                         :description="$t('form.add_activity.description')"
-                        :buttonLabel="$t('form.add_enrollment.button.add_activity')"
-                        :formRef="activityFormRef"
+                        :buttonLabel="$t('form.add_activity.title')"
+                        :isLoading="isAddingActivity"
+                        @submit="activityFormRef?.[0]?.submit"
                     >
-                        <FormAddActivity ref="activityForm" />
-                    </FormModalAdd>
+                        <FormAddActivity ref="activityFormRef" />
+                    </FormAddModal>
                 </template>
-                <template #course_id-post>
-                    <FormModalAdd
-                        v-model:open="showCourseAddForm"
-                        v-model:adding="isAddingCourse"
+                <template #courseId-post>
+                    <FormAddModal
                         :title="$t('form.add_course.title')"
                         :description="$t('form.add_course.description')"
-                        :buttonLabel="$t('form.add_enrollment.button.add_course')"
-                        :formRef="courseFormRef"
+                        :buttonLabel="$t('form.add_course.title')"
+                        :isLoading="isAddingCourse"
+                        @submit="courseFormRef?.[0]?.submit"
                     >
-                        <FormAddCourse ref="courseForm" />
-                    </FormModalAdd>
+                        <FormAddCourse ref="courseFormRef" />
+                    </FormAddModal>
                 </template>
             </FormField>
         </FormFieldGroup>
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            class="hidden"
             :loading="isAddingEnrollment"
+            :class="{ hidden: !showSubmitButton }"
             block
         />
     </UForm>

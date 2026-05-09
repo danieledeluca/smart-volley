@@ -1,18 +1,34 @@
-import type { SelectItem } from '@nuxt/ui';
+import type { FormError, FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+import type { InsertParent } from '~~/lib/db/schema';
+import type { FetchError } from 'ofetch';
 
 export const useParentsStore = defineStore('parents', () => {
-    const parentAddInitialState: Partial<ParentAddSchema> = {
+    const { $csrfFetch } = useNuxtApp();
+    const toast = useToast();
+
+    const isAddingParent = ref(false);
+    const addingParentErrors = ref<FormError[]>([]);
+
+    const parentAddInitialState: Partial<InsertParent> = {
         name: undefined,
-        tax_code: undefined,
+        fiscalCode: undefined,
+        phoneNumber: undefined,
         email: undefined,
     };
 
-    const { data: parents, pending: parentsPending, refresh: refreshParents } = useLazyFetch('/api/parents', {
+    const parentAddState = reactive({ ...parentAddInitialState });
+
+    const {
+        data: parents,
+        pending: parentsPending,
+        error: parentsError,
+        refresh: refreshParents,
+    } = useLazyFetch('/api/parents', {
         headers: useRequestHeaders(['cookie']),
     });
 
     const parentsItems = computed(() => {
-        return parents.value?.map<SelectItem>((parent) => {
+        return parents.value?.map<SelectMenuItem>((parent) => {
             return {
                 label: parent.name,
                 value: parent.id,
@@ -20,19 +36,44 @@ export const useParentsStore = defineStore('parents', () => {
         });
     });
 
-    const {
-        showAddForm: showParentAddForm,
-        isAdding: isAddingParent,
-        state: parentAddState,
-        add: addParent,
-    } = useAddForm(
-        parentAddInitialState,
-        refreshParents,
-        '/api/parents/add',
-        $t('form.add_parent.success'),
-    );
+    const clearParentAddForm = () => {
+        Object.assign(parentAddState, parentAddInitialState);
 
-    const parentAddFields = computed<GroupFormField<ParentAddSchema>[]>(() => {
+        refreshParents();
+    };
+
+    const addParent = async (event: FormSubmitEvent<InsertParent>) => {
+        try {
+            isAddingParent.value = true;
+
+            await $csrfFetch('/api/parents', {
+                method: 'POST',
+                body: event.data,
+            });
+
+            clearParentAddForm();
+
+            toast.add({
+                description: $t('form.add_parent.success'),
+                color: 'success',
+            });
+        } catch (err) {
+            const error = err as FetchError;
+
+            if (error.data?.data) {
+                addingParentErrors.value = error.data?.data;
+            } else {
+                toast.add({
+                    description: error.statusMessage || 'An unknown error occurred.',
+                    color: 'error',
+                });
+            }
+        }
+
+        isAddingParent.value = false;
+    };
+
+    const parentAddFields = computed<FormFieldGroup<InsertParent>[]>(() => {
         return [
             {
                 title: $t('form.add_parent.group.personal_information'),
@@ -40,19 +81,27 @@ export const useParentsStore = defineStore('parents', () => {
                 fields: [
                     {
                         renderAs: 'input',
-                        label: $t('form.field.name.label'),
-                        name: 'name',
-                        placeholder: $t('form.field.name.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.name.label'),
+                            name: 'name',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.name.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.tax_code.label'),
-                        name: 'tax_code',
-                        placeholder: $t('form.field.tax_code.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.fiscal_code.label'),
+                            name: 'fiscalCode',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.fiscal_code.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                 ],
             },
@@ -62,20 +111,25 @@ export const useParentsStore = defineStore('parents', () => {
                 fields: [
                     {
                         renderAs: 'input',
-                        label: $t('form.field.phone_number.label'),
-                        type: 'tel',
-                        name: 'phone_number',
-                        placeholder: $t('form.field.phone_number.placeholder'),
-                        required: true,
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.phone_number.label'),
+                            name: 'phoneNumber',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.phone_number.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                     {
                         renderAs: 'input',
-                        label: $t('form.field.email.label'),
-                        type: 'email',
-                        name: 'email',
-                        placeholder: $t('form.field.email.placeholder'),
-                        variant: 'subtle',
+                        formFieldProps: {
+                            label: $t('form.field.email.label'),
+                            name: 'email',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.email.placeholder'),
+                            variant: 'subtle',
+                        },
                     },
                 ],
             },
@@ -83,13 +137,15 @@ export const useParentsStore = defineStore('parents', () => {
     });
 
     return {
+        isAddingParent,
+        addingParentErrors,
         parents,
         parentsItems,
         parentsPending,
-        addParent,
-        showParentAddForm,
-        isAddingParent,
+        parentsError,
         parentAddState,
         parentAddFields,
+        refreshParents,
+        addParent,
     };
 });

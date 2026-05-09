@@ -48,12 +48,6 @@
     "postcss"
   ],
 
-  // Use the Prisma extension as the default formatter for Prisma files
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma",
-    "editor.formatOnSave": true
-  },
-
   // Set the default casing for Vue props
   "vue.suggest.propNameCasing": "alwaysCamelCase",
 
@@ -65,7 +59,5 @@
     "strings": "on"
   },
   "tailwindCSS.classAttributes": ["class", "ui"],
-  "tailwindCSS.experimental.classRegex": [
-    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ]
+  "tailwindCSS.experimental.classRegex": [["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]]
 }

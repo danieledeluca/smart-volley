@@ -6,18 +6,18 @@ import type { FetchError } from 'ofetch';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 
 const {
-    isLoading,
-    error,
     tableData,
     tableColumns,
+    isLoading,
+    error,
     onSelect,
 } = defineProps<{
-    isLoading: boolean;
-    error?: FetchError;
-    tableData: T[] | undefined;
+    tableData?: T[];
     tableColumns?: TableColumn<T>[];
+    isLoading?: boolean;
+    error?: FetchError;
     onSelect?: (event: Event, row: TableRow<T>) => void;
-}>();
+}> ();
 
 const tableRef = useTemplateRef('table');
 
@@ -54,10 +54,9 @@ watch(() => tableData, () => {
             <UTable
                 ref="table"
                 v-model:pagination="pagination"
+                class="striped-table rounded-md border border-accented has-[+*]:rounded-b-none"
                 :data="tableData"
                 :columns="tableColumns"
-                class="striped-table rounded-md border border-accented has-[+*]:rounded-b-none"
-                sticky
                 :paginationOptions="{ getPaginationRowModel: getPaginationRowModel() }"
                 @select="onSelect"
             />

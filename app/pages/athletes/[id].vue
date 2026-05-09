@@ -5,7 +5,7 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: athlete, pending, error } = useLazyFetch<AthleteItem>(`/api/athletes/${route.params.id}`, {
+const { data: athlete, pending, error } = useLazyFetch(`/api/athletes/${route.params.id}`, {
     headers: useRequestHeaders(['cookie']),
 });
 
@@ -62,7 +62,7 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
             >
                 <template #description>
                     <div class="mt-1 flex flex-wrap gap-2">
-                        <UBadge variant="soft" color="neutral" :label="`#${athlete.id}`" />
+                        <UBadge variant="soft" color="neutral" :label="athlete.fiscalCode" />
                     </div>
                 </template>
             </UUser>
@@ -79,15 +79,15 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="space-y-8 lg:col-span-8">
                 <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-id-card">
-                    <ItemCardRecord :label="$t('card.record.name')" :value="athlete.name" />
+                    <ItemCardRecord :label="$t('card.athlete.record.name')" :value="athlete.name" />
                     <ItemCardRecord
-                        :label="$t('card.record.birthday')"
-                        :value="formatDate(athlete.birthday.toString())"
+                        :label="$t('card.athlete.record.birthdate')"
+                        :value="formatDate(athlete.birthdate)"
                     />
-                    <ItemCardRecord :label="$t('card.record.birthplace')" :value="athlete.birthplace" />
+                    <ItemCardRecord :label="$t('card.athlete.record.birthplace')" :value="athlete.birthplace" />
                     <ItemCardRecord
-                        :label="$t('card.record.tax_code')"
-                        :value="athlete.tax_code"
+                        :label="$t('card.athlete.record.fiscal_code')"
+                        :value="athlete.fiscalCode"
                         :showCopyButton="true"
                     />
                 </ItemCard>
@@ -100,7 +100,6 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                     <ListTable
                         :tableData="athlete.enrollments"
                         :tableColumns
-                        :isLoading="pending"
                         class="col-span-2 mt-0! min-w-0 **:data-[slot=root]:rounded-t-none"
                         :onSelect="(_event, row) => navigateTo(`/enrollments/${row.original.id}`)"
                     />
@@ -109,16 +108,17 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
             <div class="lg:col-span-4">
                 <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
                     <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
-                        <ItemCardRecord :label="$t('card.record.city')" :value="athlete.city" />
-                        <ItemCardRecord :label="$t('card.record.address')" :value="athlete.address" />
+                        <ItemCardRecord :label="$t('card.address_contacts.record.city')" :value="athlete.city" />
+                        <ItemCardRecord :label="$t('card.address_contacts.record.address')" :value="athlete.address" />
                         <ItemCardRecord
-                            :label="$t('card.record.phone_number')"
-                            :value="athlete.phone_number"
+                            v-if="athlete.phoneNumber"
+                            :label="$t('card.address_contacts.record.phone_number')"
+                            :value="athlete.phoneNumber"
                             :showPhoneNumberButtons="true"
                         />
                         <ItemCardRecord
                             v-if="athlete.email"
-                            :label="$t('card.record.email')"
+                            :label="$t('card.address_contacts.record.email')"
                             :value="athlete.email"
                             :showEmailButton="true"
                         />
@@ -129,20 +129,21 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                         :title="$t('card.parent.title')"
                         icon="i-lucide-user"
                     >
-                        <ItemCardRecord :label="$t('card.record.parent.name')" :value="athlete.parent.name" />
+                        <ItemCardRecord :label="$t('card.parent.record.name')" :value="athlete.parent.name" />
                         <ItemCardRecord
-                            :label="$t('card.record.parent.tax_code')"
-                            :value="athlete.parent.tax_code"
+                            :label="$t('card.parent.record.fiscal_code')"
+                            :value="athlete.parent.fiscalCode"
                             :showCopyButton="true"
                         />
                         <ItemCardRecord
-                            :label="$t('card.record.parent.phone_number')"
-                            :value="athlete.parent.phone_number"
+                            v-if="athlete.parent.phoneNumber"
+                            :label="$t('card.parent.record.phone_number')"
+                            :value="athlete.parent.phoneNumber"
                             :showPhoneNumberButtons="true"
                         />
                         <ItemCardRecord
                             v-if="athlete.parent.email"
-                            :label="$t('card.record.parent.email')"
+                            :label="$t('card.parent.record.email')"
                             :value="athlete.parent.email"
                             :showEmailButton="true"
                         />

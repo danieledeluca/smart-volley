@@ -1,16 +1,20 @@
-export function formatDate(date: string | null | undefined) {
+export function formatDate(date: string) {
     const formatter = new Intl.DateTimeFormat('it-IT', {
         dateStyle: 'long',
     });
 
-    return date ? formatter.format(new Date(date)) : EMPTY_VALUE;
+    return formatter.format(new Date(date));
 }
 
-export function formatPrice(price: string | number | null | undefined) {
+export function formatPrice(price: string) {
     const formatter = new Intl.NumberFormat('it-IT', {
         style: 'currency',
         currency: 'EUR',
     });
 
-    return price ? formatter.format(Number(price)) : EMPTY_VALUE;
+    return formatter.format(Number(price));
+}
+
+export function formatPhoneNumber(phoneNumber: string) {
+    return phoneNumber.replace(/\D/g, '');
 }

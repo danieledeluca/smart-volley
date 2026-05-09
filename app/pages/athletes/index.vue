@@ -5,48 +5,46 @@ useSeoMeta({
 
 const athletesStore = useAthletesStore();
 const {
+    isAddingAthlete,
     athletes,
     athletesPending,
     athletesError,
     athletesFiltersState,
     athletesFiltersFields,
-    showAthleteAddForm,
-    isAddingAthlete,
 } = storeToRefs(athletesStore);
 
-const tableColumns = getAthletesTableColumns(['name', 'phone_number', 'email']);
+const formRef = useTemplateRef('formRef');
 
-const formRef = useTemplateRef('form');
+const tableColumns = getAthletesTableColumns(['name', 'phoneNumber', 'email']);
 </script>
 
 <template>
     <UPageHeader :title="$t('page.athletes.header.title')" :description="$t('page.athletes.header.description')">
         <template #links>
-            <FormSlideOverAdd
-                v-model:open="showAthleteAddForm"
-                v-model:adding="isAddingAthlete"
+            <FormAddSlideover
                 :title="$t('form.add_athlete.title')"
                 :description="$t('form.add_athlete.description')"
                 :buttonLabel="$t('page.athletes.button.add')"
                 buttonIcon="i-lucide-user-plus"
-                :formRef
+                :isLoading="isAddingAthlete"
+                @submit="formRef?.submit"
             >
-                <FormAddAthlete ref="form" />
-            </FormSlideOverAdd>
+                <FormAddAthlete ref="formRef" />
+            </FormAddSlideover>
         </template>
     </UPageHeader>
     <ListFilters
         v-model:state="athletesFiltersState"
-        :schema="athletesFiltersSchema"
+        :schema="AthletesFiltersSchema"
         :fields="athletesFiltersFields"
         @update="athletesStore.refreshAthletes"
         @clear="athletesStore.clearAthletesFilters"
     />
     <ListTable
-        :isLoading="athletesPending"
-        :error="athletesError"
         :tableData="athletes"
         :tableColumns
-        :onSelect="onAthleteSelect"
+        :isLoading="athletesPending"
+        :error="athletesError"
+        @select="(_event, row) => navigateTo(`/athletes/${row.original.id}`)"
     />
 </template>

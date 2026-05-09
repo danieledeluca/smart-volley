@@ -45,12 +45,12 @@ const actionsRef = useTemplateRef('actions');
                     <UButton
                         variant="ghost"
                         trailingIcon="i-lucide-phone"
-                        :to="`tel:${value}`"
+                        :to="`tel:${formatPhoneNumber(value)}`"
                     />
                     <UButton
                         variant="ghost"
                         trailingIcon="i-ic-baseline-whatsapp"
-                        :to="`https://api.whatsapp.com/send?phone=${value.replace(/[^0-9]/g, '')}`"
+                        :to="`https://api.whatsapp.com/send?phone=${formatPhoneNumber(value)}`"
                         target="_blank"
                     />
                 </template>

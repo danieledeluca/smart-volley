@@ -1,9 +1,5 @@
-export default defineAuthenticatedEventHandler(async () => {
-    const parents = await prisma.parent.findMany({
-        orderBy: {
-            name: 'asc',
-        },
-    });
+import { findParents } from '~~/lib/db/queries/parents';
 
-    return parents;
+export default defineAuthenticatedEventHandler(async () => {
+    return await findParents();
 });

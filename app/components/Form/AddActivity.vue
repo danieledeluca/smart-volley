@@ -1,8 +1,18 @@
 <script setup lang="ts">
-const activitiesStore = useActivitiesStore();
-const { isAddingActivity, activityAddState, activityAddFields } = storeToRefs(activitiesStore);
+import { InsertActivity } from '~~/lib/db/schema';
 
-const formRef = useTemplateRef('form');
+const { showSubmitButton = false } = defineProps<{
+    showSubmitButton?: boolean;
+}>();
+
+const activitiesStore = useActivitiesStore();
+const { isAddingActivity, addingActivityErrors, activityAddState, activityAddFields } = storeToRefs(activitiesStore);
+
+const formRef = useTemplateRef('formRef');
+
+watch(addingActivityErrors, (newErrors) => {
+    formRef.value?.setErrors(newErrors);
+});
 
 defineExpose({
     submit: () => formRef.value?.submit(),
@@ -11,24 +21,24 @@ defineExpose({
 
 <template>
     <UForm
-        ref="form"
-        :schema="activityAddSchema"
+        ref="formRef"
+        :schema="InsertActivity"
         :state="activityAddState"
-        class="grid gap-4"
+        class="grid gap-8"
         @submit="activitiesStore.addActivity"
     >
         <FormField
             v-for="(field, index) in activityAddFields"
             :key="index"
-            v-model="(activityAddState[field.name] as FormFieldModelType)"
+            v-model="activityAddState[field.formFieldProps.name]"
             :field
         />
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            class="hidden"
             :loading="isAddingActivity"
-            activityAddState
+            :class="{ hidden: !showSubmitButton }"
+            block
         />
     </UForm>
 </template>

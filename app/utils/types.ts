@@ -1,39 +1,47 @@
-import type { InputDateProps, InputNumberProps, InputProps, SelectMenuProps, SelectProps } from '@nuxt/ui';
+import type {
+    CalendarProps,
+    FormFieldProps,
+    InputDateProps,
+    InputNumberProps,
+    InputProps,
+    SelectMenuProps,
+    SelectProps,
+} from '@nuxt/ui';
 
-export type FormFieldModelType = string | number | undefined;
-
-type InputField = InputProps & {
+type InputField = {
     renderAs: 'input';
+    inputProps?: Omit<InputProps, 'modelValue' | 'defaultValue'>;
 };
 
-type InputNumberField = InputNumberProps & {
+type InputNumberField = {
     renderAs: 'input-number';
+    inputProps?: InputNumberProps;
 };
 
-type FormInputDateField = InputDateProps & {
+type InputDateField = {
     renderAs: 'input-date';
+    inputProps?: InputDateProps;
+    calendarProps?: CalendarProps;
 };
 
-type FormSelectField = SelectProps & {
+type SelectField = {
     renderAs: 'select';
+    selectProps?: SelectProps;
 };
 
-type FormSelectMenuField = SelectMenuProps & {
+type SelectMenuField = {
     renderAs: 'select-menu';
+    selectProps?: Omit<SelectMenuProps, 'valueKey'>;
 };
 
 export type FormField<T> = {
-    label: string;
-    name: keyof T;
+    renderAs: string;
     debounce?: boolean;
-} & (InputField | InputNumberField | FormInputDateField | FormSelectField | FormSelectMenuField);
+    formFieldProps: Omit<FormFieldProps, 'name'> & { name: string & keyof T };
+} & (InputField | InputNumberField | InputDateField | SelectField | SelectMenuField);
 
-export type GroupFormField<T> = {
+export type FormFieldGroup<T> = {
     title: string;
     icon: string;
     fields: FormField<T>[];
 };
-
-export type FormAddInstance = {
-    submit: () => Promise<void> | undefined;
-} | null;

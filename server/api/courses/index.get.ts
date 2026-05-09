@@ -1,9 +1,5 @@
-export default defineAuthenticatedEventHandler(async () => {
-    const courses = await prisma.course.findMany({
-        orderBy: {
-            name: 'asc',
-        },
-    });
+import { findCourses } from '~~/lib/db/queries/courses';
 
-    return courses;
+export default defineAuthenticatedEventHandler(async () => {
+    return await findCourses();
 });

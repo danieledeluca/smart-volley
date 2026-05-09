@@ -1,11 +1,20 @@
+import type { FormError } from '@nuxt/ui';
+import type { H3Event } from 'h3';
 import type { ZodError } from 'zod';
 
-import { z } from 'zod';
+export default function sendZodError(event: H3Event, error: ZodError) {
+    const statusMessage = error.issues.map((issue) => `${issue.path.join('')}: ${issue.message}`).join('; ');
 
-export default function sendZodError(error: ZodError) {
-    throw createError({
-        statusCode: 422,
-        statusMessage: 'Unprocessable Content',
-        message: z.prettifyError(error),
+    const data = error.issues.map<FormError>((issue) => {
+        return {
+            name: issue.path.join(''),
+            message: issue.message,
+        };
     });
+
+    return sendError(event, createError({
+        statusCode: 422,
+        statusMessage,
+        data,
+    }));
 }

@@ -5,51 +5,46 @@ useSeoMeta({
 
 const enrollmentsStore = useEnrollmentsStore();
 const {
+    isAddingEnrollment,
     enrollments,
     enrollmentsPending,
     enrollmentsError,
     enrollmentsFiltersState,
     enrollmentsFiltersFields,
-    showEnrollmentAddForm,
-    isAddingEnrollment,
 } = storeToRefs(enrollmentsStore);
 
-const tableColumns = getEnrollmentsTableColumns(['athlete', 'season', 'activity', 'course']);
+const formRef = useTemplateRef('formRef');
 
-const formRef = useTemplateRef('form');
+const tableColumns = getEnrollmentsTableColumns(['athlete', 'season', 'activity', 'course']);
 </script>
 
 <template>
-    <UPageHeader
-        :title="$t('page.enrollments.header.title')"
-        :description="$t('page.enrollments.header.description')"
-    >
+    <UPageHeader :title="$t('page.enrollments.header.title')" :description="$t('page.enrollments.header.description')">
         <template #links>
-            <FormSlideOverAdd
-                v-model:open="showEnrollmentAddForm"
-                v-model:adding="isAddingEnrollment"
+            <FormAddSlideover
                 :title="$t('form.add_enrollment.title')"
                 :description="$t('form.add_enrollment.description')"
                 :buttonLabel="$t('page.enrollments.button.add')"
                 buttonIcon="i-lucide-list-plus"
-                :formRef
+                :isLoading="isAddingEnrollment"
+                @submit="formRef?.submit()"
             >
-                <FormAddEnrollment ref="form" />
-            </FormSlideOverAdd>
+                <FormAddEnrollment ref="formRef" />
+            </FormAddSlideover>
         </template>
     </UPageHeader>
     <ListFilters
         v-model:state="enrollmentsFiltersState"
-        :schema="enrollmentsFiltersSchema"
+        :schema="EnrollmentsFiltersSchema"
         :fields="enrollmentsFiltersFields"
         @update="enrollmentsStore.refreshEnrollments"
         @clear="enrollmentsStore.clearEnrollmentsFilters"
     />
     <ListTable
-        :isLoading="enrollmentsPending"
-        :error="enrollmentsError"
         :tableData="enrollments"
         :tableColumns
-        :onSelect="onEnrollmentSelect"
+        :isLoading="enrollmentsPending"
+        :error="enrollmentsError"
+        @select="onEnrollmentSelect"
     />
 </template>

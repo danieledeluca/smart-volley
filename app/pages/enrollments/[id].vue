@@ -5,7 +5,7 @@ useSeoMeta({
 
 const route = useRoute();
 
-const { data: enrollment, pending, error } = useLazyFetch<EnrollmentItem>(`/api/enrollments/${route.params.id}`, {
+const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${route.params.id}`, {
     headers: useRequestHeaders(['cookie']),
 });
 </script>
@@ -18,7 +18,6 @@ const { data: enrollment, pending, error } = useLazyFetch<EnrollmentItem>(`/api/
                 <div>
                     <USkeleton class="h-7 w-62.5" />
                     <div class="mt-1 flex gap-2">
-                        <USkeleton class="h-6 w-11" />
                         <USkeleton class="h-6 w-20" />
                         <USkeleton class="h-6 w-20" />
                     </div>
@@ -63,12 +62,7 @@ const { data: enrollment, pending, error } = useLazyFetch<EnrollmentItem>(`/api/
                         <UBadge
                             variant="soft"
                             color="neutral"
-                            :label="`#${enrollment.id}`"
-                        />
-                        <UBadge
-                            variant="soft"
-                            color="neutral"
-                            :label="`${enrollment.season.starter_year} - ${enrollment.season.end_year}`"
+                            :label="`${enrollment.season.startYear} - ${enrollment.season.endYear}`"
                         />
                         <UBadge
                             variant="soft"
@@ -98,47 +92,48 @@ const { data: enrollment, pending, error } = useLazyFetch<EnrollmentItem>(`/api/
             <div class="space-y-8 lg:col-span-8">
                 <ItemCard :title="$t('card.payments.title')" icon="i-lucide-credit-card">
                     <ItemCardRecord
-                        :label="$t('card.record.account_volley')"
-                        :value="formatPrice(enrollment.volley_account)"
+                        :label="$t('card.payments.record.account_volley')"
+                        :value="enrollment.volleyAccount ? formatPrice(enrollment.volleyAccount) : EMPTY_VALUE"
                     />
                     <ItemCardRecord
-                        :label="$t('card.record.volley_balance')"
-                        :value="formatPrice(enrollment.volley_balance)"
+                        :label="$t('card.payments.record.volley_balance')"
+                        :value="enrollment.volleyBalance ? formatPrice(enrollment.volleyBalance) : EMPTY_VALUE"
                     />
                     <ItemCardRecord
-                        :label="$t('card.record.volley_balance_secondary')"
-                        :value="formatPrice(enrollment.volley_balance_secondary)"
+                        :label="$t('card.payments.record.volley_balance_secondary')"
+                        :value="enrollment.volleyBalanceSecondary
+                            ? formatPrice(enrollment.volleyBalanceSecondary)
+                            : EMPTY_VALUE"
                     />
                     <ItemCardRecord
-                        :label="$t('card.record.first_installment')"
-                        :value="formatPrice(enrollment.first_installment)"
+                        :label="$t('card.payments.record.first_installment')"
+                        :value="enrollment.firstInstallment ? formatPrice(enrollment.firstInstallment) : EMPTY_VALUE"
                     />
                     <ItemCardRecord
-                        :label="$t('card.record.second_installment')"
-                        :value="formatPrice(enrollment.second_installment)"
+                        :label="$t('card.payments.record.second_installment')"
+                        :value="enrollment.secondInstallment ? formatPrice(enrollment.secondInstallment) : EMPTY_VALUE"
                     />
                     <ItemCardRecord
-                        :label="$t('card.record.third_installment')"
-                        :value="formatPrice(enrollment.third_installment)"
+                        :label="$t('card.payments.record.third_installment')"
+                        :value="enrollment.thirdInstallment ? formatPrice(enrollment.thirdInstallment) : EMPTY_VALUE"
                     />
                 </ItemCard>
-                <ItemCard title="Certificato" icon="i-lucide-briefcase-medical">
+                <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
                     <ItemCardRecord
-                        :label="$t('card.record.certificates.expiration_date')"
-                        :value="formatDate(enrollment.certificate_expiration_date?.toString())"
+                        :label="$t('card.certificate.record.expiration_date')"
+                        :value="enrollment.certificateExpirationDate
+                            ? formatDate(enrollment.certificateExpirationDate)
+                            : EMPTY_VALUE"
                     />
                     <ItemCardRecord
-                        :label="$t('card.record.certificates.download_url')"
-                        :value="enrollment.certificate_download_url
-                            ? `${enrollment.athlete.name}
-                                (${enrollment.season.starter_year}-${enrollment.season.end_year})`
-                            : EMPTY_VALUE"
+                        :label="$t('card.certificate.record.download_url')"
+                        :value="enrollment.certificateStorageKey || EMPTY_VALUE"
                     >
-                        <template v-if="enrollment.certificate_download_url">
+                        <template v-if="enrollment.certificateStorageKey">
                             <UButton
                                 variant="ghost"
                                 icon="i-lucide-download"
-                                :to="enrollment.certificate_download_url"
+                                :to="enrollment.certificateStorageKey"
                             />
                         </template>
                     </ItemCardRecord>
@@ -148,11 +143,16 @@ const { data: enrollment, pending, error } = useLazyFetch<EnrollmentItem>(`/api/
                 <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
                     <ItemCard :title="$t('card.sport.title')" icon="i-lucide-zap">
                         <ItemCardRecord
-                            :label="$t('card.record.season')"
-                            :value="`${enrollment.season.starter_year} - ${enrollment.season.end_year}`"
+                            :label="$t('card.sport.record.season')"
+                            :value="`${enrollment.season.startYear} - ${enrollment.season.endYear}`"
                         />
-                        <ItemCardRecord :label="$t('card.record.activity')" :value="enrollment.activity.name" />
-                        <ItemCardRecord :label="$t('card.record.course')" :value="enrollment.course.name" />
+                        <ItemCardRecord :label="$t('card.sport.record.activity')" :value="enrollment.activity.name" />
+                        <ItemCardRecord
+                            :label="$t('card.sport.record.course')"
+                            :value="`${enrollment.course.name} ${enrollment.course.description
+                                ? `- ${enrollment.course.description}`
+                                : ''}`"
+                        />
                     </ItemCard>
                 </div>
             </div>
