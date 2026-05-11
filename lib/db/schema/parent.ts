@@ -3,8 +3,8 @@ import { char, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'd
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../../shared/utils/constants';
 import { $t } from '../../../shared/utils/i18n';
+import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../constants';
 import { athlete } from './athlete';
 
 export const parent = pgTable('parent', {
