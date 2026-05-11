@@ -54,7 +54,7 @@ export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
                             variant: 'ghost',
                             href: `https://api.whatsapp.com/send?phone=${formatPhoneNumber(row.original.phoneNumber)}`,
                             target: '_blank',
-                            icon: 'i-ic-baseline-whatsapp',
+                            icon: 'i-simple-icons-whatsapp',
                         }),
                         h('span', undefined, row.original.phoneNumber),
                     ]);

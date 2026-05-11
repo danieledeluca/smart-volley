@@ -1,16 +1,9 @@
 /* eslint-disable style/max-len */
 export const translations = {
     auth: {
-        log_out: 'Esci',
-        sign_up: {
-            description: 'Hai già un account?',
-            submit: 'Crea un account',
-            title: 'Registrati',
-        },
+        sign_out: 'Esci',
         sing_in: {
-            description: 'Non hai un account?',
-            password_hint: 'Password dimenticata?',
-            title: 'Accedi',
+            google: 'Accedi con Google',
         },
     },
     card: {
@@ -174,12 +167,6 @@ export const translations = {
                 placeholder: 'Inserisci la città',
                 required: 'La città è obbligatoria',
             },
-            confirm_password: {
-                error: 'Le password non corrispondono',
-                label: 'Conferma password',
-                placeholder: 'Inserisci di nuovo la password',
-                required: 'La conferma password è obbligatoria',
-            },
             course_description: {
                 label: 'Descrizione corso',
                 placeholder: 'Inserisci la descrizione del corso',
@@ -201,7 +188,6 @@ export const translations = {
                 error: 'L\'email non valida',
                 label: 'Email',
                 placeholder: 'Inserisci l\'email',
-                required: 'L\'email è obbligatoria',
             },
             end_year: {
                 error: 'L\'anno di fine deve essere un anno dopo l\'anno di partenza',
@@ -236,12 +222,6 @@ export const translations = {
                 label: 'Genitore',
                 not_found: 'Genitore non trovato',
                 placeholder: 'Seleziona un genitore',
-            },
-            password: {
-                error: 'Deve essere almeno di {min} caratteri',
-                label: 'Password',
-                placeholder: 'Inserisci la password',
-                required: 'La password è obbligatoria',
             },
             phone_number: {
                 duplicate: 'Il numero cellulare esiste già',
@@ -359,14 +339,30 @@ export const translations = {
                     title: 'Iscrizioni',
                 },
                 payments: {
-                    description: 'Consulta la lista degli atleti con i dettagli dei pagamenti effettuati.',
+                    description: 'Consulta lo stato dei pagamenti effettuati.',
                     title: 'Pagamenti',
+                },
+                tooltip: 'Accedi per vedere il contenuto',
+            },
+            feature: {
+                manager: {
+                    description: 'Può visualizzare e modificare tutti i dati',
+                    title: 'Gestore',
+                },
+                viewer: {
+                    description: 'Può visualizzare i dati senza apportare modifiche',
+                    title: 'Osservatore',
                 },
             },
             hero: {
-                description: 'Smart Volley permette di consultare e gestire in modo semplice e sicuro i dati degli atleti iscritti, lo stato dei pagamenti e la validità del certificato medico.',
-                head_line: 'Smart Volley',
-                title: 'Vis et Virtus',
+                description: 'Smart Volley è la piattaforma digitale della società Vis et Virtus, pensata per semplificare la gestione degli atleti iscritti, tenere traccia delle iscrizioni e dei pagamenti, e monitorare la validità dei certificati medici.',
+                head_line: 'Vis et Virtus',
+                title: 'Smart Volley',
+            },
+            section: {
+                description: '<p>Per accedere ai contenuti della piattaforma è necessario effettuare il login con il tuo account <strong>Google</strong>.</p><p>Dopo il primo accesso, il tuo account sarà in attesa di approvazione. L\'amministratore dovrà assegnarti un ruolo prima che tu possa visualizzare i contenuti.</p>',
+                headline: 'Come funziona',
+                title: 'Benvenuto su Smart Volley',
             },
         },
         payments: {
@@ -381,7 +377,6 @@ export const translations = {
         column: {
             activity: 'Attività',
             athlete: 'Atleta',
-            // TODO: refactor
             certificate: {
                 download_url: {
                     button: 'Download',

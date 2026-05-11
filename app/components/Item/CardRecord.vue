@@ -49,7 +49,7 @@ const actionsRef = useTemplateRef('actions');
                     />
                     <UButton
                         variant="ghost"
-                        trailingIcon="i-ic-baseline-whatsapp"
+                        trailingIcon="i-simple-icons-whatsapp"
                         :to="`https://api.whatsapp.com/send?phone=${formatPhoneNumber(value)}`"
                         target="_blank"
                     />

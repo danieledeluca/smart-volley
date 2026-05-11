@@ -20,7 +20,6 @@
     "drizzle:seed": "tsx lib/db/seed.ts"
   },
   "dependencies": {
-    "@better-auth/i18n": "^1.6.9",
     "@internationalized/date": "^3.12.1",
     "@neondatabase/serverless": "^1.1.0",
     "@nuxt/eslint": "^1.15.2",
