@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import db from './db';
+import { userRole } from './db/schema';
 import env from './env';
 
 export const auth = betterAuth({
@@ -17,6 +18,15 @@ export const auth = betterAuth({
         google: {
             clientId: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
+        },
+    },
+    user: {
+        additionalFields: {
+            role: {
+                type: userRole.enumValues,
+                required: false,
+                input: false,
+            },
         },
     },
 });

@@ -1,11 +1,23 @@
+import type { auth } from '~~/lib/auth';
+
+import { inferAdditionalFields } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/vue';
 
-const authClient = createAuthClient();
+const authClient = createAuthClient({
+    plugins: [inferAdditionalFields<typeof auth>()],
+});
 
 export const useAuthStore = defineStore('auth', () => {
     const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(null);
-    const user = computed(() => session.value?.data?.user);
     const isLoading = computed(() => session.value?.isPending);
+
+    const user = computed(() => session.value?.data?.user);
+    const isAdmin = computed(() => user.value?.role === 'admin');
+    const isManager = computed(() => user.value?.role === 'manager');
+    const isViewer = computed(() => user.value?.role === 'viewer');
+
+    const canView = computed(() => isAdmin.value || isManager.value || isViewer.value);
+    const canEdit = computed(() => isAdmin.value || isManager.value);
 
     async function init() {
         const data = await authClient.useSession(useFetch);
@@ -55,8 +67,11 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         session,
-        user,
         isLoading,
+        user,
+        isAdmin,
+        canView,
+        canEdit,
         init,
         signIn,
         signOut,

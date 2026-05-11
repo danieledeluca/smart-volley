@@ -4,7 +4,7 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 const route = useRoute();
 
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { canView } = storeToRefs(authStore);
 
 const navigationMenuItems = computed<NavigationMenuItem[]>(() => {
     return [
@@ -42,7 +42,7 @@ const navigationMenuItems = computed<NavigationMenuItem[]>(() => {
             <UColorModeImage light="logo-light.png" dark="logo-dark.png" class="h-10" />
         </template>
 
-        <UNavigationMenu v-if="user" :items="navigationMenuItems" />
+        <UNavigationMenu v-if="canView" :items="navigationMenuItems" />
 
         <template #right>
             <UColorModeButton />
@@ -52,7 +52,7 @@ const navigationMenuItems = computed<NavigationMenuItem[]>(() => {
 
         <template #body>
             <UNavigationMenu
-                v-if="user"
+                v-if="canView"
                 :items="navigationMenuItems"
                 orientation="vertical"
                 class="-mx-2.5"

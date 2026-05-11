@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     if (isProtected) {
         const session = await auth.api.getSession({ headers: event.headers });
 
-        if (!session) {
+        if (!session?.user.role) {
             await sendRedirect(event, '/', 302);
         }
     }

@@ -2,35 +2,35 @@
 import type { PageCardProps, PageFeatureProps } from '@nuxt/ui';
 
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { user, canView } = storeToRefs(authStore);
 
 const cards: PageCardProps[] = [
     {
         title: $t('page.home.card.athletes.title'),
         description: $t('page.home.card.athletes.description'),
         icon: 'i-lucide-users',
-        to: user.value ? '/athletes' : undefined,
+        to: canView.value ? '/athletes' : undefined,
         variant: 'subtle',
     },
     {
         title: $t('page.home.card.enrollments.title'),
         description: $t('page.home.card.enrollments.description'),
         icon: 'i-lucide-list',
-        to: user.value ? '/enrollments' : undefined,
+        to: canView.value ? '/enrollments' : undefined,
         variant: 'subtle',
     },
     {
         title: $t('page.home.card.payments.title'),
         description: $t('page.home.card.payments.description'),
         icon: 'i-lucide-credit-card',
-        to: user.value ? '/payments' : undefined,
+        to: canView.value ? '/payments' : undefined,
         variant: 'subtle',
     },
     {
         title: $t('page.home.card.certificates.title'),
         description: $t('page.home.card.certificates.description'),
         icon: 'i-lucide-briefcase-medical',
-        to: user.value ? '/certificates' : undefined,
+        to: canView.value ? '/certificates' : undefined,
         variant: 'subtle',
     },
 ];
