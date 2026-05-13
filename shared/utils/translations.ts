@@ -68,7 +68,7 @@ export const translations = {
         add_activity: {
             description: 'Compila i campi per creare una nuova attività.',
             success: 'Attività aggiunta con successo',
-            title: 'Aggiungi nuova attività',
+            title: 'Nuova attività',
         },
         add_athlete: {
             description: 'Compila i campi per creare un nuovo atleta.',
@@ -78,12 +78,12 @@ export const translations = {
                 personal_information: 'Informazioni personali',
             },
             success: 'Atleta aggiunto con successo',
-            title: 'Aggiungi nuovo atleta',
+            title: 'Nuovo atleta',
         },
         add_course: {
             description: 'Compila i campi per creare un nuovo corso.',
             success: 'Corso aggiunto con successo',
-            title: 'Aggiungi nuovo corso',
+            title: 'Nuovo corso',
         },
         add_enrollment: {
             description: 'Compila i campi per creare una nuova iscrizione.',
@@ -96,7 +96,7 @@ export const translations = {
                 season: 'Stagione',
             },
             success: 'Iscrizione aggiunta con successo',
-            title: 'Aggiungi nuova iscrizione',
+            title: 'Nuova iscrizione',
         },
         add_parent: {
             description: 'Compila i campi per creare un nuovo genitore.',
@@ -105,12 +105,12 @@ export const translations = {
                 personal_information: 'Informazioni personali',
             },
             success: 'Genitore aggiunto con successo',
-            title: 'Aggiungi nuovo genitore',
+            title: 'Nuovo genitore',
         },
         add_season: {
             description: 'Compila i campi per creare una nuova stagione.',
             success: 'Stagione aggiunta con successo',
-            title: 'Aggiungi nuova stagione',
+            title: 'Nuova stagione',
         },
         button: {
             add: 'Aggiungi',
@@ -282,45 +282,36 @@ export const translations = {
         payments: 'Pagamenti',
     },
     page: {
+        dashboard: {
+            title: 'Dashboard',
+        },
         athlete: {
             button: {
-                back: 'Torna alla lista degli atleti',
+                back: 'Lista atleti',
             },
             error: 'Atleta non trovato',
             title: 'Dettagli atleta',
         },
         athletes: {
             button: {
-                add: 'Aggiungi nuovo atleta',
-            },
-            header: {
-                description: 'Una panoramica completa di tutti gli atleti iscritti alla società, con informazioni di contatto sempre aggiornate, come numero di cellulare ed email, per restare facilmente in contatto e gestire ogni esigenza della squadra.',
-                title: 'Elenco atleti',
+                add: 'Nuovo atleta',
             },
             title: 'Atleti',
         },
         certificates: {
-            header: {
-                description: 'Controlla rapidamente lo stato dei certificati medici degli atleti, con informazioni sulla data di scadenza e link diretti per scaricare i documenti, assicurando la regolarità di tutte le iscrizioni.',
-                title: 'Certificati medici',
-            },
             title: 'Certificati medici',
         },
         enrollment: {
             button: {
                 athlete: 'Vedi scheda atleta',
-                back: 'Torna alla lista delle iscrizioni',
+                back: 'Lista iscrizioni',
             },
             error: 'Iscrizione non trovata',
             title: 'Dettagli iscrizione',
         },
         enrollments: {
             button: {
-                add: 'Aggiungi nuova iscrizione',
-            },
-            header: {
-                description: 'Tutte le iscrizioni degli atleti in un unico posto: consulta le stagioni di partecipazione, le attività e i corsi assegnati, per avere sotto controllo la partecipazione e la pianificazione delle squadre.',
-                title: 'Dettagli iscrizioni',
+                add: 'Nuova iscrizione',
             },
             title: 'Iscrizioni',
         },
@@ -366,10 +357,6 @@ export const translations = {
             },
         },
         payments: {
-            header: {
-                description: 'Gestisci e controlla lo storico dei pagamenti delle iscrizioni, con dettagli sui saldi, le scadenze e le transazioni, per avere sempre una visione chiara delle finanze della società.',
-                title: 'Pagamenti e saldi',
-            },
             title: 'Pagamenti',
         },
     },
@@ -394,7 +381,7 @@ export const translations = {
             course: 'Corso',
             email: 'Email',
             first_installment: 'Prima rata',
-            name: 'Nome e cognome',
+            name: 'Nome',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',
             second_installment: 'Seconda rata',
@@ -410,7 +397,7 @@ export const translations = {
         },
     },
     toast: {
-        clipboard: '{name} copiato negli appunti',
+        copy: '{name} copiato negli appunti',
     },
 } as const;
 

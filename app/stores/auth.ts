@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
     async function signIn() {
         await authClient.signIn.social({
             provider: 'google',
-            callbackURL: '/',
+            callbackURL: '/dashboard',
             errorCallbackURL: '/error',
             fetchOptions: {
                 headers: getHeaders(),

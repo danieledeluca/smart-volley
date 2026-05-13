@@ -19,7 +19,7 @@ const {
     onSelect?: (event: Event, row: TableRow<T>) => void;
 }> ();
 
-const tableRef = useTemplateRef('table');
+const tableRef = useTemplateRef('tableRef');
 
 const pagination = ref<PaginationState>({
     pageIndex: 0,
@@ -43,21 +43,22 @@ watch(() => tableData, () => {
 
 <template>
     <div class="not-empty:mt-8">
-        <USkeleton v-if="isLoading" class="h-116.75" />
+        <USkeleton v-if="isLoading && (tableData?.length || 0) === 0" class="h-116.75" />
         <UAlert
-            v-else-if="error"
+            v-if="error"
             :title="error.statusMessage"
             color="error"
             icon="i-lucide-circle-x"
         />
         <template v-else-if="tableData">
             <UTable
-                ref="table"
+                ref="tableRef"
                 v-model:pagination="pagination"
                 class="striped-table rounded-md border border-accented has-[+*]:rounded-b-none"
                 :data="tableData"
                 :columns="tableColumns"
                 :paginationOptions="{ getPaginationRowModel: getPaginationRowModel() }"
+                :loading="isLoading"
                 @select="onSelect"
             />
             <div

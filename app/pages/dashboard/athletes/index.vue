@@ -19,32 +19,32 @@ const tableColumns = getAthletesTableColumns(['name', 'phoneNumber', 'email']);
 </script>
 
 <template>
-    <UPageHeader :title="$t('page.athletes.header.title')" :description="$t('page.athletes.header.description')">
-        <template #links>
+    <DashboardMain :title="$t('page.athletes.title')">
+        <template #right>
             <FormAddSlideover
                 :title="$t('form.add_athlete.title')"
                 :description="$t('form.add_athlete.description')"
                 :buttonLabel="$t('page.athletes.button.add')"
-                buttonIcon="i-lucide-user-plus"
+                buttonIcon="i-lucide-plus"
                 :isLoading="isAddingAthlete"
                 @submit="formRef?.submit"
             >
                 <FormAddAthlete ref="formRef" />
             </FormAddSlideover>
         </template>
-    </UPageHeader>
-    <ListFilters
-        v-model:state="athletesFiltersState"
-        :schema="AthletesFiltersSchema"
-        :fields="athletesFiltersFields"
-        @update="athletesStore.refreshAthletes"
-        @clear="athletesStore.clearAthletesFilters"
-    />
-    <ListTable
-        :tableData="athletes"
-        :tableColumns
-        :isLoading="athletesPending"
-        :error="athletesError"
-        @select="(_event, row) => navigateTo(`/athletes/${row.original.id}`)"
-    />
+        <ListFilters
+            v-model:state="athletesFiltersState"
+            :schema="AthletesFiltersSchema"
+            :fields="athletesFiltersFields"
+            @update="athletesStore.refreshAthletes"
+            @clear="athletesStore.clearAthletesFilters"
+        />
+        <ListTable
+            :tableData="athletes"
+            :tableColumns
+            :isLoading="athletesPending"
+            :error="athletesError"
+            @select="(_event, row) => navigateTo(`/dashboard/athletes/${row.original.id}`)"
+        />
+    </DashboardMain>
 </template>

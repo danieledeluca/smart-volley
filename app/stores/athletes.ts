@@ -113,7 +113,7 @@ export const useAthletesStore = defineStore('athletes', () => {
                     },
                     inputProps: {
                         placeholder: $t('form.field.name.placeholder'),
-                        icon: 'i-lucide-user',
+                        icon: 'i-lucide-search',
                     },
                 },
             ],

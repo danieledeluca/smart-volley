@@ -12,7 +12,7 @@ const { label, value, showCopyButton = false, showPhoneNumberButtons = false, sh
 const { copy, copied } = useClipboard();
 const toast = useToast();
 
-const actionsRef = useTemplateRef('actions');
+const actionsRef = useTemplateRef('actionsRef');
 </script>
 
 <template>
@@ -27,15 +27,15 @@ const actionsRef = useTemplateRef('actions');
             >
                 {{ value }}
             </div>
-            <div ref="actions" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
+            <div ref="actionsRef" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
                 <UButton
                     v-if="showCopyButton"
                     variant="ghost"
-                    :icon="copied ? 'i-lucide-clipboard-check' : 'i-lucide-clipboard'"
+                    :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
                     @click="async () => {
                         await copy(value);
                         toast.add({
-                            title: $t('toast.clipboard', { name: label }),
+                            title: $t('toast.copy', { name: label }),
                             color: 'success',
                             icon: 'i-lucide-circle-check',
                         });

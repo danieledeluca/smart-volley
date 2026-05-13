@@ -30,4 +30,9 @@ export default defineNuxtConfig({
             ],
         },
     },
+    routeRules: {
+        '/dashboard/**': {
+            appLayout: 'dashboard',
+        },
+    },
 });

@@ -1,41 +1,25 @@
 <script setup lang="ts">
-import type { ButtonProps, DropdownMenuItem } from '@nuxt/ui';
+import type { ButtonProps, DropdownMenuItem, DropdownMenuProps } from '@nuxt/ui';
 
-const { variant = 'ghost', color = 'neutral', size = 'md', showTextOnMobile = true } = defineProps<{
-    variant?: ButtonProps['variant'];
-    color?: ButtonProps['color'];
-    size?: ButtonProps['size'];
-    showTextOnMobile?: boolean;
+const { dropdownMenu, button } = defineProps<{
+    dropdownMenu?: DropdownMenuProps;
+    button?: ButtonProps;
 }>();
 
 const authStore = useAuthStore();
 const { user, isLoading } = storeToRefs(authStore);
 
 const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
-    if (user.value) {
-        return [
-            {
-                label: user.value.name,
-                icon: 'i-lucide-user',
-                type: 'label',
-                class: 'md:hidden',
+    return [
+        {
+            label: $t('auth.sign_out'),
+            icon: 'i-lucide-log-out',
+            color: 'error',
+            async onSelect() {
+                await authStore.signOut();
             },
-            {
-                type: 'separator',
-                class: 'md:hidden',
-            },
-            {
-                label: $t('auth.sign_out'),
-                icon: 'i-lucide-log-out',
-                color: 'error',
-                async onSelect() {
-                    await authStore.signOut();
-                },
-            },
-        ];
-    }
-
-    return [];
+        },
+    ];
 });
 </script>
 
@@ -45,11 +29,11 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
         :items="dropdownMenuItems"
         :modal="false"
         :content="{ align: 'end' }"
+        v-bind="dropdownMenu"
     >
         <UButton
-            :color
-            :variant
-            :size
+            :label="user.name"
+            v-bind="button"
             :avatar="user.image ? {
                 src: user.image,
                 alt: user.name,
@@ -57,19 +41,14 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
             } : undefined"
             :icon="!user.image ? 'i-lucide-user' : undefined"
             :loading="isLoading"
-        >
-            <span :class="{ 'max-lg:hidden': !showTextOnMobile }">{{ user.name }}</span>
-        </UButton>
+        />
     </UDropdownMenu>
     <UButton
         v-else
-        :color
-        :variant
-        :size
+        :label="$t('auth.sing_in.google')"
+        v-bind="button"
         icon="i-simple-icons-google"
         :loading="isLoading"
         @click="authStore.signIn()"
-    >
-        <span :class="{ 'max-lg:hidden': !showTextOnMobile }">{{ $t('auth.sing_in.google') }}</span>
-    </UButton>
+    />
 </template>

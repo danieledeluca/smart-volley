@@ -284,5 +284,5 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
 }
 
 export function onEnrollmentSelect(_event: Event, row: TableRow<FindEnrollments>) {
-    return navigateTo(`/enrollments/${row.original.id}`);
+    return navigateTo(`/dashboard/enrollments/${row.original.id}`);
 }

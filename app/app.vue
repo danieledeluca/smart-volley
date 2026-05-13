@@ -13,12 +13,8 @@ await authStore.init();
 
 <template>
     <UApp :locale="it">
-        <AppHeader />
-        <UMain class="py-8">
-            <UContainer>
-                <NuxtPage />
-            </UContainer>
-        </UMain>
-        <AppFooter />
+        <NuxtLayout>
+            <NuxtPage />
+        </NuxtLayout>
     </UApp>
 </template>

@@ -162,7 +162,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     },
                     inputProps: {
                         placeholder: $t('form.field.name.placeholder'),
-                        icon: 'i-lucide-user',
+                        icon: 'i-lucide-search',
                     },
                 },
             ],
