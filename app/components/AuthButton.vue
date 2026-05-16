@@ -49,6 +49,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
         v-bind="button"
         icon="i-simple-icons-google"
         :loading="isLoading"
+        :loadingAuto="true"
         @click="authStore.signIn()"
     />
 </template>
