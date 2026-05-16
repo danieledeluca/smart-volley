@@ -8,6 +8,8 @@ import z from 'zod';
 import type { findEnrollments } from '../queries/enrollments';
 
 import { $t } from '../../../shared/utils/i18n';
+import { formatFileSize } from '../../utils';
+import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
 import { activity } from './activity';
 import { athlete } from './athlete';
 import { course } from './course';
@@ -66,8 +68,15 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     secondInstallment: NumericSchema,
     thirdInstallment: NumericSchema,
     certificateExpirationDate: z.string().optional(),
+    certificateStorageKey: z.instanceof(File)
+        .refine((file) => file.size <= FILE_MAX_SIZE, {
+            message: $t('form.field.certificate_storage_key.error.size', { size: formatFileSize(FILE_MAX_SIZE) }),
+        })
+        .refine((file) => FILE_ACCEPTED_TYPES.includes(file.type), {
+            message: $t('form.field.certificate_storage_key.error.type'),
+        })
+        .nullish(),
 }).omit({
-    certificateStorageKey: true,
     createdAt: true,
     updatedAt: true,
 });

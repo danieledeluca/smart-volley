@@ -1,5 +1,7 @@
 import type {
+    ButtonProps,
     CalendarProps,
+    FileUploadProps,
     FormFieldProps,
     InputDateProps,
     InputNumberProps,
@@ -24,6 +26,12 @@ type InputDateField = {
     calendarProps?: CalendarProps;
 };
 
+type InputFileField = {
+    renderAs: 'input-file';
+    fileUploadProps?: FileUploadProps;
+    buttonProps?: ButtonProps;
+};
+
 type SelectField = {
     renderAs: 'select';
     selectProps?: SelectProps;
@@ -38,7 +46,7 @@ export type FormField<T> = {
     renderAs: string;
     debounce?: boolean;
     formFieldProps: Omit<FormFieldProps, 'name'> & { name: string & keyof T };
-} & (InputField | InputNumberField | InputDateField | SelectField | SelectMenuField);
+} & (InputField | InputNumberField | InputDateField | InputFileField | SelectField | SelectMenuField);
 
 export type FormFieldGroup<T> = {
     title: string;

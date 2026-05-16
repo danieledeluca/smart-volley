@@ -15,5 +15,11 @@ export default defineAppConfig({
                 root: '[&:has(+[data-slot="error"])_[data-slot="base"]]:ring-error',
             },
         },
+        fileUpload: {
+            slots: {
+                root: 'has-[+[data-slot="error"]]:**:ring-error',
+                base: 'ring ring-inset ring-accented border-none!',
+            },
+        },
     },
 });

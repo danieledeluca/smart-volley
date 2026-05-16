@@ -42,7 +42,7 @@ const cards: PageCardProps[] = [
 </script>
 
 <template>
-    <DashboardMain :title="$t('page.dashboard.title')">
+    <DashboardPanel :title="$t('page.dashboard.title')">
         <UPageGrid>
             <UPageCard
                 v-for="(card, index) in cards"
@@ -50,5 +50,5 @@ const cards: PageCardProps[] = [
                 v-bind="card"
             />
         </UPageGrid>
-    </DashboardMain>
+    </DashboardPanel>
 </template>

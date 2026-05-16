@@ -17,16 +17,17 @@ export default defineNuxtConfig({
     vite: {
         optimizeDeps: {
             include: [
+                '@internationalized/date',
+                '@tanstack/vue-table',
                 '@vue/devtools-core',
                 '@vue/devtools-kit',
-                'better-auth/vue',
-                'zod',
                 '@vueuse/core',
-                '@tanstack/vue-table',
-                '@internationalized/date',
+                'better-auth/client/plugins',
+                'better-auth/vue',
                 'drizzle-orm',
                 'drizzle-orm/pg-core',
                 'drizzle-zod',
+                'zod',
             ],
         },
     },

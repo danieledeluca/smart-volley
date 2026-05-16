@@ -17,7 +17,9 @@ const { title } = defineProps<{
             </UDashboardNavbar>
         </template>
         <template #body>
-            <slot />
+            <div>
+                <slot />
+            </div>
         </template>
     </UDashboardPanel>
 </template>

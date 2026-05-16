@@ -8,7 +8,7 @@ import z from 'zod';
 import type { findAthlete, findAthletes } from '../queries/athletes';
 
 import { $t } from '../../../shared/utils/i18n';
-import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../constants';
+import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../utils/constants';
 import { enrollment } from './enrollment';
 import { parent } from './parent';
 

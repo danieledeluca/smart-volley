@@ -16,7 +16,7 @@ const tableColumns = getEnrollmentsTableColumns(['athlete', 'certificateExpirati
 </script>
 
 <template>
-    <DashboardMain :title="$t('page.certificates.title')">
+    <DashboardPanel :title="$t('page.certificates.title')">
         <ListFilters
             v-model:state="enrollmentsFiltersState"
             :schema="EnrollmentsFiltersSchema"
@@ -31,5 +31,5 @@ const tableColumns = getEnrollmentsTableColumns(['athlete', 'certificateExpirati
             :error="enrollmentsError"
             :onSelect="onEnrollmentSelect"
         />
-    </DashboardMain>
+    </DashboardPanel>
 </template>

@@ -68,9 +68,9 @@ export const useParentsStore = defineStore('parents', () => {
                     color: 'error',
                 });
             }
+        } finally {
+            isAddingParent.value = false;
         }
-
-        isAddingParent.value = false;
     };
 
     const parentAddFields = computed<FormFieldGroup<InsertParent>[]>(() => {

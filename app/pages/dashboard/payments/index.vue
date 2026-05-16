@@ -24,7 +24,7 @@ const tableColumns = getEnrollmentsTableColumns([
 </script>
 
 <template>
-    <DashboardMain :title="$t('page.payments.title')">
+    <DashboardPanel :title="$t('page.payments.title')">
         <ListFilters
             v-model:state="enrollmentsFiltersState"
             :schema="EnrollmentsFiltersSchema"
@@ -39,5 +39,5 @@ const tableColumns = getEnrollmentsTableColumns([
             :error="enrollmentsError"
             :onSelect="onEnrollmentSelect"
         />
-    </DashboardMain>
+    </DashboardPanel>
 </template>

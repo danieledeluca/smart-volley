@@ -67,9 +67,9 @@ export const useCoursesStore = defineStore('courses', () => {
                     color: 'error',
                 });
             }
+        } finally {
+            isAddingCourse.value = false;
         }
-
-        isAddingCourse.value = false;
     };
 
     const courseAddFields = computed<FormField<InsertCourse>[]>(() => {

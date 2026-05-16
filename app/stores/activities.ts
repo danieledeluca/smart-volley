@@ -65,9 +65,9 @@ export const useActivitiesStore = defineStore('activities', () => {
                     color: 'error',
                 });
             }
+        } finally {
+            isAddingActivity.value = false;
         }
-
-        isAddingActivity.value = false;
     };
 
     const activityAddFields = computed<FormField<InsertActivity>[]>(() => {

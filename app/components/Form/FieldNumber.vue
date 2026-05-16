@@ -7,7 +7,7 @@ const { inputProps } = defineProps<{
 
 const model = defineModel<string | number>();
 
-const { emitFormBlur } = useFormField({ name: inputProps?.name });
+const { emitFormBlur } = useFormField();
 
 const numberModel = computed({
     get: () => Number(model.value),

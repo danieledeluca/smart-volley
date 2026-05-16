@@ -11,7 +11,7 @@ useSeoMeta({ title });
 </script>
 
 <template>
-    <DashboardMain :title>
+    <DashboardPanel :title>
         <template #right>
             <UButton
                 icon="i-lucide-arrow-left"
@@ -20,7 +20,7 @@ useSeoMeta({ title });
             />
         </template>
         <template v-if="pending">
-            <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
+            <div class="mb-6 flex gap-4 max-md:flex-col sm:mb-8 md:items-center">
                 <div class="flex gap-3">
                     <USkeleton class="size-12 rounded-full" />
                     <div>
@@ -31,12 +31,9 @@ useSeoMeta({ title });
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-4 md:ml-auto">
-                    <USkeleton class="h-8 w-full max-md:w-full md:w-40" />
-                </div>
             </div>
-            <div class="grid gap-8 lg:grid-cols-12">
-                <div class="space-y-8 lg:col-span-8">
+            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
+                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
                     <div class="@container">
                         <USkeleton class="h-83 @max-2xl:h-141.5" />
                     </div>
@@ -44,7 +41,7 @@ useSeoMeta({ title });
                         <USkeleton class="h-44.5 @max-2xl:h-62.5" />
                     </div>
                 </div>
-                <div class="space-y-8 lg:col-span-4">
+                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
                     <div class="@container">
                         <USkeleton class="h-62.75 @max-2xl:h-80.75" />
                     </div>
@@ -58,7 +55,7 @@ useSeoMeta({ title });
             icon="i-lucide-circle-x"
         />
         <template v-else-if="enrollment">
-            <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
+            <div class="mb-6 flex gap-4 max-md:flex-col sm:mb-8 md:items-center">
                 <UUser
                     :name="enrollment.athlete.name"
                     :avatar="getAvatar(enrollment.athlete.id.toString(), 150)"
@@ -81,8 +78,8 @@ useSeoMeta({ title });
                     </template>
                 </UUser>
             </div>
-            <div class="grid gap-8 lg:grid-cols-12">
-                <div class="space-y-8 lg:col-span-8">
+            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
+                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
                     <ItemCard :title="$t('card.payments.title')" icon="i-lucide-credit-card">
                         <ItemCardRecord
                             :label="$t('card.payments.record.account_volley')"
@@ -117,6 +114,7 @@ useSeoMeta({ title });
                                 : EMPTY_VALUE"
                         />
                     </ItemCard>
+
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
                         <ItemCardRecord
                             :label="$t('card.certificate.record.expiration_date')"
@@ -127,38 +125,29 @@ useSeoMeta({ title });
                         <ItemCardRecord
                             :label="$t('card.certificate.record.download_url')"
                             :value="enrollment.certificateStorageKey || EMPTY_VALUE"
-                        >
-                            <template v-if="enrollment.certificateStorageKey">
-                                <UButton
-                                    variant="ghost"
-                                    icon="i-lucide-download"
-                                    :to="enrollment.certificateStorageKey"
-                                />
-                            </template>
-                        </ItemCardRecord>
+                            :showDownloadButton="true"
+                        />
                     </ItemCard>
                 </div>
-                <div class="lg:col-span-4">
-                    <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
-                        <ItemCard :title="$t('card.sport.title')" icon="i-lucide-zap">
-                            <ItemCardRecord
-                                :label="$t('card.sport.record.season')"
-                                :value="`${enrollment.season.startYear} - ${enrollment.season.endYear}`"
-                            />
-                            <ItemCardRecord
-                                :label="$t('card.sport.record.activity')"
-                                :value="enrollment.activity.name"
-                            />
-                            <ItemCardRecord
-                                :label="$t('card.sport.record.course')"
-                                :value="`${enrollment.course.name} ${enrollment.course.description
-                                    ? `- ${enrollment.course.description}`
-                                    : ''}`"
-                            />
-                        </ItemCard>
-                    </div>
+                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
+                    <ItemCard :title="$t('card.sport.title')" icon="i-lucide-zap">
+                        <ItemCardRecord
+                            :label="$t('card.sport.record.season')"
+                            :value="`${enrollment.season.startYear} - ${enrollment.season.endYear}`"
+                        />
+                        <ItemCardRecord
+                            :label="$t('card.sport.record.activity')"
+                            :value="enrollment.activity.name"
+                        />
+                        <ItemCardRecord
+                            :label="$t('card.sport.record.course')"
+                            :value="`${enrollment.course.name} ${enrollment.course.description
+                                ? `- ${enrollment.course.description}`
+                                : ''}`"
+                        />
+                    </ItemCard>
                 </div>
             </div>
         </template>
-    </DashboardMain>
+    </DashboardPanel>
 </template>

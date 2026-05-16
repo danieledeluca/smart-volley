@@ -42,7 +42,7 @@ watch(() => tableData, () => {
 </script>
 
 <template>
-    <div class="not-empty:mt-8">
+    <div class="not-empty:mt-6 sm:not-empty:mt-8">
         <USkeleton v-if="isLoading && (tableData?.length || 0) === 0" class="h-116.75" />
         <UAlert
             v-if="error"

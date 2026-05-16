@@ -4,7 +4,8 @@ import { insertEnrollment } from '~~/lib/db/queries/enrollments';
 import { InsertEnrollment } from '~~/lib/db/schema';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const result = await readValidatedBody(event, InsertEnrollment.safeParse);
+    const formData = await readFormData(event);
+    const result = InsertEnrollment.safeParse(Object.fromEntries(formData.entries()));
 
     if (!result.success) {
         return sendZodError(event, result.error);

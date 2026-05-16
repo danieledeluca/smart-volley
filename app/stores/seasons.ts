@@ -66,9 +66,9 @@ export const useSeasonsStore = defineStore('seasons', () => {
                     color: 'error',
                 });
             }
+        } finally {
+            isAddingSeason.value = false;
         }
-
-        isAddingSeason.value = false;
     };
 
     const seasonAddFields = computed<FormField<InsertSeason>[]>(() => {

@@ -135,7 +135,6 @@ export const translations = {
                 required: 'L\'indirizzo è obbligatorio',
             },
             athlete_id: {
-                label: 'Atleta',
                 not_found: 'Atleta non trovato',
                 placeholder: 'Seleziona un\'atleta',
                 required: 'L\'atleta è obbligatorio',
@@ -151,7 +150,7 @@ export const translations = {
                 required: 'Il luogo di nascita è obbligatorio',
             },
             certificate_expiration_date: {
-                label: 'Data scadenza certificato',
+                label: 'Data scadenza',
             },
             certificate_status: {
                 item: {
@@ -161,6 +160,14 @@ export const translations = {
                 },
                 label: 'Stato del certificato',
                 placeholder: 'Seleziona uno stato',
+            },
+            certificate_storage_key: {
+                description: 'PNG, JPG o WebP (max. {size})',
+                error: {
+                    size: 'Il file è troppo grande, scegli un file più piccolo di {size}',
+                    type: 'Il file non è valido, scegli un file valido (PNG, JPG o WebP)',
+                    upload: 'Errore nel caricamento del certificato',
+                },
             },
             city: {
                 label: 'Città',
@@ -198,6 +205,12 @@ export const translations = {
             enrollment: {
                 duplicate: 'L\'iscrizione per questo/a atleta, stagione, attività e corso esiste già',
             },
+            file_upload: {
+                button: {
+                    label: 'Seleziona file',
+                },
+                label: 'Trascina il file qui',
+            },
             first_installment: {
                 label: 'Prima rata',
                 placeholder: 'Inserisci la prima rata',
@@ -219,7 +232,6 @@ export const translations = {
                 required: 'Il nome è obbligatorio',
             },
             parent_id: {
-                label: 'Genitore',
                 not_found: 'Genitore non trovato',
                 placeholder: 'Seleziona un genitore',
             },
@@ -282,9 +294,6 @@ export const translations = {
         payments: 'Pagamenti',
     },
     page: {
-        dashboard: {
-            title: 'Dashboard',
-        },
         athlete: {
             button: {
                 back: 'Lista atleti',
@@ -300,6 +309,9 @@ export const translations = {
         },
         certificates: {
             title: 'Certificati medici',
+        },
+        dashboard: {
+            title: 'Dashboard',
         },
         enrollment: {
             button: {

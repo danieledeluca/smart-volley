@@ -43,10 +43,11 @@ export function $t(key: string, params?: Record<string, string>): string {
         return (obj as Record<string, unknown>)[k];
     }, translations) as string;
 
-    if (!params)
+    if (!params) {
         return value ?? key;
+    }
 
-    return value.replace(/\{(\w+)\}/g, (_, param) => {
+    return value?.replace(/\{(\w+)\}/g, (_, param) => {
         return params[param] ?? `{${param}}`;
     });
 }

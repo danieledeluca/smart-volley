@@ -13,12 +13,12 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
 </script>
 
 <template>
-    <DashboardMain :title>
+    <DashboardPanel :title>
         <template #right>
             <UButton icon="i-lucide-arrow-left" to="/dashboard/athletes" :label="$t('page.athlete.button.back')" />
         </template>
         <template v-if="pending">
-            <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
+            <div class="mb-6 flex gap-4 max-md:flex-col sm:mb-8 md:items-center">
                 <div class="flex gap-3">
                     <USkeleton class="size-12 rounded-full" />
                     <div>
@@ -29,8 +29,8 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                     </div>
                 </div>
             </div>
-            <div class="grid gap-8 lg:grid-cols-12">
-                <div class="space-y-8 lg:col-span-8">
+            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
+                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
                     <div class="@container">
                         <USkeleton class="h-62.5 @max-2xl:h-97" />
                     </div>
@@ -38,7 +38,7 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                         <USkeleton class="h-110 @max-2xl:h-119" />
                     </div>
                 </div>
-                <div class="space-y-8 lg:col-span-4">
+                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
                     <div class="@container">
                         <USkeleton class="h-62.75 @max-2xl:h-101" />
                     </div>
@@ -68,8 +68,8 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                     </template>
                 </UUser>
             </div>
-            <div class="grid gap-8 lg:grid-cols-12">
-                <div class="space-y-8 lg:col-span-8">
+            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
+                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
                     <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-id-card">
                         <ItemCardRecord :label="$t('card.athlete.record.name')" :value="athlete.name" />
                         <ItemCardRecord
@@ -97,55 +97,53 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                         />
                     </ItemCard>
                 </div>
-                <div class="lg:col-span-4">
-                    <div class="space-y-8 lg:sticky lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
-                        <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
-                            <ItemCardRecord :label="$t('card.address_contacts.record.city')" :value="athlete.city" />
-                            <ItemCardRecord
-                                :label="$t('card.address_contacts.record.address')"
-                                :value="athlete.address"
-                            />
-                            <ItemCardRecord
-                                v-if="athlete.phoneNumber"
-                                :label="$t('card.address_contacts.record.phone_number')"
-                                :value="athlete.phoneNumber"
-                                :showPhoneNumberButtons="true"
-                            />
-                            <ItemCardRecord
-                                v-if="athlete.email"
-                                :label="$t('card.address_contacts.record.email')"
-                                :value="athlete.email"
-                                :showEmailButton="true"
-                            />
-                        </ItemCard>
+                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
+                    <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
+                        <ItemCardRecord :label="$t('card.address_contacts.record.city')" :value="athlete.city" />
+                        <ItemCardRecord
+                            :label="$t('card.address_contacts.record.address')"
+                            :value="athlete.address"
+                        />
+                        <ItemCardRecord
+                            v-if="athlete.phoneNumber"
+                            :label="$t('card.address_contacts.record.phone_number')"
+                            :value="athlete.phoneNumber"
+                            :showPhoneNumberButtons="true"
+                        />
+                        <ItemCardRecord
+                            v-if="athlete.email"
+                            :label="$t('card.address_contacts.record.email')"
+                            :value="athlete.email"
+                            :showEmailButton="true"
+                        />
+                    </ItemCard>
 
-                        <ItemCard
-                            v-if="athlete.parent"
-                            :title="$t('card.parent.title')"
-                            icon="i-lucide-user"
-                        >
-                            <ItemCardRecord :label="$t('card.parent.record.name')" :value="athlete.parent.name" />
-                            <ItemCardRecord
-                                :label="$t('card.parent.record.fiscal_code')"
-                                :value="athlete.parent.fiscalCode"
-                                :showCopyButton="true"
-                            />
-                            <ItemCardRecord
-                                v-if="athlete.parent.phoneNumber"
-                                :label="$t('card.parent.record.phone_number')"
-                                :value="athlete.parent.phoneNumber"
-                                :showPhoneNumberButtons="true"
-                            />
-                            <ItemCardRecord
-                                v-if="athlete.parent.email"
-                                :label="$t('card.parent.record.email')"
-                                :value="athlete.parent.email"
-                                :showEmailButton="true"
-                            />
-                        </ItemCard>
-                    </div>
+                    <ItemCard
+                        v-if="athlete.parent"
+                        :title="$t('card.parent.title')"
+                        icon="i-lucide-user"
+                    >
+                        <ItemCardRecord :label="$t('card.parent.record.name')" :value="athlete.parent.name" />
+                        <ItemCardRecord
+                            :label="$t('card.parent.record.fiscal_code')"
+                            :value="athlete.parent.fiscalCode"
+                            :showCopyButton="true"
+                        />
+                        <ItemCardRecord
+                            v-if="athlete.parent.phoneNumber"
+                            :label="$t('card.parent.record.phone_number')"
+                            :value="athlete.parent.phoneNumber"
+                            :showPhoneNumberButtons="true"
+                        />
+                        <ItemCardRecord
+                            v-if="athlete.parent.email"
+                            :label="$t('card.parent.record.email')"
+                            :value="athlete.parent.email"
+                            :showEmailButton="true"
+                        />
+                    </ItemCard>
                 </div>
             </div>
         </template>
-    </DashboardMain>
+    </DashboardPanel>
 </template>

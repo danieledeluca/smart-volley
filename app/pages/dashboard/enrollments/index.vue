@@ -19,7 +19,7 @@ const tableColumns = getEnrollmentsTableColumns(['athlete', 'season', 'activity'
 </script>
 
 <template>
-    <DashboardMain :title="$t('page.enrollments.title')">
+    <DashboardPanel :title="$t('page.enrollments.title')">
         <template #right>
             <FormAddSlideover
                 :title="$t('form.add_enrollment.title')"
@@ -46,5 +46,5 @@ const tableColumns = getEnrollmentsTableColumns(['athlete', 'season', 'activity'
             :error="enrollmentsError"
             @select="onEnrollmentSelect"
         />
-    </DashboardMain>
+    </DashboardPanel>
 </template>

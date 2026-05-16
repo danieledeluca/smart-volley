@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core';
 
-const { label, value, showCopyButton = false, showPhoneNumberButtons = false, showEmailButton = false } = defineProps<{
+const { label, value, showCopyButton, showPhoneNumberButtons, showEmailButton, showDownloadButton } = defineProps<{
     label: string;
     value: string;
     showCopyButton?: boolean;
     showPhoneNumberButtons?: boolean;
     showEmailButton?: boolean;
+    showDownloadButton?: boolean;
 }>();
 
 const { copy, copied } = useClipboard();
@@ -59,6 +60,13 @@ const actionsRef = useTemplateRef('actionsRef');
                     variant="ghost"
                     trailingIcon="i-lucide-mail"
                     :to="`mailto:${value}`"
+                />
+                <UButton
+                    v-if="showDownloadButton"
+                    variant="ghost"
+                    trailingIcon="i-lucide-download"
+                    :to="value"
+                    target="_blank"
                 />
                 <slot />
             </div>

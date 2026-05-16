@@ -19,7 +19,7 @@ const tableColumns = getAthletesTableColumns(['name', 'phoneNumber', 'email']);
 </script>
 
 <template>
-    <DashboardMain :title="$t('page.athletes.title')">
+    <DashboardPanel :title="$t('page.athletes.title')">
         <template #right>
             <FormAddSlideover
                 :title="$t('form.add_athlete.title')"
@@ -46,5 +46,5 @@ const tableColumns = getAthletesTableColumns(['name', 'phoneNumber', 'email']);
             :error="athletesError"
             @select="(_event, row) => navigateTo(`/dashboard/athletes/${row.original.id}`)"
         />
-    </DashboardMain>
+    </DashboardPanel>
 </template>

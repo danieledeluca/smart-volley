@@ -3,7 +3,7 @@
 import { Faker, it } from '@faker-js/faker';
 
 import { formatPhoneNumber } from '../../app/utils/format';
-import db from './index';
+import db from './';
 import * as schema from './schema';
 
 const faker = new Faker({

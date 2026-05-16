@@ -96,9 +96,9 @@ export const useAthletesStore = defineStore('athletes', () => {
                     color: 'error',
                 });
             }
+        } finally {
+            isAddingAthlete.value = false;
         }
-
-        isAddingAthlete.value = false;
     };
 
     const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[][]>(() => {
@@ -242,7 +242,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                     {
                         renderAs: 'select-menu',
                         formFieldProps: {
-                            label: $t('form.field.parent_id.label'),
                             name: 'parentId',
                         },
                         selectProps: {

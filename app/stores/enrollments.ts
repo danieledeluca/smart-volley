@@ -2,6 +2,9 @@ import type { FormError, FormSubmitEvent, InputNumberProps, SelectItem } from '@
 import type { InsertEnrollment } from '~~/lib/db/schema';
 import type { FetchError } from 'ofetch';
 
+import { formatFileSize } from '~~/lib/utils';
+import { FILE_MAX_SIZE } from '~~/lib/utils/constants';
+
 import type {
     CertificateStatusEnum,
     EnrollmentsFiltersSchema,
@@ -48,6 +51,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         secondInstallment: undefined,
         thirdInstallment: undefined,
         certificateExpirationDate: undefined,
+        certificateStorageKey: undefined,
     };
 
     const enrollmentsFiltersState = reactive({ ...enrollmentsFiltersInitialState });
@@ -83,7 +87,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
 
             await $csrfFetch('/api/enrollments', {
                 method: 'POST',
-                body: event.data,
+                body: toFormData(event.data),
             });
 
             clearEnrollmentAddForm();
@@ -103,9 +107,9 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     color: 'error',
                 });
             }
+        } finally {
+            isAddingEnrollment.value = false;
         }
-
-        isAddingEnrollment.value = false;
     };
 
     const missingPaymentItems: Array<SelectItem & { value: MissingPaymentEnum }> = [
@@ -259,7 +263,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     {
                         renderAs: 'select-menu',
                         formFieldProps: {
-                            label: $t('form.field.athlete_id.label'),
                             name: 'athleteId',
                             required: true,
                         },
@@ -279,7 +282,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     {
                         renderAs: 'select-menu',
                         formFieldProps: {
-                            label: $t('form.field.season_id.label'),
                             name: 'seasonId',
                             required: true,
                         },
@@ -299,7 +301,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     {
                         renderAs: 'select-menu',
                         formFieldProps: {
-                            label: $t('form.field.activity_id.label'),
                             name: 'activityId',
                             required: true,
                         },
@@ -319,7 +320,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     {
                         renderAs: 'select-menu',
                         formFieldProps: {
-                            label: $t('form.field.course_id.label'),
                             name: 'courseId',
                             required: true,
                         },
@@ -414,6 +414,24 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 title: $t('form.add_enrollment.group.certificate'),
                 icon: 'i-lucide-briefcase-medical',
                 fields: [
+                    {
+                        renderAs: 'input-file',
+                        formFieldProps: {
+                            name: 'certificateStorageKey',
+                        },
+                        fileUploadProps: {
+                            description: $t(
+                                'form.field.certificate_storage_key.description',
+                                { size: formatFileSize(FILE_MAX_SIZE) },
+                            ),
+                            accept: 'image/*',
+                            interactive: false,
+                        },
+                        buttonProps: {
+                            variant: 'subtle',
+                            color: 'neutral',
+                        },
+                    },
                     {
                         renderAs: 'input-date',
                         formFieldProps: {

@@ -21,14 +21,18 @@ const model = defineModel<T[keyof T]>();
                     v-if="field.renderAs === 'input-number'"
                     v-model="model"
                     :inputProps="field.inputProps"
-                    class="w-full"
                 />
                 <FormFieldDate
                     v-if="field.renderAs === 'input-date'"
                     v-model="model"
                     :inputProps="field.inputProps"
                     :calendarProps="field.calendarProps"
-                    class="w-full"
+                />
+                <FormFieldFile
+                    v-if="field.renderAs === 'input-file'"
+                    v-model="model"
+                    :fileUploadProps="field.fileUploadProps"
+                    :buttonProps="field.buttonProps"
                 />
                 <USelect
                     v-if="field.renderAs === 'select'"

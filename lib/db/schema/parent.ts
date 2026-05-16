@@ -4,7 +4,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
 import { $t } from '../../../shared/utils/i18n';
-import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../constants';
+import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../utils/constants';
 import { athlete } from './athlete';
 
 export const parent = pgTable('parent', {

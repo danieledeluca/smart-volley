@@ -10,7 +10,7 @@ const { inputProps } = defineProps<{
 
 const model = defineModel<string>();
 
-const { emitFormBlur } = useFormField({ name: inputProps?.name });
+const { emitFormBlur } = useFormField();
 
 function stringToCalendarDate(value: string | undefined) {
     if (!value) {
@@ -56,12 +56,7 @@ const dateModel = computed({
     >
         <template #trailing>
             <UPopover>
-                <UButton
-                    color="neutral"
-                    variant="link"
-                    size="sm"
-                    icon="i-lucide-calendar"
-                />
+                <UButton color="neutral" variant="link" icon="i-lucide-calendar" />
 
                 <template #content>
                     <UCalendar v-model="dateModel" v-bind="calendarProps" class="p-2" />
