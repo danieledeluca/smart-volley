@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 import { Faker, it } from '@faker-js/faker';
 
 import { formatPhoneNumber } from '../../app/utils/format';
@@ -223,7 +222,12 @@ async function main() {
         }))
     ).filter((enrollment) => enrollment !== null);
 
-    await db.insert(schema.enrollment).values(enrollments);
+    await db.insert(schema.enrollment).values(enrollments.map((enrollment) => {
+        return {
+            ...enrollment,
+            certificateStorageKey: null,
+        };
+    }));
     console.log('Enrollments inserted successfully');
 };
 
