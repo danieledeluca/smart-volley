@@ -13,6 +13,7 @@ const {
 } = storeToRefs(enrollmentsStore);
 
 const tableColumns = getEnrollmentsTableColumns([
+    'id',
     'athlete',
     'volleyAccount',
     'volleyBalance',

@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core';
 
-const { label, value, showCopyButton, showPhoneNumberButtons, showEmailButton, showDownloadButton } = defineProps<{
+const { label, value, showCopyButton, showPhoneNumberButtons, showEmailButton } = defineProps<{
     label: string;
-    value: string;
+    value?: string;
     showCopyButton?: boolean;
     showPhoneNumberButtons?: boolean;
     showEmailButton?: boolean;
-    showDownloadButton?: boolean;
 }>();
+
+const slots = defineSlots();
 
 const { copy, copied } = useClipboard();
 const toast = useToast();
@@ -21,14 +22,16 @@ const actionsRef = useTemplateRef('actionsRef');
         <div class="mb-1 truncate text-sm text-muted">
             {{ label }}
         </div>
-        <div class="relative flex">
-            <div
-                class="truncate"
-                :style="{ 'max-width': `calc(100% - (var(--spacing) * 2) - ${actionsRef?.clientWidth || 0}px)` }"
-            >
-                {{ value }}
-            </div>
-            <div ref="actionsRef" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
+        <div v-if="value || !!slots.default" class="relative flex">
+            <slot>
+                <div
+                    class="truncate"
+                    :style="{ 'max-width': `calc(100% - (var(--spacing) * 2) - ${actionsRef?.clientWidth || 0}px)` }"
+                >
+                    {{ value }}
+                </div>
+            </slot>
+            <div v-if="value" ref="actionsRef" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
                 <UButton
                     v-if="showCopyButton"
                     variant="ghost"
@@ -61,14 +64,6 @@ const actionsRef = useTemplateRef('actionsRef');
                     trailingIcon="i-lucide-mail"
                     :to="`mailto:${value}`"
                 />
-                <UButton
-                    v-if="showDownloadButton"
-                    variant="ghost"
-                    trailingIcon="i-lucide-download"
-                    :to="value"
-                    target="_blank"
-                />
-                <slot />
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ const {
 
 const formRef = useTemplateRef('formRef');
 
-const tableColumns = getAthletesTableColumns(['name', 'phoneNumber', 'email']);
+const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
 </script>
 
 <template>

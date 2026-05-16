@@ -80,6 +80,17 @@ export async function findEnrollment(enrollmentId: number) {
     });
 }
 
+export async function findEnrollmentCertificateStorageKey(enrollmentId: number) {
+    const result = await db.query.enrollment.findFirst({
+        where: eq(enrollment.id, enrollmentId),
+        columns: {
+            certificateStorageKey: true,
+        },
+    });
+
+    return result?.certificateStorageKey;
+}
+
 export async function insertEnrollment(data: InsertEnrollment) {
     let certificateStorageKey: string | undefined;
 

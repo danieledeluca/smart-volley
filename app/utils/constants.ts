@@ -1,1 +1,1 @@
-export const EMPTY_VALUE = 'N/A';
+export const EMPTY_VALUE = '—';

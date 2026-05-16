@@ -8,6 +8,8 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
 const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollment.title'));
 
 useSeoMeta({ title });
+
+const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.certificateExpirationDate || null));
 </script>
 
 <template>
@@ -116,17 +118,20 @@ useSeoMeta({ title });
                     </ItemCard>
 
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
-                        <ItemCardRecord
-                            :label="$t('card.certificate.record.expiration_date')"
-                            :value="enrollment.certificateExpirationDate
-                                ? formatDate(enrollment.certificateExpirationDate)
-                                : EMPTY_VALUE"
-                        />
-                        <ItemCardRecord
-                            :label="$t('card.certificate.record.download_url')"
-                            :value="enrollment.certificateStorageKey || EMPTY_VALUE"
-                            :showDownloadButton="true"
-                        />
+                        <ItemCardRecord :label="$t('card.certificate.record.expiration_date')">
+                            <CertificateDate />
+                        </ItemCardRecord>
+                        <ItemCardRecord :label="$t('card.certificate.record.download_url')" :value="EMPTY_VALUE">
+                            <UButton
+                                v-if="enrollment.certificateStorageKey"
+                                variant="soft"
+                                :label="$t('form.button.download')"
+                                icon="i-lucide-download"
+                                :to="enrollment.certificateStorageKey"
+                                size="xs"
+                                target="_blank"
+                            />
+                        </ItemCardRecord>
                     </ItemCard>
                 </div>
                 <div class="space-y-6 sm:space-y-8 lg:col-span-4">

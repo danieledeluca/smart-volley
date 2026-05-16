@@ -12,7 +12,12 @@ const {
     enrollmentsFiltersFields,
 } = storeToRefs(enrollmentsStore);
 
-const tableColumns = getEnrollmentsTableColumns(['athlete', 'certificateExpirationDate', 'certificateStorageKey']);
+const tableColumns = getEnrollmentsTableColumns([
+    'id',
+    'athlete',
+    'certificateExpirationDate',
+    'certificateStorageKey',
+]);
 </script>
 
 <template>

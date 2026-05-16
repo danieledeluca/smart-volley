@@ -115,6 +115,7 @@ export const translations = {
         button: {
             add: 'Aggiungi',
             cancel: 'Annulla',
+            download: 'Download',
         },
         field: {
             activity_id: {
@@ -290,6 +291,7 @@ export const translations = {
     menu: {
         athletes: 'Atleti',
         certificates: 'Certificati medici',
+        dashboard: 'Dashboard',
         enrollments: 'Iscrizioni',
         payments: 'Pagamenti',
     },
@@ -315,7 +317,6 @@ export const translations = {
         },
         enrollment: {
             button: {
-                athlete: 'Vedi scheda atleta',
                 back: 'Lista iscrizioni',
             },
             error: 'Iscrizione non trovata',
@@ -376,23 +377,12 @@ export const translations = {
         column: {
             activity: 'Attività',
             athlete: 'Atleta',
-            certificate: {
-                download_url: {
-                    button: 'Download',
-                    label: 'Download certificato',
-                },
-                expiration_date: {
-                    label: 'Scadenza certificato',
-                    status: {
-                        expired: 'Scaduto',
-                        missing: 'Mancante',
-                        valid: 'Valido',
-                    },
-                },
-            },
+            certificate_download_url: 'Download certificato',
+            certificate_expiration_date: 'Scadenza certificato',
             course: 'Corso',
             email: 'Email',
             first_installment: 'Prima rata',
+            id: 'ID',
             name: 'Nome',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',

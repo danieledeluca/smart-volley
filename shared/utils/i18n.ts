@@ -40,7 +40,7 @@ export function $t<K extends string>(
 ): string;
 export function $t(key: string, params?: Record<string, string>): string {
     const value = key.split('.').reduce<unknown>((obj, k) => {
-        return (obj as Record<string, unknown>)[k];
+        return (obj as Record<string, unknown>)?.[k];
     }, translations) as string;
 
     if (!params) {

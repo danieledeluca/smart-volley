@@ -1,33 +1,19 @@
-import type { BadgeProps, TableColumn, TableRow } from '@nuxt/ui';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { FindAthlete, FindAthletes, FindEnrollments } from '~~/lib/db/schema';
 
-import UBadge from '@nuxt/ui/components/Badge.vue';
 import UButton from '@nuxt/ui/components/Button.vue';
 import UUser from '@nuxt/ui/components/User.vue';
 
-import type { CertificateStatusEnum } from '#imports';
-
 import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
-
-export function getCertificateDateStatus(date: string | null): CertificateStatusEnum {
-    if (!date) {
-        return 'missing';
-    }
-
-    const dateTime = new Date(date).getTime();
-    const currentTime = Date.now();
-
-    if (dateTime < currentTime) {
-        return 'expired';
-    }
-
-    return 'valid';
-}
 
 export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
     type TableColumns = Partial<Record<keyof FindAthletes, TableColumn<FindAthletes>>>;
 
     const tableColumns: TableColumns = {
+        id: {
+            accessorKey: 'id',
+            header: $t('table.column.id'),
+        },
         name: {
             accessorKey: 'name',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
@@ -109,7 +95,7 @@ export function getAthleteEnrollmentsTableColumns(keys: (keyof FindAthlete['enro
             header: $t('table.column.course'),
             cell: ({ row }) => {
                 return h('div', [
-                    h('span', {}, row.original.course.name),
+                    h('span', undefined, row.original.course.name),
                     h(
                         'span',
                         { class: 'text-xs' },
@@ -127,6 +113,10 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
     type TableColumns = Partial<Record<keyof FindEnrollments, TableColumn<FindEnrollments>>>;
 
     const tableColumns: TableColumns = {
+        id: {
+            accessorKey: 'id',
+            header: $t('table.column.id'),
+        },
         athlete: {
             accessorKey: 'athlete',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.athlete') }),
@@ -150,14 +140,14 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
             accessorKey: 'course',
             header: $t('table.column.course'),
             cell: ({ row }) => {
-                return h('div', [
-                    h('span', {}, row.original.course.name),
-                    h(
-                        'span',
-                        { class: 'text-xs' },
-                        row.original.course.description ? ` - ${row.original.course.description}` : '',
-                    ),
-                ]);
+                if (row.original.course.description) {
+                    return [
+                        h('span', undefined, row.original.course.name),
+                        h('span', { class: 'text-xs' }, ` - ${row.original.course.description}`),
+                    ];
+                }
+
+                return row.original.course.name;
             },
         },
         volleyAccount: {
@@ -230,52 +220,29 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
         },
         certificateExpirationDate: {
             accessorKey: 'certificate_expiration_date',
-            header: $t('table.column.certificate.expiration_date.label'),
-            cell: ({ row }) => {
-                const status = getCertificateDateStatus(row.original.certificateExpirationDate);
-                const colorMap: Record<CertificateStatusEnum, string> = {
-                    valid: 'text-success',
-                    missing: 'text-warning',
-                    expired: 'text-error',
-                };
-
-                const badgeColorMap: Record<CertificateStatusEnum, BadgeProps['color']> = {
-                    valid: 'success',
-                    missing: 'warning',
-                    expired: 'error',
-                };
-
-                const badgeLabelMap: Record<CertificateStatusEnum, string> = {
-                    valid: $t('table.column.certificate.expiration_date.status.valid'),
-                    missing: $t('table.column.certificate.expiration_date.status.missing'),
-                    expired: $t('table.column.certificate.expiration_date.status.expired'),
-                };
-
-                return h('div', { class: 'flex gap-2 items-center' }, [
-                    h(UBadge, { color: badgeColorMap[status], variant: 'soft', label: badgeLabelMap[status] }),
-                    h('span', {
-                        class: `${colorMap[status]}`,
-                    }, row.original.certificateExpirationDate
-                        ? formatDate(row.original.certificateExpirationDate)
-                        : EMPTY_VALUE),
-                ]);
-            },
+            header: $t('table.column.certificate_expiration_date'),
+            cell: ({ row }) => getCertificateDateNode(row.original.certificateExpirationDate),
         },
         certificateStorageKey: {
             accessorKey: 'certificate_download_url',
-            header: $t('table.column.certificate.download_url.label'),
+            header: $t('table.column.certificate_download_url'),
             cell: ({ row }) => {
-                if (!row.original.certificateStorageKey) {
-                    return EMPTY_VALUE;
+                if (row.original.certificateStorageKey) {
+                    return h(UButton, {
+                        color: 'primary',
+                        variant: 'soft',
+                        label: $t('form.button.download'),
+                        icon: 'i-lucide-download',
+                        loadingAuto: true,
+                        onClick: async () => {
+                            const { url } = await $fetch(`/api/enrollments/${row.original.id}/certificate`);
+
+                            window.open(url, '_blank');
+                        },
+                    });
                 }
 
-                return h(UButton, {
-                    color: 'primary',
-                    variant: 'soft',
-                    to: row.original.certificateStorageKey,
-                    icon: 'i-lucide-download',
-                    label: $t('table.column.certificate.download_url.button'),
-                });
+                return EMPTY_VALUE;
             },
         },
     };

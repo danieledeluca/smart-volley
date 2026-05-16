@@ -92,7 +92,7 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                         <ListTable
                             :tableData="athlete.enrollments"
                             :tableColumns
-                            class="col-span-2 mt-0! min-w-0 **:data-[slot=root]:rounded-t-none"
+                            class="col-span-2 mt-0! **:data-[slot=root]:rounded-t-none"
                             :onSelect="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />
                     </ItemCard>
@@ -105,16 +105,14 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                             :value="athlete.address"
                         />
                         <ItemCardRecord
-                            v-if="athlete.phoneNumber"
                             :label="$t('card.address_contacts.record.phone_number')"
-                            :value="athlete.phoneNumber"
-                            :showPhoneNumberButtons="true"
+                            :value="athlete.phoneNumber || EMPTY_VALUE"
+                            :showPhoneNumberButtons="Boolean(athlete.phoneNumber)"
                         />
                         <ItemCardRecord
-                            v-if="athlete.email"
                             :label="$t('card.address_contacts.record.email')"
-                            :value="athlete.email"
-                            :showEmailButton="true"
+                            :value="athlete.email || EMPTY_VALUE"
+                            :showEmailButton="Boolean(athlete.email)"
                         />
                     </ItemCard>
 
@@ -130,16 +128,14 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                             :showCopyButton="true"
                         />
                         <ItemCardRecord
-                            v-if="athlete.parent.phoneNumber"
                             :label="$t('card.parent.record.phone_number')"
-                            :value="athlete.parent.phoneNumber"
-                            :showPhoneNumberButtons="true"
+                            :value="athlete.parent.phoneNumber || EMPTY_VALUE"
+                            :showPhoneNumberButtons="Boolean(athlete.parent.phoneNumber)"
                         />
                         <ItemCardRecord
-                            v-if="athlete.parent.email"
                             :label="$t('card.parent.record.email')"
-                            :value="athlete.parent.email"
-                            :showEmailButton="true"
+                            :value="athlete.parent.email || EMPTY_VALUE"
+                            :showEmailButton="Boolean(athlete.parent.email)"
                         />
                     </ItemCard>
                 </div>

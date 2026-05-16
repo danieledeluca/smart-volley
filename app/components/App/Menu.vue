@@ -8,7 +8,7 @@ const route = useRoute();
 const navigationMenuItems = computed<NavigationMenuItem[]>(() => {
     return [
         {
-            label: 'Dashboard',
+            label: $t('menu.dashboard'),
             to: '/dashboard',
             icon: 'i-lucide-layout-dashboard',
         },
