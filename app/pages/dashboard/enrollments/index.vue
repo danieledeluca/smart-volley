@@ -3,6 +3,9 @@ useSeoMeta({
     title: $t('page.enrollments.title'),
 });
 
+const authStore = useAuthStore();
+const { canEdit } = storeToRefs(authStore);
+
 const enrollmentsStore = useEnrollmentsStore();
 const {
     isAddingEnrollment,
@@ -20,7 +23,7 @@ const tableColumns = getEnrollmentsTableColumns(['id', 'athlete', 'season', 'act
 
 <template>
     <DashboardPanel :title="$t('page.enrollments.title')">
-        <template #right>
+        <template v-if="canEdit" #right>
             <FormAddSlideover
                 :title="$t('form.add_enrollment.title')"
                 :description="$t('form.add_enrollment.description')"

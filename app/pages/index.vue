@@ -2,7 +2,7 @@
 import type { PageFeatureProps } from '@nuxt/ui';
 
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { user, canView } = storeToRefs(authStore);
 
 const features: PageFeatureProps[] = [
     {
@@ -27,7 +27,7 @@ const features: PageFeatureProps[] = [
         <template #links>
             <AuthButton v-if="!user" size="xl" />
             <UButton
-                v-else
+                v-else-if="canView"
                 label="Dashboard"
                 to="/dashboard"
                 icon="i-lucide-layout-dashboard"

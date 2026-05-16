@@ -3,6 +3,9 @@ useSeoMeta({
     title: $t('page.athletes.title'),
 });
 
+const authStore = useAuthStore();
+const { canEdit } = storeToRefs(authStore);
+
 const athletesStore = useAthletesStore();
 const {
     isAddingAthlete,
@@ -20,7 +23,7 @@ const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'emai
 
 <template>
     <DashboardPanel :title="$t('page.athletes.title')">
-        <template #right>
+        <template v-if="canEdit" #right>
             <FormAddSlideover
                 :title="$t('form.add_athlete.title')"
                 :description="$t('form.add_athlete.description')"
