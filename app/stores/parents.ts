@@ -88,7 +88,6 @@ export const useParentsStore = defineStore('parents', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.name.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -100,7 +99,6 @@ export const useParentsStore = defineStore('parents', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.fiscal_code.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                 ],
@@ -117,7 +115,6 @@ export const useParentsStore = defineStore('parents', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.phone_number.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -128,7 +125,6 @@ export const useParentsStore = defineStore('parents', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.email.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                 ],

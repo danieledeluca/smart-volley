@@ -179,7 +179,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     },
                     selectProps: {
                         placeholder: $t('form.field.season_id.placeholder'),
-                        variant: 'subtle',
                         icon: 'i-lucide-calendar',
                         items: seasonsItems.value,
                         loading: seasonsPending.value,
@@ -193,7 +192,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     },
                     selectProps: {
                         placeholder: $t('form.field.activity_id.placeholder'),
-                        variant: 'subtle',
                         icon: 'i-lucide-zap',
                         items: activitiesItems.value,
                         loading: activitiesPending.value,
@@ -207,7 +205,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     },
                     selectProps: {
                         placeholder: $t('form.field.course_id.placeholder'),
-                        variant: 'subtle',
                         icon: 'i-lucide-dumbbell',
                         items: coursesItems.value,
                         loading: coursesPending.value,
@@ -221,7 +218,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     },
                     selectProps: {
                         placeholder: $t('form.field.missing_payment.placeholder'),
-                        variant: 'subtle',
                         icon: 'i-lucide-credit-card',
                         items: missingPaymentItems,
                     },
@@ -234,7 +230,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     },
                     selectProps: {
                         placeholder: $t('form.field.certificate_status.placeholder'),
-                        variant: 'subtle',
                         icon: 'i-lucide-briefcase-medical',
                         items: certificateStatusItems,
                     },
@@ -268,7 +263,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         selectProps: {
                             placeholder: $t('form.field.athlete_id.placeholder'),
-                            variant: 'subtle',
                             items: athletesItems.value,
                             loading: athletesPending.value,
                         },
@@ -287,7 +281,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         selectProps: {
                             placeholder: $t('form.field.season_id.placeholder'),
-                            variant: 'subtle',
                             items: seasonsItems.value,
                             loading: seasonsPending.value,
                         },
@@ -306,7 +299,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         selectProps: {
                             placeholder: $t('form.field.activity_id.placeholder'),
-                            variant: 'subtle',
                             items: activitiesItems.value,
                             loading: activitiesPending.value,
                         },
@@ -325,7 +317,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         selectProps: {
                             placeholder: $t('form.field.course_id.placeholder'),
-                            variant: 'subtle',
                             items: coursesItems.value,
                             loading: coursesPending.value,
                         },
@@ -344,7 +335,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.volley_account.placeholder'),
-                            variant: 'subtle',
                             ...paymentFieldsProps,
                         },
                     },
@@ -356,7 +346,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.volley_balance.placeholder'),
-                            variant: 'subtle',
                             ...paymentFieldsProps,
                         },
                     },
@@ -368,7 +357,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.volley_balance_secondary.placeholder'),
-                            variant: 'subtle',
                             ...paymentFieldsProps,
                         },
                     },
@@ -380,7 +368,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.first_installment.placeholder'),
-                            variant: 'subtle',
                             ...paymentFieldsProps,
                         },
                     },
@@ -392,7 +379,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.second_installment.placeholder'),
-                            variant: 'subtle',
                             ...paymentFieldsProps,
                         },
                     },
@@ -404,7 +390,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.third_installment.placeholder'),
-                            variant: 'subtle',
                             ...paymentFieldsProps,
                         },
                     },
@@ -437,9 +422,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                         formFieldProps: {
                             label: $t('form.field.certificate_expiration_date.label'),
                             name: 'certificateExpirationDate',
-                        },
-                        inputProps: {
-                            variant: 'subtle',
                         },
                     },
                 ],

@@ -83,7 +83,6 @@ export const useCoursesStore = defineStore('courses', () => {
                 },
                 inputProps: {
                     placeholder: $t('form.field.course_name.placeholder'),
-                    variant: 'subtle',
                 },
             },
             {
@@ -94,7 +93,6 @@ export const useCoursesStore = defineStore('courses', () => {
                 },
                 inputProps: {
                     placeholder: $t('form.field.course_description.placeholder'),
-                    variant: 'subtle',
                 },
             },
         ];

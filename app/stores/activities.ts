@@ -81,7 +81,6 @@ export const useActivitiesStore = defineStore('activities', () => {
                 },
                 inputProps: {
                     placeholder: $t('form.field.activity_name.placeholder'),
-                    variant: 'subtle',
                 },
             },
         ];

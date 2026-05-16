@@ -82,7 +82,6 @@ export const useSeasonsStore = defineStore('seasons', () => {
                 },
                 inputProps: {
                     placeholder: $t('form.field.start_year.placeholder'),
-                    variant: 'subtle',
                     formatOptions: {
                         useGrouping: false,
                     },
@@ -97,7 +96,6 @@ export const useSeasonsStore = defineStore('seasons', () => {
                 },
                 inputProps: {
                     placeholder: $t('form.field.end_year.placeholder'),
-                    variant: 'subtle',
                     formatOptions: {
                         useGrouping: false,
                     },

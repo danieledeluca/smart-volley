@@ -138,7 +138,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.name.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -149,11 +148,9 @@ export const useAthletesStore = defineStore('athletes', () => {
                             required: true,
                         },
                         inputProps: {
-                            variant: 'subtle',
                             maxValue: maxDate,
                         },
                         calendarProps: {
-                            variant: 'soft',
                             maxValue: maxDate,
                         },
                     },
@@ -166,7 +163,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.birthplace.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -178,7 +174,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.fiscal_code.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                 ],
@@ -196,7 +191,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.city.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -208,7 +202,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.address.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -219,7 +212,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.phone_number.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                     {
@@ -230,7 +222,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         inputProps: {
                             placeholder: $t('form.field.email.placeholder'),
-                            variant: 'subtle',
                         },
                     },
                 ],
@@ -246,7 +237,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                         },
                         selectProps: {
                             placeholder: $t('form.field.parent_id.placeholder'),
-                            variant: 'subtle',
                             items: parentsItems.value,
                             loading: parentsPending.value,
                         },
