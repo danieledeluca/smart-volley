@@ -8,7 +8,7 @@ export default function defineAuthenticatedEventHandler<T>(handler: (event: H3Ev
             headers: event.headers,
         });
 
-        if (!session) {
+        if (!session?.user.role) {
             throw createError({
                 statusCode: 401,
                 statusMessage: 'Unauthorized',
