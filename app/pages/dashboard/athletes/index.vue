@@ -8,7 +8,7 @@ const { canEdit } = storeToRefs(authStore);
 
 const athletesStore = useAthletesStore();
 const {
-    isAddingAthlete,
+    isLoading,
     athletes,
     athletesPending,
     athletesError,
@@ -29,7 +29,7 @@ const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'emai
                 :description="$t('form.add_athlete.description')"
                 :buttonLabel="$t('page.athletes.button.add')"
                 buttonIcon="i-lucide-plus"
-                :isLoading="isAddingAthlete"
+                :isLoading
                 @submit="formRef?.submit"
             >
                 <FormAddAthlete ref="formRef" />

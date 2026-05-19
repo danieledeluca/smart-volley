@@ -118,8 +118,8 @@ const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.
                     </ItemCard>
 
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
-                        <ItemCardRecord :label="$t('card.certificate.record.expiration_date')">
-                            <CertificateDate />
+                        <ItemCardRecord :label="$t('card.certificate.record.expiration_date')" :value="EMPTY_VALUE">
+                            <CertificateDate v-if="enrollment.certificateExpirationDate" />
                         </ItemCardRecord>
                         <ItemCardRecord :label="$t('card.certificate.record.download_url')" :value="EMPTY_VALUE">
                             <UButton

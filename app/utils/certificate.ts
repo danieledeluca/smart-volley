@@ -51,7 +51,11 @@ export function getCertificateDateBadgeNode(date: string | null) {
         expired: $t('form.field.certificate_status.item.expired'),
     };
 
-    return h(UBadge, { color: badgeColorMap[status], variant: 'soft', label: badgeLabelMap[status] });
+    return h(UBadge, {
+        color: badgeColorMap[status],
+        variant: 'subtle',
+        label: badgeLabelMap[status],
+    });
 }
 
 export function getCertificateDateNode(date: string | null) {

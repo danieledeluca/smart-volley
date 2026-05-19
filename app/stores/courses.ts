@@ -6,7 +6,7 @@ export const useCoursesStore = defineStore('courses', () => {
     const { $csrfFetch } = useNuxtApp();
     const toast = useToast();
 
-    const isAddingCourse = ref(false);
+    const isLoading = ref(false);
     const addingCourseErrors = ref<FormError[]>([]);
 
     const courseAddInitialState: Partial<InsertCourse> = {
@@ -43,7 +43,7 @@ export const useCoursesStore = defineStore('courses', () => {
 
     const addCourse = async (event: FormSubmitEvent<InsertCourse>) => {
         try {
-            isAddingCourse.value = true;
+            isLoading.value = true;
 
             await $csrfFetch('/api/courses', {
                 method: 'POST',
@@ -70,7 +70,7 @@ export const useCoursesStore = defineStore('courses', () => {
                 });
             }
         } finally {
-            isAddingCourse.value = false;
+            isLoading.value = false;
         }
     };
 
@@ -101,7 +101,7 @@ export const useCoursesStore = defineStore('courses', () => {
     });
 
     return {
-        isAddingCourse,
+        isLoading,
         addingCourseErrors,
         courses,
         coursesItems,

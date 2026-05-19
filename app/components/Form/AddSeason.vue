@@ -6,7 +6,7 @@ const { showSubmitButton = false } = defineProps<{
 }>();
 
 const seasonsStore = useSeasonsStore();
-const { isAddingSeason, addingSeasonErrors, seasonAddState, seasonAddFields } = storeToRefs(seasonsStore);
+const { isLoading, addingSeasonErrors, seasonAddState, seasonAddFields } = storeToRefs(seasonsStore);
 
 const formRef = useTemplateRef('formRef');
 
@@ -36,7 +36,7 @@ defineExpose({
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            :loading="isAddingSeason"
+            :loading="isLoading"
             :class="{ hidden: !showSubmitButton }"
             block
         />

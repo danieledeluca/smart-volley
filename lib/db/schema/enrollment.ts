@@ -31,6 +31,7 @@ export const enrollment = pgTable('enrollment', {
     certificateStorageKey: text(),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
+    deletedAt: timestamp(),
 }, (table) => [
     unique().on(table.athleteId, table.seasonId, table.activityId, table.courseId),
 ]);
@@ -79,6 +80,7 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
 }).omit({
     createdAt: true,
     updatedAt: true,
+    deletedAt: true,
 });
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;

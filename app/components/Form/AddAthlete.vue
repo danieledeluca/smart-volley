@@ -8,8 +8,13 @@ const { showSubmitButton = false } = defineProps<{
 const athletesStore = useAthletesStore();
 const parentsStore = useParentsStore();
 
-const { isAddingAthlete, addingAthleteErrors, athleteAddState, athleteAddFields } = storeToRefs(athletesStore);
-const { isAddingParent } = storeToRefs(parentsStore);
+const {
+    isLoading: isAthletesLoading,
+    addingAthleteErrors,
+    athleteAddState,
+    athleteAddFields,
+} = storeToRefs(athletesStore);
+const { isLoading: isParentsLoading } = storeToRefs(parentsStore);
 
 const athleteFormRef = useTemplateRef('athleteFormRef');
 const parentFormRef = useTemplateRef('parentFormRef');
@@ -48,7 +53,7 @@ defineExpose({
                         :title="$t('form.add_parent.title')"
                         :description="$t('form.add_parent.description')"
                         :buttonLabel="$t('form.add_parent.title')"
-                        :isLoading="isAddingParent"
+                        :isLoading="isParentsLoading"
                         @submit="parentFormRef?.[0]?.submit()"
                     >
                         <FormAddParent ref="parentFormRef" />
@@ -59,7 +64,7 @@ defineExpose({
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            :loading="isAddingAthlete"
+            :loading="isAthletesLoading"
             :class="{ hidden: !showSubmitButton }"
             block
         />

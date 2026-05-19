@@ -12,15 +12,15 @@ const activitiesStore = useActivitiesStore();
 const coursesStore = useCoursesStore();
 
 const {
-    isAddingEnrollment,
+    isLoading: isEnrollmentsLoading,
     addingEnrollmentErrors,
     enrollmentAddState,
     enrollmentAddFields,
 } = storeToRefs(enrollmentsStore);
-const { isAddingAthlete } = storeToRefs(athletesStore);
-const { isAddingSeason } = storeToRefs(seasonsStore);
-const { isAddingActivity } = storeToRefs(activitiesStore);
-const { isAddingCourse } = storeToRefs(coursesStore);
+const { isLoading: isAthletesLoading } = storeToRefs(athletesStore);
+const { isLoading: isSeasonsLoading } = storeToRefs(seasonsStore);
+const { isLoading: isActivitiesLoading } = storeToRefs(activitiesStore);
+const { isLoading: isCoursesLoading } = storeToRefs(coursesStore);
 
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 const athleteFormRef = useTemplateRef('athleteFormRef');
@@ -62,7 +62,7 @@ defineExpose({
                         :title="$t('form.add_athlete.title')"
                         :description="$t('form.add_athlete.description')"
                         :buttonLabel="$t('form.add_athlete.title')"
-                        :isLoading="isAddingAthlete"
+                        :isLoading="isAthletesLoading"
                         @submit="athleteFormRef?.[0]?.submit"
                     >
                         <FormAddAthlete ref="athleteFormRef" />
@@ -73,7 +73,7 @@ defineExpose({
                         :title="$t('form.add_season.title')"
                         :description="$t('form.add_season.description')"
                         :buttonLabel="$t('form.add_season.title')"
-                        :isLoading="isAddingSeason"
+                        :isLoading="isSeasonsLoading"
                         @submit="seasonFormRef?.[0]?.submit"
                     >
                         <FormAddSeason ref="seasonFormRef" />
@@ -84,7 +84,7 @@ defineExpose({
                         :title="$t('form.add_activity.title')"
                         :description="$t('form.add_activity.description')"
                         :buttonLabel="$t('form.add_activity.title')"
-                        :isLoading="isAddingActivity"
+                        :isLoading="isActivitiesLoading"
                         @submit="activityFormRef?.[0]?.submit"
                     >
                         <FormAddActivity ref="activityFormRef" />
@@ -95,7 +95,7 @@ defineExpose({
                         :title="$t('form.add_course.title')"
                         :description="$t('form.add_course.description')"
                         :buttonLabel="$t('form.add_course.title')"
-                        :isLoading="isAddingCourse"
+                        :isLoading="isCoursesLoading"
                         @submit="courseFormRef?.[0]?.submit"
                     >
                         <FormAddCourse ref="courseFormRef" />
@@ -106,7 +106,7 @@ defineExpose({
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            :loading="isAddingEnrollment"
+            :loading="isEnrollmentsLoading"
             :class="{ hidden: !showSubmitButton }"
             block
         />

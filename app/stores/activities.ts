@@ -6,7 +6,7 @@ export const useActivitiesStore = defineStore('activities', () => {
     const { $csrfFetch } = useNuxtApp();
     const toast = useToast();
 
-    const isAddingActivity = ref(false);
+    const isLoading = ref(false);
     const addingActivityErrors = ref<FormError[]>([]);
 
     const activityAddInitialState: Partial<InsertActivity> = {
@@ -41,7 +41,7 @@ export const useActivitiesStore = defineStore('activities', () => {
 
     const addActivity = async (event: FormSubmitEvent<InsertActivity>) => {
         try {
-            isAddingActivity.value = true;
+            isLoading.value = true;
 
             await $csrfFetch('/api/activities', {
                 method: 'POST',
@@ -68,7 +68,7 @@ export const useActivitiesStore = defineStore('activities', () => {
                 });
             }
         } finally {
-            isAddingActivity.value = false;
+            isLoading.value = false;
         }
     };
 
@@ -89,7 +89,7 @@ export const useActivitiesStore = defineStore('activities', () => {
     });
 
     return {
-        isAddingActivity,
+        isLoading,
         addingActivityErrors,
         activities,
         activitiesItems,

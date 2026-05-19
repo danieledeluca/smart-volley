@@ -2,7 +2,7 @@ import { findEnrollmentCertificateStorageKey } from '~~/lib/db/queries/enrollmen
 import { getSignedFileUrl } from '~~/lib/storage';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id') as string);
+    const id = Number(getRouterParam(event, 'id'));
 
     const certificateStorageKey = await findEnrollmentCertificateStorageKey(id);
 

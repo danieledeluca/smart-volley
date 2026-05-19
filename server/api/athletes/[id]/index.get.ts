@@ -1,7 +1,7 @@
 import { findAthlete } from '~~/lib/db/queries/athletes';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id') as string);
+    const id = Number(getRouterParam(event, 'id'));
 
     const athlete = await findAthlete(id);
 

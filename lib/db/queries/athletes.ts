@@ -1,4 +1,4 @@
-import { asc, eq, ilike } from 'drizzle-orm';
+import { and, asc, eq, ilike, isNull } from 'drizzle-orm';
 
 import type { InsertAthlete } from '../schema';
 
@@ -7,7 +7,10 @@ import { athlete } from '../schema';
 
 export async function findAthletes(athleteName?: string) {
     return await db.query.athlete.findMany({
-        where: athleteName ? ilike(athlete.name, `%${athleteName}%`) : undefined,
+        where: and(
+            athleteName ? ilike(athlete.name, `%${athleteName}%`) : undefined,
+            isNull(athlete.deletedAt),
+        ),
         columns: {
             id: true,
             name: true,
@@ -21,7 +24,10 @@ export async function findAthletes(athleteName?: string) {
 
 export async function findAthlete(athleteId: number) {
     const result = await db.query.athlete.findFirst({
-        where: eq(athlete.id, athleteId),
+        where: and(
+            eq(athlete.id, athleteId),
+            isNull(athlete.deletedAt),
+        ),
         with: {
             parent: true,
             enrollments: {

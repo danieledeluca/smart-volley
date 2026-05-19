@@ -6,7 +6,7 @@ const { showSubmitButton = false } = defineProps<{
 }>();
 
 const coursesStore = useCoursesStore();
-const { isAddingCourse, addingCourseErrors, courseAddState, courseAddFields } = storeToRefs(coursesStore);
+const { isLoading, addingCourseErrors, courseAddState, courseAddFields } = storeToRefs(coursesStore);
 
 const formRef = useTemplateRef('formRef');
 
@@ -36,7 +36,7 @@ defineExpose({
         <UButton
             type="submit"
             :label="$t('form.button.add')"
-            :loading="isAddingCourse"
+            :loading="isLoading"
             :class="{ hidden: !showSubmitButton }"
             block
         />

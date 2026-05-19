@@ -14,7 +14,7 @@ export const useAthletesStore = defineStore('athletes', () => {
 
     const { parentsItems, parentsPending } = storeToRefs(parentsStore);
 
-    const isAddingAthlete = ref(false);
+    const isLoading = ref(false);
     const addingAthleteErrors = ref<FormError[]>([]);
 
     const athletesFiltersInitialState: AthletesFiltersSchema = {
@@ -72,7 +72,7 @@ export const useAthletesStore = defineStore('athletes', () => {
 
     const addAthlete = async (event: FormSubmitEvent<InsertAthlete>) => {
         try {
-            isAddingAthlete.value = true;
+            isLoading.value = true;
 
             await $csrfFetch('/api/athletes', {
                 method: 'POST',
@@ -99,7 +99,7 @@ export const useAthletesStore = defineStore('athletes', () => {
                 });
             }
         } finally {
-            isAddingAthlete.value = false;
+            isLoading.value = false;
         }
     };
 
@@ -248,7 +248,7 @@ export const useAthletesStore = defineStore('athletes', () => {
     });
 
     return {
-        isAddingAthlete,
+        isLoading,
         addingAthleteErrors,
         athletes,
         athletesItems,

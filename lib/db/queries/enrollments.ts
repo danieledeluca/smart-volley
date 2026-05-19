@@ -50,7 +50,10 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
 export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
     const filteredIds = await db.select({ id: enrollment.id })
         .from(enrollment)
-        .innerJoin(athlete, eq(enrollment.athleteId, athlete.id))
+        .innerJoin(athlete, and(
+            eq(enrollment.athleteId, athlete.id),
+            isNull(athlete.deletedAt),
+        ))
         .where(buildEnrollmentFilters(filters));
 
     const result = await db.query.enrollment.findMany({
@@ -66,7 +69,10 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
             activity: true,
             course: true,
         },
-        where: inArray(enrollment.id, filteredIds.map((filter) => filter.id)),
+        where: and(
+            inArray(enrollment.id, filteredIds.map((filter) => filter.id)),
+            isNull(enrollment.deletedAt),
+        ),
     });
 
     result.sort((a, b) => a.athlete.name.localeCompare(b.athlete.name));
@@ -76,7 +82,10 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
 
 export async function findEnrollment(enrollmentId: number) {
     return await db.query.enrollment.findFirst({
-        where: eq(enrollment.id, enrollmentId),
+        where: and(
+            eq(enrollment.id, enrollmentId),
+            isNull(enrollment.deletedAt),
+        ),
         with: {
             athlete: {
                 columns: {
@@ -93,7 +102,10 @@ export async function findEnrollment(enrollmentId: number) {
 
 export async function findEnrollmentCertificateStorageKey(enrollmentId: number) {
     const result = await db.query.enrollment.findFirst({
-        where: eq(enrollment.id, enrollmentId),
+        where: and(
+            eq(enrollment.id, enrollmentId),
+            isNull(enrollment.deletedAt),
+        ),
         columns: {
             certificateStorageKey: true,
         },

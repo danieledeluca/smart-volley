@@ -27,7 +27,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     const { activitiesItems, activitiesPending } = storeToRefs(activitiesStore);
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
-    const isAddingEnrollment = ref(false);
+    const isLoading = ref(false);
     const addingEnrollmentErrors = ref<FormError[]>([]);
 
     const enrollmentsFiltersInitialState: EnrollmentsFiltersSchema = {
@@ -83,7 +83,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
 
     const addEnrollment = async (event: FormSubmitEvent<InsertEnrollment>) => {
         try {
-            isAddingEnrollment.value = true;
+            isLoading.value = true;
 
             await $csrfFetch('/api/enrollments', {
                 method: 'POST',
@@ -110,7 +110,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 });
             }
         } finally {
-            isAddingEnrollment.value = false;
+            isLoading.value = false;
         }
     };
 
@@ -431,7 +431,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     });
 
     return {
-        isAddingEnrollment,
+        isLoading,
         addingEnrollmentErrors,
         enrollments,
         enrollmentsPending,

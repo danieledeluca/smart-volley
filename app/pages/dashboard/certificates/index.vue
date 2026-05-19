@@ -8,7 +8,7 @@ const { canEdit } = storeToRefs(authStore);
 
 const enrollmentsStore = useEnrollmentsStore();
 const {
-    isAddingEnrollment,
+    isLoading,
     enrollments,
     enrollmentsPending,
     enrollmentsError,
@@ -34,7 +34,7 @@ const tableColumns = getEnrollmentsTableColumns([
                 :description="$t('form.add_enrollment.description')"
                 :buttonLabel="$t('page.enrollments.button.add')"
                 buttonIcon="i-lucide-plus"
-                :isLoading="isAddingEnrollment"
+                :isLoading
                 @submit="formRef?.submit()"
             >
                 <FormAddEnrollment ref="formRef" />

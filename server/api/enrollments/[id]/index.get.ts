@@ -2,7 +2,7 @@ import { findEnrollment } from '~~/lib/db/queries/enrollments';
 import { getSignedFileUrl } from '~~/lib/storage';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id') as string);
+    const id = Number(getRouterParam(event, 'id'));
 
     const enrollment = await findEnrollment(id);
 

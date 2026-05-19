@@ -6,7 +6,7 @@ export const useParentsStore = defineStore('parents', () => {
     const { $csrfFetch } = useNuxtApp();
     const toast = useToast();
 
-    const isAddingParent = ref(false);
+    const isLoading = ref(false);
     const addingParentErrors = ref<FormError[]>([]);
 
     const parentAddInitialState: Partial<InsertParent> = {
@@ -44,7 +44,7 @@ export const useParentsStore = defineStore('parents', () => {
 
     const addParent = async (event: FormSubmitEvent<InsertParent>) => {
         try {
-            isAddingParent.value = true;
+            isLoading.value = true;
 
             await $csrfFetch('/api/parents', {
                 method: 'POST',
@@ -71,7 +71,7 @@ export const useParentsStore = defineStore('parents', () => {
                 });
             }
         } finally {
-            isAddingParent.value = false;
+            isLoading.value = false;
         }
     };
 
@@ -135,7 +135,7 @@ export const useParentsStore = defineStore('parents', () => {
     });
 
     return {
-        isAddingParent,
+        isLoading,
         addingParentErrors,
         parents,
         parentsItems,

@@ -6,7 +6,7 @@ export const useSeasonsStore = defineStore('seasons', () => {
     const { $csrfFetch } = useNuxtApp();
     const toast = useToast();
 
-    const isAddingSeason = ref(false);
+    const isLoading = ref(false);
     const addingSeasonErrors = ref<FormError[]>([]);
 
     const seasonAddInitialState: Partial<InsertSeason> = {
@@ -42,7 +42,7 @@ export const useSeasonsStore = defineStore('seasons', () => {
 
     const addSeason = async (event: FormSubmitEvent<InsertSeason>) => {
         try {
-            isAddingSeason.value = true;
+            isLoading.value = true;
 
             await $csrfFetch('/api/seasons', {
                 method: 'POST',
@@ -69,7 +69,7 @@ export const useSeasonsStore = defineStore('seasons', () => {
                 });
             }
         } finally {
-            isAddingSeason.value = false;
+            isLoading.value = false;
         }
     };
 
@@ -107,7 +107,7 @@ export const useSeasonsStore = defineStore('seasons', () => {
     });
 
     return {
-        isAddingSeason,
+        isLoading,
         addingSeasonErrors,
         seasons,
         seasonsItems,
