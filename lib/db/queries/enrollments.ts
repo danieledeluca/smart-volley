@@ -55,7 +55,13 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
 
     const result = await db.query.enrollment.findMany({
         with: {
-            athlete: true,
+            athlete: {
+                columns: {
+                    id: true,
+                    name: true,
+                    fiscalCode: true,
+                },
+            },
             season: true,
             activity: true,
             course: true,
@@ -72,7 +78,12 @@ export async function findEnrollment(enrollmentId: number) {
     return await db.query.enrollment.findFirst({
         where: eq(enrollment.id, enrollmentId),
         with: {
-            athlete: true,
+            athlete: {
+                columns: {
+                    id: true,
+                    name: true,
+                },
+            },
             season: true,
             activity: true,
             course: true,

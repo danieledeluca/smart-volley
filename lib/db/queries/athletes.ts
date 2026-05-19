@@ -8,8 +8,12 @@ import { athlete } from '../schema';
 export async function findAthletes(athleteName?: string) {
     return await db.query.athlete.findMany({
         where: athleteName ? ilike(athlete.name, `%${athleteName}%`) : undefined,
-        with: {
-            parent: true,
+        columns: {
+            id: true,
+            name: true,
+            fiscalCode: true,
+            phoneNumber: true,
+            email: true,
         },
         orderBy: asc(athlete.name),
     });
@@ -21,6 +25,9 @@ export async function findAthlete(athleteId: number) {
         with: {
             parent: true,
             enrollments: {
+                columns: {
+                    id: true,
+                },
                 with: {
                     season: true,
                     activity: true,

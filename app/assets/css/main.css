@@ -2,7 +2,7 @@
 @import "@nuxt/ui";
 
 :root {
-    --ui-footer-height: 53px;
+    --ui-filters-height: 32px;
 }
 
 @layer components {

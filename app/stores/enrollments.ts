@@ -95,6 +95,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             toast.add({
                 description: $t('form.add_enrollment.success'),
                 color: 'success',
+                icon: 'i-lucide-circle-check',
             });
         } catch (err) {
             const error = err as FetchError;
@@ -103,8 +104,9 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 addingEnrollmentErrors.value = error.data?.data;
             } else {
                 toast.add({
-                    description: error.statusMessage || 'An unknown error occurred.',
+                    description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
                     color: 'error',
+                    icon: 'i-lucide-circle-x',
                 });
             }
         } finally {
@@ -161,7 +163,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                     renderAs: 'input',
                     debounce: true,
                     formFieldProps: {
-                        label: $t('form.field.name.label'),
                         name: 'athleteName',
                     },
                     inputProps: {

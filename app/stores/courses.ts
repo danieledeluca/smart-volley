@@ -55,6 +55,7 @@ export const useCoursesStore = defineStore('courses', () => {
             toast.add({
                 description: $t('form.add_course.success'),
                 color: 'success',
+                icon: 'i-lucide-circle-check',
             });
         } catch (err) {
             const error = err as FetchError;
@@ -63,8 +64,9 @@ export const useCoursesStore = defineStore('courses', () => {
                 addingCourseErrors.value = error.data?.data;
             } else {
                 toast.add({
-                    description: error.statusMessage || 'An unknown error occurred.',
+                    description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
                     color: 'error',
+                    icon: 'i-lucide-circle-x',
                 });
             }
         } finally {

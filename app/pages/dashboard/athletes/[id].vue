@@ -93,6 +93,7 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                             :tableData="athlete.enrollments"
                             :tableColumns
                             class="col-span-2 mt-0! **:data-[slot=root]:rounded-t-none"
+                            :showPagination="true"
                             :onSelect="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />
                     </ItemCard>

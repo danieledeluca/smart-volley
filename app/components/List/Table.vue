@@ -10,12 +10,14 @@ const {
     tableColumns,
     isLoading,
     error,
+    showPagination = false,
     onSelect,
 } = defineProps<{
     tableData?: T[];
     tableColumns?: TableColumn<T>[];
     isLoading?: boolean;
     error?: FetchError;
+    showPagination?: boolean;
     onSelect?: (event: Event, row: TableRow<T>) => void;
 }> ();
 
@@ -42,8 +44,8 @@ watch(() => tableData, () => {
 </script>
 
 <template>
-    <div class="not-empty:mt-6 sm:not-empty:mt-8">
-        <USkeleton v-if="isLoading && !tableData" class="h-116.75" />
+    <div class="not-empty:mt-6 sm:not-empty:mt-8" :class="{ 'h-full max-h-[calc(100%-var(--ui-filters-height)-var(--spacing)*6)] sm:max-h-[calc(100%-var(--ui-filters-height)-var(--spacing)*8)]': !showPagination }">
+        <USkeleton v-if="isLoading && !tableData" class="h-full" />
         <UAlert
             v-if="error"
             :title="error.statusMessage"
@@ -54,15 +56,17 @@ watch(() => tableData, () => {
             <UTable
                 ref="tableRef"
                 v-model:pagination="pagination"
-                class="striped-table rounded-md border border-accented has-[+*]:rounded-b-none"
+                class="striped-table max-h-full rounded-md border border-accented has-[+*]:rounded-b-none"
                 :data="tableData"
                 :columns="tableColumns"
-                :paginationOptions="{ getPaginationRowModel: getPaginationRowModel() }"
+                :paginationOptions="showPagination ? { getPaginationRowModel: getPaginationRowModel() } : undefined"
                 :loading="isLoading"
+                :sticky="!showPagination"
+                :virtualize="!showPagination"
                 @select="onSelect"
             />
             <div
-                v-if="tableData.length > 0"
+                v-if="tableData.length > 0 && showPagination"
                 class="flex items-center gap-4 rounded-md rounded-t-none border border-t-0 border-accented bg-elevated px-4 py-3.5 max-md:flex-col"
             >
                 <div class="text-sm text-muted">

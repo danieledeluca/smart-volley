@@ -1,10 +1,17 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { FindAthlete, FindAthletes, FindEnrollments } from '~~/lib/db/schema';
 
-import UButton from '@nuxt/ui/components/Button.vue';
 import UUser from '@nuxt/ui/components/User.vue';
 
 import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
+
+function getUserAvatarNode(id: number, name: string, description?: string) {
+    return h(UUser, {
+        name,
+        description,
+        avatar: { ...getAvatar(id.toString(), 64) },
+    });
+}
 
 export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
     type TableColumns = Partial<Record<keyof FindAthletes, TableColumn<FindAthletes>>>;
@@ -17,11 +24,7 @@ export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
         name: {
             accessorKey: 'name',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
-            cell: ({ row }) => h(UUser, {
-                name: row.original.name,
-                description: row.original.fiscalCode,
-                avatar: { ...getAvatar(row.original.id.toString(), 64) },
-            }),
+            cell: ({ row }) => getUserAvatarNode(row.original.id, row.original.name, row.original.fiscalCode),
         },
         phoneNumber: {
             accessorKey: 'phoneNumber',
@@ -29,19 +32,7 @@ export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
             cell: ({ row }) => {
                 if (row.original.phoneNumber) {
                     return h('div', { class: 'flex gap-2 items-center' }, [
-                        h(UButton, {
-                            color: 'primary',
-                            variant: 'ghost',
-                            href: `tel:${formatPhoneNumber(row.original.phoneNumber)}`,
-                            icon: 'i-lucide-phone',
-                        }),
-                        h(UButton, {
-                            color: 'primary',
-                            variant: 'ghost',
-                            href: `https://api.whatsapp.com/send?phone=${formatPhoneNumber(row.original.phoneNumber)}`,
-                            target: '_blank',
-                            icon: 'i-simple-icons-whatsapp',
-                        }),
+                        getPhoneNumberButtonsNode(row.original.phoneNumber),
                         h('span', undefined, row.original.phoneNumber),
                     ]);
                 }
@@ -55,12 +46,7 @@ export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
             cell: ({ row }) => {
                 if (row.original.email) {
                     return h('div', { class: 'flex gap-2 items-center' }, [
-                        h(UButton, {
-                            color: 'primary',
-                            variant: 'ghost',
-                            href: `mailto:${row.original.email}`,
-                            icon: 'i-lucide-mail',
-                        }),
+                        getEmailButtonNode(row.original.email),
                         h('span', undefined, row.original.email),
                     ]);
                 }
@@ -120,11 +106,11 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
         athlete: {
             accessorKey: 'athlete',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.athlete') }),
-            cell: ({ row }) => h(UUser, {
-                name: row.original.athlete.name,
-                description: row.original.athlete.fiscalCode,
-                avatar: { ...getAvatar(row.original.athlete.id.toString(), 64) },
-            }),
+            cell: ({ row }) => getUserAvatarNode(
+                row.original.id,
+                row.original.athlete.name,
+                row.original.athlete.fiscalCode,
+            ),
         },
         season: {
             accessorKey: 'season',
@@ -175,8 +161,9 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
         volleyBalanceSecondary: {
             accessorKey: 'volley_balance_secondary',
             header: $t('table.column.volley_balance_secondary'),
-            cell: ({ row }) =>
-                row.original.volleyBalanceSecondary ? formatPrice(row.original.volleyBalanceSecondary) : EMPTY_VALUE,
+            cell: ({ row }) => row.original.volleyBalanceSecondary
+                ? formatPrice(row.original.volleyBalanceSecondary)
+                : EMPTY_VALUE,
             meta: {
                 class: {
                     th: 'text-center',
@@ -198,8 +185,9 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
         secondInstallment: {
             accessorKey: 'second_installment',
             header: $t('table.column.second_installment'),
-            cell: ({ row }) =>
-                row.original.secondInstallment ? formatPrice(row.original.secondInstallment) : EMPTY_VALUE,
+            cell: ({ row }) => row.original.secondInstallment
+                ? formatPrice(row.original.secondInstallment)
+                : EMPTY_VALUE,
             meta: {
                 class: {
                     th: 'text-center',
@@ -220,30 +208,22 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
         },
         certificateExpirationDate: {
             accessorKey: 'certificate_expiration_date',
-            header: $t('table.column.certificate_expiration_date'),
+            header: ({ column }) => h(TableSortDropdown, {
+                column,
+                label: $t('table.column.certificate_expiration_date'),
+            }),
             cell: ({ row }) => getCertificateDateNode(row.original.certificateExpirationDate),
+            sortingFn: (rowA, rowB) => getCertificateDateColumnSortingFn(
+                rowA.original.certificateExpirationDate,
+                rowB.original.certificateExpirationDate,
+            ),
         },
         certificateStorageKey: {
             accessorKey: 'certificate_download_url',
             header: $t('table.column.certificate_download_url'),
-            cell: ({ row }) => {
-                if (row.original.certificateStorageKey) {
-                    return h(UButton, {
-                        color: 'primary',
-                        variant: 'soft',
-                        label: $t('form.button.download'),
-                        icon: 'i-lucide-download',
-                        loadingAuto: true,
-                        onClick: async () => {
-                            const { url } = await $fetch(`/api/enrollments/${row.original.id}/certificate`);
-
-                            window.open(url, '_blank');
-                        },
-                    });
-                }
-
-                return EMPTY_VALUE;
-            },
+            cell: ({ row }) => row.original.certificateStorageKey
+                ? getCertificateDownloadButtonNode(row.original.id)
+                : EMPTY_VALUE,
         },
     };
 

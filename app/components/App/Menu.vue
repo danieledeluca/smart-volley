@@ -23,18 +23,21 @@ const navigationMenuItems = computed<NavigationMenuItem[]>(() => {
             to: '/dashboard/enrollments',
             icon: 'i-lucide-list',
             active: route.path.startsWith('/dashboard/enrollments'),
-        },
-        {
-            label: $t('menu.payments'),
-            to: '/dashboard/payments',
-            icon: 'i-lucide-credit-card',
-            active: route.path === '/dashboard/payments',
-        },
-        {
-            label: $t('menu.certificates'),
-            to: '/dashboard/certificates',
-            icon: 'i-lucide-briefcase-medical',
-            active: route.path === '/dashboard/certificates',
+            open: true,
+            children: [
+                {
+                    label: $t('menu.payments'),
+                    to: '/dashboard/payments',
+                    icon: 'i-lucide-credit-card',
+                    active: route.path === '/dashboard/payments',
+                },
+                {
+                    label: $t('menu.certificates'),
+                    to: '/dashboard/certificates',
+                    icon: 'i-lucide-briefcase-medical',
+                    active: route.path === '/dashboard/certificates',
+                },
+            ],
         },
     ];
 });

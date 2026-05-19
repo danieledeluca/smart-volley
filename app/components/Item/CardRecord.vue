@@ -15,6 +15,9 @@ const { copy, copied } = useClipboard();
 const toast = useToast();
 
 const actionsRef = useTemplateRef('actionsRef');
+
+const PhoneNumberButtons = getPhoneNumberButtonsNode(value || null);
+const EmailButton = getEmailButtonNode(value || null);
 </script>
 
 <template>
@@ -38,32 +41,17 @@ const actionsRef = useTemplateRef('actionsRef');
                     :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
                     @click="async () => {
                         await copy(value);
+
                         toast.add({
+                            id: value,
                             title: $t('toast.copy', { name: label }),
                             color: 'success',
                             icon: 'i-lucide-circle-check',
                         });
                     }"
                 />
-                <template v-if="showPhoneNumberButtons">
-                    <UButton
-                        variant="ghost"
-                        trailingIcon="i-lucide-phone"
-                        :to="`tel:${formatPhoneNumber(value)}`"
-                    />
-                    <UButton
-                        variant="ghost"
-                        trailingIcon="i-simple-icons-whatsapp"
-                        :to="`https://api.whatsapp.com/send?phone=${formatPhoneNumber(value)}`"
-                        target="_blank"
-                    />
-                </template>
-                <UButton
-                    v-if="showEmailButton"
-                    variant="ghost"
-                    trailingIcon="i-lucide-mail"
-                    :to="`mailto:${value}`"
-                />
+                <PhoneNumberButtons v-if="showPhoneNumberButtons" />
+                <EmailButton v-if="showEmailButton" />
             </div>
         </div>
     </div>

@@ -53,6 +53,7 @@ export const useActivitiesStore = defineStore('activities', () => {
             toast.add({
                 description: $t('form.add_activity.success'),
                 color: 'success',
+                icon: 'i-lucide-circle-check',
             });
         } catch (err) {
             const error = err as FetchError;
@@ -61,8 +62,9 @@ export const useActivitiesStore = defineStore('activities', () => {
                 addingActivityErrors.value = error.data?.data;
             } else {
                 toast.add({
-                    description: error.statusMessage || 'An unknown error occurred.',
+                    description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
                     color: 'error',
+                    icon: 'i-lucide-circle-x',
                 });
             }
         } finally {

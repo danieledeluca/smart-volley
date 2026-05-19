@@ -48,21 +48,11 @@ export const useAuthStore = defineStore('auth', () => {
             {
                 fetchOptions: {
                     headers: getHeaders(),
-                    onSuccess: () => {
-                        navigateTo('/');
-                    },
-                    onError: (ctx) => {
-                        const toast = useToast();
-
-                        toast.add({
-                            title: ctx.error.statusText,
-                            color: 'error',
-                            icon: 'i-lucide-circle-x',
-                        });
-                    },
                 },
             },
         );
+
+        navigateTo('/');
     }
 
     return {

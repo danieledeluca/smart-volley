@@ -84,6 +84,7 @@ export const useAthletesStore = defineStore('athletes', () => {
             toast.add({
                 description: $t('form.add_athlete.success'),
                 color: 'success',
+                icon: 'i-lucide-circle-check',
             });
         } catch (err) {
             const error = err as FetchError;
@@ -92,8 +93,9 @@ export const useAthletesStore = defineStore('athletes', () => {
                 addingAthleteErrors.value = error.data?.data;
             } else {
                 toast.add({
-                    description: error.statusMessage || 'An unknown error occurred.',
+                    description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
                     color: 'error',
+                    icon: 'i-lucide-circle-x',
                 });
             }
         } finally {
@@ -108,7 +110,6 @@ export const useAthletesStore = defineStore('athletes', () => {
                     renderAs: 'input',
                     debounce: true,
                     formFieldProps: {
-                        label: $t('form.field.name.label'),
                         name: 'name',
                     },
                     inputProps: {
