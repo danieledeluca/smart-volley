@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { InsertCourse } from '~~/lib/db/schema';
 
-const { showSubmitButton = false } = defineProps<{
-    showSubmitButton?: boolean;
-}>();
-
 const coursesStore = useCoursesStore();
 const { isLoading, addingCourseErrors, courseAddState, courseAddFields } = storeToRefs(coursesStore);
 
@@ -37,7 +33,7 @@ defineExpose({
             type="submit"
             :label="$t('form.button.add')"
             :loading="isLoading"
-            :class="{ hidden: !showSubmitButton }"
+            class="hidden"
             block
         />
     </UForm>

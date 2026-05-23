@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { InsertParent } from '~~/lib/db/schema';
 
-const { showSubmitButton = false } = defineProps<{
-    showSubmitButton?: boolean;
-}>();
-
 const parentsStore = useParentsStore();
 const { isLoading, addingParentErrors, parentAddState, parentAddFields } = storeToRefs(parentsStore);
 
@@ -44,7 +40,7 @@ defineExpose({
             type="submit"
             :label="$t('form.button.add')"
             :loading="isLoading"
-            :class="{ hidden: !showSubmitButton }"
+            class="hidden"
             block
         />
     </UForm>

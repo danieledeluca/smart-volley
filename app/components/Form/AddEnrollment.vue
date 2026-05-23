@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { InsertEnrollment } from '~~/lib/db/schema';
 
-const { showSubmitButton = false } = defineProps<{
-    showSubmitButton?: boolean;
-}>();
-
 const enrollmentsStore = useEnrollmentsStore();
 const athletesStore = useAthletesStore();
 const seasonsStore = useSeasonsStore();
@@ -58,48 +54,56 @@ defineExpose({
                 :field
             >
                 <template #athleteId-post>
-                    <FormAddModal
+                    <AppModal
                         :title="$t('form.add_athlete.title')"
                         :description="$t('form.add_athlete.description')"
                         :buttonLabel="$t('form.add_athlete.title')"
+                        buttonIcon="i-lucide-plus"
+                        :footerButtonLabel="$t('form.button.add')"
                         :isLoading="isAthletesLoading"
                         @submit="athleteFormRef?.[0]?.submit"
                     >
                         <FormAddAthlete ref="athleteFormRef" />
-                    </FormAddModal>
+                    </AppModal>
                 </template>
                 <template #seasonId-post>
-                    <FormAddModal
+                    <AppModal
                         :title="$t('form.add_season.title')"
                         :description="$t('form.add_season.description')"
                         :buttonLabel="$t('form.add_season.title')"
+                        buttonIcon="i-lucide-plus"
+                        :footerButtonLabel="$t('form.button.add')"
                         :isLoading="isSeasonsLoading"
                         @submit="seasonFormRef?.[0]?.submit"
                     >
                         <FormAddSeason ref="seasonFormRef" />
-                    </FormAddModal>
+                    </AppModal>
                 </template>
                 <template #activityId-post>
-                    <FormAddModal
+                    <AppModal
                         :title="$t('form.add_activity.title')"
                         :description="$t('form.add_activity.description')"
                         :buttonLabel="$t('form.add_activity.title')"
+                        buttonIcon="i-lucide-plus"
+                        :footerButtonLabel="$t('form.button.add')"
                         :isLoading="isActivitiesLoading"
                         @submit="activityFormRef?.[0]?.submit"
                     >
                         <FormAddActivity ref="activityFormRef" />
-                    </FormAddModal>
+                    </AppModal>
                 </template>
                 <template #courseId-post>
-                    <FormAddModal
+                    <AppModal
                         :title="$t('form.add_course.title')"
                         :description="$t('form.add_course.description')"
                         :buttonLabel="$t('form.add_course.title')"
+                        buttonIcon="i-lucide-plus"
+                        :footerButtonLabel="$t('form.button.add')"
                         :isLoading="isCoursesLoading"
                         @submit="courseFormRef?.[0]?.submit"
                     >
                         <FormAddCourse ref="courseFormRef" />
-                    </FormAddModal>
+                    </AppModal>
                 </template>
             </FormField>
         </FormFieldGroup>
@@ -107,7 +111,7 @@ defineExpose({
             type="submit"
             :label="$t('form.button.add')"
             :loading="isEnrollmentsLoading"
-            :class="{ hidden: !showSubmitButton }"
+            class="hidden"
             block
         />
     </UForm>

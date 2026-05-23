@@ -16,7 +16,9 @@ const emit = defineEmits<{
     clear: [];
 }>();
 
-const state = defineModel<Partial<FormData>>('state', { required: true });
+const state = defineModel<Partial<FormData>>('state', {
+    required: true,
+});
 
 const firstFieldsGroup = computed(() => fields.at(0));
 const secondFieldsGroup = computed(() => fields.at(1));

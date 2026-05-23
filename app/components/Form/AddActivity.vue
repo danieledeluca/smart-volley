@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { InsertActivity } from '~~/lib/db/schema';
 
-const { showSubmitButton = false } = defineProps<{
-    showSubmitButton?: boolean;
-}>();
-
 const activitiesStore = useActivitiesStore();
 const { isLoading, addingActivityErrors, activityAddState, activityAddFields } = storeToRefs(activitiesStore);
 
@@ -37,7 +33,7 @@ defineExpose({
             type="submit"
             :label="$t('form.button.add')"
             :loading="isLoading"
-            :class="{ hidden: !showSubmitButton }"
+            class="hidden"
             block
         />
     </UForm>

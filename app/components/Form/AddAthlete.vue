@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { InsertAthlete } from '~~/lib/db/schema';
 
-const { showSubmitButton = false } = defineProps<{
-    showSubmitButton?: boolean;
-}>();
-
 const athletesStore = useAthletesStore();
 const parentsStore = useParentsStore();
 
@@ -49,15 +45,17 @@ defineExpose({
                 :field
             >
                 <template #parentId-post>
-                    <FormAddModal
+                    <AppModal
                         :title="$t('form.add_parent.title')"
                         :description="$t('form.add_parent.description')"
                         :buttonLabel="$t('form.add_parent.title')"
+                        buttonIcon="i-lucide-plus"
+                        :footerButtonLabel="$t('form.button.add')"
                         :isLoading="isParentsLoading"
                         @submit="parentFormRef?.[0]?.submit()"
                     >
                         <FormAddParent ref="parentFormRef" />
-                    </FormAddModal>
+                    </AppModal>
                 </template>
             </FormField>
         </FormFieldGroup>
@@ -65,7 +63,7 @@ defineExpose({
             type="submit"
             :label="$t('form.button.add')"
             :loading="isAthletesLoading"
-            :class="{ hidden: !showSubmitButton }"
+            class="hidden"
             block
         />
     </UForm>

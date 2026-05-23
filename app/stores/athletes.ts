@@ -103,6 +103,34 @@ export const useAthletesStore = defineStore('athletes', () => {
         }
     };
 
+    const removeAthlete = async (athleteId: number) => {
+        try {
+            isLoading.value = true;
+
+            await $csrfFetch(`/api/athletes/${athleteId}`, {
+                method: 'DELETE',
+            });
+
+            refreshAthletes();
+
+            toast.add({
+                description: $t('form.delete_athlete.success'),
+                color: 'success',
+                icon: 'i-lucide-circle-check',
+            });
+        } catch (err) {
+            const error = err as FetchError;
+
+            toast.add({
+                description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
+                color: 'error',
+                icon: 'i-lucide-circle-x',
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
     const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[][]>(() => {
         return [
             [
@@ -261,5 +289,6 @@ export const useAthletesStore = defineStore('athletes', () => {
         refreshAthletes,
         clearAthletesFilters,
         addAthlete,
+        removeAthlete,
     };
 });

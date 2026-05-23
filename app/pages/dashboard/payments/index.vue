@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import EnrollmentActions from '~/components/List/EnrollmentActions.vue';
+
 useSeoMeta({
     title: $t('page.payments.title'),
 });
@@ -28,21 +30,34 @@ const tableColumns = getEnrollmentsTableColumns([
     'secondInstallment',
     'thirdInstallment',
 ]);
+
+if (canEdit.value) {
+    tableColumns.push({
+        id: 'actions',
+        meta: {
+            class: {
+                td: 'text-right',
+            },
+        },
+        cell: ({ row }) => h(EnrollmentActions, { enrollment: row.original }),
+    });
+}
 </script>
 
 <template>
     <DashboardPanel :title="$t('page.payments.title')">
         <template v-if="canEdit" #right>
-            <FormAddSlideover
+            <AppSlideover
                 :title="$t('form.add_enrollment.title')"
                 :description="$t('form.add_enrollment.description')"
                 :buttonLabel="$t('page.enrollments.button.add')"
                 buttonIcon="i-lucide-plus"
+                :footerButtonLabel="$t('form.button.add')"
                 :isLoading
                 @submit="formRef?.submit()"
             >
                 <FormAddEnrollment ref="formRef" />
-            </FormAddSlideover>
+            </AppSlideover>
         </template>
         <ListFilters
             v-model:state="enrollmentsFiltersState"

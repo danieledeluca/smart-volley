@@ -115,7 +115,31 @@ export const translations = {
         button: {
             add: 'Aggiungi',
             cancel: 'Annulla',
+            delete: 'Elimina',
             download: 'Download',
+            edit: 'Modifica',
+        },
+        delete_athlete: {
+            body: 'Sei sicuro di voler eliminare questo atleta? Questa azione è irreversibile.',
+            description: 'Attenzione! Stai per eliminare un\'atleta.',
+            success: 'Atleta eliminato con successo',
+            title: 'Elimina atleta',
+        },
+        delete_enrollment: {
+            body: 'Sei sicuro di voler eliminare questa iscrizione? Questa azione è irreversibile.',
+            description: 'Attenzione! Stai per eliminare un\'iscrizione.',
+            success: 'Iscrizione eliminata con successo',
+            title: 'Elimina iscrizione',
+        },
+        edit_athlete: {
+            description: 'Compila i campi per modificare le informazioni dell\'atleta.',
+            success: 'Atleta modificato con successo',
+            title: 'Modifica atleta',
+        },
+        edit_enrollment: {
+            description: 'Compila i campi per modificare le informazioni dell\'iscrizione.',
+            success: 'Iscrizione modificata con successo',
+            title: 'Modifica iscrizione',
         },
         field: {
             activity_id: {

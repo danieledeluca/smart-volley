@@ -135,3 +135,12 @@ export async function insertEnrollment(data: InsertEnrollment) {
 
     return created;
 }
+
+export async function deleteEnrollment(enrollmentId: number) {
+    const [deleted] = await db.update(enrollment)
+        .set({ deletedAt: new Date() })
+        .where(eq(enrollment.id, enrollmentId))
+        .returning();
+
+    return deleted;
+}

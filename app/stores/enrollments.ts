@@ -114,6 +114,34 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         }
     };
 
+    const removeEnrollment = async (enrollmentId: number) => {
+        try {
+            isLoading.value = true;
+
+            await $csrfFetch(`/api/enrollments/${enrollmentId}`, {
+                method: 'DELETE',
+            });
+
+            refreshEnrollments();
+
+            toast.add({
+                description: $t('form.delete_enrollment.success'),
+                color: 'success',
+                icon: 'i-lucide-circle-check',
+            });
+        } catch (err) {
+            const error = err as FetchError;
+
+            toast.add({
+                description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
+                color: 'error',
+                icon: 'i-lucide-circle-x',
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
     const missingPaymentItems: Array<SelectItem & { value: MissingPaymentEnum }> = [
         {
             label: $t('form.field.volley_account.label'),
@@ -443,5 +471,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         refreshEnrollments,
         clearEnrollmentsFilters,
         addEnrollment,
+        removeEnrollment,
     };
 });

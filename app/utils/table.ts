@@ -13,13 +13,14 @@ function getUserAvatarNode(id: number, name: string, description?: string) {
     });
 }
 
-export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
+export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
     type TableColumns = Partial<Record<keyof FindAthletes, TableColumn<FindAthletes>>>;
 
     const tableColumns: TableColumns = {
         id: {
             accessorKey: 'id',
             header: $t('table.column.id'),
+            cell: ({ row }) => `#${row.original.id}`,
         },
         name: {
             accessorKey: 'name',
@@ -56,10 +57,10 @@ export function getAthletesTableColumns(keys: (keyof FindAthletes)[]) {
         },
     };
 
-    return keys.map((key) => tableColumns[key]).filter((column) => !!column);
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
-export function getAthleteEnrollmentsTableColumns(keys: (keyof FindAthlete['enrollments'][number])[]) {
+export function getAthleteEnrollmentsTableColumns(columns: (keyof FindAthlete['enrollments'][number])[]) {
     type TableColumns = Partial<Record<
         keyof FindAthlete['enrollments'][number],
         TableColumn<FindAthlete['enrollments'][number]>
@@ -80,28 +81,29 @@ export function getAthleteEnrollmentsTableColumns(keys: (keyof FindAthlete['enro
             accessorKey: 'course',
             header: $t('table.column.course'),
             cell: ({ row }) => {
-                return h('div', [
-                    h('span', undefined, row.original.course.name),
-                    h(
-                        'span',
-                        { class: 'text-xs' },
-                        row.original.course.description ? ` - ${row.original.course.description}` : '',
-                    ),
-                ]);
+                if (row.original.course.description) {
+                    return [
+                        h('span', undefined, row.original.course.name),
+                        h('span', { class: 'text-xs' }, ` - ${row.original.course.description}`),
+                    ];
+                }
+
+                return row.original.course.name;
             },
         },
     };
 
-    return keys.map((key) => tableColumns[key]).filter((column) => !!column);
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
-export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
+export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
     type TableColumns = Partial<Record<keyof FindEnrollments, TableColumn<FindEnrollments>>>;
 
     const tableColumns: TableColumns = {
         id: {
             accessorKey: 'id',
             header: $t('table.column.id'),
+            cell: ({ row }) => `#${row.original.id}`,
         },
         athlete: {
             accessorKey: 'athlete',
@@ -118,7 +120,7 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
             cell: ({ row }) => `${row.original.season.startYear} - ${row.original.season.endYear}`,
         },
         activity: {
-            accessorKey: 'season',
+            accessorKey: 'activity',
             header: $t('table.column.activity'),
             cell: ({ row }) => row.original.activity.name,
         },
@@ -212,7 +214,9 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
                 column,
                 label: $t('table.column.certificate_expiration_date'),
             }),
-            cell: ({ row }) => getCertificateDateNode(row.original.certificateExpirationDate),
+            cell: ({ row }) => row.original.certificateExpirationDate
+                ? getCertificateDateNode(row.original.certificateExpirationDate)
+                : EMPTY_VALUE,
             sortingFn: (rowA, rowB) => getCertificateDateColumnSortingFn(
                 rowA.original.certificateExpirationDate,
                 rowB.original.certificateExpirationDate,
@@ -227,7 +231,7 @@ export function getEnrollmentsTableColumns(keys: (keyof FindEnrollments)[]) {
         },
     };
 
-    return keys.map((key) => tableColumns[key]).filter((column) => !!column);
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
 export function onEnrollmentSelect(_event: Event, row: TableRow<FindEnrollments>) {

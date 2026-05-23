@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { InsertSeason } from '~~/lib/db/schema';
 
-const { showSubmitButton = false } = defineProps<{
-    showSubmitButton?: boolean;
-}>();
-
 const seasonsStore = useSeasonsStore();
 const { isLoading, addingSeasonErrors, seasonAddState, seasonAddFields } = storeToRefs(seasonsStore);
 
@@ -37,7 +33,7 @@ defineExpose({
             type="submit"
             :label="$t('form.button.add')"
             :loading="isLoading"
-            :class="{ hidden: !showSubmitButton }"
+            class="hidden"
             block
         />
     </UForm>

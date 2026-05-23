@@ -3,7 +3,7 @@ import { and, asc, eq, ilike, isNull } from 'drizzle-orm';
 import type { InsertAthlete } from '../schema';
 
 import db from '..';
-import { athlete } from '../schema';
+import { athlete, enrollment } from '../schema';
 
 export async function findAthletes(athleteName?: string) {
     return await db.query.athlete.findMany({
@@ -31,6 +31,7 @@ export async function findAthlete(athleteId: number) {
         with: {
             parent: true,
             enrollments: {
+                where: isNull(enrollment.deletedAt),
                 columns: {
                     id: true,
                 },
@@ -56,4 +57,13 @@ export async function insertAthlete(data: InsertAthlete) {
     }).returning();
 
     return created;
+}
+
+export async function deleteAthlete(athleteId: number) {
+    const [deleted] = await db.update(athlete)
+        .set({ deletedAt: new Date() })
+        .where(eq(athlete.id, athleteId))
+        .returning();
+
+    return deleted;
 }

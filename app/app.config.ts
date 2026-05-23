@@ -21,5 +21,15 @@ export default defineAppConfig({
                 base: 'ring ring-inset ring-accented border-none!',
             },
         },
+        modal: {
+            slots: {
+                footer: 'justify-end',
+            },
+        },
+        slideover: {
+            slots: {
+                footer: 'justify-end',
+            },
+        },
     },
 });
