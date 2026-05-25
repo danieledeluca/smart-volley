@@ -8,6 +8,7 @@ export default defineAppConfig({
         inputDate: {
             slots: {
                 base: 'has-[+[data-slot="error"]]:ring-error',
+                trailing: 'pe-1!',
             },
         },
         inputNumber: {

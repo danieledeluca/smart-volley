@@ -20,19 +20,23 @@
             <UColorModeButton />
 
             <AuthButton
-                :dropdownMenu="{
+                :dropdownMenuProps="{
                     content: {
                         align: collapsed ? 'start' : 'end',
                     },
                 }"
-                :button="{
+                :buttonProps="{
                     variant: 'ghost',
                     color: 'neutral',
-                    class: !collapsed ? 'max-w-[calc(100%-32px-6px)]' : '',
-                    trailingIcon: !collapsed ? 'i-lucide-chevrons-up-down' : undefined,
+                    class: collapsed ? 'px-1.5' : 'max-w-[calc(100%-32px-6px)]',
+                    trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
                     block: true,
+                }"
+                :userProps="{
+                    class: collapsed ? '' : 'max-w-[calc(100%-20px-6px-2px)]!',
                     ui: {
-                        label: collapsed ? 'hidden' : '',
+                        avatar: collapsed ? 'size-5' : '',
+                        wrapper: collapsed ? 'hidden' : '',
                     },
                 }"
             />

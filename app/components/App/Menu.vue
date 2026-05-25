@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, NavigationMenuProps } from '@nuxt/ui';
 
-const props = defineProps<Omit<NavigationMenuProps, 'items'>>();
+const navigationMenuProps = defineProps<Omit<NavigationMenuProps, 'items'>>();
 
 const route = useRoute();
 
@@ -44,5 +44,5 @@ const navigationMenuItems = computed<NavigationMenuItem[]>(() => {
 </script>
 
 <template>
-    <UNavigationMenu :items="navigationMenuItems" v-bind="props" />
+    <UNavigationMenu v-bind="navigationMenuProps" :items="navigationMenuItems" />
 </template>

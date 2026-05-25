@@ -48,12 +48,7 @@ const dateModel = computed({
 </script>
 
 <template>
-    <UInputDate
-        v-model="dateModel"
-        v-bind="inputProps"
-        class="w-full"
-        :ui="{ trailing: 'pr-1' }"
-    >
+    <UInputDate v-model="dateModel" v-bind="inputProps" class="w-full">
         <template #trailing>
             <UPopover>
                 <UButton color="neutral" variant="link" icon="i-lucide-calendar" />

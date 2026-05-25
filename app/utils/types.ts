@@ -28,8 +28,8 @@ type InputDateField = {
 
 type InputFileField = {
     renderAs: 'input-file';
-    fileUploadProps?: FileUploadProps;
-    buttonProps?: ButtonProps;
+    fileUploadProps?: Omit<FileUploadProps, 'label' | 'icon'>;
+    buttonProps?: Omit<ButtonProps, 'label' | 'icon'>;
 };
 
 type SelectField = {

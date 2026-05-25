@@ -1,5 +1,5 @@
 <template>
-    <UHeader :toggle="false" class="@container" :ui="{ right: 'max-w-[calc(100%-125px-12px)]' }">
+    <UHeader :toggle="false" :ui="{ right: 'max-w-[calc(100%-125px-12px)]' }">
         <template #title>
             <AppLogo class="h-8" />
         </template>
@@ -7,12 +7,17 @@
         <template #right>
             <UColorModeButton />
             <AuthButton
-                :button="{
+                :buttonProps="{
                     variant: 'ghost',
                     color: 'neutral',
-                    class: 'max-w-[calc(100%-32px-6px)]',
+                    class: 'max-w-[calc(100%-32px-6px)] max-sm:px-1.5',
                     ui: {
-                        label: '@max-sm:hidden',
+                        label: 'max-w-[calc(100%-20px-6px)] max-sm:hidden',
+                    },
+                }"
+                :userProps="{
+                    ui: {
+                        wrapper: 'max-sm:hidden',
                     },
                 }"
             />

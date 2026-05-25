@@ -25,7 +25,14 @@ const features: PageFeatureProps[] = [
         :description="$t('page.home.hero.description')"
     >
         <template #links>
-            <AuthButton v-if="!user" size="xl" />
+            <AuthButton
+                v-if="!user"
+                :buttonProps="{
+                    variant: 'soft',
+                    color: 'neutral',
+                    size: 'xl',
+                }"
+            />
             <UButton
                 v-else-if="canView"
                 label="Dashboard"

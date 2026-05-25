@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { ButtonProps, DropdownMenuItem, DropdownMenuProps } from '@nuxt/ui';
+import type { ButtonProps, DropdownMenuItem, DropdownMenuProps, UserProps } from '@nuxt/ui';
 
-const { dropdownMenu, button } = defineProps<{
-    dropdownMenu?: DropdownMenuProps;
-    button?: ButtonProps;
+const { dropdownMenuProps, buttonProps, userProps } = defineProps<{
+    dropdownMenuProps?: Omit<DropdownMenuProps, 'items' | 'modal'>;
+    buttonProps?: Omit<ButtonProps, 'label' | 'icon' | 'loading'>;
+    userProps?: Omit<UserProps, 'name' | 'description' | 'avatar'>;
 }>();
 
 const authStore = useAuthStore();
@@ -26,30 +27,35 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
 <template>
     <UDropdownMenu
         v-if="user"
+        v-bind="dropdownMenuProps"
         :items="dropdownMenuItems"
         :modal="false"
         :content="{ align: 'end' }"
-        v-bind="dropdownMenu"
     >
-        <UButton
-            :label="user.name"
-            v-bind="button"
-            :avatar="user.image ? {
-                src: user.image,
-                alt: user.name,
-                loading: 'lazy',
-            } : undefined"
-            :icon="!user.image ? 'i-lucide-user' : undefined"
-            :loading="isLoading"
-        />
+        <UButton v-bind="buttonProps" :disabled="isLoading">
+            <UUser
+                v-bind="userProps"
+                :name="user.name"
+                :description="user.role?.toString()"
+                :avatar="{
+                    src: user.image && !isLoading ? user.image : undefined,
+                    alt: user.name,
+                    loading: user.image && !isLoading ? 'lazy' : undefined,
+                    icon: isLoading ? 'i-lucide-loader-circle' : undefined,
+                    ui: {
+                        icon: 'animate-spin',
+                    },
+                }"
+                class="w-full max-w-full text-start **:data-[slot=wrapper]:max-w-[calc(100%-32px-8px)] **:data-[slot=wrapper]:*:truncate"
+            />
+        </UButton>
     </UDropdownMenu>
     <UButton
         v-else
+        v-bind="buttonProps"
         :label="$t('auth.sing_in.google')"
-        v-bind="button"
-        icon="i-simple-icons-google"
+        icon="i-logos-google-icon"
         :loading="isLoading"
-        :loadingAuto="true"
         @click="authStore.signIn()"
     />
 </template>
