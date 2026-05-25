@@ -77,11 +77,16 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
 
     result.sort((a, b) => a.athlete.name.localeCompare(b.athlete.name));
 
-    return result;
+    return result.map(({ certificateStorageKey, ...rest }) => {
+        return {
+            ...rest,
+            certificateFile: Boolean(certificateStorageKey),
+        };
+    });
 }
 
 export async function findEnrollment(enrollmentId: number) {
-    return await db.query.enrollment.findFirst({
+    const result = await db.query.enrollment.findFirst({
         where: and(
             eq(enrollment.id, enrollmentId),
             isNull(enrollment.deletedAt),
@@ -98,6 +103,17 @@ export async function findEnrollment(enrollmentId: number) {
             course: true,
         },
     });
+
+    if (result) {
+        const { certificateStorageKey, ...rest } = result;
+
+        return {
+            ...rest,
+            certificateFile: Boolean(certificateStorageKey),
+        };
+    }
+
+    return result;
 }
 
 export async function findEnrollmentCertificateStorageKey(enrollmentId: number) {

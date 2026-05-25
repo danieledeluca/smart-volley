@@ -1,9 +1,7 @@
 import { findEnrollment } from '~~/lib/db/queries/enrollments';
-import { getSignedFileUrl } from '~~/lib/storage';
 
 export default defineAuthenticatedEventHandler(async (event) => {
     const id = Number(getRouterParam(event, 'id'));
-
     const enrollment = await findEnrollment(id);
 
     if (!enrollment) {
@@ -13,10 +11,5 @@ export default defineAuthenticatedEventHandler(async (event) => {
         });
     }
 
-    return {
-        ...enrollment,
-        certificateStorageKey: enrollment.certificateStorageKey
-            ? await getSignedFileUrl(enrollment.certificateStorageKey)
-            : null,
-    };
+    return enrollment;
 });

@@ -24,7 +24,7 @@ const tableColumns = getEnrollmentsTableColumns([
     'id',
     'athlete',
     'certificateExpirationDate',
-    'certificateStorageKey',
+    'certificateFile',
 ]);
 
 if (canEdit.value) {

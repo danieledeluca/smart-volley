@@ -33,6 +33,12 @@ if (canEdit.value) {
         cell: ({ row }) => h(AthleteActions, { athlete: row.original }),
     });
 }
+
+onBeforeRouteLeave(() => {
+    if (Object.values(athletesFiltersState.value).filter((filter) => filter).length) {
+        athletesStore.clearAthletesFilters();
+    }
+});
 </script>
 
 <template>

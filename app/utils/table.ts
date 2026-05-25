@@ -222,10 +222,10 @@ export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
                 rowB.original.certificateExpirationDate,
             ),
         },
-        certificateStorageKey: {
+        certificateFile: {
             accessorKey: 'certificate_download_url',
             header: $t('table.column.certificate_download_url'),
-            cell: ({ row }) => row.original.certificateStorageKey
+            cell: ({ row }) => row.original.certificateFile
                 ? getCertificateDownloadButtonNode(row.original.id)
                 : EMPTY_VALUE,
         },

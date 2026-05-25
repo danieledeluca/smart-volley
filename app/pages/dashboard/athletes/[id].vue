@@ -9,7 +9,7 @@ const title = computed(() => athlete.value?.name || $t('page.athlete.title'));
 
 useSeoMeta({ title });
 
-const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
+const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
 </script>
 
 <template>
@@ -62,9 +62,9 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                     :avatar="getAvatar(athlete.id.toString(), 96)"
                 >
                     <template #description>
-                        <div class="mt-1 flex flex-wrap gap-2">
+                        <span class="mt-1 flex flex-wrap gap-2">
                             <UBadge variant="soft" color="neutral" :label="athlete.fiscalCode" />
-                        </div>
+                        </span>
                     </template>
                 </UUser>
             </div>
@@ -91,7 +91,7 @@ const tableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'c
                     >
                         <ListTable
                             :tableData="athlete.enrollments"
-                            :tableColumns
+                            :tableColumns="enrollmentTableColumns"
                             class="col-span-2 mt-0! **:data-[slot=root]:rounded-t-none"
                             :showPagination="true"
                             :onSelect="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"

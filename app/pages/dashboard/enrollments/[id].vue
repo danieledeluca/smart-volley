@@ -10,6 +10,11 @@ const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollme
 useSeoMeta({ title });
 
 const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.certificateExpirationDate || null));
+const CertificateFileButton = computed(() => {
+    return enrollment.value?.id && enrollment.value?.certificateFile
+        ? getCertificateDownloadButtonNode(enrollment.value?.id)
+        : null;
+});
 </script>
 
 <template>
@@ -65,7 +70,7 @@ const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.
                     size="3xl"
                 >
                     <template #description>
-                        <div class="mt-1 flex flex-wrap gap-2">
+                        <span class="mt-1 flex flex-wrap gap-2">
                             <UBadge
                                 variant="soft"
                                 color="neutral"
@@ -76,7 +81,7 @@ const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.
                                 color="neutral"
                                 :label="`${enrollment.activity.name} (${enrollment.course.name})`"
                             />
-                        </div>
+                        </span>
                     </template>
                 </UUser>
             </div>
@@ -122,15 +127,7 @@ const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.
                             <CertificateDate v-if="enrollment.certificateExpirationDate" />
                         </ItemCardRecord>
                         <ItemCardRecord :label="$t('card.certificate.record.download_url')" :value="EMPTY_VALUE">
-                            <UButton
-                                v-if="enrollment.certificateStorageKey"
-                                variant="soft"
-                                :label="$t('form.button.download')"
-                                icon="i-lucide-download"
-                                :to="enrollment.certificateStorageKey"
-                                size="xs"
-                                target="_blank"
-                            />
+                            <CertificateFileButton v-if="enrollment.certificateFile" size="xs" />
                         </ItemCardRecord>
                     </ItemCard>
                 </div>
