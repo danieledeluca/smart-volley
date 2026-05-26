@@ -3,7 +3,13 @@ import type { FindAthlete, FindAthletes, FindEnrollments } from '~~/lib/db/schem
 
 import UUser from '@nuxt/ui/components/User.vue';
 
+import CertificateDate from '~/components/CertificateDate.vue';
+import CertificateDownloadButton from '~/components/CertificateDownloadButton.vue';
+import EmailButton from '~/components/EmailButton.vue';
+import AthleteActions from '~/components/List/AthleteActions.vue';
+import EnrollmentActions from '~/components/List/EnrollmentActions.vue';
 import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
+import PhoneNumberButtons from '~/components/PhoneNumberButtons.vue';
 
 function getUserAvatarNode(id: number, name: string, description?: string) {
     return h(UUser, {
@@ -33,7 +39,7 @@ export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
             cell: ({ row }) => {
                 if (row.original.phoneNumber) {
                     return h('div', { class: 'flex gap-2 items-center' }, [
-                        getPhoneNumberButtonsNode(row.original.phoneNumber),
+                        h(PhoneNumberButtons, { phoneNumber: row.original.phoneNumber }),
                         h('span', undefined, row.original.phoneNumber),
                     ]);
                 }
@@ -47,7 +53,7 @@ export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
             cell: ({ row }) => {
                 if (row.original.email) {
                     return h('div', { class: 'flex gap-2 items-center' }, [
-                        getEmailButtonNode(row.original.email),
+                        h(EmailButton, { email: row.original.email }),
                         h('span', undefined, row.original.email),
                     ]);
                 }
@@ -58,6 +64,18 @@ export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
     };
 
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+}
+
+export function getAthletesTableActionsColumn(): TableColumn<FindAthletes> {
+    return {
+        id: 'actions',
+        meta: {
+            class: {
+                td: 'text-right',
+            },
+        },
+        cell: ({ row }) => h(AthleteActions, { athleteId: row.original.id }),
+    };
 }
 
 export function getAthleteEnrollmentsTableColumns(columns: (keyof FindAthlete['enrollments'][number])[]) {
@@ -215,7 +233,7 @@ export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
                 label: $t('table.column.certificate_expiration_date'),
             }),
             cell: ({ row }) => row.original.certificateExpirationDate
-                ? getCertificateDateNode(row.original.certificateExpirationDate)
+                ? h(CertificateDate, { date: row.original.certificateExpirationDate })
                 : EMPTY_VALUE,
             sortingFn: (rowA, rowB) => getCertificateDateColumnSortingFn(
                 rowA.original.certificateExpirationDate,
@@ -226,12 +244,24 @@ export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
             accessorKey: 'certificate_download_url',
             header: $t('table.column.certificate_download_url'),
             cell: ({ row }) => row.original.certificateFile
-                ? getCertificateDownloadButtonNode(row.original.id)
+                ? h(CertificateDownloadButton, { enrollmentId: row.original.id })
                 : EMPTY_VALUE,
         },
     };
 
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+}
+
+export function getEnrollmentsTableActionsColumn(): TableColumn<FindEnrollments> {
+    return {
+        id: 'actions',
+        meta: {
+            class: {
+                td: 'text-right',
+            },
+        },
+        cell: ({ row }) => h(EnrollmentActions, { enrollmentId: row.original.id }),
+    };
 }
 
 export function onEnrollmentSelect(_event: Event, row: TableRow<FindEnrollments>) {

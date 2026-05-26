@@ -103,7 +103,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         }
     };
 
-    const removeAthlete = async (athleteId: number) => {
+    const removeAthlete = async (athleteId: number, onComplete?: () => void) => {
         try {
             isLoading.value = true;
 
@@ -112,6 +112,8 @@ export const useAthletesStore = defineStore('athletes', () => {
             });
 
             refreshAthletes();
+
+            onComplete?.();
 
             toast.add({
                 description: $t('form.delete_athlete.success'),

@@ -57,9 +57,15 @@ defineExpose({
                     <AppModal
                         :title="$t('form.add_athlete.title')"
                         :description="$t('form.add_athlete.description')"
-                        :buttonLabel="$t('form.add_athlete.title')"
-                        buttonIcon="i-lucide-plus"
-                        :footerButtonLabel="$t('form.button.add')"
+                        :buttonProps="{
+                            label: $t('form.add_athlete.title'),
+                            icon: 'i-lucide-plus',
+                            variant: 'soft',
+                            block: true,
+                        }"
+                        :footerButtonProps="{
+                            label: $t('form.button.add'),
+                        }"
                         :isLoading="isAthletesLoading"
                         @submit="athleteFormRef?.[0]?.submit"
                     >
@@ -70,9 +76,15 @@ defineExpose({
                     <AppModal
                         :title="$t('form.add_season.title')"
                         :description="$t('form.add_season.description')"
-                        :buttonLabel="$t('form.add_season.title')"
-                        buttonIcon="i-lucide-plus"
-                        :footerButtonLabel="$t('form.button.add')"
+                        :buttonProps="{
+                            label: $t('form.add_season.title'),
+                            icon: 'i-lucide-plus',
+                            variant: 'soft',
+                            block: true,
+                        }"
+                        :footerButtonProps="{
+                            label: $t('form.button.add'),
+                        }"
                         :isLoading="isSeasonsLoading"
                         @submit="seasonFormRef?.[0]?.submit"
                     >
@@ -83,9 +95,15 @@ defineExpose({
                     <AppModal
                         :title="$t('form.add_activity.title')"
                         :description="$t('form.add_activity.description')"
-                        :buttonLabel="$t('form.add_activity.title')"
-                        buttonIcon="i-lucide-plus"
-                        :footerButtonLabel="$t('form.button.add')"
+                        :buttonProps="{
+                            label: $t('form.add_activity.title'),
+                            icon: 'i-lucide-plus',
+                            variant: 'soft',
+                            block: true,
+                        }"
+                        :footerButtonProps="{
+                            label: $t('form.button.add'),
+                        }"
                         :isLoading="isActivitiesLoading"
                         @submit="activityFormRef?.[0]?.submit"
                     >
@@ -96,9 +114,15 @@ defineExpose({
                     <AppModal
                         :title="$t('form.add_course.title')"
                         :description="$t('form.add_course.description')"
-                        :buttonLabel="$t('form.add_course.title')"
-                        buttonIcon="i-lucide-plus"
-                        :footerButtonLabel="$t('form.button.add')"
+                        :buttonProps="{
+                            label: $t('form.add_course.title'),
+                            icon: 'i-lucide-plus',
+                            variant: 'soft',
+                            block: true,
+                        }"
+                        :footerButtonProps="{
+                            label: $t('form.button.add'),
+                        }"
                         :isLoading="isCoursesLoading"
                         @submit="courseFormRef?.[0]?.submit"
                     >

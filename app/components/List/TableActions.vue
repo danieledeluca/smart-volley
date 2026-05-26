@@ -21,6 +21,7 @@ const dropDownItems: DropdownMenuItem[] = [
     {
         label: $t('form.button.edit'),
         icon: 'i-lucide-edit',
+        color: 'warning',
         onSelect() {
             openEdit.value = true;
         },
@@ -48,8 +49,10 @@ const dropDownItems: DropdownMenuItem[] = [
         v-model:open="openDelete"
         :title="deleteTitle"
         :description="deleteDescription"
-        :footerButtonLabel="$t('form.button.delete')"
-        footerButtonColor="error"
+        :footerButtonProps="{
+            label: $t('form.button.delete'),
+            color: 'error',
+        }"
         :isLoading
         @submit="emit('delete')"
     >
@@ -59,7 +62,9 @@ const dropDownItems: DropdownMenuItem[] = [
         v-model:open="openEdit"
         :title="editTitle"
         :description="editDescription"
-        :footerButtonLabel="$t('form.button.edit')"
+        :footerButtonProps="{
+            label: $t('form.button.edit'),
+        }"
         :isLoading
         @submit="emit('edit')"
     >

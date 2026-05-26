@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import AthleteActions from '~/components/List/AthleteActions.vue';
-
 useSeoMeta({
     title: $t('page.athletes.title'),
 });
@@ -23,15 +21,7 @@ const formRef = useTemplateRef('formRef');
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
 
 if (canEdit.value) {
-    tableColumns.push({
-        id: 'actions',
-        meta: {
-            class: {
-                td: 'text-right',
-            },
-        },
-        cell: ({ row }) => h(AthleteActions, { athlete: row.original }),
-    });
+    tableColumns.push(getAthletesTableActionsColumn());
 }
 
 onBeforeRouteLeave(() => {
@@ -47,9 +37,13 @@ onBeforeRouteLeave(() => {
             <AppSlideover
                 :title="$t('form.add_athlete.title')"
                 :description="$t('form.add_athlete.description')"
-                :buttonLabel="$t('page.athletes.button.add')"
-                buttonIcon="i-lucide-plus"
-                :footerButtonLabel="$t('form.button.add')"
+                :buttonProps="{
+                    label: $t('page.athletes.button.add'),
+                    icon: 'i-lucide-plus',
+                }"
+                :footerButtonProps="{
+                    label: $t('form.button.add'),
+                }"
                 :isLoading
                 @submit="formRef?.submit"
             >

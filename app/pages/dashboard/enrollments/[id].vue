@@ -8,13 +8,6 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${ro
 const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollment.title'));
 
 useSeoMeta({ title });
-
-const CertificateDate = computed(() => getCertificateDateNode(enrollment.value?.certificateExpirationDate || null));
-const CertificateFileButton = computed(() => {
-    return enrollment.value?.id && enrollment.value?.certificateFile
-        ? getCertificateDownloadButtonNode(enrollment.value?.id)
-        : null;
-});
 </script>
 
 <template>
@@ -27,30 +20,31 @@ const CertificateFileButton = computed(() => {
             />
         </template>
         <template v-if="pending">
-            <div class="mb-6 flex gap-4 max-md:flex-col sm:mb-8 md:items-center">
-                <div class="flex gap-3">
+            <div class="mb-6 flex items-start gap-4 sm:mb-8">
+                <div class="flex w-full flex-1 gap-3">
                     <USkeleton class="size-12 rounded-full" />
-                    <div>
-                        <USkeleton class="h-7 w-62.5" />
+                    <div class="flex-1">
+                        <USkeleton class="h-7 w-full max-w-60" />
                         <div class="mt-1 flex gap-2">
-                            <USkeleton class="h-6 w-20" />
-                            <USkeleton class="h-6 w-20" />
+                            <USkeleton class="h-6 w-full max-w-20" />
+                            <USkeleton class="h-6 w-full max-w-20" />
                         </div>
                     </div>
                 </div>
+                <USkeleton class="ml-auto size-8" />
             </div>
             <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
                 <div class="space-y-6 sm:space-y-8 lg:col-span-8">
                     <div class="@container">
-                        <USkeleton class="h-83 @max-2xl:h-141.5" />
+                        <USkeleton class="h-80 @max-2xl:h-140" />
                     </div>
                     <div class="@container">
-                        <USkeleton class="h-44.5 @max-2xl:h-62.5" />
+                        <USkeleton class="h-44 @max-2xl:h-60" />
                     </div>
                 </div>
                 <div class="space-y-6 sm:space-y-8 lg:col-span-4">
                     <div class="@container">
-                        <USkeleton class="h-62.75 @max-2xl:h-80.75" />
+                        <USkeleton class="h-60 @max-2xl:h-80" />
                     </div>
                 </div>
             </div>
@@ -62,7 +56,7 @@ const CertificateFileButton = computed(() => {
             icon="i-lucide-circle-x"
         />
         <template v-else-if="enrollment">
-            <div class="mb-6 flex gap-4 max-md:flex-col sm:mb-8 md:items-center">
+            <div class="mb-6 flex items-start gap-4 sm:mb-8">
                 <UUser
                     :name="enrollment.athlete.name"
                     :avatar="getAvatar(enrollment.athlete.id.toString(), 150)"
@@ -84,6 +78,12 @@ const CertificateFileButton = computed(() => {
                         </span>
                     </template>
                 </UUser>
+                <div class="ml-auto">
+                    <ListEnrollmentActions
+                        :enrollmentId="enrollment.id"
+                        :onDeleteComplete="() => navigateTo('/dashboard/enrollments')"
+                    />
+                </div>
             </div>
             <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
                 <div class="space-y-6 sm:space-y-8 lg:col-span-8">
@@ -124,10 +124,17 @@ const CertificateFileButton = computed(() => {
 
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
                         <ItemCardRecord :label="$t('card.certificate.record.expiration_date')" :value="EMPTY_VALUE">
-                            <CertificateDate v-if="enrollment.certificateExpirationDate" />
+                            <CertificateDate
+                                v-if="enrollment.certificateExpirationDate"
+                                :date="enrollment.certificateExpirationDate"
+                            />
                         </ItemCardRecord>
                         <ItemCardRecord :label="$t('card.certificate.record.download_url')" :value="EMPTY_VALUE">
-                            <CertificateFileButton v-if="enrollment.certificateFile" size="xs" />
+                            <CertificateDownloadButton
+                                v-if="enrollment.certificateFile"
+                                :enrollmentId="enrollment.id"
+                                :buttonProps="{ size: 'xs' }"
+                            />
                         </ItemCardRecord>
                     </ItemCard>
                 </div>

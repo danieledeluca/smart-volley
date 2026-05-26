@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const { title, description, buttonLabel, buttonIcon, footerButtonLabel, isLoading } = defineProps<{
+import type { ButtonProps } from '@nuxt/ui';
+
+const { title, description, buttonProps, footerButtonProps, isLoading } = defineProps<{
     title: string;
     description?: string;
-    buttonLabel?: string;
-    buttonIcon?: string;
-    footerButtonLabel: string;
+    buttonProps?: ButtonProps;
+    footerButtonProps?: Omit<ButtonProps, 'loading'>;
     isLoading: boolean;
 }>();
 
@@ -17,26 +18,20 @@ const open = defineModel<boolean>('open', { default: false });
 
 <template>
     <USlideover v-model:open="open" :title :description>
-        <UButton
-            v-if="buttonLabel || buttonIcon"
-            :label="buttonLabel"
-            variant="solid"
-            :icon="buttonIcon"
-        />
+        <UButton v-if="buttonProps?.label || buttonProps?.icon" v-bind="buttonProps" />
         <template #body>
             <slot />
         </template>
         <template #footer="{ close }">
             <UButton
-                type="button"
                 variant="outline"
                 color="neutral"
                 :label="$t('form.button.cancel')"
                 @click="close()"
             />
             <UButton
-                type="button"
-                :label="footerButtonLabel"
+                v-if="footerButtonProps?.label || footerButtonProps?.icon"
+                v-bind="footerButtonProps"
                 :loading="isLoading"
                 @click="emit('submit')"
             />

@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core';
-
-const { label, value, showCopyButton, showPhoneNumberButtons, showEmailButton } = defineProps<{
+const { label, value } = defineProps<{
     label: string;
     value?: string;
-    showCopyButton?: boolean;
-    showPhoneNumberButtons?: boolean;
-    showEmailButton?: boolean;
 }>();
 
-const slots = defineSlots();
-
-const { copy, copied } = useClipboard();
-const toast = useToast();
+const slots = defineSlots<{
+    default: () => any;
+    actions: () => any;
+}>();
 
 const actionsRef = useTemplateRef('actionsRef');
-
-const PhoneNumberButtons = getPhoneNumberButtonsNode(value || null);
-const EmailButton = getEmailButtonNode(value || null);
 </script>
 
 <template>
@@ -34,24 +26,12 @@ const EmailButton = getEmailButtonNode(value || null);
                     {{ value }}
                 </div>
             </slot>
-            <div v-if="value" ref="actionsRef" class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2">
-                <UButton
-                    v-if="showCopyButton"
-                    variant="ghost"
-                    :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
-                    @click="async () => {
-                        await copy(value);
-
-                        toast.add({
-                            id: value,
-                            title: $t('toast.copy', { name: label }),
-                            color: 'success',
-                            icon: 'i-lucide-circle-check',
-                        });
-                    }"
-                />
-                <PhoneNumberButtons v-if="showPhoneNumberButtons" />
-                <EmailButton v-if="showEmailButton" />
+            <div
+                v-if="value && !!slots.actions"
+                ref="actionsRef"
+                class="absolute top-1/2 right-0 flex -translate-y-1/2 gap-2"
+            >
+                <slot name="actions" />
             </div>
         </div>
     </div>

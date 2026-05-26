@@ -48,9 +48,15 @@ defineExpose({
                     <AppModal
                         :title="$t('form.add_parent.title')"
                         :description="$t('form.add_parent.description')"
-                        :buttonLabel="$t('form.add_parent.title')"
-                        buttonIcon="i-lucide-plus"
-                        :footerButtonLabel="$t('form.button.add')"
+                        :buttonProps="{
+                            label: $t('form.add_parent.title'),
+                            icon: 'i-lucide-plus',
+                            variant: 'soft',
+                            block: true,
+                        }"
+                        :footerButtonProps="{
+                            label: $t('form.button.add'),
+                        }"
                         :isLoading="isParentsLoading"
                         @submit="parentFormRef?.[0]?.submit()"
                     >

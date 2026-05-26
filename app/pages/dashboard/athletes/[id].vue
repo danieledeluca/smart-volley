@@ -17,33 +17,34 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
         <template #right>
             <UButton icon="i-lucide-arrow-left" to="/dashboard/athletes" :label="$t('page.athlete.button.back')" />
         </template>
-        <template v-if="pending">
-            <div class="mb-6 flex gap-4 max-md:flex-col sm:mb-8 md:items-center">
-                <div class="flex gap-3">
+        <template v-if="pending ">
+            <div class="mb-6 flex items-start gap-4 sm:mb-8">
+                <div class="flex w-full flex-1 gap-3">
                     <USkeleton class="size-12 rounded-full" />
-                    <div>
-                        <USkeleton class="h-7 w-62.5" />
+                    <div class="flex-1">
+                        <USkeleton class="h-7 w-full max-w-60" />
                         <div class="mt-1 flex gap-2">
-                            <USkeleton class="h-6 w-11" />
+                            <USkeleton class="h-6 w-full max-w-32" />
                         </div>
                     </div>
                 </div>
+                <USkeleton class="ml-auto size-8" />
             </div>
             <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
                 <div class="space-y-6 sm:space-y-8 lg:col-span-8">
                     <div class="@container">
-                        <USkeleton class="h-62.5 @max-2xl:h-97" />
+                        <USkeleton class="h-60 @max-2xl:h-96" />
                     </div>
                     <div class="@container">
-                        <USkeleton class="h-110 @max-2xl:h-119" />
+                        <USkeleton class="h-110 @max-2xl:h-120" />
                     </div>
                 </div>
                 <div class="space-y-6 sm:space-y-8 lg:col-span-4">
                     <div class="@container">
-                        <USkeleton class="h-62.75 @max-2xl:h-101" />
+                        <USkeleton class="h-60 @max-2xl:h-100" />
                     </div>
                     <div class="@container">
-                        <USkeleton class="h-62.75 @max-2xl:h-80.75" />
+                        <USkeleton class="h-60 @max-2xl:h-80" />
                     </div>
                 </div>
             </div>
@@ -55,7 +56,7 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
             icon="i-lucide-circle-x"
         />
         <template v-else-if="athlete">
-            <div class="mb-8 flex gap-4 max-md:flex-col md:items-center">
+            <div class="mb-8 flex items-start gap-4">
                 <UUser
                     :name="athlete.name"
                     size="3xl"
@@ -67,6 +68,12 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         </span>
                     </template>
                 </UUser>
+                <div class="ml-auto">
+                    <ListAthleteActions
+                        :athleteId="athlete.id"
+                        :onDeleteComplete="() => navigateTo('/dashboard/athletes')"
+                    />
+                </div>
             </div>
             <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
                 <div class="space-y-6 sm:space-y-8 lg:col-span-8">
@@ -80,8 +87,14 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         <ItemCardRecord
                             :label="$t('card.athlete.record.fiscal_code')"
                             :value="athlete.fiscalCode"
-                            :showCopyButton="true"
-                        />
+                        >
+                            <template #actions>
+                                <CopyButton
+                                    :label="$t('card.athlete.record.fiscal_code')"
+                                    :value="athlete.fiscalCode"
+                                />
+                            </template>
+                        </ItemCardRecord>
                     </ItemCard>
 
                     <ItemCard
@@ -108,13 +121,19 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         <ItemCardRecord
                             :label="$t('card.address_contacts.record.phone_number')"
                             :value="athlete.phoneNumber || EMPTY_VALUE"
-                            :showPhoneNumberButtons="Boolean(athlete.phoneNumber)"
-                        />
+                        >
+                            <template v-if="athlete.phoneNumber" #actions>
+                                <PhoneNumberButtons :phoneNumber="athlete.phoneNumber" />
+                            </template>
+                        </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.address_contacts.record.email')"
                             :value="athlete.email || EMPTY_VALUE"
-                            :showEmailButton="Boolean(athlete.email)"
-                        />
+                        >
+                            <template v-if="athlete.email" #actions>
+                                <EmailButton :email="athlete.email" />
+                            </template>
+                        </ItemCardRecord>
                     </ItemCard>
 
                     <ItemCard
@@ -126,18 +145,30 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         <ItemCardRecord
                             :label="$t('card.parent.record.fiscal_code')"
                             :value="athlete.parent.fiscalCode"
-                            :showCopyButton="true"
-                        />
+                        >
+                            <template #actions>
+                                <CopyButton
+                                    :label="$t('card.parent.record.fiscal_code')"
+                                    :value="athlete.parent.fiscalCode"
+                                />
+                            </template>
+                        </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.parent.record.phone_number')"
                             :value="athlete.parent.phoneNumber || EMPTY_VALUE"
-                            :showPhoneNumberButtons="Boolean(athlete.parent.phoneNumber)"
-                        />
+                        >
+                            <template v-if="athlete.parent.phoneNumber" #actions>
+                                <PhoneNumberButtons :phoneNumber="athlete.parent.phoneNumber" />
+                            </template>
+                        </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.parent.record.email')"
                             :value="athlete.parent.email || EMPTY_VALUE"
-                            :showEmailButton="Boolean(athlete.parent.email)"
-                        />
+                        >
+                            <template v-if="athlete.parent.email" #actions>
+                                <EmailButton :email="athlete.parent.email" />
+                            </template>
+                        </ItemCardRecord>
                     </ItemCard>
                 </div>
             </div>

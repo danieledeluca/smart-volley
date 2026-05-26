@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import type { FindAthletes } from '~~/lib/db/schema';
-
-const { athlete } = defineProps<{
-    athlete: FindAthletes;
+const { athleteId, onDeleteComplete, onEditComplete } = defineProps<{
+    athleteId: number;
+    onDeleteComplete?: () => void;
+    onEditComplete?: () => void;
 }>();
 
 const athletesStore = useAthletesStore();
 const { isLoading } = storeToRefs(athletesStore);
 
-const formRef = useTemplateRef('formRef');
-
 const openDelete = ref(false);
 const openEdit = ref(false);
 
 async function handleDelete() {
-    await athletesStore.removeAthlete(athlete.id);
+    await athletesStore.removeAthlete(athleteId, onDeleteComplete);
     openDelete.value = false;
 }
 
 async function handleEdit() {
-    formRef.value?.submit();
+    // TODO: add function in store
     openEdit.value = false;
+
+    onEditComplete?.();
 }
 </script>
 
@@ -41,7 +41,7 @@ async function handleEdit() {
         </template>
         <template #edit>
             <!-- TODO: add form -->
-            <pre>{{ athlete }}</pre>
+            <pre>{{ athleteId }}</pre>
         </template>
     </ListTableActions>
 </template>

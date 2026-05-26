@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import EnrollmentActions from '~/components/List/EnrollmentActions.vue';
-
 useSeoMeta({
     title: $t('page.enrollments.title'),
 });
@@ -23,15 +21,7 @@ const formRef = useTemplateRef('formRef');
 const tableColumns = getEnrollmentsTableColumns(['id', 'athlete', 'season', 'activity', 'course']);
 
 if (canEdit.value) {
-    tableColumns.push({
-        id: 'actions',
-        meta: {
-            class: {
-                td: 'text-right',
-            },
-        },
-        cell: ({ row }) => h(EnrollmentActions, { enrollment: row.original }),
-    });
+    tableColumns.push(getEnrollmentsTableActionsColumn());
 }
 </script>
 
@@ -41,9 +31,13 @@ if (canEdit.value) {
             <AppSlideover
                 :title="$t('form.add_enrollment.title')"
                 :description="$t('form.add_enrollment.description')"
-                :buttonLabel="$t('page.enrollments.button.add')"
-                buttonIcon="i-lucide-plus"
-                :footerButtonLabel="$t('form.button.add')"
+                :buttonProps="{
+                    label: $t('page.enrollments.button.add'),
+                    icon: 'i-lucide-plus',
+                }"
+                :footerButtonProps="{
+                    label: $t('form.button.add'),
+                }"
                 :isLoading
                 @submit="formRef?.submit()"
             >

@@ -1,28 +1,26 @@
 <script setup lang="ts">
-import type { FindEnrollments } from '~~/lib/db/schema';
-
-const { enrollment } = defineProps<{
-    enrollment: FindEnrollments;
+const { enrollmentId, onDeleteComplete, onEditComplete } = defineProps<{
+    enrollmentId: number;
+    onDeleteComplete?: () => void;
+    onEditComplete?: () => void;
 }>();
 
 const enrollmentsStore = useEnrollmentsStore();
 const { isLoading } = storeToRefs(enrollmentsStore);
 
-const formRef = useTemplateRef('formRef');
-
 const openDelete = ref(false);
 const openEdit = ref(false);
 
 async function handleDelete() {
-    await enrollmentsStore.removeEnrollment(enrollment.id);
+    await enrollmentsStore.removeEnrollment(enrollmentId, onDeleteComplete);
     openDelete.value = false;
 }
 
 async function handleEdit() {
-    formRef.value?.submit();
+    // TODO: add function in store
     openEdit.value = false;
 
-    console.log(enrollment);
+    onEditComplete?.();
 }
 </script>
 
@@ -43,7 +41,7 @@ async function handleEdit() {
         </template>
         <template #edit>
             <!-- TODO: add form -->
-            <pre>{{ enrollment }}</pre>
+            <pre>{{ enrollmentId }}</pre>
         </template>
     </ListTableActions>
 </template>

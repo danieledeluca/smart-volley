@@ -114,7 +114,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         }
     };
 
-    const removeEnrollment = async (enrollmentId: number) => {
+    const removeEnrollment = async (enrollmentId: number, onComplete?: () => void) => {
         try {
             isLoading.value = true;
 
@@ -123,6 +123,8 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             });
 
             refreshEnrollments();
+
+            onComplete?.();
 
             toast.add({
                 description: $t('form.delete_enrollment.success'),
