@@ -1,23 +1,14 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { FindAthlete, FindAthletes, FindEnrollments } from '~~/lib/db/schema';
 
-import UUser from '@nuxt/ui/components/User.vue';
-
-import CertificateDate from '~/components/CertificateDate.vue';
-import CertificateDownloadButton from '~/components/CertificateDownloadButton.vue';
+import User from '~/components/App/User.vue';
+import AthleteActions from '~/components/Athlete/Actions.vue';
+import CertificateDate from '~/components/Certificate/Date.vue';
+import CertificateDownloadButton from '~/components/Certificate/DownloadButton.vue';
 import EmailButton from '~/components/EmailButton.vue';
-import AthleteActions from '~/components/List/AthleteActions.vue';
-import EnrollmentActions from '~/components/List/EnrollmentActions.vue';
+import EnrollmentActions from '~/components/Enrollment/Actions.vue';
 import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
 import PhoneNumberButtons from '~/components/PhoneNumberButtons.vue';
-
-function getUserAvatarNode(id: number, name: string, description?: string) {
-    return h(UUser, {
-        name,
-        description,
-        avatar: { ...getAvatar(id.toString(), 64) },
-    });
-}
 
 export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
     type TableColumns = Partial<Record<keyof FindAthletes, TableColumn<FindAthletes>>>;
@@ -31,7 +22,13 @@ export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
         name: {
             accessorKey: 'name',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
-            cell: ({ row }) => getUserAvatarNode(row.original.id, row.original.name, row.original.fiscalCode),
+            cell: ({ row }) => h(User, {
+                userProps: {
+                    name: row.original.name,
+                    description: row.original.fiscalCode,
+                },
+                avatarSize: 64,
+            }),
         },
         phoneNumber: {
             accessorKey: 'phoneNumber',
@@ -126,11 +123,13 @@ export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
         athlete: {
             accessorKey: 'athlete',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.athlete') }),
-            cell: ({ row }) => getUserAvatarNode(
-                row.original.id,
-                row.original.athlete.name,
-                row.original.athlete.fiscalCode,
-            ),
+            cell: ({ row }) => h(User, {
+                userProps: {
+                    name: row.original.athlete.name,
+                    description: row.original.athlete.fiscalCode,
+                },
+                avatarSize: 64,
+            }),
         },
         season: {
             accessorKey: 'season',

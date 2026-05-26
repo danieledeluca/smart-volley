@@ -46,7 +46,7 @@ if (canEdit.value) {
                 :isLoading
                 @submit="formRef?.submit()"
             >
-                <FormAddEnrollment ref="formRef" />
+                <EnrollmentForm ref="formRef" />
             </AppSlideover>
         </template>
         <ListFilters

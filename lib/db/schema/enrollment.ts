@@ -8,8 +8,8 @@ import z from 'zod';
 import type { findEnrollments } from '../queries/enrollments';
 
 import { $t } from '../../../shared/utils/i18n';
-import { formatFileSize } from '../../utils';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
+import { formatFileSize } from '../../utils/formatters';
 import { activity } from './activity';
 import { athlete } from './athlete';
 import { course } from './course';

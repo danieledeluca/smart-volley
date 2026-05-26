@@ -60,7 +60,7 @@ defineExpose({
                         :isLoading="isParentsLoading"
                         @submit="parentFormRef?.[0]?.submit()"
                     >
-                        <FormAddParent ref="parentFormRef" />
+                        <ParentForm ref="parentFormRef" />
                     </AppModal>
                 </template>
             </FormField>

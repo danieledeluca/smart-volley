@@ -57,11 +57,13 @@ useSeoMeta({ title });
         />
         <template v-else-if="enrollment">
             <div class="mb-6 flex items-start gap-4 sm:mb-8">
-                <UUser
-                    :name="enrollment.athlete.name"
-                    :avatar="getAvatar(enrollment.athlete.id.toString(), 150)"
-                    :to="`/dashboard/athletes/${enrollment.athlete.id}`"
-                    size="3xl"
+                <AppUser
+                    :userProps="{
+                        name: enrollment.athlete.name,
+                        size: '3xl',
+                        to: `/dashboard/athletes/${enrollment.athlete.id}`,
+                    }"
+                    :avatarSize="96"
                 >
                     <template #description>
                         <span class="mt-1 flex flex-wrap gap-2">
@@ -77,9 +79,9 @@ useSeoMeta({ title });
                             />
                         </span>
                     </template>
-                </UUser>
+                </AppUser>
                 <div class="ml-auto">
-                    <ListEnrollmentActions
+                    <EnrollmentActions
                         :enrollmentId="enrollment.id"
                         :onDeleteComplete="() => navigateTo('/dashboard/enrollments')"
                     />

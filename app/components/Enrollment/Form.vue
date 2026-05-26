@@ -69,7 +69,7 @@ defineExpose({
                         :isLoading="isAthletesLoading"
                         @submit="athleteFormRef?.[0]?.submit"
                     >
-                        <FormAddAthlete ref="athleteFormRef" />
+                        <AthleteForm ref="athleteFormRef" />
                     </AppModal>
                 </template>
                 <template #seasonId-post>
@@ -88,7 +88,7 @@ defineExpose({
                         :isLoading="isSeasonsLoading"
                         @submit="seasonFormRef?.[0]?.submit"
                     >
-                        <FormAddSeason ref="seasonFormRef" />
+                        <SeasonForm ref="seasonFormRef" />
                     </AppModal>
                 </template>
                 <template #activityId-post>
@@ -107,7 +107,7 @@ defineExpose({
                         :isLoading="isActivitiesLoading"
                         @submit="activityFormRef?.[0]?.submit"
                     >
-                        <FormAddActivity ref="activityFormRef" />
+                        <ActivityForm ref="activityFormRef" />
                     </AppModal>
                 </template>
                 <template #courseId-post>
@@ -126,7 +126,7 @@ defineExpose({
                         :isLoading="isCoursesLoading"
                         @submit="courseFormRef?.[0]?.submit"
                     >
-                        <FormAddCourse ref="courseFormRef" />
+                        <CourseForm ref="courseFormRef" />
                     </AppModal>
                 </template>
             </FormField>

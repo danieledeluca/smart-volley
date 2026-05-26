@@ -57,19 +57,21 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
         />
         <template v-else-if="athlete">
             <div class="mb-8 flex items-start gap-4">
-                <UUser
-                    :name="athlete.name"
-                    size="3xl"
-                    :avatar="getAvatar(athlete.id.toString(), 96)"
+                <AppUser
+                    :userProps="{
+                        name: athlete.name,
+                        size: '3xl',
+                    }"
+                    :avatarSize="96"
                 >
                     <template #description>
                         <span class="mt-1 flex flex-wrap gap-2">
                             <UBadge variant="soft" color="neutral" :label="athlete.fiscalCode" />
                         </span>
                     </template>
-                </UUser>
+                </AppUser>
                 <div class="ml-auto">
-                    <ListAthleteActions
+                    <AthleteActions
                         :athleteId="athlete.id"
                         :onDeleteComplete="() => navigateTo('/dashboard/athletes')"
                     />

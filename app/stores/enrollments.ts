@@ -2,8 +2,8 @@ import type { FormError, FormSubmitEvent, InputNumberProps, SelectItem } from '@
 import type { InsertEnrollment } from '~~/lib/db/schema';
 import type { FetchError } from 'ofetch';
 
-import { formatFileSize } from '~~/lib/utils';
 import { FILE_MAX_SIZE } from '~~/lib/utils/constants';
+import { formatFileSize } from '~~/lib/utils/formatters';
 
 import type {
     CertificateStatusEnum,

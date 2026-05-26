@@ -47,7 +47,7 @@ onBeforeRouteLeave(() => {
                 :isLoading
                 @submit="formRef?.submit"
             >
-                <FormAddAthlete ref="formRef" />
+                <AthleteForm ref="formRef" />
             </AppSlideover>
         </template>
         <ListFilters
