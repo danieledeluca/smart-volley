@@ -31,13 +31,15 @@ export const athlete = pgTable('athlete', {
     uniqueIndex().on(table.email).where(sql`${table.email} IS NOT NULL`),
 ]);
 
-export const athleteRelations = relations(athlete, ({ one, many }) => ({
-    parent: one(parent, {
-        fields: [athlete.parentId],
-        references: [parent.id],
-    }),
-    enrollments: many(enrollment),
-}));
+export const athleteRelations = relations(athlete, ({ one, many }) => {
+    return {
+        parent: one(parent, {
+            fields: [athlete.parentId],
+            references: [parent.id],
+        }),
+        enrollments: many(enrollment),
+    };
+});
 
 export const InsertAthlete = createInsertSchema(athlete, {
     name: z.string($t('form.field.name.required')).trim().nonempty($t('form.field.name.required')),
@@ -50,12 +52,14 @@ export const InsertAthlete = createInsertSchema(athlete, {
     city: z.string($t('form.field.city.required')).trim().nonempty($t('form.field.city.required')),
     address: z.string($t('form.field.address.required')).trim().nonempty($t('form.field.address.required')),
     phoneNumber: z.string()
+        .transform((value) => value || undefined)
         .refine((value) => !value || PHONE_NUMBER_REGEX.test(value), $t('form.field.phone_number.error'))
         .optional(),
     email: z.string()
+        .transform((value) => value || undefined)
         .refine((value) => !value || z.email().safeParse(value).success, $t('form.field.email.error'))
         .optional(),
-    parentId: z.union([z.coerce.number(), z.literal('').transform(() => undefined)]).optional(),
+    parentId: z.union([z.literal('').transform(() => undefined), z.coerce.number()]).optional(),
 }).omit({
     createdAt: true,
     updatedAt: true,
@@ -63,5 +67,5 @@ export const InsertAthlete = createInsertSchema(athlete, {
 });
 
 export type InsertAthlete = z.infer<typeof InsertAthlete>;
-export type FindAthletes = SerializeObject<Awaited<ReturnType<typeof findAthletes>>[number]>;
-export type FindAthlete = SerializeObject<NonNullable<Awaited<ReturnType<typeof findAthlete>>>>;
+export type SelectAthletes = SerializeObject<Awaited<ReturnType<typeof findAthletes>>[number]>;
+export type SelectAthleteWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findAthlete>>>>;

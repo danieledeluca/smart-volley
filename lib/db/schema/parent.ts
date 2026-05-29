@@ -15,14 +15,17 @@ export const parent = pgTable('parent', {
     email: varchar({ length: 255 }),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
+    deletedAt: timestamp(),
 }, (table) => [
     uniqueIndex().on(table.phoneNumber).where(sql`${table.phoneNumber} IS NOT NULL`),
     uniqueIndex().on(table.email).where(sql`${table.email} IS NOT NULL`),
 ]);
 
-export const parentRelations = relations(parent, ({ many }) => ({
-    athletes: many(athlete),
-}));
+export const parentRelations = relations(parent, ({ many }) => {
+    return {
+        athletes: many(athlete),
+    };
+});
 
 export const InsertParent = createInsertSchema(parent, {
     name: z.string($t('form.field.name.required')).trim().nonempty($t('form.field.name.required')),
@@ -38,6 +41,7 @@ export const InsertParent = createInsertSchema(parent, {
 }).omit({
     createdAt: true,
     updatedAt: true,
+    deletedAt: true,
 });
 
 export type InsertParent = z.infer<typeof InsertParent>;

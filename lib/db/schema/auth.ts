@@ -56,21 +56,27 @@ export const verification = pgTable('verification', {
     index().on(table.identifier),
 ]);
 
-export const userRelations = relations(user, ({ many }) => ({
-    sessions: many(session),
-    accounts: many(account),
-}));
+export const userRelations = relations(user, ({ many }) => {
+    return {
+        sessions: many(session),
+        accounts: many(account),
+    };
+});
 
-export const sessionRelations = relations(session, ({ one }) => ({
-    user: one(user, {
-        fields: [session.userId],
-        references: [user.id],
-    }),
-}));
+export const sessionRelations = relations(session, ({ one }) => {
+    return {
+        user: one(user, {
+            fields: [session.userId],
+            references: [user.id],
+        }),
+    };
+});
 
-export const accountRelations = relations(account, ({ one }) => ({
-    user: one(user, {
-        fields: [account.userId],
-        references: [user.id],
-    }),
-}));
+export const accountRelations = relations(account, ({ one }) => {
+    return {
+        user: one(user, {
+            fields: [account.userId],
+            references: [user.id],
+        }),
+    };
+});

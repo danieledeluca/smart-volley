@@ -36,24 +36,26 @@ export const enrollment = pgTable('enrollment', {
     unique().on(table.athleteId, table.seasonId, table.activityId, table.courseId),
 ]);
 
-export const enrollmentRelations = relations(enrollment, ({ one }) => ({
-    athlete: one(athlete, {
-        fields: [enrollment.athleteId],
-        references: [athlete.id],
-    }),
-    season: one(season, {
-        fields: [enrollment.seasonId],
-        references: [season.id],
-    }),
-    activity: one(activity, {
-        fields: [enrollment.activityId],
-        references: [activity.id],
-    }),
-    course: one(course, {
-        fields: [enrollment.courseId],
-        references: [course.id],
-    }),
-}));
+export const enrollmentRelations = relations(enrollment, ({ one }) => {
+    return {
+        athlete: one(athlete, {
+            fields: [enrollment.athleteId],
+            references: [athlete.id],
+        }),
+        season: one(season, {
+            fields: [enrollment.seasonId],
+            references: [season.id],
+        }),
+        activity: one(activity, {
+            fields: [enrollment.activityId],
+            references: [activity.id],
+        }),
+        course: one(course, {
+            fields: [enrollment.courseId],
+            references: [course.id],
+        }),
+    };
+});
 
 const NumericSchema = z.string().transform((value) => !Number(value) ? undefined : value).optional();
 
@@ -84,4 +86,4 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
 });
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;
-export type FindEnrollments = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;
+export type SelectEnrollmentsWithRelations = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;

@@ -12,7 +12,9 @@ export async function findSeasons() {
 }
 
 export async function insertSeason(data: InsertSeason) {
-    const [created] = await db.insert(season).values(data).returning();
+    const [created] = await db.insert(season)
+        .values(data)
+        .returning();
 
     return created;
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Faker, it } from '@faker-js/faker';
 
-import { formatPhoneNumber } from '../../app/utils/format';
+import { formatPhoneNumber } from '../../app/utils/formatters';
 import db from './';
 import * as schema from './schema';
 

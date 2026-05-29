@@ -13,9 +13,11 @@ export const activity = pgTable('activity', {
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
-export const activityRelations = relations(activity, ({ many }) => ({
-    enrollments: many(enrollment),
-}));
+export const activityRelations = relations(activity, ({ many }) => {
+    return {
+        enrollments: many(enrollment),
+    };
+});
 
 export const InsertActivity = createInsertSchema(activity, {
     name: z.string($t('form.field.activity_name.required')).trim().nonempty($t('form.field.activity_name.required')),

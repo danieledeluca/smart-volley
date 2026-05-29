@@ -12,7 +12,9 @@ export async function findCourses() {
 }
 
 export async function insertCourse(data: InsertCourse) {
-    const [created] = await db.insert(course).values(data).returning();
+    const [created] = await db.insert(course)
+        .values(data)
+        .returning();
 
     return created;
 }

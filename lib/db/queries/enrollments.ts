@@ -65,9 +65,23 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
                     fiscalCode: true,
                 },
             },
-            season: true,
-            activity: true,
-            course: true,
+            season: {
+                columns: {
+                    startYear: true,
+                    endYear: true,
+                },
+            },
+            activity: {
+                columns: {
+                    name: true,
+                },
+            },
+            course: {
+                columns: {
+                    name: true,
+                    description: true,
+                },
+            },
         },
         where: and(
             inArray(enrollment.id, filteredIds.map((filter) => filter.id)),
@@ -92,28 +106,23 @@ export async function findEnrollment(enrollmentId: number) {
             isNull(enrollment.deletedAt),
         ),
         with: {
-            athlete: {
-                columns: {
-                    id: true,
-                    name: true,
-                },
-            },
+            athlete: true,
             season: true,
             activity: true,
             course: true,
         },
     });
 
-    if (result) {
-        const { certificateStorageKey, ...rest } = result;
-
-        return {
-            ...rest,
-            certificateFile: Boolean(certificateStorageKey),
-        };
+    if (!result) {
+        return result;
     }
 
-    return result;
+    const { certificateStorageKey, ...rest } = result;
+
+    return {
+        ...rest,
+        certificateFile: Boolean(certificateStorageKey),
+    };
 }
 
 export async function findEnrollmentCertificateStorageKey(enrollmentId: number) {
@@ -144,10 +153,12 @@ export async function insertEnrollment(data: InsertEnrollment) {
         }
     }
 
-    const [created] = await db.insert(enrollment).values({
-        ...data,
-        certificateStorageKey,
-    }).returning();
+    const [created] = await db.insert(enrollment)
+        .values({
+            ...data,
+            certificateStorageKey,
+        })
+        .returning();
 
     return created;
 }

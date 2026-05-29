@@ -16,9 +16,11 @@ export const season = pgTable('season', {
     unique().on(table.startYear, table.endYear),
 ]);
 
-export const seasonRelations = relations(season, ({ many }) => ({
-    enrollments: many(enrollment),
-}));
+export const seasonRelations = relations(season, ({ many }) => {
+    return {
+        enrollments: many(enrollment),
+    };
+});
 
 export const InsertSeason = createInsertSchema(season, {
     startYear: z.coerce.number($t('form.field.start_year.required')).transform((value) => Number(value)),

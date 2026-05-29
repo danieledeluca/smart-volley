@@ -12,7 +12,9 @@ export async function findActivities() {
 }
 
 export async function insertActivity(data: InsertActivity) {
-    const [created] = await db.insert(activity).values(data).returning();
+    const [created] = await db.insert(activity)
+        .values(data)
+        .returning();
 
     return created;
 }

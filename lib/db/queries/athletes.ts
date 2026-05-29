@@ -32,9 +32,6 @@ export async function findAthlete(athleteId: number) {
             parent: true,
             enrollments: {
                 where: isNull(enrollment.deletedAt),
-                columns: {
-                    id: true,
-                },
                 with: {
                     season: true,
                     activity: true,
@@ -44,17 +41,22 @@ export async function findAthlete(athleteId: number) {
         },
     });
 
-    result?.enrollments.sort((a, b) => b.season.endYear - a.season.endYear);
+    if (!result) {
+        return result;
+    }
 
-    return result;
+    result.enrollments.sort((a, b) => b.season.endYear - a.season.endYear);
+
+    return {
+        ...result,
+        parent: result.parent?.deletedAt ? null : result.parent,
+    };
 }
 
 export async function insertAthlete(data: InsertAthlete) {
-    const [created] = await db.insert(athlete).values({
-        ...data,
-        phoneNumber: data.phoneNumber || undefined,
-        email: data.email || undefined,
-    }).returning();
+    const [created] = await db.insert(athlete)
+        .values(data)
+        .returning();
 
     return created;
 }

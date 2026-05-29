@@ -1,5 +1,5 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import type { FindAthlete, FindAthletes, FindEnrollments } from '~~/lib/db/schema';
+import type { SelectAthletes, SelectAthleteWithRelations, SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
 
 import User from '~/components/App/User.vue';
 import AthleteActions from '~/components/Athlete/Actions.vue';
@@ -10,10 +10,10 @@ import EnrollmentActions from '~/components/Enrollment/Actions.vue';
 import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
 import PhoneNumberButtons from '~/components/PhoneNumberButtons.vue';
 
-export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
-    type TableColumns = Partial<Record<keyof FindAthletes, TableColumn<FindAthletes>>>;
+type TableColumns<T> = Partial<Record<keyof T, TableColumn<T>>>;
 
-    const tableColumns: TableColumns = {
+export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
+    const tableColumns: TableColumns<SelectAthletes> = {
         id: {
             accessorKey: 'id',
             header: $t('table.column.id'),
@@ -63,7 +63,7 @@ export function getAthletesTableColumns(columns: (keyof FindAthletes)[]) {
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
-export function getAthletesTableActionsColumn(): TableColumn<FindAthletes> {
+export function getAthletesTableActionsColumn(): TableColumn<SelectAthletes> {
     return {
         id: 'actions',
         meta: {
@@ -75,13 +75,10 @@ export function getAthletesTableActionsColumn(): TableColumn<FindAthletes> {
     };
 }
 
-export function getAthleteEnrollmentsTableColumns(columns: (keyof FindAthlete['enrollments'][number])[]) {
-    type TableColumns = Partial<Record<
-        keyof FindAthlete['enrollments'][number],
-        TableColumn<FindAthlete['enrollments'][number]>
-    >>;
-
-    const tableColumns: TableColumns = {
+export function getAthleteEnrollmentsTableColumns(
+    columns: (keyof SelectAthleteWithRelations['enrollments'][number])[],
+) {
+    const tableColumns: TableColumns<SelectAthleteWithRelations['enrollments'][number]> = {
         season: {
             accessorKey: 'season',
             header: $t('table.column.season'),
@@ -111,10 +108,8 @@ export function getAthleteEnrollmentsTableColumns(columns: (keyof FindAthlete['e
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
-export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
-    type TableColumns = Partial<Record<keyof FindEnrollments, TableColumn<FindEnrollments>>>;
-
-    const tableColumns: TableColumns = {
+export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWithRelations)[]) {
+    const tableColumns: TableColumns<SelectEnrollmentsWithRelations> = {
         id: {
             accessorKey: 'id',
             header: $t('table.column.id'),
@@ -251,7 +246,7 @@ export function getEnrollmentsTableColumns(columns: (keyof FindEnrollments)[]) {
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
-export function getEnrollmentsTableActionsColumn(): TableColumn<FindEnrollments> {
+export function getEnrollmentsTableActionsColumn(): TableColumn<SelectEnrollmentsWithRelations> {
     return {
         id: 'actions',
         meta: {
@@ -263,6 +258,6 @@ export function getEnrollmentsTableActionsColumn(): TableColumn<FindEnrollments>
     };
 }
 
-export function onEnrollmentSelect(_event: Event, row: TableRow<FindEnrollments>) {
+export function onEnrollmentSelect(_event: Event, row: TableRow<SelectEnrollmentsWithRelations>) {
     return navigateTo(`/dashboard/enrollments/${row.original.id}`);
 }
