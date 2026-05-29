@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const { title } = defineProps<{
+const { title, wrapBody = false } = defineProps<{
     title: string;
+    wrapBody?: boolean;
 }>();
 </script>
 
@@ -17,9 +18,10 @@ const { title } = defineProps<{
             </UDashboardNavbar>
         </template>
         <template #body>
-            <div class="flex h-full flex-col">
+            <div v-if="wrapBody" class="flex h-full flex-col">
                 <slot />
             </div>
+            <slot v-else />
         </template>
     </UDashboardPanel>
 </template>

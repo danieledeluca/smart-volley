@@ -46,6 +46,7 @@
     "@antfu/eslint-config": "^8.2.0",
     "@faker-js/faker": "^10.4.0",
     "@iconify-json/lucide": "^1.2.105",
+    "@iconify-json/simple-icons": "^1.2.84",
     "@types/node": "^25.6.2",
     "drizzle-kit": "^0.31.10",
     "drizzle-zod": "^0.8.3",

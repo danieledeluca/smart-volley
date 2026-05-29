@@ -32,11 +32,11 @@ onBeforeRouteLeave(() => {
 </script>
 
 <template>
-    <DashboardPanel :title="$t('page.athletes.title')">
+    <DashboardPanel :title="$t('page.athletes.title')" :wrapBody="true">
         <template v-if="canEdit" #right>
             <AppSlideover
-                :title="$t('form.add_athlete.title')"
-                :description="$t('form.add_athlete.description')"
+                :title="$t('form.athlete.add.title')"
+                :description="$t('form.athlete.add.description')"
                 :buttonProps="{
                     label: $t('page.athletes.button.add'),
                     icon: 'i-lucide-plus',

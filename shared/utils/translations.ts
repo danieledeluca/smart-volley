@@ -1,6 +1,11 @@
 /* eslint-disable style/max-len */
 export const translations = {
     auth: {
+        role: {
+            admin: 'Admin',
+            manager: 'Gestore',
+            viewer: 'Osservatore',
+        },
         sign_out: 'Esci',
         sing_in: {
             google: 'Accedi con Google',
@@ -65,52 +70,86 @@ export const translations = {
         },
     },
     form: {
-        add_activity: {
-            description: 'Compila i campi per creare una nuova attività.',
-            success: 'Attività aggiunta con successo',
-            title: 'Nuova attività',
-        },
-        add_athlete: {
-            description: 'Compila i campi per creare un nuovo atleta.',
-            group: {
-                address_contacts: 'Indirizzo e contatti',
-                parent: 'Genitore',
-                personal_information: 'Informazioni personali',
+        activity: {
+            add: {
+                description: 'Compila i campi per creare una nuova attività.',
+                success: 'Attività aggiunta con successo',
+                title: 'Nuova attività',
             },
-            success: 'Atleta aggiunto con successo',
-            title: 'Nuovo atleta',
         },
-        add_course: {
-            description: 'Compila i campi per creare un nuovo corso.',
-            success: 'Corso aggiunto con successo',
-            title: 'Nuovo corso',
-        },
-        add_enrollment: {
-            description: 'Compila i campi per creare una nuova iscrizione.',
-            group: {
-                activity: 'Attività',
-                athlete: 'Atleta',
-                certificate: 'Certificato medico',
-                course: 'Corso',
-                payment_information: 'Informazioni di pagamento',
-                season: 'Stagione',
+        athlete: {
+            add: {
+                description: 'Compila i campi per creare un nuovo atleta.',
+                group: {
+                    address_contacts: 'Indirizzo e contatti',
+                    parent: 'Genitore',
+                    personal_information: 'Informazioni personali',
+                },
+                success: 'Atleta aggiunto con successo',
+                title: 'Nuovo atleta',
             },
-            success: 'Iscrizione aggiunta con successo',
-            title: 'Nuova iscrizione',
-        },
-        add_parent: {
-            description: 'Compila i campi per creare un nuovo genitore.',
-            group: {
-                contacts: 'Contatti',
-                personal_information: 'Informazioni personali',
+            delete: {
+                body: 'Sei sicuro di voler eliminare questo atleta? Questa azione è irreversibile.',
+                description: 'Attenzione! Stai per eliminare un\'atleta.',
+                success: 'Atleta eliminato con successo',
+                title: 'Elimina atleta',
             },
-            success: 'Genitore aggiunto con successo',
-            title: 'Nuovo genitore',
+            edit: {
+                description: 'Compila i campi per modificare le informazioni dell\'atleta.',
+                success: 'Atleta modificato con successo',
+                title: 'Modifica atleta',
+            },
         },
-        add_season: {
-            description: 'Compila i campi per creare una nuova stagione.',
-            success: 'Stagione aggiunta con successo',
-            title: 'Nuova stagione',
+        course: {
+            add: {
+                description: 'Compila i campi per creare un nuovo corso.',
+                success: 'Corso aggiunto con successo',
+                title: 'Nuovo corso',
+            },
+        },
+        enrollment: {
+            add: {
+                description: 'Compila i campi per creare una nuova iscrizione.',
+                group: {
+                    activity: 'Attività',
+                    athlete: 'Atleta',
+                    certificate: 'Certificato medico',
+                    course: 'Corso',
+                    payment_information: 'Informazioni di pagamento',
+                    season: 'Stagione',
+                },
+                success: 'Iscrizione aggiunta con successo',
+                title: 'Nuova iscrizione',
+            },
+            delete: {
+                body: 'Sei sicuro di voler eliminare questa iscrizione? Questa azione è irreversibile.',
+                description: 'Attenzione! Stai per eliminare un\'iscrizione.',
+                success: 'Iscrizione eliminata con successo',
+                title: 'Elimina iscrizione',
+            },
+            edit: {
+                description: 'Compila i campi per modificare le informazioni dell\'iscrizione.',
+                success: 'Iscrizione modificata con successo',
+                title: 'Modifica iscrizione',
+            },
+        },
+        parent: {
+            add: {
+                description: 'Compila i campi per creare un nuovo genitore.',
+                group: {
+                    contacts: 'Contatti',
+                    personal_information: 'Informazioni personali',
+                },
+                success: 'Genitore aggiunto con successo',
+                title: 'Nuovo genitore',
+            },
+        },
+        season: {
+            add: {
+                description: 'Compila i campi per creare una nuova stagione.',
+                success: 'Stagione aggiunta con successo',
+                title: 'Nuova stagione',
+            },
         },
         button: {
             add: 'Aggiungi',
@@ -118,28 +157,6 @@ export const translations = {
             delete: 'Elimina',
             download: 'Download',
             edit: 'Modifica',
-        },
-        delete_athlete: {
-            body: 'Sei sicuro di voler eliminare questo atleta? Questa azione è irreversibile.',
-            description: 'Attenzione! Stai per eliminare un\'atleta.',
-            success: 'Atleta eliminato con successo',
-            title: 'Elimina atleta',
-        },
-        delete_enrollment: {
-            body: 'Sei sicuro di voler eliminare questa iscrizione? Questa azione è irreversibile.',
-            description: 'Attenzione! Stai per eliminare un\'iscrizione.',
-            success: 'Iscrizione eliminata con successo',
-            title: 'Elimina iscrizione',
-        },
-        edit_athlete: {
-            description: 'Compila i campi per modificare le informazioni dell\'atleta.',
-            success: 'Atleta modificato con successo',
-            title: 'Modifica atleta',
-        },
-        edit_enrollment: {
-            description: 'Compila i campi per modificare le informazioni dell\'iscrizione.',
-            success: 'Iscrizione modificata con successo',
-            title: 'Modifica iscrizione',
         },
         field: {
             activity_id: {

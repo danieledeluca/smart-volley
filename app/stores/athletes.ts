@@ -82,7 +82,7 @@ export const useAthletesStore = defineStore('athletes', () => {
             clearAthleteAddForm();
 
             toast.add({
-                description: $t('form.add_athlete.success'),
+                description: $t('form.athlete.add.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });
@@ -116,7 +116,7 @@ export const useAthletesStore = defineStore('athletes', () => {
             onComplete?.();
 
             toast.add({
-                description: $t('form.delete_athlete.success'),
+                description: $t('form.athlete.delete.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });
@@ -157,7 +157,7 @@ export const useAthletesStore = defineStore('athletes', () => {
     const athleteAddFields = computed<FormFieldGroup<InsertAthlete>[]>(() => {
         return [
             {
-                title: $t('form.add_athlete.group.personal_information'),
+                title: $t('form.athlete.add.group.personal_information'),
                 icon: 'i-lucide-id-card',
                 fields: [
                     {
@@ -210,7 +210,7 @@ export const useAthletesStore = defineStore('athletes', () => {
                 ],
             },
             {
-                title: $t('form.add_athlete.group.address_contacts'),
+                title: $t('form.athlete.add.group.address_contacts'),
                 icon: 'i-lucide-notebook',
                 fields: [
                     {
@@ -258,7 +258,7 @@ export const useAthletesStore = defineStore('athletes', () => {
                 ],
             },
             {
-                title: $t('form.add_athlete.group.parent'),
+                title: $t('form.athlete.add.group.parent'),
                 icon: 'i-lucide-user',
                 fields: [
                     {

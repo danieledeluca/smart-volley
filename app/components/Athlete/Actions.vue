@@ -28,16 +28,16 @@ async function handleEdit() {
     <ListTableActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
-        :deleteTitle="$t('form.delete_athlete.title')"
-        :deleteDescription="$t('form.delete_athlete.description')"
-        :editTitle="$t('form.edit_athlete.title')"
-        :editDescription="$t('form.edit_athlete.description')"
+        :deleteTitle="$t('form.athlete.delete.title')"
+        :deleteDescription="$t('form.athlete.delete.description')"
+        :editTitle="$t('form.athlete.edit.title')"
+        :editDescription="$t('form.athlete.edit.description')"
         :isLoading
         @delete="handleDelete"
         @edit="handleEdit"
     >
         <template #delete>
-            {{ $t('form.delete_athlete.body') }}
+            {{ $t('form.athlete.delete.body') }}
         </template>
         <template #edit>
             <!-- TODO: add form -->

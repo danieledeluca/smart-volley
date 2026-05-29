@@ -46,10 +46,10 @@ defineExpose({
             >
                 <template #parentId-post>
                     <AppModal
-                        :title="$t('form.add_parent.title')"
-                        :description="$t('form.add_parent.description')"
+                        :title="$t('form.parent.add.title')"
+                        :description="$t('form.parent.add.description')"
                         :buttonProps="{
-                            label: $t('form.add_parent.title'),
+                            label: $t('form.parent.add.title'),
                             icon: 'i-lucide-plus',
                             variant: 'soft',
                             block: true,

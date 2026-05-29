@@ -52,7 +52,7 @@ export const useSeasonsStore = defineStore('seasons', () => {
             clearSeasonAddForm();
 
             toast.add({
-                description: $t('form.add_season.success'),
+                description: $t('form.season.add.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });

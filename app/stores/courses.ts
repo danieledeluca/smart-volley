@@ -53,7 +53,7 @@ export const useCoursesStore = defineStore('courses', () => {
             clearCourseAddForm();
 
             toast.add({
-                description: $t('form.add_course.success'),
+                description: $t('form.course.add.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });

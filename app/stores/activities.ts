@@ -51,7 +51,7 @@ export const useActivitiesStore = defineStore('activities', () => {
             clearActivityAddForm();
 
             toast.add({
-                description: $t('form.add_activity.success'),
+                description: $t('form.activity.add.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });

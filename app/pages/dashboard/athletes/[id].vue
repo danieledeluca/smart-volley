@@ -17,8 +17,8 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
         <template #right>
             <UButton icon="i-lucide-arrow-left" to="/dashboard/athletes" :label="$t('page.athlete.button.back')" />
         </template>
-        <template v-if="pending ">
-            <div class="mb-6 flex items-start gap-4 sm:mb-8">
+        <template v-if="pending">
+            <div class="flex items-start gap-4">
                 <div class="flex w-full flex-1 gap-3">
                     <USkeleton class="size-12 rounded-full" />
                     <div class="flex-1">
@@ -30,8 +30,8 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                 </div>
                 <USkeleton class="ml-auto size-8" />
             </div>
-            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
-                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
+            <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-8">
                     <div class="@container">
                         <USkeleton class="h-60 @max-2xl:h-96" />
                     </div>
@@ -39,7 +39,7 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         <USkeleton class="h-110 @max-2xl:h-120" />
                     </div>
                 </div>
-                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-4">
                     <div class="@container">
                         <USkeleton class="h-60 @max-2xl:h-100" />
                     </div>
@@ -56,7 +56,7 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
             icon="i-lucide-circle-x"
         />
         <template v-else-if="athlete">
-            <div class="mb-8 flex items-start gap-4">
+            <div class="flex items-start gap-4">
                 <AppUser
                     :userProps="{
                         name: athlete.name,
@@ -77,8 +77,8 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                     />
                 </div>
             </div>
-            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
-                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
+            <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-8">
                     <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-id-card">
                         <ItemCardRecord :label="$t('card.athlete.record.name')" :value="athlete.name" />
                         <ItemCardRecord
@@ -113,7 +113,7 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         />
                     </ItemCard>
                 </div>
-                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-4">
                     <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
                         <ItemCardRecord :label="$t('card.address_contacts.record.city')" :value="athlete.city" />
                         <ItemCardRecord

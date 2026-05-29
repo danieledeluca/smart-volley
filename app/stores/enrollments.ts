@@ -93,7 +93,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             clearEnrollmentAddForm();
 
             toast.add({
-                description: $t('form.add_enrollment.success'),
+                description: $t('form.enrollment.add.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });
@@ -127,7 +127,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
             onComplete?.();
 
             toast.add({
-                description: $t('form.delete_enrollment.success'),
+                description: $t('form.enrollment.delete.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });
@@ -283,7 +283,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
     const enrollmentAddFields = computed<FormFieldGroup<InsertEnrollment>[]>(() => {
         return [
             {
-                title: $t('form.add_enrollment.group.athlete'),
+                title: $t('form.enrollment.add.group.athlete'),
                 icon: 'i-lucide-user',
                 fields: [
                     {
@@ -301,7 +301,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 ],
             },
             {
-                title: $t('form.add_enrollment.group.season'),
+                title: $t('form.enrollment.add.group.season'),
                 icon: 'i-lucide-calendar',
                 fields: [
                     {
@@ -319,7 +319,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 ],
             },
             {
-                title: $t('form.add_enrollment.group.activity'),
+                title: $t('form.enrollment.add.group.activity'),
                 icon: 'i-lucide-zap',
                 fields: [
                     {
@@ -337,7 +337,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 ],
             },
             {
-                title: $t('form.add_enrollment.group.course'),
+                title: $t('form.enrollment.add.group.course'),
                 icon: 'i-lucide-dumbbell',
                 fields: [
                     {
@@ -355,7 +355,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 ],
             },
             {
-                title: $t('form.add_enrollment.group.payment_information'),
+                title: $t('form.enrollment.add.group.payment_information'),
                 icon: 'i-lucide-credit-card',
                 fields: [
                     {
@@ -427,7 +427,7 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
                 ],
             },
             {
-                title: $t('form.add_enrollment.group.certificate'),
+                title: $t('form.enrollment.add.group.certificate'),
                 icon: 'i-lucide-briefcase-medical',
                 fields: [
                     {

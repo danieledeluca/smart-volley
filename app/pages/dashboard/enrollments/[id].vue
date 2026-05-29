@@ -20,7 +20,7 @@ useSeoMeta({ title });
             />
         </template>
         <template v-if="pending">
-            <div class="mb-6 flex items-start gap-4 sm:mb-8">
+            <div class="flex items-start gap-4">
                 <div class="flex w-full flex-1 gap-3">
                     <USkeleton class="size-12 rounded-full" />
                     <div class="flex-1">
@@ -33,8 +33,8 @@ useSeoMeta({ title });
                 </div>
                 <USkeleton class="ml-auto size-8" />
             </div>
-            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
-                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
+            <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-8">
                     <div class="@container">
                         <USkeleton class="h-80 @max-2xl:h-140" />
                     </div>
@@ -42,7 +42,7 @@ useSeoMeta({ title });
                         <USkeleton class="h-44 @max-2xl:h-60" />
                     </div>
                 </div>
-                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-4">
                     <div class="@container">
                         <USkeleton class="h-60 @max-2xl:h-80" />
                     </div>
@@ -56,7 +56,7 @@ useSeoMeta({ title });
             icon="i-lucide-circle-x"
         />
         <template v-else-if="enrollment">
-            <div class="mb-6 flex items-start gap-4 sm:mb-8">
+            <div class="flex items-start gap-4">
                 <AppUser
                     :userProps="{
                         name: enrollment.athlete.name,
@@ -87,8 +87,8 @@ useSeoMeta({ title });
                     />
                 </div>
             </div>
-            <div class="grid gap-6 sm:gap-8 lg:grid-cols-12">
-                <div class="space-y-6 sm:space-y-8 lg:col-span-8">
+            <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-8">
                     <ItemCard :title="$t('card.payments.title')" icon="i-lucide-credit-card">
                         <ItemCardRecord
                             :label="$t('card.payments.record.account_volley')"
@@ -140,7 +140,7 @@ useSeoMeta({ title });
                         </ItemCardRecord>
                     </ItemCard>
                 </div>
-                <div class="space-y-6 sm:space-y-8 lg:col-span-4">
+                <div class="space-y-4 sm:space-y-6 lg:col-span-4">
                     <ItemCard :title="$t('card.sport.title')" icon="i-lucide-zap">
                         <ItemCardRecord
                             :label="$t('card.sport.record.season')"

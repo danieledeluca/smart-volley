@@ -55,10 +55,10 @@ defineExpose({
             >
                 <template #athleteId-post>
                     <AppModal
-                        :title="$t('form.add_athlete.title')"
-                        :description="$t('form.add_athlete.description')"
+                        :title="$t('form.athlete.add.title')"
+                        :description="$t('form.athlete.add.description')"
                         :buttonProps="{
-                            label: $t('form.add_athlete.title'),
+                            label: $t('form.athlete.add.title'),
                             icon: 'i-lucide-plus',
                             variant: 'soft',
                             block: true,
@@ -74,10 +74,10 @@ defineExpose({
                 </template>
                 <template #seasonId-post>
                     <AppModal
-                        :title="$t('form.add_season.title')"
-                        :description="$t('form.add_season.description')"
+                        :title="$t('form.season.add.title')"
+                        :description="$t('form.season.add.description')"
                         :buttonProps="{
-                            label: $t('form.add_season.title'),
+                            label: $t('form.season.add.title'),
                             icon: 'i-lucide-plus',
                             variant: 'soft',
                             block: true,
@@ -93,10 +93,10 @@ defineExpose({
                 </template>
                 <template #activityId-post>
                     <AppModal
-                        :title="$t('form.add_activity.title')"
-                        :description="$t('form.add_activity.description')"
+                        :title="$t('form.activity.add.title')"
+                        :description="$t('form.activity.add.description')"
                         :buttonProps="{
-                            label: $t('form.add_activity.title'),
+                            label: $t('form.activity.add.title'),
                             icon: 'i-lucide-plus',
                             variant: 'soft',
                             block: true,
@@ -112,10 +112,10 @@ defineExpose({
                 </template>
                 <template #courseId-post>
                     <AppModal
-                        :title="$t('form.add_course.title')"
-                        :description="$t('form.add_course.description')"
+                        :title="$t('form.course.add.title')"
+                        :description="$t('form.course.add.description')"
                         :buttonProps="{
-                            label: $t('form.add_course.title'),
+                            label: $t('form.course.add.title'),
                             icon: 'i-lucide-plus',
                             variant: 'soft',
                             block: true,

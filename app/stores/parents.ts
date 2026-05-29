@@ -54,7 +54,7 @@ export const useParentsStore = defineStore('parents', () => {
             clearParentAddForm();
 
             toast.add({
-                description: $t('form.add_parent.success'),
+                description: $t('form.parent.add.success'),
                 color: 'success',
                 icon: 'i-lucide-circle-check',
             });
@@ -78,7 +78,7 @@ export const useParentsStore = defineStore('parents', () => {
     const parentAddFields = computed<FormFieldGroup<InsertParent>[]>(() => {
         return [
             {
-                title: $t('form.add_parent.group.personal_information'),
+                title: $t('form.parent.add.group.personal_information'),
                 icon: 'i-lucide-user',
                 fields: [
                     {
@@ -106,7 +106,7 @@ export const useParentsStore = defineStore('parents', () => {
                 ],
             },
             {
-                title: $t('form.add_parent.group.contacts'),
+                title: $t('form.parent.add.group.contacts'),
                 icon: 'i-lucide-notebook',
                 fields: [
                     {

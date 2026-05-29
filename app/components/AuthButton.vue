@@ -36,7 +36,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
             <UUser
                 v-bind="userProps"
                 :name="user.name"
-                :description="user.role?.toString()"
+                :description="$t(`auth.role.${user.role?.toString()}`)"
                 :avatar="{
                     src: user.image && !isLoading ? user.image : undefined,
                     alt: user.name,

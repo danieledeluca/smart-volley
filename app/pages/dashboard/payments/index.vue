@@ -35,11 +35,11 @@ if (canEdit.value) {
 </script>
 
 <template>
-    <DashboardPanel :title="$t('page.payments.title')">
+    <DashboardPanel :title="$t('page.payments.title')" :wrapBody="true">
         <template v-if="canEdit" #right>
             <AppSlideover
-                :title="$t('form.add_enrollment.title')"
-                :description="$t('form.add_enrollment.description')"
+                :title="$t('form.enrollment.add.title')"
+                :description="$t('form.enrollment.add.description')"
                 :buttonProps="{
                     label: $t('page.enrollments.button.add'),
                     icon: 'i-lucide-plus',
