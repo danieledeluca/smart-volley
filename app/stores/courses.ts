@@ -1,21 +1,6 @@
-import type { FormError, FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
-import type { InsertCourse } from '~~/lib/db/schema';
-import type { FetchError } from 'ofetch';
+import type { SelectMenuItem } from '@nuxt/ui';
 
 export const useCoursesStore = defineStore('courses', () => {
-    const { $csrfFetch } = useNuxtApp();
-    const toast = useToast();
-
-    const isLoading = ref(false);
-    const addingCourseErrors = ref<FormError[]>([]);
-
-    const courseAddInitialState: Partial<InsertCourse> = {
-        name: undefined,
-        description: undefined,
-    };
-
-    const courseAddState = reactive({ ...courseAddInitialState });
-
     const {
         data: courses,
         pending: coursesPending,
@@ -35,81 +20,11 @@ export const useCoursesStore = defineStore('courses', () => {
         });
     });
 
-    const clearCourseAddForm = () => {
-        Object.assign(courseAddState, courseAddInitialState);
-
-        refreshCourses();
-    };
-
-    const addCourse = async (event: FormSubmitEvent<InsertCourse>) => {
-        try {
-            isLoading.value = true;
-
-            await $csrfFetch('/api/courses', {
-                method: 'POST',
-                body: event.data,
-            });
-
-            clearCourseAddForm();
-
-            toast.add({
-                description: $t('form.course.add.success'),
-                color: 'success',
-                icon: 'i-lucide-circle-check',
-            });
-        } catch (err) {
-            const error = err as FetchError;
-
-            if (error.data?.data) {
-                addingCourseErrors.value = error.data?.data;
-            } else {
-                toast.add({
-                    description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
-                    color: 'error',
-                    icon: 'i-lucide-circle-x',
-                });
-            }
-        } finally {
-            isLoading.value = false;
-        }
-    };
-
-    const courseAddFields = computed<FormField<InsertCourse>[]>(() => {
-        return [
-            {
-                renderAs: 'input',
-                formFieldProps: {
-                    label: $t('form.field.course_name.label'),
-                    name: 'name',
-                    required: true,
-                },
-                inputProps: {
-                    placeholder: $t('form.field.course_name.placeholder'),
-                },
-            },
-            {
-                renderAs: 'input',
-                formFieldProps: {
-                    label: $t('form.field.course_description.label'),
-                    name: 'description',
-                },
-                inputProps: {
-                    placeholder: $t('form.field.course_description.placeholder'),
-                },
-            },
-        ];
-    });
-
     return {
-        isLoading,
-        addingCourseErrors,
         courses,
         coursesItems,
         coursesPending,
         coursesError,
-        courseAddState,
-        courseAddFields,
         refreshCourses,
-        addCourse,
     };
 });

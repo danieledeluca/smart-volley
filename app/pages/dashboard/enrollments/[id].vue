@@ -1,13 +1,22 @@
 <script setup lang="ts">
-const route = useRoute();
+const authStore = useAuthStore();
+const enrollmentsStore = useEnrollmentsStore();
 
-const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${route.params.id}`, {
-    headers: useRequestHeaders(['cookie']),
-});
+const { canEdit } = storeToRefs(authStore);
+const {
+    currentEnrollment: enrollment,
+    currentEnrollmentPending: pending,
+    currentEnrollmentError: error,
+} = storeToRefs(enrollmentsStore);
 
 const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollment.title'));
 
 useSeoMeta({ title });
+
+onMounted(async () => {
+    await nextTick();
+    enrollmentsStore.refreshCurrentEnrollment();
+});
 </script>
 
 <template>
@@ -31,7 +40,7 @@ useSeoMeta({ title });
                         </div>
                     </div>
                 </div>
-                <USkeleton class="ml-auto size-8" />
+                <USkeleton v-if="canEdit" class="ml-auto size-8" />
             </div>
             <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
                 <div class="space-y-4 sm:space-y-6 lg:col-span-8">
@@ -80,7 +89,7 @@ useSeoMeta({ title });
                         </span>
                     </template>
                 </AppUser>
-                <div class="ml-auto">
+                <div v-if="canEdit" class="ml-auto">
                     <EnrollmentActions
                         :enrollmentId="enrollment.id"
                         :onDeleteComplete="() => navigateTo('/dashboard/enrollments')"

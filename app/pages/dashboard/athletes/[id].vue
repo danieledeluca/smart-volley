@@ -1,15 +1,24 @@
 <script setup lang="ts">
-const route = useRoute();
+const authStore = useAuthStore();
+const athletesStore = useAthletesStore();
 
-const { data: athlete, pending, error } = useLazyFetch(`/api/athletes/${route.params.id}`, {
-    headers: useRequestHeaders(['cookie']),
-});
+const { canEdit } = storeToRefs(authStore);
+const {
+    currentAthlete: athlete,
+    currentAthletePending: pending,
+    currentAthleteError: error,
+} = storeToRefs(athletesStore);
 
 const title = computed(() => athlete.value?.name || $t('page.athlete.title'));
 
 useSeoMeta({ title });
 
 const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
+
+onMounted(async () => {
+    await nextTick();
+    athletesStore.refreshCurrentAthlete();
+});
 </script>
 
 <template>
@@ -28,7 +37,7 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         </div>
                     </div>
                 </div>
-                <USkeleton class="ml-auto size-8" />
+                <USkeleton v-if="canEdit" class="ml-auto size-8" />
             </div>
             <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
                 <div class="space-y-4 sm:space-y-6 lg:col-span-8">
@@ -70,10 +79,11 @@ const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'act
                         </span>
                     </template>
                 </AppUser>
-                <div class="ml-auto">
+                <div v-if="canEdit" class="ml-auto">
                     <AthleteActions
                         :athleteId="athlete.id"
                         :onDeleteComplete="() => navigateTo('/dashboard/athletes')"
+                        :onEditComplete="() => athletesStore.refreshCurrentAthlete()"
                     />
                 </div>
             </div>

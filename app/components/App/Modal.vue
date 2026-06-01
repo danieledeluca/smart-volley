@@ -13,7 +13,9 @@ const emit = defineEmits<{
     submit: [];
 }>();
 
-const open = defineModel<boolean>('open', { default: false });
+const open = defineModel<boolean>('open', {
+    default: false,
+});
 </script>
 
 <template>

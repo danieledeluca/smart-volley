@@ -8,15 +8,14 @@ const { canEdit } = storeToRefs(authStore);
 
 const athletesStore = useAthletesStore();
 const {
-    isLoading,
     athletes,
     athletesPending,
     athletesError,
-    athletesFiltersState,
-    athletesFiltersFields,
+    filterState,
+    filterFields,
 } = storeToRefs(athletesStore);
 
-const formRef = useTemplateRef('formRef');
+const athleteFormRef = useTemplateRef('athleteFormRef');
 
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
 
@@ -25,8 +24,8 @@ if (canEdit.value) {
 }
 
 onBeforeRouteLeave(() => {
-    if (Object.values(athletesFiltersState.value).filter((filter) => filter).length) {
-        athletesStore.clearAthletesFilters();
+    if (Object.values(filterState.value).filter((filter) => filter).length) {
+        athletesStore.clearFilters();
     }
 });
 </script>
@@ -44,18 +43,18 @@ onBeforeRouteLeave(() => {
                 :footerButtonProps="{
                     label: $t('form.button.add'),
                 }"
-                :isLoading
-                @submit="formRef?.submit"
+                :isLoading="Boolean(athleteFormRef?.isLoading())"
+                @submit="athleteFormRef?.submit"
             >
-                <AthleteForm ref="formRef" />
+                <AthleteAddForm ref="athleteFormRef" />
             </AppSlideover>
         </template>
         <ListFilters
-            v-model:state="athletesFiltersState"
+            v-model:state="filterState"
             :schema="AthletesFiltersSchema"
-            :fields="athletesFiltersFields"
+            :fields="filterFields"
             @update="athletesStore.refreshAthletes"
-            @clear="athletesStore.clearAthletesFilters"
+            @clear="athletesStore.clearFilters"
         />
         <ListTable
             :tableData="athletes"

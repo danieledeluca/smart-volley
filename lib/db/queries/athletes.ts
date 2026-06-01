@@ -61,6 +61,15 @@ export async function insertAthlete(data: InsertAthlete) {
     return created;
 }
 
+export async function updateAthlete(data: InsertAthlete, athleteId: number) {
+    const [updated] = await db.update(athlete)
+        .set(data)
+        .where(eq(athlete.id, athleteId))
+        .returning();
+
+    return updated;
+}
+
 export async function deleteAthlete(athleteId: number) {
     const [deleted] = await db.update(athlete)
         .set({ deletedAt: new Date() })

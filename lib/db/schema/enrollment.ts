@@ -5,7 +5,7 @@ import { date, integer, numeric, pgTable, text, timestamp, unique } from 'drizzl
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { findEnrollments } from '../queries/enrollments';
+import type { findEnrollment, findEnrollments } from '../queries/enrollments';
 
 import { $t } from '../../../shared/utils/i18n';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
@@ -87,3 +87,4 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;
 export type SelectEnrollmentsWithRelations = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;
+export type SelectEnrollmentWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findEnrollment>>>>;

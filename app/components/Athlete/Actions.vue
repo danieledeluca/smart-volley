@@ -5,19 +5,23 @@ const { athleteId, onDeleteComplete, onEditComplete } = defineProps<{
     onEditComplete?: () => void;
 }>();
 
-const athletesStore = useAthletesStore();
-const { isLoading } = storeToRefs(athletesStore);
+const athleteEditFormRef = useTemplateRef('athleteEditFormRef');
+const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
 
-async function handleDelete() {
-    await athletesStore.removeAthlete(athleteId, onDeleteComplete);
+const isLoading = computed(() => {
+    return Boolean(athleteEditFormRef.value?.isLoading()) || Boolean(athleteDeleteFormRef.value?.isLoading());
+});
+
+function handleDeleteSuccess() {
     openDelete.value = false;
+
+    onDeleteComplete?.();
 }
 
-async function handleEdit() {
-    // TODO: add function in store
+function handleEditSuccess() {
     openEdit.value = false;
 
     onEditComplete?.();
@@ -33,15 +37,14 @@ async function handleEdit() {
         :editTitle="$t('form.athlete.edit.title')"
         :editDescription="$t('form.athlete.edit.description')"
         :isLoading
-        @delete="handleDelete"
-        @edit="handleEdit"
+        @delete="athleteDeleteFormRef?.submit"
+        @edit="athleteEditFormRef?.submit"
     >
         <template #delete>
-            {{ $t('form.athlete.delete.body') }}
+            <AthleteDeleteForm ref="athleteDeleteFormRef" :athleteId @success="handleDeleteSuccess" />
         </template>
         <template #edit>
-            <!-- TODO: add form -->
-            <pre>{{ athleteId }}</pre>
+            <AthleteEditForm ref="athleteEditFormRef" :athleteId @success="handleEditSuccess" />
         </template>
     </ListTableActions>
 </template>

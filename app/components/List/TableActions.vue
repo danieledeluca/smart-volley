@@ -14,8 +14,12 @@ const emit = defineEmits<{
     edit: [];
 }>();
 
-const openDelete = defineModel<boolean>('openDelete', { default: false });
-const openEdit = defineModel<boolean>('openEdit', { default: false });
+const openDelete = defineModel<boolean>('openDelete', {
+    default: false,
+});
+const openEdit = defineModel<boolean>('openEdit', {
+    default: false,
+});
 
 const dropDownItems: DropdownMenuItem[] = [
     {

@@ -8,15 +8,14 @@ const { canEdit } = storeToRefs(authStore);
 
 const enrollmentsStore = useEnrollmentsStore();
 const {
-    isLoading,
     enrollments,
     enrollmentsPending,
     enrollmentsError,
-    enrollmentsFiltersState,
-    enrollmentsFiltersFields,
+    filterState,
+    filterFields,
 } = storeToRefs(enrollmentsStore);
 
-const formRef = useTemplateRef('formRef');
+const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 
 const tableColumns = getEnrollmentsTableColumns([
     'id',
@@ -43,25 +42,25 @@ if (canEdit.value) {
                 :footerButtonProps="{
                     label: $t('form.button.add'),
                 }"
-                :isLoading
-                @submit="formRef?.submit()"
+                :isLoading="Boolean(enrollmentFormRef?.isLoading())"
+                @submit="enrollmentFormRef?.submit()"
             >
-                <EnrollmentForm ref="formRef" />
+                <EnrollmentAddForm ref="enrollmentFormRef" />
             </AppSlideover>
         </template>
         <ListFilters
-            v-model:state="enrollmentsFiltersState"
+            v-model:state="filterState"
             :schema="EnrollmentsFiltersSchema"
-            :fields="enrollmentsFiltersFields"
+            :fields="filterFields"
             @update="enrollmentsStore.refreshEnrollments"
-            @clear="enrollmentsStore.clearEnrollmentsFilters"
+            @clear="enrollmentsStore.clearFilters"
         />
         <ListTable
             :tableData="enrollments"
             :tableColumns
             :isLoading="enrollmentsPending"
             :error="enrollmentsError"
-            :onSelect="onEnrollmentSelect"
+            @select="onEnrollmentSelect"
         />
     </DashboardPanel>
 </template>

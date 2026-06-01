@@ -1,20 +1,6 @@
-import type { FormError, FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
-import type { InsertActivity } from '~~/lib/db/schema';
-import type { FetchError } from 'ofetch';
+import type { SelectMenuItem } from '@nuxt/ui';
 
 export const useActivitiesStore = defineStore('activities', () => {
-    const { $csrfFetch } = useNuxtApp();
-    const toast = useToast();
-
-    const isLoading = ref(false);
-    const addingActivityErrors = ref<FormError[]>([]);
-
-    const activityAddInitialState: Partial<InsertActivity> = {
-        name: undefined,
-    };
-
-    const activityAddState = reactive({ ...activityAddInitialState });
-
     const {
         data: activities,
         pending: activitiesPending,
@@ -33,71 +19,11 @@ export const useActivitiesStore = defineStore('activities', () => {
         });
     });
 
-    const clearActivityAddForm = () => {
-        Object.assign(activityAddState, activityAddInitialState);
-
-        refreshActivities();
-    };
-
-    const addActivity = async (event: FormSubmitEvent<InsertActivity>) => {
-        try {
-            isLoading.value = true;
-
-            await $csrfFetch('/api/activities', {
-                method: 'POST',
-                body: event.data,
-            });
-
-            clearActivityAddForm();
-
-            toast.add({
-                description: $t('form.activity.add.success'),
-                color: 'success',
-                icon: 'i-lucide-circle-check',
-            });
-        } catch (err) {
-            const error = err as FetchError;
-
-            if (error.data?.data) {
-                addingActivityErrors.value = error.data?.data;
-            } else {
-                toast.add({
-                    description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
-                    color: 'error',
-                    icon: 'i-lucide-circle-x',
-                });
-            }
-        } finally {
-            isLoading.value = false;
-        }
-    };
-
-    const activityAddFields = computed<FormField<InsertActivity>[]>(() => {
-        return [
-            {
-                renderAs: 'input',
-                formFieldProps: {
-                    label: $t('form.field.activity_name.label'),
-                    name: 'name',
-                    required: true,
-                },
-                inputProps: {
-                    placeholder: $t('form.field.activity_name.placeholder'),
-                },
-            },
-        ];
-    });
-
     return {
-        isLoading,
-        addingActivityErrors,
         activities,
         activitiesItems,
         activitiesPending,
         activitiesError,
-        activityAddState,
-        activityAddFields,
         refreshActivities,
-        addActivity,
     };
 });

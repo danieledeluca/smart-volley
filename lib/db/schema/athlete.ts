@@ -5,7 +5,7 @@ import { char, date, integer, pgTable, text, timestamp, uniqueIndex, varchar } f
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { findAthlete, findAthletes } from '../queries/athletes';
+import type { findAthlete, findAthletes, insertAthlete } from '../queries/athletes';
 
 import { $t } from '../../../shared/utils/i18n';
 import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../utils/constants';
@@ -67,5 +67,6 @@ export const InsertAthlete = createInsertSchema(athlete, {
 });
 
 export type InsertAthlete = z.infer<typeof InsertAthlete>;
+export type InsertedAthlete = Awaited<ReturnType<typeof insertAthlete>>;
 export type SelectAthletes = SerializeObject<Awaited<ReturnType<typeof findAthletes>>[number]>;
 export type SelectAthleteWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findAthlete>>>>;

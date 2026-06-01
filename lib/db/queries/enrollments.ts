@@ -47,6 +47,23 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     return and(...conditions);
 }
 
+async function getCertificateStorageKey(data: InsertEnrollment) {
+    let certificateStorageKey: string | undefined;
+
+    if (data.certificateStorageKey) {
+        try {
+            certificateStorageKey = await uploadFile(
+                `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`,
+                data.certificateStorageKey,
+            );
+        } catch {
+            throw new Error($t('form.field.certificate_storage_key.error.upload'));
+        }
+    }
+
+    return certificateStorageKey;
+}
+
 export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
     const filteredIds = await db.select({ id: enrollment.id })
         .from(enrollment)
@@ -140,18 +157,7 @@ export async function findEnrollmentCertificateStorageKey(enrollmentId: number) 
 }
 
 export async function insertEnrollment(data: InsertEnrollment) {
-    let certificateStorageKey: string | undefined;
-
-    if (data.certificateStorageKey) {
-        try {
-            certificateStorageKey = await uploadFile(
-                `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`,
-                data.certificateStorageKey,
-            );
-        } catch {
-            throw new Error($t('form.field.certificate_storage_key.error.upload'));
-        }
-    }
+    const certificateStorageKey = await getCertificateStorageKey(data);
 
     const [created] = await db.insert(enrollment)
         .values({
@@ -161,6 +167,20 @@ export async function insertEnrollment(data: InsertEnrollment) {
         .returning();
 
     return created;
+}
+
+export async function updateEnrollment(data: InsertEnrollment, enrollmentId: number) {
+    const certificateStorageKey = await getCertificateStorageKey(data);
+
+    const [updated] = await db.update(enrollment)
+        .set({
+            ...data,
+            certificateStorageKey,
+        })
+        .where(eq(enrollment.id, enrollmentId))
+        .returning();
+
+    return updated;
 }
 
 export async function deleteEnrollment(enrollmentId: number) {

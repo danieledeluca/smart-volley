@@ -3,6 +3,8 @@ import { char, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'd
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
+import type { insertParent } from '../queries/parents';
+
 import { $t } from '../../../shared/utils/i18n';
 import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../utils/constants';
 import { athlete } from './athlete';
@@ -45,3 +47,4 @@ export const InsertParent = createInsertSchema(parent, {
 });
 
 export type InsertParent = z.infer<typeof InsertParent>;
+export type InsertedParent = Awaited<ReturnType<typeof insertParent>>;

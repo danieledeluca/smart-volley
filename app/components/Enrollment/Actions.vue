@@ -5,19 +5,23 @@ const { enrollmentId, onDeleteComplete, onEditComplete } = defineProps<{
     onEditComplete?: () => void;
 }>();
 
-const enrollmentsStore = useEnrollmentsStore();
-const { isLoading } = storeToRefs(enrollmentsStore);
+const enrollmentEditFormRef = useTemplateRef('enrollmentEditFormRef');
+const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
 
-async function handleDelete() {
-    await enrollmentsStore.removeEnrollment(enrollmentId, onDeleteComplete);
+const isLoading = computed(() => {
+    return Boolean(enrollmentEditFormRef.value?.isLoading()) || Boolean(enrollmentDeleteFormRef.value?.isLoading());
+});
+
+function handleDeleteSuccess() {
     openDelete.value = false;
+
+    onDeleteComplete?.();
 }
 
-async function handleEdit() {
-    // TODO: add function in store
+function handleEditSuccess() {
     openEdit.value = false;
 
     onEditComplete?.();
@@ -33,15 +37,14 @@ async function handleEdit() {
         :editTitle="$t('form.enrollment.edit.title')"
         :editDescription="$t('form.enrollment.edit.description')"
         :isLoading
-        @delete="handleDelete"
-        @edit="handleEdit"
+        @delete="enrollmentDeleteFormRef?.submit"
+        @edit="enrollmentEditFormRef?.submit"
     >
         <template #delete>
-            {{ $t('form.enrollment.delete.body') }}
+            <EnrollmentDeleteForm ref="enrollmentDeleteFormRef" :enrollmentId @success="handleDeleteSuccess" />
         </template>
         <template #edit>
-            <!-- TODO: add form -->
-            <pre>{{ enrollmentId }}</pre>
+            <EnrollmentEditForm ref="enrollmentEditFormRef" :enrollmentId @success="handleEditSuccess" />
         </template>
     </ListTableActions>
 </template>

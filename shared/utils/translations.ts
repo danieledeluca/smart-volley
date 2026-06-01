@@ -5,6 +5,7 @@ export const translations = {
             admin: 'Admin',
             manager: 'Gestore',
             viewer: 'Osservatore',
+            waiting: 'In attesa',
         },
         sign_out: 'Esci',
         sing_in: {
