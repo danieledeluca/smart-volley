@@ -22,7 +22,7 @@ export const athlete = pgTable('athlete', {
     address: text().notNull(),
     phoneNumber: varchar({ length: 15 }),
     email: varchar({ length: 255 }),
-    parentId: integer().references(() => parent.id),
+    parentId: integer().references(() => parent.id, { onDelete: 'set null' }),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
     deletedAt: timestamp(),

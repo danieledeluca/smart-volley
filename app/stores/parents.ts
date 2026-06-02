@@ -1,6 +1,8 @@
 import type { SelectMenuItem } from '@nuxt/ui';
 
 export const useParentsStore = defineStore('parents', () => {
+    const { filterState, filterFields, clearFilters } = useFilters('parent');
+
     const {
         data: parents,
         pending: parentsPending,
@@ -8,6 +10,8 @@ export const useParentsStore = defineStore('parents', () => {
         refresh: refreshParents,
     } = useLazyFetch('/api/parents', {
         headers: useRequestHeaders(['cookie']),
+        query: filterState,
+        watch: false,
     });
 
     const parentsItems = computed(() => {
@@ -24,6 +28,9 @@ export const useParentsStore = defineStore('parents', () => {
         parentsItems,
         parentsPending,
         parentsError,
+        filterState,
+        filterFields,
         refreshParents,
+        clearFilters,
     };
 });

@@ -1,9 +1,11 @@
+import type { SerializeObject } from 'nitropack';
+
 import { relations, sql } from 'drizzle-orm';
 import { char, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { insertParent } from '../queries/parents';
+import type { findParents, insertParent } from '../queries/parents';
 
 import { $t } from '../../../shared/utils/i18n';
 import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../utils/constants';
@@ -17,7 +19,6 @@ export const parent = pgTable('parent', {
     email: varchar({ length: 255 }),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
-    deletedAt: timestamp(),
 }, (table) => [
     uniqueIndex().on(table.phoneNumber).where(sql`${table.phoneNumber} IS NOT NULL`),
     uniqueIndex().on(table.email).where(sql`${table.email} IS NOT NULL`),
@@ -43,8 +44,8 @@ export const InsertParent = createInsertSchema(parent, {
 }).omit({
     createdAt: true,
     updatedAt: true,
-    deletedAt: true,
 });
 
 export type InsertParent = z.infer<typeof InsertParent>;
 export type InsertedParent = Awaited<ReturnType<typeof insertParent>>;
+export type SelectParents = SerializeObject<Awaited<ReturnType<typeof findParents>>[number]>;

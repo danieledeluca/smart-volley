@@ -17,6 +17,10 @@ export const AthletesFiltersSchema = z.object({
     name: z.string().optional(),
 });
 
+export const ParentsFiltersSchema = z.object({
+    name: z.string().optional(),
+});
+
 export const EnrollmentsFiltersSchema = z.object({
     athleteName: z.string().optional(),
     seasonId: z.coerce.number().optional(),
@@ -31,4 +35,5 @@ export type MissingPaymentEnum = z.infer<typeof MissingPaymentEnum>;
 export type CertificateStatusEnum = z.infer<typeof CertificateStatusEnum>;
 
 export type AthletesFiltersSchema = z.infer<typeof AthletesFiltersSchema>;
+export type ParentsFiltersSchema = z.infer<typeof ParentsFiltersSchema>;
 export type EnrollmentsFiltersSchema = z.infer<typeof EnrollmentsFiltersSchema>;

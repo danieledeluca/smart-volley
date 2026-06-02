@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Actions from '~/components/Athlete/Actions.vue';
+
 useSeoMeta({
     title: $t('page.athletes.title'),
 });
@@ -20,7 +22,7 @@ const athleteFormRef = useTemplateRef('athleteFormRef');
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
 
 if (canEdit.value) {
-    tableColumns.push(getAthletesTableActionsColumn());
+    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ athleteId: row.id })));
 }
 
 onBeforeRouteLeave(() => {

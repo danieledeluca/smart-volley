@@ -1,120 +1,185 @@
-import type { TableColumn, TableRow } from '@nuxt/ui';
-import type { SelectAthletes, SelectAthleteWithRelations, SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
+import type { TableColumn } from '@nuxt/ui';
+import type {
+    SelectAthletes,
+    SelectAthleteWithRelations,
+    SelectEnrollmentsWithRelations,
+    SelectParents,
+} from '~~/lib/db/schema';
+import type { Component } from 'vue';
+
+import type { ComponentProps } from '#build/types/layouts';
 
 import User from '~/components/App/User.vue';
-import AthleteActions from '~/components/Athlete/Actions.vue';
 import CertificateDate from '~/components/Certificate/Date.vue';
 import CertificateDownloadButton from '~/components/Certificate/DownloadButton.vue';
 import EmailButton from '~/components/EmailButton.vue';
-import EnrollmentActions from '~/components/Enrollment/Actions.vue';
 import TableSortDropdown from '~/components/List/TableSortDropdown.vue';
 import PhoneNumberButtons from '~/components/PhoneNumberButtons.vue';
 
 type TableColumns<T> = Partial<Record<keyof T, TableColumn<T>>>;
 
-export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
-    const tableColumns: TableColumns<SelectAthletes> = {
-        id: {
-            accessorKey: 'id',
-            header: $t('table.column.id'),
-            cell: ({ row }) => `#${row.original.id}`,
-        },
-        name: {
-            accessorKey: 'name',
-            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
-            cell: ({ row }) => h(User, {
-                userProps: {
-                    name: row.original.name,
-                    description: row.original.fiscalCode,
-                },
-                avatarSize: 64,
-            }),
-        },
-        phoneNumber: {
-            accessorKey: 'phoneNumber',
-            header: $t('table.column.phone_number'),
-            cell: ({ row }) => {
-                if (row.original.phoneNumber) {
-                    return h('div', { class: 'flex gap-2 items-center' }, [
-                        h(PhoneNumberButtons, { phoneNumber: row.original.phoneNumber }),
-                        h('span', undefined, row.original.phoneNumber),
-                    ]);
-                }
+// Common columns
+function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
+    return {
+        accessorKey: 'id',
+        header: $t('table.column.id'),
+        cell: ({ row }) => `#${row.original.id}`,
+    };
+}
 
-                return EMPTY_VALUE;
+function getNameTableColumn<T extends { name: string; fiscalCode: string }>(): TableColumn<T> {
+    return {
+        accessorKey: 'name',
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
+        cell: ({ row }) => h(User, {
+            userProps: {
+                name: row.original.name,
+                description: row.original.fiscalCode,
             },
-        },
-        email: {
-            accessorKey: 'email',
-            header: $t('table.column.email'),
-            cell: ({ row }) => {
-                if (row.original.email) {
-                    return h('div', { class: 'flex gap-2 items-center' }, [
-                        h(EmailButton, { email: row.original.email }),
-                        h('span', undefined, row.original.email),
-                    ]);
-                }
+            avatarSize: 64,
+        }),
+    };
+}
 
-                return EMPTY_VALUE;
+function getPhoneNumberTableColumn<T extends { phoneNumber: string | null }>(): TableColumn<T> {
+    return {
+        accessorKey: 'phoneNumber',
+        header: $t('table.column.phone_number'),
+        cell: ({ row }) => {
+            if (row.original.phoneNumber) {
+                return h('div', { class: 'flex gap-2 items-center' }, [
+                    h(PhoneNumberButtons, { phoneNumber: row.original.phoneNumber }),
+                    h('span', undefined, row.original.phoneNumber),
+                ]);
+            }
+
+            return EMPTY_VALUE;
+        },
+    };
+}
+
+function getEmailTableColumn<T extends { email: string | null }>(): TableColumn<T> {
+    return {
+        accessorKey: 'email',
+        header: $t('table.column.email'),
+        cell: ({ row }) => {
+            if (row.original.email) {
+                return h('div', { class: 'flex gap-2 items-center' }, [
+                    h(EmailButton, { email: row.original.email }),
+                    h('span', undefined, row.original.email),
+                ]);
+            }
+
+            return EMPTY_VALUE;
+        },
+    };
+}
+
+function getSeasonTableColumn<T extends { season: { startYear: number; endYear: number } }>(): TableColumn<T> {
+    return {
+        accessorKey: 'season',
+        header: $t('table.column.season'),
+        cell: ({ row }) => `${row.original.season.startYear} - ${row.original.season.endYear}`,
+    };
+}
+
+function getActivityTableColumn<T extends { activity: { name: string } }>(): TableColumn<T> {
+    return {
+        accessorKey: 'activity',
+        header: $t('table.column.activity'),
+        cell: ({ row }) => row.original.activity.name,
+    };
+}
+
+function getCourseTableColumn<T extends { course: { name: string; description: string | null } }>(): TableColumn<T> {
+    return {
+        accessorKey: 'course',
+        header: $t('table.column.course'),
+        cell: ({ row }) => {
+            if (row.original.course.description) {
+                return [
+                    h('span', undefined, row.original.course.name),
+                    h('span', { class: 'text-xs' }, ` - ${row.original.course.description}`),
+                ];
+            }
+
+            return row.original.course.name;
+        },
+    };
+}
+
+function getPriceTableColum<T>(accessorKey: keyof T, header: string): TableColumn<T> {
+    return {
+        accessorKey,
+        header,
+        cell: ({ row }) => {
+            const value = row.original[accessorKey] as string | undefined;
+            return value ? formatPrice(value) : EMPTY_VALUE;
+        },
+        meta: {
+            class: {
+                th: 'text-center',
+                td: 'text-center',
             },
         },
     };
-
-    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
-export function getAthletesTableActionsColumn(): TableColumn<SelectAthletes> {
+export function getActionsTableColumn<T extends { id: number }, C extends Component>(
+    component: C,
+    props: (row: T) => ComponentProps<C>,
+): TableColumn<T> {
     return {
         id: 'actions',
+        cell: ({ row }) => h(component, props?.(row.original)),
         meta: {
             class: {
                 td: 'text-right',
             },
         },
-        cell: ({ row }) => h(AthleteActions, { athleteId: row.original.id }),
     };
+}
+
+// Athletes
+export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
+    const tableColumns: TableColumns<SelectAthletes> = {
+        id: getIdTableColumn(),
+        name: getNameTableColumn(),
+        phoneNumber: getPhoneNumberTableColumn(),
+        email: getEmailTableColumn(),
+    };
+
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
 export function getAthleteEnrollmentsTableColumns(
     columns: (keyof SelectAthleteWithRelations['enrollments'][number])[],
 ) {
     const tableColumns: TableColumns<SelectAthleteWithRelations['enrollments'][number]> = {
-        season: {
-            accessorKey: 'season',
-            header: $t('table.column.season'),
-            cell: ({ row }) => `${row.original.season.startYear} - ${row.original.season.endYear}`,
-        },
-        activity: {
-            accessorKey: 'activity',
-            header: $t('table.column.activity'),
-            cell: ({ row }) => row.original.activity.name,
-        },
-        course: {
-            accessorKey: 'course',
-            header: $t('table.column.course'),
-            cell: ({ row }) => {
-                if (row.original.course.description) {
-                    return [
-                        h('span', undefined, row.original.course.name),
-                        h('span', { class: 'text-xs' }, ` - ${row.original.course.description}`),
-                    ];
-                }
-
-                return row.original.course.name;
-            },
-        },
+        season: getSeasonTableColumn(),
+        activity: getActivityTableColumn(),
+        course: getCourseTableColumn(),
     };
 
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
 }
 
+// Parents
+export function getParentsTableColumns(columns: (keyof SelectParents)[]) {
+    const tableColumns: TableColumns<SelectParents> = {
+        id: getIdTableColumn(),
+        name: getNameTableColumn(),
+        phoneNumber: getPhoneNumberTableColumn(),
+        email: getEmailTableColumn(),
+    };
+
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+}
+
+// Enrollments
 export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWithRelations)[]) {
     const tableColumns: TableColumns<SelectEnrollmentsWithRelations> = {
-        id: {
-            accessorKey: 'id',
-            header: $t('table.column.id'),
-            cell: ({ row }) => `#${row.original.id}`,
-        },
+        id: getIdTableColumn(),
         athlete: {
             accessorKey: 'athlete',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.athlete') }),
@@ -126,100 +191,18 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
                 avatarSize: 64,
             }),
         },
-        season: {
-            accessorKey: 'season',
-            header: $t('table.column.season'),
-            cell: ({ row }) => `${row.original.season.startYear} - ${row.original.season.endYear}`,
-        },
-        activity: {
-            accessorKey: 'activity',
-            header: $t('table.column.activity'),
-            cell: ({ row }) => row.original.activity.name,
-        },
-        course: {
-            accessorKey: 'course',
-            header: $t('table.column.course'),
-            cell: ({ row }) => {
-                if (row.original.course.description) {
-                    return [
-                        h('span', undefined, row.original.course.name),
-                        h('span', { class: 'text-xs' }, ` - ${row.original.course.description}`),
-                    ];
-                }
-
-                return row.original.course.name;
-            },
-        },
-        volleyAccount: {
-            accessorKey: 'volley_account',
-            header: $t('table.column.volley_account'),
-            cell: ({ row }) => row.original.volleyAccount ? formatPrice(row.original.volleyAccount) : EMPTY_VALUE,
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
-        },
-        volleyBalance: {
-            accessorKey: 'volley_balance',
-            header: $t('table.column.volley_balance'),
-            cell: ({ row }) => row.original.volleyBalance ? formatPrice(row.original.volleyBalance) : EMPTY_VALUE,
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
-        },
-        volleyBalanceSecondary: {
-            accessorKey: 'volley_balance_secondary',
-            header: $t('table.column.volley_balance_secondary'),
-            cell: ({ row }) => row.original.volleyBalanceSecondary
-                ? formatPrice(row.original.volleyBalanceSecondary)
-                : EMPTY_VALUE,
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
-        },
-        firstInstallment: {
-            accessorKey: 'first_installment',
-            header: $t('table.column.first_installment'),
-            cell: ({ row }) => row.original.firstInstallment ? formatPrice(row.original.firstInstallment) : EMPTY_VALUE,
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
-        },
-        secondInstallment: {
-            accessorKey: 'second_installment',
-            header: $t('table.column.second_installment'),
-            cell: ({ row }) => row.original.secondInstallment
-                ? formatPrice(row.original.secondInstallment)
-                : EMPTY_VALUE,
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
-        },
-        thirdInstallment: {
-            accessorKey: 'third_installment',
-            header: $t('table.column.third_installment'),
-            cell: ({ row }) => row.original.thirdInstallment ? formatPrice(row.original.thirdInstallment) : EMPTY_VALUE,
-            meta: {
-                class: {
-                    th: 'text-center',
-                    td: 'text-center',
-                },
-            },
-        },
+        season: getSeasonTableColumn(),
+        activity: getActivityTableColumn(),
+        course: getCourseTableColumn(),
+        volleyAccount: getPriceTableColum('volleyAccount', $t('table.column.volley_account')),
+        volleyBalance: getPriceTableColum('volleyBalance', $t('table.column.volley_balance')),
+        volleyBalanceSecondary: getPriceTableColum(
+            'volleyBalanceSecondary',
+            $t('table.column.volley_balance_secondary'),
+        ),
+        firstInstallment: getPriceTableColum('firstInstallment', $t('table.column.first_installment')),
+        secondInstallment: getPriceTableColum('secondInstallment', $t('table.column.second_installment')),
+        thirdInstallment: getPriceTableColum('thirdInstallment', $t('table.column.third_installment')),
         certificateExpirationDate: {
             accessorKey: 'certificate_expiration_date',
             header: ({ column }) => h(TableSortDropdown, {
@@ -244,20 +227,4 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
     };
 
     return columns.map((column) => tableColumns[column]).filter((column) => !!column);
-}
-
-export function getEnrollmentsTableActionsColumn(): TableColumn<SelectEnrollmentsWithRelations> {
-    return {
-        id: 'actions',
-        meta: {
-            class: {
-                td: 'text-right',
-            },
-        },
-        cell: ({ row }) => h(EnrollmentActions, { enrollmentId: row.original.id }),
-    };
-}
-
-export function onEnrollmentSelect(_event: Event, row: TableRow<SelectEnrollmentsWithRelations>) {
-    return navigateTo(`/dashboard/enrollments/${row.original.id}`);
 }

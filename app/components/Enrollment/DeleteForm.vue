@@ -12,7 +12,7 @@ const { $csrfFetch } = useNuxtApp();
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 
 async function onSubmit() {
-    await $csrfFetch(`/api/athletes/${enrollmentId}`, {
+    await $csrfFetch(`/api/enrollments/${enrollmentId}`, {
         method: 'DELETE',
     });
 }

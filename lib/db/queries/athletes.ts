@@ -47,10 +47,7 @@ export async function findAthlete(athleteId: number) {
 
     result.enrollments.sort((a, b) => b.season.endYear - a.season.endYear);
 
-    return {
-        ...result,
-        parent: result.parent?.deletedAt ? null : result.parent,
-    };
+    return result;
 }
 
 export async function insertAthlete(data: InsertAthlete) {

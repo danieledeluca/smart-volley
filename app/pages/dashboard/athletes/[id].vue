@@ -82,8 +82,8 @@ onMounted(async () => {
                 <div v-if="canEdit" class="ml-auto">
                     <AthleteActions
                         :athleteId="athlete.id"
-                        :onDeleteComplete="() => navigateTo('/dashboard/athletes')"
-                        :onEditComplete="() => athletesStore.refreshCurrentAthlete()"
+                        @deleteComplete="navigateTo('/dashboard/athletes')"
+                        @editComplete="athletesStore.refreshCurrentAthlete"
                     />
                 </div>
             </div>
@@ -119,7 +119,7 @@ onMounted(async () => {
                             :tableColumns="enrollmentTableColumns"
                             class="col-span-2 mt-0! **:data-[slot=root]:rounded-t-none"
                             :showPagination="true"
-                            :onSelect="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
+                            @select="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />
                     </ItemCard>
                 </div>

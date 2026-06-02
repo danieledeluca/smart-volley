@@ -92,7 +92,8 @@ onMounted(async () => {
                 <div v-if="canEdit" class="ml-auto">
                     <EnrollmentActions
                         :enrollmentId="enrollment.id"
-                        :onDeleteComplete="() => navigateTo('/dashboard/enrollments')"
+                        @deleteComplete="navigateTo('/dashboard/enrollments')"
+                        @editComplete="enrollmentsStore.refreshCurrentEnrollment"
                     />
                 </div>
             </div>

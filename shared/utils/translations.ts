@@ -144,6 +144,17 @@ export const translations = {
                 success: 'Genitore aggiunto con successo',
                 title: 'Nuovo genitore',
             },
+            delete: {
+                body: 'Sei sicuro di voler eliminare questo genitore? Questa azione è irreversibile.',
+                description: 'Attenzione! Stai per eliminare un genitore.',
+                success: 'Genitore eliminato con successo',
+                title: 'Elimina genitore',
+            },
+            edit: {
+                description: 'Compila i campi per modificare le informazioni del genitore.',
+                success: 'Genitore modificato con successo',
+                title: 'Modifica genitore',
+            },
         },
         season: {
             add: {
@@ -337,6 +348,7 @@ export const translations = {
         dashboard: 'Dashboard',
         enrollments: 'Iscrizioni',
         payments: 'Pagamenti',
+        parents: 'Genitori',
     },
     page: {
         athlete: {
@@ -414,6 +426,15 @@ export const translations = {
         },
         payments: {
             title: 'Pagamenti',
+        },
+        parents: {
+            title: 'Genitori',
+            button: {
+                add: 'Nuovo genitore',
+            },
+        },
+        parent: {
+            error: 'Genitore non trovato',
         },
     },
     table: {

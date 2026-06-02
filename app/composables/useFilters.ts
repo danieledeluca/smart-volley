@@ -1,4 +1,5 @@
 import type { SelectItem } from '@nuxt/ui';
+import type { ParentsFiltersSchema } from '~~/shared/utils/zod-schema';
 
 import type {
     AthletesFiltersSchema,
@@ -9,11 +10,13 @@ import type {
 
 type FiltersSchemas = {
     athlete: AthletesFiltersSchema;
+    parent: ParentsFiltersSchema;
     enrollment: EnrollmentsFiltersSchema;
 };
 
 export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const athletesStore = useAthletesStore();
+    const parentsStore = useParentsStore();
     const enrollmentsStore = useEnrollmentsStore();
     const seasonsStore = useSeasonsStore();
     const activitiesStore = useActivitiesStore();
@@ -27,6 +30,9 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const athletesFiltersInitialState: AthletesFiltersSchema = {
         name: undefined,
     };
+    const parentsFiltersInitialState: ParentsFiltersSchema = {
+        name: undefined,
+    };
     const enrollmentsFiltersInitialState: EnrollmentsFiltersSchema = {
         athleteName: undefined,
         seasonId: undefined,
@@ -38,6 +44,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
 
     const initialStates = {
         athlete: athletesFiltersInitialState,
+        parent: parentsFiltersInitialState,
         enrollment: enrollmentsFiltersInitialState,
     };
 
@@ -45,10 +52,12 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
 
     // States
     const athletesFiltersState = ref({ ...athletesFiltersInitialState });
+    const parentsFiltersState = ref({ ...parentsFiltersInitialState });
     const enrollmentsFiltersState = ref({ ...enrollmentsFiltersInitialState });
 
     const filtersStates = {
         athlete: athletesFiltersState,
+        parent: parentsFiltersState,
         enrollment: enrollmentsFiltersState,
     };
 
@@ -98,6 +107,24 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     ];
 
     const athletesFiltersFields = computed<FormField<AthletesFiltersSchema>[][]>(() => {
+        return [
+            [
+                {
+                    renderAs: 'input',
+                    debounce: true,
+                    formFieldProps: {
+                        name: 'name',
+                    },
+                    inputProps: {
+                        placeholder: $t('form.field.name.placeholder'),
+                        icon: 'i-lucide-search',
+                    },
+                },
+            ],
+        ];
+    });
+
+    const parentsFiltersFields = computed<FormField<ParentsFiltersSchema>[][]>(() => {
         return [
             [
                 {
@@ -200,6 +227,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
 
     const filtersFields = {
         athlete: athletesFiltersFields,
+        parent: parentsFiltersFields,
         enrollment: enrollmentsFiltersFields,
     };
 
@@ -211,6 +239,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
 
         const refreshLists = {
             athlete: athletesStore.refreshAthletes,
+            parent: parentsStore.refreshParents,
             enrollment: enrollmentsStore.refreshEnrollments,
         };
 
