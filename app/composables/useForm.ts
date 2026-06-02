@@ -9,7 +9,7 @@ import type {
 } from '~~/lib/db/schema';
 
 import { CalendarDate } from '@internationalized/date';
-import { FILE_MAX_SIZE } from '~~/lib/utils/constants';
+import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '~~/lib/utils/constants';
 import { formatFileSize } from '~~/lib/utils/formatters';
 
 type FormSchemas = {
@@ -451,7 +451,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                                 'form.field.certificate_storage_key.description',
                                 { size: formatFileSize(FILE_MAX_SIZE) },
                             ),
-                            accept: 'image/*',
+                            accept: FILE_ACCEPTED_TYPES.join(','),
                             interactive: false,
                         },
                         buttonProps: {

@@ -205,11 +205,11 @@ export const translations = {
                 placeholder: 'Seleziona uno stato',
             },
             certificate_storage_key: {
-                description: 'PNG, JPG o WebP (max. {size})',
+                description: 'PNG, JPG, WebP o PDF (max. {size})',
                 error: {
                     not_found: 'Certificato non trovato',
                     size: 'Il file è troppo grande, scegli un file più piccolo di {size}',
-                    type: 'Il file non è valido, scegli un file valido (PNG, JPG o WebP)',
+                    type: 'Il file non è valido, scegli un file valido (PNG, JPG, WebP o PDF)',
                     upload: 'Errore nel caricamento del certificato',
                 },
             },

@@ -48,20 +48,24 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
 }
 
 async function getCertificateStorageKey(data: InsertEnrollment) {
-    let certificateStorageKey: string | undefined;
-
-    if (data.certificateStorageKey) {
-        try {
-            certificateStorageKey = await uploadFile(
-                `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`,
-                data.certificateStorageKey,
-            );
-        } catch {
-            throw new Error($t('form.field.certificate_storage_key.error.upload'));
-        }
+    if (!data.certificateStorageKey) {
+        return null;
     }
 
-    return certificateStorageKey;
+    if (data.certificateStorageKey.size === 0) {
+        return undefined;
+    }
+
+    try {
+        const certificateStorageKey = await uploadFile(
+            `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`,
+            data.certificateStorageKey,
+        );
+
+        return certificateStorageKey;
+    } catch {
+        throw new Error($t('form.field.certificate_storage_key.error.upload'));
+    }
 }
 
 export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
@@ -158,11 +162,12 @@ export async function findEnrollmentCertificateStorageKey(enrollmentId: number) 
 
 export async function insertEnrollment(data: InsertEnrollment) {
     const certificateStorageKey = await getCertificateStorageKey(data);
+    const { certificateStorageKey: _, ...rest } = data;
 
     const [created] = await db.insert(enrollment)
         .values({
-            ...data,
-            certificateStorageKey,
+            ...rest,
+            ...(certificateStorageKey !== undefined && { certificateStorageKey }),
         })
         .returning();
 
@@ -171,11 +176,12 @@ export async function insertEnrollment(data: InsertEnrollment) {
 
 export async function updateEnrollment(data: InsertEnrollment, enrollmentId: number) {
     const certificateStorageKey = await getCertificateStorageKey(data);
+    const { certificateStorageKey: _, ...rest } = data;
 
     const [updated] = await db.update(enrollment)
         .set({
-            ...data,
-            certificateStorageKey,
+            ...rest,
+            ...(certificateStorageKey !== undefined && { certificateStorageKey }),
         })
         .where(eq(enrollment.id, enrollmentId))
         .returning();

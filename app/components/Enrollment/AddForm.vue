@@ -17,7 +17,7 @@ const state = ref({ ...initialState });
 async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
     await $csrfFetch('/api/enrollments', {
         method: 'POST',
-        body: event.data,
+        body: toFormData(event.data),
     });
 }
 

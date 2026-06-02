@@ -2,6 +2,7 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 
 import { InsertEnrollment } from '~~/lib/db/schema';
+import { FILE_ACCEPTED_TYPES } from '~~/lib/utils/constants';
 
 const { enrollmentId } = defineProps<{
     enrollmentId: number;
@@ -23,7 +24,7 @@ const state = ref({ ...initialState });
 async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
     await $csrfFetch(`/api/enrollments/${enrollmentId}`, {
         method: 'PUT',
-        body: event.data,
+        body: toFormData(event.data),
     });
 }
 
@@ -47,7 +48,9 @@ watchEffect(() => {
             secondInstallment: enrollment.value.secondInstallment ?? undefined,
             thirdInstallment: enrollment.value.thirdInstallment ?? undefined,
             certificateExpirationDate: enrollment.value.certificateExpirationDate ?? undefined,
-            certificateStorageKey: undefined,
+            certificateStorageKey: enrollment.value.certificateFile
+                ? new File([], '', { type: FILE_ACCEPTED_TYPES[0] })
+                : undefined,
         };
     }
 });
