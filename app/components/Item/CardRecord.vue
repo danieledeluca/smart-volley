@@ -5,8 +5,8 @@ const { label, value } = defineProps<{
 }>();
 
 const slots = defineSlots<{
-    default: () => any;
-    actions: () => any;
+    default: () => VNode[];
+    actions: () => VNode[];
 }>();
 
 const actionsRef = useTemplateRef('actionsRef');

@@ -42,10 +42,10 @@ onBeforeRouteLeave(() => {
                     label: $t('page.athletes.button.add'),
                     icon: 'i-lucide-plus',
                 }"
-                :footerButtonProps="{
+                :submitButtonProps="{
                     label: $t('form.button.add'),
+                    loading: athleteFormRef?.isLoading(),
                 }"
-                :isLoading="Boolean(athleteFormRef?.isLoading())"
                 @submit="athleteFormRef?.submit"
             >
                 <AthleteAddForm ref="athleteFormRef" />

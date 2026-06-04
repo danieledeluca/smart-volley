@@ -53,11 +53,11 @@ const dropDownItems: DropdownMenuItem[] = [
         v-model:open="openDelete"
         :title="deleteTitle"
         :description="deleteDescription"
-        :footerButtonProps="{
-            label: $t('form.button.delete'),
+        :submitButtonProps="{
             color: 'error',
+            label: $t('form.button.delete'),
+            loading: isLoading,
         }"
-        :isLoading
         @submit="emit('delete')"
     >
         <slot name="delete" />
@@ -66,10 +66,10 @@ const dropDownItems: DropdownMenuItem[] = [
         v-model:open="openEdit"
         :title="editTitle"
         :description="editDescription"
-        :footerButtonProps="{
+        :submitButtonProps="{
             label: $t('form.button.edit'),
+            loading: isLoading,
         }"
-        :isLoading
         @submit="emit('edit')"
     >
         <slot name="edit" />

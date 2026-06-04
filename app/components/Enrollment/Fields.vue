@@ -12,11 +12,15 @@ const seasonFormRef = useTemplateRef('seasonFormRef');
 const activityFormRef = useTemplateRef('activityFormRef');
 const courseFormRef = useTemplateRef('courseFormRef');
 
-const open = ref(false);
+const openModal = reactive<Partial<Record<keyof InsertEnrollment, boolean>>>({
+    athleteId: false,
+    seasonId: false,
+    activityId: false,
+    courseId: false,
+});
 
 function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnrollment[K]) {
-    open.value = false;
-
+    openModal[key] = false;
     state.value[key] = id;
 }
 </script>
@@ -36,6 +40,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
         >
             <template #athleteId-post>
                 <AppModal
+                    v-model:open="openModal.athleteId"
                     :title="$t('form.athlete.add.title')"
                     :description="$t('form.athlete.add.description')"
                     :buttonProps="{
@@ -44,10 +49,10 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         variant: 'soft',
                         block: true,
                     }"
-                    :footerButtonProps="{
+                    :submitButtonProps="{
                         label: $t('form.button.add'),
+                        loading: athleteFormRef?.[0]?.isLoading(),
                     }"
-                    :isLoading="Boolean(athleteFormRef?.[0]?.isLoading())"
                     @submit="athleteFormRef?.[0]?.submit"
                 >
                     <AthleteAddForm ref="athleteFormRef" @success="handleSuccess('athleteId', $event)" />
@@ -55,6 +60,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
             </template>
             <template #seasonId-post>
                 <AppModal
+                    v-model:open="openModal.seasonId"
                     :title="$t('form.season.add.title')"
                     :description="$t('form.season.add.description')"
                     :buttonProps="{
@@ -63,10 +69,10 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         variant: 'soft',
                         block: true,
                     }"
-                    :footerButtonProps="{
+                    :submitButtonProps="{
                         label: $t('form.button.add'),
+                        loading: seasonFormRef?.[0]?.isLoading(),
                     }"
-                    :isLoading="Boolean(seasonFormRef?.[0]?.isLoading())"
                     @submit="seasonFormRef?.[0]?.submit"
                 >
                     <SeasonAddForm ref="seasonFormRef" @success="handleSuccess('seasonId', $event)" />
@@ -74,6 +80,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
             </template>
             <template #activityId-post>
                 <AppModal
+                    v-model:open="openModal.activityId"
                     :title="$t('form.activity.add.title')"
                     :description="$t('form.activity.add.description')"
                     :buttonProps="{
@@ -82,10 +89,10 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         variant: 'soft',
                         block: true,
                     }"
-                    :footerButtonProps="{
+                    :submitButtonProps="{
                         label: $t('form.button.add'),
+                        loading: activityFormRef?.[0]?.isLoading(),
                     }"
-                    :isLoading="Boolean(activityFormRef?.[0]?.isLoading())"
                     @submit="activityFormRef?.[0]?.submit"
                 >
                     <ActivityAddForm ref="activityFormRef" @success="handleSuccess('activityId', $event)" />
@@ -93,6 +100,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
             </template>
             <template #courseId-post>
                 <AppModal
+                    v-model:open="openModal.courseId"
                     :title="$t('form.course.add.title')"
                     :description="$t('form.course.add.description')"
                     :buttonProps="{
@@ -101,10 +109,10 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         variant: 'soft',
                         block: true,
                     }"
-                    :footerButtonProps="{
+                    :submitButtonProps="{
                         label: $t('form.button.add'),
+                        loading: courseFormRef?.[0]?.isLoading(),
                     }"
-                    :isLoading="Boolean(courseFormRef?.[0]?.isLoading())"
                     @submit="courseFormRef?.[0]?.submit"
                 >
                     <CourseAddForm ref="courseFormRef" @success="handleSuccess('courseId', $event)" />

@@ -44,7 +44,7 @@ watch(() => tableData, () => {
 </script>
 
 <template>
-    <div class="not-empty:mt-6 sm:not-empty:mt-8" :class="{ 'h-full max-h-[calc(100%-var(--ui-filters-height)-var(--spacing)*6)] sm:max-h-[calc(100%-var(--ui-filters-height)-var(--spacing)*8)]': !showPagination }">
+    <div class="not-empty:mt-4 sm:not-empty:mt-6" :class="{ 'h-full max-h-[calc(100%-var(--ui-filters-height)-var(--spacing)*4)] sm:max-h-[calc(100%-var(--ui-filters-height)-var(--spacing)*6)]': !showPagination }">
         <USkeleton v-if="isLoading && !tableData" class="h-full" />
         <UAlert
             v-if="error"

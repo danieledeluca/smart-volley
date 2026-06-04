@@ -8,10 +8,10 @@ const state = defineModel<Partial<InsertAthlete>>('state', {
 const { formFields } = useForm('athlete');
 const parentFormRef = useTemplateRef('parentFormRef');
 
-const open = ref(false);
+const openParentModal = ref(false);
 
 function handleSuccess(id?: number) {
-    open.value = false;
+    openParentModal.value = false;
     state.value.parentId = id;
 }
 </script>
@@ -31,7 +31,7 @@ function handleSuccess(id?: number) {
         >
             <template #parentId-post>
                 <AppModal
-                    v-model:open="open"
+                    v-model:open="openParentModal"
                     :title="$t('form.parent.add.title')"
                     :description="$t('form.parent.add.description')"
                     :buttonProps="{
@@ -40,10 +40,10 @@ function handleSuccess(id?: number) {
                         variant: 'soft',
                         block: true,
                     }"
-                    :footerButtonProps="{
+                    :submitButtonProps="{
                         label: $t('form.button.add'),
+                        loading: parentFormRef?.[0]?.isLoading(),
                     }"
-                    :isLoading="Boolean(parentFormRef?.[0]?.isLoading())"
                     @submit="parentFormRef?.[0]?.submit()"
                 >
                     <ParentAddForm ref="parentFormRef" @success="handleSuccess" />

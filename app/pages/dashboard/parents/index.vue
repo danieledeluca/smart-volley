@@ -42,10 +42,10 @@ onBeforeRouteLeave(() => {
                     label: $t('page.parents.button.add'),
                     icon: 'i-lucide-plus',
                 }"
-                :footerButtonProps="{
+                :submitButtonProps="{
                     label: $t('form.button.add'),
+                    loading: parentFormRef?.isLoading(),
                 }"
-                :isLoading="Boolean(parentFormRef?.isLoading())"
                 @submit="parentFormRef?.submit"
             >
                 <ParentAddForm ref="parentFormRef" />

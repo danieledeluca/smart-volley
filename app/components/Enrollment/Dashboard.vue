@@ -39,10 +39,10 @@ if (canEdit.value) {
                     label: $t('page.enrollments.button.add'),
                     icon: 'i-lucide-plus',
                 }"
-                :footerButtonProps="{
+                :submitButtonProps="{
                     label: $t('form.button.add'),
+                    loading: enrollmentFormRef?.isLoading(),
                 }"
-                :isLoading="Boolean(enrollmentFormRef?.isLoading())"
                 @submit="enrollmentFormRef?.submit()"
             >
                 <EnrollmentAddForm ref="enrollmentFormRef" />

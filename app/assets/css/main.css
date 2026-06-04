@@ -3,6 +3,12 @@
 
 :root {
     --ui-filters-height: 32px;
+
+    &:has(#activeFilters) {
+        @media (width < 48rem) {
+            --ui-filters-height: 76px;
+        }
+    }
 }
 
 @layer components {
