@@ -7,7 +7,7 @@ const { date } = defineProps<{
     date: string | null;
 }>();
 
-const status = getCertificateDateStatus(date);
+const status = computed(() => getCertificateDateStatus(date));
 
 const textColorMap: Record<CertificateStatusEnum, string> = {
     valid: 'text-success',
@@ -27,9 +27,9 @@ const badgeLabelMap: Record<CertificateStatusEnum, string> = {
     expired: $t('form.field.certificate_status.item.expired'),
 };
 
-const textColor = textColorMap[status];
-const badgeColor = badgeColorMap[status];
-const badgeLabel = badgeLabelMap[status];
+const textColor = computed(() => textColorMap[status.value]);
+const badgeColor = computed(() => badgeColorMap[status.value]);
+const badgeLabel = computed(() => badgeLabelMap[status.value]);
 </script>
 
 <template>
