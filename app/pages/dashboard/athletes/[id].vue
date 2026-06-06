@@ -117,7 +117,7 @@ onMounted(async () => {
                         <ListTable
                             :tableData="athlete.enrollments"
                             :tableColumns="enrollmentTableColumns"
-                            class="col-span-2 mt-0! **:data-[slot=root]:rounded-t-none"
+                            class="col-span-2 mt-0! max-h-full **:data-[slot=root]:max-h-full **:data-[slot=root]:rounded-t-none"
                             :showPagination="true"
                             @select="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />

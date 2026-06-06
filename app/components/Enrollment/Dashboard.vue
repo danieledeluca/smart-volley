@@ -21,11 +21,22 @@ const {
 } = storeToRefs(enrollmentsStore);
 
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
+const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
+const enrollmentTableRef = useTemplateRef('enrollmentTableRef');
+
+const deleteModalOpen = ref(false);
 
 const tableColumns = getEnrollmentsTableColumns(_tableColumns);
 
 if (canEdit.value) {
+    tableColumns.unshift(getSelectTableColumn());
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ enrollmentId: row.id })));
+}
+
+function handelDeleteSuccess() {
+    deleteModalOpen.value = false;
+
+    enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
 }
 </script>
 
@@ -54,8 +65,24 @@ if (canEdit.value) {
             :fields="filterFields"
             @update="enrollmentsStore.refreshEnrollments"
             @clear="enrollmentsStore.clearFilters"
-        />
+        >
+            <ListDeleteButton
+                v-model:open="deleteModalOpen"
+                :title="$t('form.enrollment.multiple_delete.title')"
+                :description="$t('form.enrollment.multiple_delete.description')"
+                :isDisabled="!(enrollmentTableRef?.selectRows()?.length || 0)"
+                :isLoading="enrollmentDeleteFormRef?.isLoading()"
+                @submit="enrollmentDeleteFormRef?.submit()"
+            >
+                <EnrollmentMultipleDeleteForm
+                    ref="enrollmentDeleteFormRef"
+                    :enrollments="enrollmentTableRef?.selectRows()?.map((row) => row.original) || []"
+                    @success="handelDeleteSuccess"
+                />
+            </ListDeleteButton>
+        </ListFilters>
         <ListTable
+            ref="enrollmentTableRef"
             :tableData="enrollments"
             :tableColumns
             :isLoading="enrollmentsPending"

@@ -17,12 +17,23 @@ const {
     filterFields,
 } = storeToRefs(athletesStore);
 
-const athleteFormRef = useTemplateRef('athleteFormRef');
+const athleteAddFormRef = useTemplateRef('athleteAddFormRef');
+const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
+const athleteTableRef = useTemplateRef('athleteTableRef');
+
+const deleteModalOpen = ref(false);
 
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
 
 if (canEdit.value) {
+    tableColumns.unshift(getSelectTableColumn());
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ athleteId: row.id })));
+}
+
+function handelDeleteSuccess() {
+    deleteModalOpen.value = false;
+
+    athleteTableRef.value?.toggleAllPageRowsSelected(false);
 }
 
 onBeforeRouteLeave(() => {
@@ -44,11 +55,11 @@ onBeforeRouteLeave(() => {
                 }"
                 :submitButtonProps="{
                     label: $t('form.button.add'),
-                    loading: athleteFormRef?.isLoading(),
+                    loading: athleteAddFormRef?.isLoading(),
                 }"
-                @submit="athleteFormRef?.submit"
+                @submit="athleteAddFormRef?.submit"
             >
-                <AthleteAddForm ref="athleteFormRef" />
+                <AthleteAddForm ref="athleteAddFormRef" />
             </AppSlideover>
         </template>
         <ListFilters
@@ -57,8 +68,24 @@ onBeforeRouteLeave(() => {
             :fields="filterFields"
             @update="athletesStore.refreshAthletes"
             @clear="athletesStore.clearFilters"
-        />
+        >
+            <ListDeleteButton
+                v-model:open="deleteModalOpen"
+                :title="$t('form.athlete.multiple_delete.title')"
+                :description="$t('form.athlete.multiple_delete.description')"
+                :isDisabled="!(athleteTableRef?.selectRows()?.length || 0)"
+                :isLoading="athleteDeleteFormRef?.isLoading()"
+                @submit="athleteDeleteFormRef?.submit()"
+            >
+                <AthleteMultipleDeleteForm
+                    ref="athleteDeleteFormRef"
+                    :athletes="athleteTableRef?.selectRows()?.map((row) => row.original) || []"
+                    @success="handelDeleteSuccess"
+                />
+            </ListDeleteButton>
+        </ListFilters>
         <ListTable
+            ref="athleteTableRef"
             :tableData="athletes"
             :tableColumns
             :isLoading="athletesPending"

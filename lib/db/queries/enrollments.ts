@@ -2,7 +2,7 @@ import type { SQL } from 'drizzle-orm';
 
 import { and, eq, gt, ilike, inArray, isNull, lte, sql } from 'drizzle-orm';
 
-import type { CertificateStatusEnum, EnrollmentsFiltersSchema } from '#imports';
+import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
 import type { InsertEnrollment } from '../schema';
 
@@ -187,6 +187,19 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
         .returning();
 
     return updated;
+}
+
+export async function deleteEnrollments(data: MultipleDeleteSchema) {
+    if (!data.ids.length) {
+        return [];
+    }
+
+    const deleted = await db.update(enrollment)
+        .set({ deletedAt: new Date() })
+        .where(inArray(enrollment.id, data.ids))
+        .returning();
+
+    return deleted;
 }
 
 export async function deleteEnrollment(enrollmentId: number) {

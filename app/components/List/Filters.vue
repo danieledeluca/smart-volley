@@ -97,6 +97,7 @@ function handleRemoveFilter(filterName: keyof FormData) {
             :key="index"
             v-model="state[field.formFieldProps.name]"
             :field
+            class="max-sm:flex-1"
             @update:modelValue="handleFormFieldUpdate(field)"
         />
         <div v-if="activeFilters.length > 0" id="activeFilters" class="relative flex-1 overflow-hidden max-md:order-last max-md:basis-full">
@@ -113,10 +114,12 @@ function handleRemoveFilter(filterName: keyof FormData) {
                     />
                 </template>
             </div>
-            <div class="absolute inset-y-0 right-0 w-16 bg-linear-to-l from-default" />
+            <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-default" />
         </div>
-        <div v-if="(secondFieldsGroup?.length || 0) > 0" class="ml-auto">
+        <div class="ml-auto flex gap-4 sm:gap-6">
+            <slot />
             <AppSlideover
+                v-if="(secondFieldsGroup?.length || 0) > 0"
                 v-model:open="openFilters"
                 :title="$t('form.filter.title')"
                 :description="$t('form.filter.description')"
@@ -131,7 +134,7 @@ function handleRemoveFilter(filterName: keyof FormData) {
                 @cancel="handleClear"
             >
                 <template #button>
-                    <UChip :show="activeFilters.length > 0" class="w-full">
+                    <UChip :show="activeFilters.length > 0">
                         <UButton
                             variant="subtle"
                             color="neutral"

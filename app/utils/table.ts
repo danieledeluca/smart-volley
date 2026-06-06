@@ -5,7 +5,8 @@ import type {
     SelectEnrollmentsWithRelations,
     SelectParents,
 } from '~~/lib/db/schema';
-import type { Component } from 'vue';
+
+import UCheckbox from '@nuxt/ui/components/Checkbox.vue';
 
 import type { ComponentProps } from '#build/types/layouts';
 
@@ -27,7 +28,9 @@ function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
     };
 }
 
-function getNameTableColumn<T extends { name: string; fiscalCode: string }>(): TableColumn<T> {
+function getNameTableColumn<T extends { id: number; name: string; fiscalCode: string }>(
+    detailPagePath?: string,
+): TableColumn<T> {
     return {
         accessorKey: 'name',
         header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
@@ -35,6 +38,7 @@ function getNameTableColumn<T extends { name: string; fiscalCode: string }>(): T
             userProps: {
                 name: row.original.name,
                 description: row.original.fiscalCode,
+                to: detailPagePath ? detailPagePath + row.original.id.toString() : undefined,
             },
             avatarSize: 64,
         }),
@@ -140,11 +144,29 @@ export function getActionsTableColumn<T extends { id: number }, C extends Compon
     };
 }
 
+export function getSelectTableColumn<T>(): TableColumn<T> {
+    return {
+        id: 'select',
+        header: ({ table }) =>
+            h(UCheckbox, {
+                'modelValue': table.getIsSomePageRowsSelected()
+                    ? 'indeterminate'
+                    : table.getIsAllPageRowsSelected(),
+                'onUpdate:modelValue': (value) => table.toggleAllPageRowsSelected(!!value),
+            }),
+        cell: ({ row }) =>
+            h(UCheckbox, {
+                'modelValue': row.getIsSelected(),
+                'onUpdate:modelValue': (value) => row.toggleSelected(!!value),
+            }),
+    };
+}
+
 // Athletes
 export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
     const tableColumns: TableColumns<SelectAthletes> = {
         id: getIdTableColumn(),
-        name: getNameTableColumn(),
+        name: getNameTableColumn(`/dashboard/athletes/`),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
     };
@@ -187,6 +209,7 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
                 userProps: {
                     name: row.original.athlete.name,
                     description: row.original.athlete.fiscalCode,
+                    to: `/dashboard/enrollments/${row.original.id}`,
                 },
                 avatarSize: 64,
             }),

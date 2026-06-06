@@ -18,11 +18,22 @@ const {
 } = storeToRefs(parentsStore);
 
 const parentFormRef = useTemplateRef('parentFormRef');
+const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
+const parentTableRef = useTemplateRef('parentTableRef');
+
+const deleteModalOpen = ref(false);
 
 const tableColumns = getParentsTableColumns(['id', 'name', 'phoneNumber', 'email']);
 
 if (canEdit.value) {
+    tableColumns.unshift(getSelectTableColumn());
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ parentId: row.id })));
+}
+
+function handelDeleteSuccess() {
+    deleteModalOpen.value = false;
+
+    parentTableRef.value?.toggleAllPageRowsSelected(false);
 }
 
 onBeforeRouteLeave(() => {
@@ -57,8 +68,24 @@ onBeforeRouteLeave(() => {
             :fields="filterFields"
             @update="parentsStore.refreshParents"
             @clear="parentsStore.clearFilters"
-        />
+        >
+            <ListDeleteButton
+                v-model:open="deleteModalOpen"
+                :title="$t('form.parent.multiple_delete.title')"
+                :description="$t('form.parent.multiple_delete.description')"
+                :isDisabled="!(parentTableRef?.selectRows()?.length || 0)"
+                :isLoading="parentDeleteFormRef?.isLoading()"
+                @submit="parentDeleteFormRef?.submit()"
+            >
+                <ParentMultipleDeleteForm
+                    ref="parentDeleteFormRef"
+                    :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
+                    @success="handelDeleteSuccess"
+                />
+            </ListDeleteButton>
+        </ListFilters>
         <ListTable
+            ref="parentTableRef"
             :tableData="parents"
             :tableColumns
             :isLoading="parentsPending"

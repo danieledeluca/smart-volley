@@ -100,6 +100,15 @@ export const translations = {
                 success: 'Atleta modificato con successo',
                 title: 'Modifica atleta',
             },
+            multiple_delete: {
+                body: 'Sei sicuro di voler eliminare questi atleti? Questa azione è irreversibile.',
+                button: {
+                    show_selected: 'Mostra gli atleti selezionati',
+                },
+                description: 'Attenzione! Stai per eliminare più atleti.',
+                success: 'Atleti eliminati con successo',
+                title: 'Elimina atleti',
+            },
         },
         button: {
             add: 'Aggiungi',
@@ -139,6 +148,15 @@ export const translations = {
                 description: 'Compila i campi per modificare le informazioni dell\'iscrizione.',
                 success: 'Iscrizione modificata con successo',
                 title: 'Modifica iscrizione',
+            },
+            multiple_delete: {
+                body: 'Sei sicuro di voler eliminare queste iscrizioni? Questa azione è irreversibile.',
+                button: {
+                    show_selected: 'Mostra le iscrizioni selezionate',
+                },
+                description: 'Attenzione! Stai per eliminare più iscrizioni.',
+                success: 'Iscrizioni eliminate con successo',
+                title: 'Elimina iscrizioni',
             },
         },
         field: {
@@ -333,6 +351,15 @@ export const translations = {
                 success: 'Genitore modificato con successo',
                 title: 'Modifica genitore',
             },
+            multiple_delete: {
+                body: 'Sei sicuro di voler eliminare questi genitori? Questa azione è irreversibile.',
+                button: {
+                    show_selected: 'Mostra i genitori selezionati',
+                },
+                description: 'Attenzione! Stai per eliminare più genitori.',
+                success: 'Genitori eliminati con successo',
+                title: 'Elimina genitori',
+            },
         },
         season: {
             add: {
@@ -457,6 +484,7 @@ export const translations = {
             volley_balance_secondary: 'Saldo volley 2',
         },
         pagination: 'Visualizzati {start}-{end} di {total}',
+        row_selected: '{selected} di {total} righe selezionate',
         sort: {
             asc: 'Ascendente',
             desc: 'Discendente',

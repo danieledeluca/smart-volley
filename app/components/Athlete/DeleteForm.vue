@@ -8,6 +8,7 @@ const emit = defineEmits<{
 }>();
 
 const athletesStore = useAthletesStore();
+const enrollmentsStore = useEnrollmentsStore();
 const { $csrfFetch } = useNuxtApp();
 const athleteFormRef = useTemplateRef('athleteFormRef');
 
@@ -19,6 +20,7 @@ async function onSubmit() {
 
 function onSubmitComplete() {
     athletesStore.refreshAthletes();
+    enrollmentsStore.refreshEnrollments();
 
     emit('success');
 }

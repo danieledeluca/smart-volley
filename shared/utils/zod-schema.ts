@@ -30,6 +30,10 @@ export const EnrollmentsFiltersSchema = z.object({
     certificateStatus: CertificateStatusEnum.optional(),
 });
 
+export const MultipleDeleteSchema = z.object({
+    ids: z.array(z.number()),
+});
+
 // Schema types
 export type MissingPaymentEnum = z.infer<typeof MissingPaymentEnum>;
 export type CertificateStatusEnum = z.infer<typeof CertificateStatusEnum>;
@@ -37,3 +41,5 @@ export type CertificateStatusEnum = z.infer<typeof CertificateStatusEnum>;
 export type AthletesFiltersSchema = z.infer<typeof AthletesFiltersSchema>;
 export type ParentsFiltersSchema = z.infer<typeof ParentsFiltersSchema>;
 export type EnrollmentsFiltersSchema = z.infer<typeof EnrollmentsFiltersSchema>;
+
+export type MultipleDeleteSchema = z.infer<typeof MultipleDeleteSchema>;

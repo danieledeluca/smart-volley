@@ -1,4 +1,6 @@
-import { and, asc, eq, ilike, isNull } from 'drizzle-orm';
+import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schema';
+
+import { and, asc, eq, ilike, inArray, isNull } from 'drizzle-orm';
 
 import type { InsertAthlete } from '../schema';
 
@@ -65,6 +67,19 @@ export async function updateAthlete(data: InsertAthlete, athleteId: number) {
         .returning();
 
     return updated;
+}
+
+export async function deleteAthletes(data: MultipleDeleteSchema) {
+    if (!data.ids.length) {
+        return [];
+    }
+
+    const deleted = await db.update(athlete)
+        .set({ deletedAt: new Date() })
+        .where(inArray(athlete.id, data.ids))
+        .returning();
+
+    return deleted;
 }
 
 export async function deleteAthlete(athleteId: number) {

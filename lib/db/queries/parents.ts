@@ -1,4 +1,6 @@
-import { asc, eq, ilike } from 'drizzle-orm';
+import { asc, eq, ilike, inArray } from 'drizzle-orm';
+
+import type { MultipleDeleteSchema } from '#imports';
 
 import type { InsertParent } from '../schema';
 
@@ -33,6 +35,18 @@ export async function updateParent(data: InsertParent, parentId: number) {
         .returning();
 
     return updated;
+}
+
+export async function deleteParents(data: MultipleDeleteSchema) {
+    if (!data.ids.length) {
+        return [];
+    }
+
+    const deleted = await db.delete(parent)
+        .where(inArray(parent.id, data.ids))
+        .returning();
+
+    return deleted;
 }
 
 export async function deleteParent(parentId: number) {
