@@ -1,8 +1,13 @@
 <script setup lang="ts">
-const { athleteId, onDeleteComplete, onEditComplete } = defineProps<{
+const { athleteId } = defineProps<{
     athleteId: number;
-    onDeleteComplete?: () => void;
-    onEditComplete?: () => void;
+}>();
+
+const emit = defineEmits<{
+    deleteComplete: [];
+    deleteClose: [];
+    editComplete: [];
+    editClose: [];
 }>();
 
 const athleteEditFormRef = useTemplateRef('athleteEditFormRef');
@@ -18,13 +23,13 @@ const isLoading = computed(() => {
 function handleDeleteSuccess() {
     openDelete.value = false;
 
-    onDeleteComplete?.();
+    emit('deleteComplete');
 }
 
 function handleEditSuccess() {
     openEdit.value = false;
 
-    onEditComplete?.();
+    emit('editComplete');
 }
 </script>
 
@@ -38,7 +43,9 @@ function handleEditSuccess() {
         :editDescription="$t('form.athlete.edit.description')"
         :isLoading
         @delete="athleteDeleteFormRef?.submit"
+        @deleteClose="emit('deleteClose')"
         @edit="athleteEditFormRef?.submit"
+        @editClose="emit('editClose')"
     >
         <template #delete>
             <AthleteDeleteForm ref="athleteDeleteFormRef" :athleteId @success="handleDeleteSuccess" />

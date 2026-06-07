@@ -39,7 +39,7 @@ function calendarDateToString(date: CalendarDate | undefined) {
 
 const dateModel = computed({
     get: () => stringToCalendarDate(model.value),
-    set: (value: CalendarDate | undefined) => {
+    set: (value) => {
         model.value = calendarDateToString(value);
 
         emitFormBlur();

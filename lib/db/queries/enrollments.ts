@@ -1,6 +1,6 @@
 import type { SQL } from 'drizzle-orm';
 
-import { and, eq, gt, ilike, inArray, isNull, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, ilike, inArray, isNull, lte, sql } from 'drizzle-orm';
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
@@ -108,9 +108,8 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
             inArray(enrollment.id, filteredIds.map((filter) => filter.id)),
             isNull(enrollment.deletedAt),
         ),
+        orderBy: desc(enrollment.id),
     });
-
-    result.sort((a, b) => a.athlete.name.localeCompare(b.athlete.name));
 
     return result.map(({ certificateStorageKey, ...rest }) => {
         return {

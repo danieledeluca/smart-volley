@@ -1,6 +1,7 @@
 import type { SelectMenuItem } from '@nuxt/ui';
 
 export const useParentsStore = defineStore('parents', () => {
+    const route = useRoute();
     const { filterState, filterFields, clearFilters } = useFilters('parent');
 
     const {
@@ -15,12 +16,22 @@ export const useParentsStore = defineStore('parents', () => {
     });
 
     const parentsItems = computed(() => {
-        return parents.value?.map<SelectMenuItem>((parent) => {
+        const sortedParents = parents.value?.toSorted((parentA, parentB) => {
+            return parentA.name.localeCompare(parentB.name);
+        });
+
+        return sortedParents?.map<SelectMenuItem>((parent) => {
             return {
                 label: parent.name,
                 value: parent.id,
             };
         });
+    });
+
+    effect(() => {
+        if (!route.name?.toString().startsWith('dashboard-parents')) {
+            clearFilters();
+        }
     });
 
     return {

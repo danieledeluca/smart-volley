@@ -23,27 +23,3 @@
         }
     }
 }
-
-@layer components {
-    .striped-table {
-        table {
-            thead {
-                @apply text-nowrap;
-
-                tr {
-                    @apply bg-elevated;
-                }
-            }
-
-            tbody {
-                tr {
-                    @apply odd:bg-elevated/50;
-
-                    &[data-selectable="true"] {
-                        @apply hover:bg-elevated/30! odd:hover:bg-elevated/70!;
-                    }
-                }
-            }
-        }
-    }
-}

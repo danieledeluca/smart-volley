@@ -6,9 +6,9 @@ useSeoMeta({
 });
 
 const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
-
 const athletesStore = useAthletesStore();
+
+const { canEdit } = storeToRefs(authStore);
 const {
     athletes,
     athletesPending,
@@ -30,17 +30,17 @@ if (canEdit.value) {
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ athleteId: row.id })));
 }
 
+async function handleFiltersUpdate() {
+    await athletesStore.refreshAthletes();
+
+    athleteTableRef.value?.toggleAllPageRowsSelected(false);
+}
+
 function handelDeleteSuccess() {
     deleteModalOpen.value = false;
 
     athleteTableRef.value?.toggleAllPageRowsSelected(false);
 }
-
-onBeforeRouteLeave(() => {
-    if (Object.values(filterState.value).filter((filter) => filter).length) {
-        athletesStore.clearFilters();
-    }
-});
 </script>
 
 <template>
@@ -66,14 +66,15 @@ onBeforeRouteLeave(() => {
             v-model:state="filterState"
             :schema="AthletesFiltersSchema"
             :fields="filterFields"
-            @update="athletesStore.refreshAthletes"
+            @update="handleFiltersUpdate"
             @clear="athletesStore.clearFilters"
         >
             <ListDeleteButton
+                v-if="canEdit"
                 v-model:open="deleteModalOpen"
                 :title="$t('form.athlete.multiple_delete.title')"
                 :description="$t('form.athlete.multiple_delete.description')"
-                :isDisabled="!(athleteTableRef?.selectRows()?.length || 0)"
+                :isDisabled="athletesPending || !(athleteTableRef?.selectRows()?.length || 0)"
                 :isLoading="athleteDeleteFormRef?.isLoading()"
                 @submit="athleteDeleteFormRef?.submit()"
             >

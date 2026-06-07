@@ -11,15 +11,17 @@ const {
     isLoading,
     error,
     showPagination = false,
-    onSelect,
 } = defineProps<{
     tableData?: T[];
     tableColumns?: TableColumn<T>[];
     isLoading?: boolean;
     error?: FetchError;
     showPagination?: boolean;
-    onSelect?: (event: Event, row: TableRow<T>) => void;
 }> ();
+
+const emit = defineEmits<{
+    select: [event: Event, row: TableRow<T>];
+}>();
 
 const tableRef = useTemplateRef('tableRef');
 
@@ -39,6 +41,10 @@ const currentPage = computed(() => {
 });
 
 const hasSelectColumn = computed(() => Boolean(tableColumns?.find((column) => column.id === 'select')));
+
+function handleSelect(_event: Event, row: TableRow<T>) {
+    hasSelectColumn.value ? row.toggleSelected(!row.getIsSelected()) : emit('select', _event, row);
+}
 
 watch(() => tableData, () => {
     pagination.value.pageIndex = 0;
@@ -63,11 +69,13 @@ defineExpose({
             <UTable
                 ref="tableRef"
                 v-model:pagination="pagination"
-                class="striped-table max-h-full rounded-md border border-accented"
+                class="max-h-full rounded-md border border-accented **:[thead]:text-nowrap"
                 :class="{
                     'rounded-b-none': showPagination || hasSelectColumn,
-                    'max-h-[calc(100%-var(--ui-table-footer-pagination-height))]': showPagination,
-                    'max-h-[calc(100%-var(--ui-table-footer-selection-height))]': !showPagination && hasSelectColumn,
+                    'max-h-[calc(100%-var(--ui-table-footer-pagination-height))] **:[thead]:bg-elevated':
+                        showPagination,
+                    'max-h-[calc(100%-var(--ui-table-footer-selection-height))] **:[thead]:bg-elevated/75':
+                        !showPagination && hasSelectColumn,
                 }"
                 :data="tableData"
                 :columns="tableColumns"
@@ -75,8 +83,7 @@ defineExpose({
                 :loading="isLoading"
                 :sticky="!showPagination"
                 :virtualize="!showPagination"
-                @select="(_event, row) => hasSelectColumn
-                    ? row.toggleSelected(!row.getIsSelected()) : onSelect?.(_event, row)"
+                @select="handleSelect"
             />
             <template v-if="tableData.length > 0 && (showPagination || hasSelectColumn)">
                 <div class="flex items-center gap-4 rounded-md rounded-t-none border border-t-0 border-accented bg-elevated px-4 py-3.5 max-md:flex-col">
@@ -90,8 +97,8 @@ defineExpose({
                         </template>
                         <template v-else-if="hasSelectColumn">
                             {{ $t('table.row_selected', {
-                                // eslint-disable-next-line style/max-len
-                                selected: (tableRef?.tableApi?.getFilteredSelectedRowModel().rows.length || 0).toString(),
+                                selected: (tableRef?.tableApi?.getFilteredSelectedRowModel().rows.length || 0)
+                                    .toString(),
                                 total: (tableRef?.tableApi?.getFilteredRowModel().rows.length || 0).toString(),
                             }) }}
                         </template>

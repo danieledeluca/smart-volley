@@ -6,12 +6,14 @@ const { deleteTitle, deleteDescription, editTitle, editDescription, isLoading } 
     deleteDescription?: string;
     editTitle: string;
     editDescription?: string;
-    isLoading: boolean;
+    isLoading?: boolean;
 }>();
 
 const emit = defineEmits<{
     delete: [];
+    deleteClose: [];
     edit: [];
+    editClose: [];
 }>();
 
 const openDelete = defineModel<boolean>('openDelete', {
@@ -59,6 +61,7 @@ const dropDownItems: DropdownMenuItem[] = [
             loading: isLoading,
         }"
         @submit="emit('delete')"
+        @close="emit('deleteClose')"
     >
         <slot name="delete" />
     </AppModal>
@@ -71,6 +74,7 @@ const dropDownItems: DropdownMenuItem[] = [
             loading: isLoading,
         }"
         @submit="emit('edit')"
+        @close="emit('editClose')"
     >
         <slot name="edit" />
     </AppSlideover>

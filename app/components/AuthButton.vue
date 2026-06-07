@@ -8,6 +8,7 @@ const { dropdownMenuProps, buttonProps, userProps } = defineProps<{
 }>();
 
 const authStore = useAuthStore();
+
 const { user, isLoading } = storeToRefs(authStore);
 
 const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {

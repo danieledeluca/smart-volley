@@ -12,11 +12,7 @@ const { title, description, buttonProps, cancelButtonProps, submitButtonProps } 
 const emit = defineEmits<{
     submit: [];
     cancel: [];
-}>();
-
-const slots = defineSlots<{
-    default: () => VNode[];
-    button: () => VNode[];
+    close: [];
 }>();
 
 const open = defineModel<boolean>('open', {
@@ -31,9 +27,15 @@ function handleCancel() {
 </script>
 
 <template>
-    <UModal v-model:open="open" :title :description>
-        <slot v-if="!!slots.button" name="button" />
-        <UButton v-else-if="buttonProps?.label || buttonProps?.icon" v-bind="buttonProps" />
+    <UModal
+        v-model:open="open"
+        :title
+        :description
+        @after:leave="emit('close')"
+    >
+        <slot name="button">
+            <UButton v-if="buttonProps?.label || buttonProps?.icon" v-bind="buttonProps" />
+        </slot>
         <template #body>
             <slot />
         </template>

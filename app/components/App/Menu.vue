@@ -5,6 +5,7 @@ const navigationMenuProps = defineProps<Omit<NavigationMenuProps, 'items'>>();
 
 const route = useRoute();
 const authStore = useAuthStore();
+
 const { canEdit } = storeToRefs(authStore);
 
 const navigationMenuItems = computed(() => {

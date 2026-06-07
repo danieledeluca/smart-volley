@@ -30,17 +30,17 @@ if (canEdit.value) {
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ parentId: row.id })));
 }
 
+async function handleFiltersUpdate() {
+    await parentsStore.refreshParents();
+
+    parentTableRef.value?.toggleAllPageRowsSelected(false);
+}
+
 function handelDeleteSuccess() {
     deleteModalOpen.value = false;
 
     parentTableRef.value?.toggleAllPageRowsSelected(false);
 }
-
-onBeforeRouteLeave(() => {
-    if (Object.values(filterState.value).filter((filter) => filter).length) {
-        parentsStore.clearFilters();
-    }
-});
 </script>
 
 <template>
@@ -66,14 +66,15 @@ onBeforeRouteLeave(() => {
             v-model:state="filterState"
             :schema="ParentsFiltersSchema"
             :fields="filterFields"
-            @update="parentsStore.refreshParents"
+            @update="handleFiltersUpdate"
             @clear="parentsStore.clearFilters"
         >
             <ListDeleteButton
+                v-if="canEdit"
                 v-model:open="deleteModalOpen"
                 :title="$t('form.parent.multiple_delete.title')"
                 :description="$t('form.parent.multiple_delete.description')"
-                :isDisabled="!(parentTableRef?.selectRows()?.length || 0)"
+                :isDisabled="parentsPending || !(parentTableRef?.selectRows()?.length || 0)"
                 :isLoading="parentDeleteFormRef?.isLoading()"
                 @submit="parentDeleteFormRef?.submit()"
             >

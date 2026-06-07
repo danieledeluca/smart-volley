@@ -1,6 +1,6 @@
 import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schema';
 
-import { and, asc, eq, ilike, inArray, isNull } from 'drizzle-orm';
+import { and, desc, eq, ilike, inArray, isNull } from 'drizzle-orm';
 
 import type { InsertAthlete } from '../schema';
 
@@ -20,7 +20,7 @@ export async function findAthletes(athleteName?: string) {
             phoneNumber: true,
             email: true,
         },
-        orderBy: asc(athlete.name),
+        orderBy: desc(athlete.id),
     });
 }
 
@@ -47,7 +47,7 @@ export async function findAthlete(athleteId: number) {
         return result;
     }
 
-    result.enrollments.sort((a, b) => b.season.endYear - a.season.endYear);
+    result.enrollments.sort((athleteA, athleteB) => athleteB.season.endYear - athleteA.season.endYear);
 
     return result;
 }

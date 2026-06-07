@@ -83,7 +83,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
         description: undefined,
     };
 
-    const initialStates = {
+    const initialStates: { [K in keyof FormSchemas]: Partial<FormSchemas[K]> } = {
         athlete: athleteInitialState,
         parent: parentInitialState,
         enrollment: enrollmentInitialState,
@@ -546,14 +546,20 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
         ];
     });
 
-    const formsFields = {
+    function defineFormFields<T extends {
+        [K in keyof FormSchemas]: ComputedRef<FormField<FormSchemas[K]>[] | FormFieldGroup<FormSchemas[K]>[]>
+    }>(fields: T) {
+        return fields;
+    }
+
+    const formsFields = defineFormFields({
         athlete: athleteFields,
         parent: parentFields,
         enrollment: enrollmentFields,
         season: seasonFields,
         activity: activityFields,
         course: courseFields,
-    };
+    });
 
     const formFields = formsFields[formType];
 

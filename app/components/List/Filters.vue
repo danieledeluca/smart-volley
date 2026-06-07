@@ -71,10 +71,16 @@ const activeFilters = computed(() => {
     }, []);
 });
 
+const debouncedUpdate = useDebounceFn(() => {
+    emit('update');
+}, 500);
+
 function handleFormFieldUpdate(field: FormField<FormData>) {
-    useDebounceFn(() => {
+    if (field.debounce) {
+        debouncedUpdate();
+    } else {
         emit('update');
-    }, field.debounce ? 500 : 0)();
+    }
 }
 
 function handleClear() {
@@ -116,7 +122,7 @@ function handleRemoveFilter(filterName: keyof FormData) {
             </div>
             <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-default" />
         </div>
-        <div class="ml-auto flex gap-4 sm:gap-6">
+        <div class="ml-auto flex gap-4 empty:hidden sm:gap-6">
             <slot />
             <AppSlideover
                 v-if="(secondFieldsGroup?.length || 0) > 0"

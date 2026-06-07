@@ -10,9 +10,6 @@ const emit = defineEmits<{
     submit: [];
 }>();
 
-const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
-
 const open = defineModel<boolean>('open', {
     default: false,
 });
@@ -20,7 +17,6 @@ const open = defineModel<boolean>('open', {
 
 <template>
     <AppModal
-        v-if="canEdit"
         v-model:open="open"
         :title
         :description

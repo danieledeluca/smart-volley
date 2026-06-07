@@ -9,9 +9,12 @@ const { title, tableColumns: _tableColumns } = defineProps<{
 }>();
 
 const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
-
 const enrollmentsStore = useEnrollmentsStore();
+const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
+const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
+const enrollmentTableRef = useTemplateRef('enrollmentTableRef');
+
+const { canEdit } = storeToRefs(authStore);
 const {
     enrollments,
     enrollmentsPending,
@@ -20,10 +23,6 @@ const {
     filterFields,
 } = storeToRefs(enrollmentsStore);
 
-const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
-const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
-const enrollmentTableRef = useTemplateRef('enrollmentTableRef');
-
 const deleteModalOpen = ref(false);
 
 const tableColumns = getEnrollmentsTableColumns(_tableColumns);
@@ -31,6 +30,12 @@ const tableColumns = getEnrollmentsTableColumns(_tableColumns);
 if (canEdit.value) {
     tableColumns.unshift(getSelectTableColumn());
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ enrollmentId: row.id })));
+}
+
+async function handleFiltersUpdate() {
+    await enrollmentsStore.refreshEnrollments();
+
+    enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
 }
 
 function handelDeleteSuccess() {
@@ -63,14 +68,15 @@ function handelDeleteSuccess() {
             v-model:state="filterState"
             :schema="EnrollmentsFiltersSchema"
             :fields="filterFields"
-            @update="enrollmentsStore.refreshEnrollments"
+            @update="handleFiltersUpdate"
             @clear="enrollmentsStore.clearFilters"
         >
             <ListDeleteButton
+                v-if="canEdit"
                 v-model:open="deleteModalOpen"
                 :title="$t('form.enrollment.multiple_delete.title')"
                 :description="$t('form.enrollment.multiple_delete.description')"
-                :isDisabled="!(enrollmentTableRef?.selectRows()?.length || 0)"
+                :isDisabled="enrollmentsPending || !(enrollmentTableRef?.selectRows()?.length || 0)"
                 :isLoading="enrollmentDeleteFormRef?.isLoading()"
                 @submit="enrollmentDeleteFormRef?.submit()"
             >

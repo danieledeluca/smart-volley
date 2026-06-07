@@ -31,12 +31,36 @@ function generateUsers(count: number) {
 }
 
 function generateFiscalCode() {
+    // Format: [A-Z]{6}\d{2}[A-EHLMPR-T](\d{2})[A-Z]\d{3}[A-Z]$
     let result = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-    for (let i = 0; i < 16; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    // 6 uppercase letters
+    for (let i = 0; i < 6; i++) {
+        result += String.fromCharCode(Math.floor(Math.random() * 26) + 65);
     }
+
+    // 2 digits
+    result += Math.floor(Math.random() * 10);
+    result += Math.floor(Math.random() * 10);
+
+    // 1 letter from [A-EHLMPR-T]
+    const validLetters = 'AEHLMPRT';
+    result += validLetters.charAt(Math.floor(Math.random() * validLetters.length));
+
+    // 2 digits
+    result += Math.floor(Math.random() * 10);
+    result += Math.floor(Math.random() * 10);
+
+    // 1 letter
+    result += String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+
+    // 3 digits
+    result += Math.floor(Math.random() * 10);
+    result += Math.floor(Math.random() * 10);
+    result += Math.floor(Math.random() * 10);
+
+    // 1 letter
+    result += String.fromCharCode(Math.floor(Math.random() * 26) + 65);
 
     return result;
 }

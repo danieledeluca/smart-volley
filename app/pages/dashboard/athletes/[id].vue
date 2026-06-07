@@ -13,7 +13,7 @@ const title = computed(() => athlete.value?.name || $t('page.athlete.title'));
 
 useSeoMeta({ title });
 
-const enrollmentTableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
+const enrollmentsTableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
 
 onMounted(async () => {
     await nextTick();
@@ -83,7 +83,7 @@ onMounted(async () => {
                     <AthleteActions
                         :athleteId="athlete.id"
                         @deleteComplete="navigateTo('/dashboard/athletes')"
-                        @editComplete="athletesStore.refreshCurrentAthlete"
+                        @editClose="athletesStore.refreshCurrentAthlete"
                     />
                 </div>
             </div>
@@ -116,9 +116,9 @@ onMounted(async () => {
                     >
                         <ListTable
                             :tableData="athlete.enrollments"
-                            :tableColumns="enrollmentTableColumns"
-                            class="col-span-2 mt-0! max-h-full **:data-[slot=root]:max-h-full **:data-[slot=root]:rounded-t-none"
+                            :tableColumns="enrollmentsTableColumns"
                             :showPagination="true"
+                            class="col-span-2 mt-0! max-h-full **:data-[slot=root]:max-h-full **:data-[slot=root]:rounded-t-none"
                             @select="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />
                     </ItemCard>
@@ -126,22 +126,16 @@ onMounted(async () => {
                 <div class="space-y-4 sm:space-y-6 lg:col-span-4">
                     <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
                         <ItemCardRecord :label="$t('card.address_contacts.record.city')" :value="athlete.city" />
-                        <ItemCardRecord
-                            :label="$t('card.address_contacts.record.address')"
-                            :value="athlete.address"
-                        />
+                        <ItemCardRecord :label="$t('card.address_contacts.record.address')" :value="athlete.address" />
                         <ItemCardRecord
                             :label="$t('card.address_contacts.record.phone_number')"
-                            :value="athlete.phoneNumber || EMPTY_VALUE"
+                            :value="athlete.phoneNumber"
                         >
                             <template v-if="athlete.phoneNumber" #actions>
                                 <PhoneNumberButtons :phoneNumber="athlete.phoneNumber" />
                             </template>
                         </ItemCardRecord>
-                        <ItemCardRecord
-                            :label="$t('card.address_contacts.record.email')"
-                            :value="athlete.email || EMPTY_VALUE"
-                        >
+                        <ItemCardRecord :label="$t('card.address_contacts.record.email')" :value="athlete.email">
                             <template v-if="athlete.email" #actions>
                                 <EmailButton :email="athlete.email" />
                             </template>
@@ -167,16 +161,13 @@ onMounted(async () => {
                         </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.parent.record.phone_number')"
-                            :value="athlete.parent.phoneNumber || EMPTY_VALUE"
+                            :value="athlete.parent.phoneNumber"
                         >
                             <template v-if="athlete.parent.phoneNumber" #actions>
                                 <PhoneNumberButtons :phoneNumber="athlete.parent.phoneNumber" />
                             </template>
                         </ItemCardRecord>
-                        <ItemCardRecord
-                            :label="$t('card.parent.record.email')"
-                            :value="athlete.parent.email || EMPTY_VALUE"
-                        >
+                        <ItemCardRecord :label="$t('card.parent.record.email')" :value="athlete.parent.email ">
                             <template v-if="athlete.parent.email" #actions>
                                 <EmailButton :email="athlete.parent.email" />
                             </template>

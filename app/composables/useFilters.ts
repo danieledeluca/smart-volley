@@ -42,7 +42,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         certificateStatus: undefined,
     };
 
-    const initialStates = {
+    const initialStates: { [K in keyof FiltersSchemas]: FiltersSchemas[K] } = {
         athlete: athletesFiltersInitialState,
         parent: parentsFiltersInitialState,
         enrollment: enrollmentsFiltersInitialState,
@@ -55,7 +55,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const parentsFiltersState = ref({ ...parentsFiltersInitialState });
     const enrollmentsFiltersState = ref({ ...enrollmentsFiltersInitialState });
 
-    const filtersStates = {
+    const filtersStates: { [K in keyof FiltersSchemas]: Ref<FiltersSchemas[K]> } = {
         athlete: athletesFiltersState,
         parent: parentsFiltersState,
         enrollment: enrollmentsFiltersState,
@@ -225,7 +225,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         ];
     });
 
-    const filtersFields = {
+    const filtersFields: { [K in keyof FiltersSchemas]: ComputedRef<FormField<FiltersSchemas[K]>[][]> } = {
         athlete: athletesFiltersFields,
         parent: parentsFiltersFields,
         enrollment: enrollmentsFiltersFields,
@@ -237,7 +237,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const clearFilters = () => {
         filterState.value = { ...initialState };
 
-        const refreshLists = {
+        const refreshLists: { [K in keyof FiltersSchemas]: () => void } = {
             athlete: athletesStore.refreshAthletes,
             parent: parentsStore.refreshParents,
             enrollment: enrollmentsStore.refreshEnrollments,

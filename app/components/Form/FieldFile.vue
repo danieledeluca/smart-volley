@@ -21,14 +21,14 @@ watch(model, () => emitFormBlur());
     <UFileUpload
         v-model="model"
         v-bind="fileUploadProps"
-        icon="i-lucide-image"
-        :label="$t('form.field.file_upload.label')"
+        :label="fileUploadProps?.label || $t('form.field.file_upload.label')"
+        :icon="fileUploadProps?.icon || 'i-lucide-image'"
     >
         <template v-if="showButton" #actions="{ open }">
             <UButton
                 v-bind="buttonProps"
-                :label="$t('form.field.file_upload.button.label')"
-                icon="i-lucide-upload"
+                :label="buttonProps?.label || $t('form.field.file_upload.button.label')"
+                :icon="buttonProps?.icon || 'i-lucide-upload'"
                 @click="open()"
             />
         </template>

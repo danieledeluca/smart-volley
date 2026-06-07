@@ -17,7 +17,11 @@ export const useAthletesStore = defineStore('athletes', () => {
     });
 
     const athletesItems = computed(() => {
-        return athletes.value?.map<SelectMenuItem>((athlete) => {
+        const sortedAthletes = athletes.value?.toSorted((athleteA, athleteB) => {
+            return athleteA.name.localeCompare(athleteB.name);
+        });
+
+        return sortedAthletes?.map<SelectMenuItem>((athlete) => {
             return {
                 label: athlete.name,
                 description: athlete.fiscalCode,
@@ -37,6 +41,12 @@ export const useAthletesStore = defineStore('athletes', () => {
         headers: useRequestHeaders(['cookie']),
         immediate: false,
         watch: false,
+    });
+
+    effect(() => {
+        if (!route.name?.toString().startsWith('dashboard-athletes')) {
+            clearFilters();
+        }
     });
 
     return {

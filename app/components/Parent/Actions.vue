@@ -1,8 +1,11 @@
 <script setup lang="ts">
-const { parentId, onDeleteComplete, onEditComplete } = defineProps<{
+const { parentId } = defineProps<{
     parentId: number;
-    onDeleteComplete?: () => void;
-    onEditComplete?: () => void;
+}>();
+
+const emit = defineEmits<{
+    deleteComplete: [];
+    editComplete: [];
 }>();
 
 const parentEditFormRef = useTemplateRef('parentEditFormRef');
@@ -18,13 +21,13 @@ const isLoading = computed(() => {
 function handleDeleteSuccess() {
     openDelete.value = false;
 
-    onDeleteComplete?.();
+    emit('deleteComplete');
 }
 
 function handleEditSuccess() {
     openEdit.value = false;
 
-    onEditComplete?.();
+    emit('editComplete');
 }
 </script>
 

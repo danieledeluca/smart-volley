@@ -56,10 +56,8 @@ const model = defineModel<T[keyof T]>();
                 @click.stop="model = undefined"
             />
         </div>
-        <template v-if="!!slots[`${field.formFieldProps.name}-post`]">
-            <div class="mt-2">
-                <slot :name="`${field.formFieldProps.name}-post`" />
-            </div>
-        </template>
+        <div v-if="!!slots[`${field.formFieldProps.name}-post`]" class="mt-2">
+            <slot :name="`${field.formFieldProps.name}-post`" />
+        </div>
     </div>
 </template>

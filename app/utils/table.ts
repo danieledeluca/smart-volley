@@ -23,7 +23,7 @@ type TableColumns<T> = Partial<Record<keyof T, TableColumn<T>>>;
 function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
     return {
         accessorKey: 'id',
-        header: $t('table.column.id'),
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.id') }),
         cell: ({ row }) => `#${row.original.id}`,
     };
 }

@@ -135,13 +135,13 @@ onMounted(async () => {
                     </ItemCard>
 
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
-                        <ItemCardRecord :label="$t('card.certificate.record.expiration_date')" :value="EMPTY_VALUE">
+                        <ItemCardRecord :label="$t('card.certificate.record.expiration_date')">
                             <CertificateDate
                                 v-if="enrollment.certificateExpirationDate"
                                 :date="enrollment.certificateExpirationDate"
                             />
                         </ItemCardRecord>
-                        <ItemCardRecord :label="$t('card.certificate.record.download_url')" :value="EMPTY_VALUE">
+                        <ItemCardRecord :label="$t('card.certificate.record.download_url')">
                             <CertificateDownloadButton
                                 v-if="enrollment.certificateFile"
                                 :enrollmentId="enrollment.id"
