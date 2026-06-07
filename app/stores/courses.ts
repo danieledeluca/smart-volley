@@ -15,7 +15,7 @@ export const useCoursesStore = defineStore('courses', () => {
             let label = course.name;
 
             if (course.description) {
-                label += ` (${course.description})`;
+                label += ` - ${course.description}`;
             }
 
             return {

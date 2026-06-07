@@ -18,7 +18,7 @@ export const translations = {
                 address: 'Indirizzo',
                 city: 'Città',
                 email: 'Email',
-                phone_number: 'Numero cellulare',
+                phone_number: 'Numero di cellulare',
             },
             title: 'Indirizzo e contatti',
         },
@@ -46,7 +46,7 @@ export const translations = {
                 email: 'Email genitore',
                 fiscal_code: 'Codice fiscale genitore',
                 name: 'Nome genitore',
-                phone_number: 'Numero cellulare genitore',
+                phone_number: 'Numero di cellulare genitore',
             },
             title: 'Informazioni genitore',
         },
@@ -195,7 +195,8 @@ export const translations = {
                 required: 'Il luogo di nascita è obbligatorio',
             },
             certificate_expiration_date: {
-                label: 'Data scadenza',
+                label: 'Data di scadenza',
+                required: 'La data di scadenza è obbligatoria',
             },
             certificate_status: {
                 item: {
@@ -214,6 +215,7 @@ export const translations = {
                     type: 'Il file non è valido, scegli un file valido (PNG, JPG, WebP o PDF)',
                     upload: 'Errore nel caricamento del certificato',
                 },
+                required: 'Il certificato medico è obbligatorio',
             },
             city: {
                 label: 'Città',
@@ -221,7 +223,7 @@ export const translations = {
                 required: 'La città è obbligatoria',
             },
             course_description: {
-                label: 'Descrizione corso',
+                label: 'Descrizione del corso',
                 placeholder: 'Inserisci la descrizione del corso',
             },
             course_id: {
@@ -232,7 +234,7 @@ export const translations = {
             },
             course_name: {
                 duplicate: 'Il corso esiste già',
-                label: 'Nome corso',
+                label: 'Nome del corso',
                 placeholder: 'Inserisci il nome del corso',
                 required: 'Il nome del corso è obbligatorio',
             },
@@ -282,11 +284,11 @@ export const translations = {
                 placeholder: 'Seleziona un genitore',
             },
             phone_number: {
-                duplicate: 'Il numero cellulare esiste già',
-                error: 'Il numero cellulare non è valido',
-                label: 'Numero cellulare',
-                placeholder: 'Inserisci il numero cellulare',
-                required: 'Il numero cellulare è obbligatorio',
+                duplicate: 'Il numero di cellulare esiste già',
+                error: 'Il numero di cellulare non è valido',
+                label: 'Numero di cellulare',
+                placeholder: 'Inserisci il numero di cellulare',
+                required: 'Il numero di cellulare è obbligatorio',
             },
             season: {
                 duplicate: 'La stagione per questo arco di tempo esiste già',

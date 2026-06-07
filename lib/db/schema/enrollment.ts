@@ -76,6 +76,25 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
+}).superRefine((data, ctx) => {
+    const hasCertificateExpirationDate = Boolean(data.certificateExpirationDate);
+    const hasCertificateStorageKey = Boolean(data.certificateStorageKey);
+
+    if (hasCertificateExpirationDate && !hasCertificateStorageKey) {
+        ctx.addIssue({
+            code: 'custom',
+            path: ['certificateStorageKey'],
+            message: $t('form.field.certificate_storage_key.required'),
+        });
+    }
+
+    if (hasCertificateStorageKey && !hasCertificateExpirationDate) {
+        ctx.addIssue({
+            code: 'custom',
+            path: ['certificateExpirationDate'],
+            message: $t('form.field.certificate_expiration_date.required'),
+        });
+    }
 });
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;

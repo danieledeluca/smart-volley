@@ -103,7 +103,7 @@ function getCourseTableColumn<T extends { course: { name: string; description: s
             if (row.original.course.description) {
                 return [
                     h('span', undefined, row.original.course.name),
-                    h('span', { class: 'text-xs' }, ` (${row.original.course.description})`),
+                    h('span', { class: 'text-xs' }, ` - ${row.original.course.description}`),
                 ];
             }
 
