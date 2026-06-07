@@ -172,7 +172,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                     },
                 },
                 {
-                    renderAs: 'select-menu',
+                    renderAs: 'select',
                     formFieldProps: {
                         label: $t('form.field.activity_id.label'),
                         name: 'activityId',

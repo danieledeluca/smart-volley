@@ -49,7 +49,7 @@ export type FormField<T> = {
 } & (InputField | InputNumberField | InputDateField | InputFileField | SelectField | SelectMenuField);
 
 export type FormFieldGroup<T> = {
-    title: string;
-    icon: string;
+    title?: string;
+    icon?: string;
     fields: FormField<T>[];
 };

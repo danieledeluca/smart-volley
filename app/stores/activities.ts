@@ -1,4 +1,4 @@
-import type { SelectMenuItem } from '@nuxt/ui';
+import type { SelectItem } from '@nuxt/ui';
 
 export const useActivitiesStore = defineStore('activities', () => {
     const {
@@ -11,7 +11,7 @@ export const useActivitiesStore = defineStore('activities', () => {
     });
 
     const activitiesItems = computed(() => {
-        return activities.value?.map<SelectMenuItem>((activity) => {
+        return activities.value?.map<SelectItem>((activity) => {
             return {
                 label: activity.name,
                 value: activity.id,

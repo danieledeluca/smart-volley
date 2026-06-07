@@ -36,8 +36,11 @@ export async function findAthlete(athleteId: number) {
                 where: isNull(enrollment.deletedAt),
                 with: {
                     season: true,
-                    activity: true,
-                    course: true,
+                    course: {
+                        with: {
+                            activity: true,
+                        },
+                    },
                 },
             },
         },
@@ -47,9 +50,19 @@ export async function findAthlete(athleteId: number) {
         return result;
     }
 
-    result.enrollments.sort((athleteA, athleteB) => athleteB.season.endYear - athleteA.season.endYear);
+    const enrollments = result.enrollments
+        .toSorted((athleteA, athleteB) => athleteB.season.endYear - athleteA.season.endYear)
+        .map((enrollment) => {
+            return {
+                ...enrollment,
+                activity: enrollment.course.activity,
+            };
+        });
 
-    return result;
+    return {
+        ...result,
+        enrollments,
+    };
 }
 
 export async function insertAthlete(data: InsertAthlete) {

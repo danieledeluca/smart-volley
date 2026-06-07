@@ -39,7 +39,6 @@ watchEffect(() => {
         state.value = {
             athleteId: enrollment.value.athleteId,
             seasonId: enrollment.value.seasonId,
-            activityId: enrollment.value.activityId,
             courseId: enrollment.value.courseId,
             volleyAccount: enrollment.value.volleyAccount ?? undefined,
             volleyBalance: enrollment.value.volleyBalance ?? undefined,

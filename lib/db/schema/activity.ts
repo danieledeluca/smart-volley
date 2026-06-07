@@ -6,7 +6,7 @@ import z from 'zod';
 import type { insertActivity } from '../queries/activities';
 
 import { $t } from '../../../shared/utils/i18n';
-import { enrollment } from './enrollment';
+import { course } from './course';
 
 export const activity = pgTable('activity', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -17,7 +17,7 @@ export const activity = pgTable('activity', {
 
 export const activityRelations = relations(activity, ({ many }) => {
     return {
-        enrollments: many(enrollment),
+        courses: many(course),
     };
 });
 

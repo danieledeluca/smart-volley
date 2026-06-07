@@ -9,7 +9,7 @@ import type { InsertEnrollment } from '../schema';
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
 import { uploadFile } from '../../storage';
-import { athlete, enrollment } from '../schema';
+import { athlete, course, enrollment } from '../schema';
 
 function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     const conditions: SQL[] = [];
@@ -23,7 +23,7 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     }
 
     if (filters?.activityId) {
-        conditions.push(eq(enrollment.activityId, filters.activityId));
+        conditions.push(eq(course.activityId, filters.activityId));
     }
 
     if (filters?.courseId) {
@@ -75,6 +75,7 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
             eq(enrollment.athleteId, athlete.id),
             isNull(athlete.deletedAt),
         ))
+        .innerJoin(course, eq(enrollment.courseId, course.id))
         .where(buildEnrollmentFilters(filters));
 
     const result = await db.query.enrollment.findMany({
@@ -92,15 +93,17 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
                     endYear: true,
                 },
             },
-            activity: {
-                columns: {
-                    name: true,
-                },
-            },
             course: {
                 columns: {
                     name: true,
                     description: true,
+                },
+                with: {
+                    activity: {
+                        columns: {
+                            name: true,
+                        },
+                    },
                 },
             },
         },
@@ -114,6 +117,7 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
     return result.map(({ certificateStorageKey, ...rest }) => {
         return {
             ...rest,
+            activity: rest.course.activity,
             certificateFile: Boolean(certificateStorageKey),
         };
     });
@@ -128,8 +132,11 @@ export async function findEnrollment(enrollmentId: number) {
         with: {
             athlete: true,
             season: true,
-            activity: true,
-            course: true,
+            course: {
+                with: {
+                    activity: true,
+                },
+            },
         },
     });
 
@@ -141,6 +148,7 @@ export async function findEnrollment(enrollmentId: number) {
 
     return {
         ...rest,
+        activity: rest.course.activity,
         certificateFile: Boolean(certificateStorageKey),
     };
 }

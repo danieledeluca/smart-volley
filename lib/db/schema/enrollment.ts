@@ -10,7 +10,6 @@ import type { findEnrollment, findEnrollments } from '../queries/enrollments';
 import { $t } from '../../../shared/utils/i18n';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
 import { formatFileSize } from '../../utils/formatters';
-import { activity } from './activity';
 import { athlete } from './athlete';
 import { course } from './course';
 import { season } from './season';
@@ -19,7 +18,6 @@ export const enrollment = pgTable('enrollment', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     athleteId: integer().notNull().references(() => athlete.id),
     seasonId: integer().notNull().references(() => season.id),
-    activityId: integer().notNull().references(() => activity.id),
     courseId: integer().notNull().references(() => course.id),
     volleyAccount: numeric({ precision: 10, scale: 2 }),
     volleyBalance: numeric({ precision: 10, scale: 2 }),
@@ -33,7 +31,7 @@ export const enrollment = pgTable('enrollment', {
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
     deletedAt: timestamp(),
 }, (table) => [
-    unique().on(table.athleteId, table.seasonId, table.activityId, table.courseId),
+    unique().on(table.athleteId, table.seasonId, table.courseId),
 ]);
 
 export const enrollmentRelations = relations(enrollment, ({ one }) => {
@@ -45,10 +43,6 @@ export const enrollmentRelations = relations(enrollment, ({ one }) => {
         season: one(season, {
             fields: [enrollment.seasonId],
             references: [season.id],
-        }),
-        activity: one(activity, {
-            fields: [enrollment.activityId],
-            references: [activity.id],
         }),
         course: one(course, {
             fields: [enrollment.courseId],
@@ -62,7 +56,6 @@ const NumericSchema = z.string().transform((value) => !Number(value) ? undefined
 export const InsertEnrollment = createInsertSchema(enrollment, {
     athleteId: z.coerce.number($t('form.field.athlete_id.required')),
     seasonId: z.coerce.number($t('form.field.season_id.required')),
-    activityId: z.coerce.number($t('form.field.activity_id.required')),
     courseId: z.coerce.number($t('form.field.course_id.required')),
     volleyAccount: NumericSchema,
     volleyBalance: NumericSchema,

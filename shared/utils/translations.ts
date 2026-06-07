@@ -120,6 +120,9 @@ export const translations = {
         course: {
             add: {
                 description: 'Compila i campi per creare un nuovo corso.',
+                group: {
+                    activity: 'Attività',
+                },
                 success: 'Corso aggiunto con successo',
                 title: 'Nuovo corso',
             },
@@ -128,7 +131,6 @@ export const translations = {
             add: {
                 description: 'Compila i campi per creare una nuova iscrizione.',
                 group: {
-                    activity: 'Attività',
                     athlete: 'Atleta',
                     certificate: 'Certificato medico',
                     course: 'Corso',
@@ -247,7 +249,7 @@ export const translations = {
                 required: 'L\'anno di fine è obbligatorio',
             },
             enrollment: {
-                duplicate: 'L\'iscrizione per questo/a atleta, stagione, attività e corso esiste già',
+                duplicate: 'L\'iscrizione per questo/a atleta, stagione e corso esiste già',
             },
             file_upload: {
                 button: {

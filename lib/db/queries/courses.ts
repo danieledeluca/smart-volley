@@ -7,6 +7,9 @@ import { course } from '../schema';
 
 export async function findCourses() {
     return await db.query.course.findMany({
+        with: {
+            activity: true,
+        },
         orderBy: asc(course.name),
     });
 }

@@ -43,7 +43,7 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
         };
 
         const statusMessages: Record<string, string> = {
-            enrollment_athleteId_seasonId_activityId_courseId_unique: $t('form.field.enrollment.duplicate'),
+            enrollment_athleteId_seasonId_courseId_unique: $t('form.field.enrollment.duplicate'),
             season_startYear_endYear_unique: $t('form.field.season.duplicate'),
         };
 
@@ -71,13 +71,13 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
                 name: 'seasonId',
                 message: $t('form.field.season_id.not_found'),
             },
-            enrollment_activity_id_activity_id_fk: {
-                name: 'activityId',
-                message: $t('form.field.activity_id.not_found'),
-            },
             enrollment_course_id_course_id_fk: {
                 name: 'courseId',
                 message: $t('form.field.course_id.not_found'),
+            },
+            course_activity_id_activity_id_fk: {
+                name: 'activityId',
+                message: $t('form.field.activity_id.not_found'),
             },
         };
 

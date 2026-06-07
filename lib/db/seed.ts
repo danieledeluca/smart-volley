@@ -1,9 +1,18 @@
 /* eslint-disable no-console */
 import { Faker, it } from '@faker-js/faker';
 
+import type {
+    InsertActivity,
+    InsertAthlete,
+    InsertCourse,
+    InsertEnrollment,
+    InsertParent,
+    InsertSeason,
+} from './schema';
+
 import { formatPhoneNumber } from '../../app/utils/formatters';
 import db from './';
-import * as schema from './schema';
+import { activity, athlete, course, enrollment, parent, season } from './schema';
 
 const faker = new Faker({
     locale: it,
@@ -74,15 +83,15 @@ function generateDate(start: Date, end: Date) {
 }
 
 async function main() {
-    await db.delete(schema.enrollment);
-    await db.delete(schema.athlete);
-    await db.delete(schema.parent);
-    await db.delete(schema.season);
-    await db.delete(schema.activity);
-    await db.delete(schema.course);
+    await db.delete(enrollment);
+    await db.delete(athlete);
+    await db.delete(parent);
+    await db.delete(season);
+    await db.delete(activity);
+    await db.delete(course);
 
     // Seasons
-    const seasons: schema.InsertSeason[] = [
+    const seasons: InsertSeason[] = [
         {
             startYear: 2017,
             endYear: 2018,
@@ -125,11 +134,11 @@ async function main() {
         },
     ];
 
-    const insertedSeasons = await db.insert(schema.season).values(seasons).returning();
+    const insertedSeasons = await db.insert(season).values(seasons).returning();
     console.log('Seasons inserted successfully');
 
     // Activities
-    const activities: schema.InsertActivity[] = [
+    const activities: InsertActivity[] = [
         {
             name: 'Volley',
         },
@@ -138,50 +147,59 @@ async function main() {
         },
     ];
 
-    const insertedActivities = await db.insert(schema.activity).values(activities).returning();
+    const insertedActivities = await db.insert(activity).values(activities).returning();
     console.log('Activities inserted successfully');
 
     // Courses
-    const courses: schema.InsertCourse[] = [
+    const courses: InsertCourse[] = [
         {
             name: 'M',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'U12',
             description: 'Under 12',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'U14',
             description: 'Under 14',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'U16',
             description: 'Under 16',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: '2D',
             description: 'Seconda divisione',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'TB',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'Z',
             description: 'Zumba',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'P',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'D',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
     ];
 
-    const insertedCourses = await db.insert(schema.course).values(courses).returning();
+    const insertedCourses = await db.insert(course).values(courses).returning();
     console.log('Courses inserted successfully');
 
     // Parents
-    const parents: schema.InsertParent[] = generateUsers(50).map((user) => {
+    const parents: InsertParent[] = generateUsers(50).map((user) => {
         return {
             name: user.name,
             fiscalCode: user.fiscalCode,
@@ -190,11 +208,11 @@ async function main() {
         };
     });
 
-    const insertedParents = await db.insert(schema.parent).values(parents).returning();
+    const insertedParents = await db.insert(parent).values(parents).returning();
     console.log('Parents inserted successfully');
 
     // Athletes
-    const athletes: schema.InsertAthlete[] = generateUsers(200).map((user) => {
+    const athletes: InsertAthlete[] = generateUsers(200).map((user) => {
         return {
             name: user.name,
             birthdate: user.birthdate,
@@ -208,19 +226,18 @@ async function main() {
         };
     });
 
-    const insertedAthletes = await db.insert(schema.athlete).values(athletes).returning();
+    const insertedAthletes = await db.insert(athlete).values(athletes).returning();
     console.log('Athletes inserted successfully');
 
     // Enrollments
     const usedCombinations = new Set<string>();
-    const enrollments: schema.InsertEnrollment[] = (
+    const enrollments: InsertEnrollment[] = (
         await Promise.all(insertedAthletes.flatMap((athlete) => {
             return Array.from({ length: 10 }, async () => {
                 const season = insertedSeasons[Math.floor(Math.random() * insertedSeasons.length)];
-                const activity = insertedActivities[Math.floor(Math.random() * insertedActivities.length)];
                 const course = insertedCourses[Math.floor(Math.random() * insertedCourses.length)];
 
-                const key = `${athlete.id}-${season.id}-${activity.id}-${course.id}`;
+                const key = `${athlete.id}-${season.id}-${course.id}`;
 
                 if (usedCombinations.has(key)) {
                     return null;
@@ -231,7 +248,6 @@ async function main() {
                 return {
                     athleteId: athlete.id,
                     seasonId: season.id,
-                    activityId: activity.id,
                     courseId: course.id,
                     volleyAccount: maybe(() => generateDecimal(300, 700)),
                     volleyBalance: maybe(() => generateDecimal(50, 250)),
@@ -241,12 +257,12 @@ async function main() {
                     thirdInstallment: maybe(() => generateDecimal(100, 250)),
                     certificateExpirationDate:
                         maybe(() => generateDate(new Date(season.startYear, 0), new Date(season.endYear + 1, 0))),
-                } satisfies schema.InsertEnrollment;
+                } satisfies InsertEnrollment;
             });
         }))
     ).filter((enrollment) => enrollment !== null);
 
-    await db.insert(schema.enrollment).values(enrollments.map((enrollment) => {
+    await db.insert(enrollment).values(enrollments.map((enrollment) => {
         return {
             ...enrollment,
             certificateStorageKey: null,

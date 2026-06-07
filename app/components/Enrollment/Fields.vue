@@ -9,13 +9,11 @@ const { formFields } = useForm('enrollment');
 
 const athleteFormRef = useTemplateRef('athleteFormRef');
 const seasonFormRef = useTemplateRef('seasonFormRef');
-const activityFormRef = useTemplateRef('activityFormRef');
 const courseFormRef = useTemplateRef('courseFormRef');
 
 const openModal = reactive<Partial<Record<keyof InsertEnrollment, boolean>>>({
     athleteId: false,
     seasonId: false,
-    activityId: false,
     courseId: false,
 });
 
@@ -76,26 +74,6 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                     @submit="seasonFormRef?.[0]?.submit"
                 >
                     <SeasonAddForm ref="seasonFormRef" @success="handleSuccess('seasonId', $event)" />
-                </AppModal>
-            </template>
-            <template #activityId-post>
-                <AppModal
-                    v-model:open="openModal.activityId"
-                    :title="$t('form.activity.add.title')"
-                    :description="$t('form.activity.add.description')"
-                    :buttonProps="{
-                        label: $t('form.activity.add.title'),
-                        icon: 'i-lucide-plus',
-                        variant: 'soft',
-                        block: true,
-                    }"
-                    :submitButtonProps="{
-                        label: $t('form.button.add'),
-                        loading: activityFormRef?.[0]?.isLoading(),
-                    }"
-                    @submit="activityFormRef?.[0]?.submit"
-                >
-                    <ActivityAddForm ref="activityFormRef" @success="handleSuccess('activityId', $event)" />
                 </AppModal>
             </template>
             <template #courseId-post>

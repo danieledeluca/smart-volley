@@ -57,7 +57,6 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
     const enrollmentInitialState: Partial<InsertEnrollment> = {
         athleteId: undefined,
         seasonId: undefined,
-        activityId: undefined,
         courseId: undefined,
         volleyAccount: undefined,
         volleyBalance: undefined,
@@ -81,6 +80,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
     const courseInitialState: Partial<InsertCourse> = {
         name: undefined,
         description: undefined,
+        activityId: undefined,
     };
 
     const initialStates: { [K in keyof FormSchemas]: Partial<FormSchemas[K]> } = {
@@ -330,24 +330,6 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                 ],
             },
             {
-                title: $t('form.enrollment.add.group.activity'),
-                icon: 'i-lucide-zap',
-                fields: [
-                    {
-                        renderAs: 'select-menu',
-                        formFieldProps: {
-                            name: 'activityId',
-                            required: true,
-                        },
-                        selectProps: {
-                            placeholder: $t('form.field.activity_id.placeholder'),
-                            items: activitiesItems.value,
-                            loading: activitiesPending.value,
-                        },
-                    },
-                ],
-            },
-            {
                 title: $t('form.enrollment.add.group.course'),
                 icon: 'i-lucide-dumbbell',
                 fields: [
@@ -520,28 +502,51 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
         ];
     });
 
-    const courseFields = computed<FormField<InsertCourse>[]>(() => {
+    const courseFields = computed<FormFieldGroup<InsertCourse>[]>(() => {
         return [
             {
-                renderAs: 'input',
-                formFieldProps: {
-                    label: $t('form.field.course_name.label'),
-                    name: 'name',
-                    required: true,
-                },
-                inputProps: {
-                    placeholder: $t('form.field.course_name.placeholder'),
-                },
+                fields: [
+                    {
+                        renderAs: 'input',
+                        formFieldProps: {
+                            label: $t('form.field.course_name.label'),
+                            name: 'name',
+                            required: true,
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.course_name.placeholder'),
+                        },
+                    },
+                    {
+                        renderAs: 'input',
+                        formFieldProps: {
+                            label: $t('form.field.course_description.label'),
+                            name: 'description',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.course_description.placeholder'),
+                        },
+                    },
+
+                ],
             },
             {
-                renderAs: 'input',
-                formFieldProps: {
-                    label: $t('form.field.course_description.label'),
-                    name: 'description',
-                },
-                inputProps: {
-                    placeholder: $t('form.field.course_description.placeholder'),
-                },
+                title: $t('form.course.add.group.activity'),
+                icon: 'i-lucide-zap',
+                fields: [
+                    {
+                        renderAs: 'select-menu',
+                        formFieldProps: {
+                            name: 'activityId',
+                            required: true,
+                        },
+                        selectProps: {
+                            placeholder: $t('form.field.activity_id.placeholder'),
+                            items: activitiesItems.value,
+                            loading: activitiesPending.value,
+                        },
+                    },
+                ],
             },
         ];
     });
