@@ -46,7 +46,7 @@ function handelDeleteSuccess() {
 </script>
 
 <template>
-    <DashboardPanel :title :wrapBody="true">
+    <DashboardPanel :title>
         <template v-if="canEdit" #right>
             <AppSlideover
                 :title="$t('form.enrollment.add.title')"

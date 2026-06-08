@@ -13,7 +13,7 @@ const { title, icon } = defineProps<{
                 <span>{{ title }}</span>
             </h2>
         </template>
-        <div class="grid gap-6 *:min-w-0 @2xl:grid-cols-2">
+        <div class="grid gap-4 *:min-w-0 sm:gap-6 @2xl:grid-cols-2">
             <slot />
         </div>
     </UCard>

@@ -112,13 +112,12 @@ onMounted(async () => {
                     <ItemCard
                         :title="$t('card.enrollments.title')"
                         icon="i-lucide-history"
-                        class="**:data-[slot=body]:p-0"
+                        class="**:data-[slot=body]:p-0 **:data-[slot=body]:*:grid-cols-1 **:data-[slot=root]:rounded-t-none"
                     >
                         <ListTable
                             :tableData="athlete.enrollments"
                             :tableColumns="enrollmentsTableColumns"
                             :showPagination="true"
-                            class="col-span-2 mt-0! max-h-full **:data-[slot=root]:max-h-full **:data-[slot=root]:rounded-t-none"
                             @select="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />
                     </ItemCard>

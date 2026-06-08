@@ -1,25 +1,2 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
-
-:root {
-    --ui-filters-height: 32px;
-
-    --ui-table-margin-top: theme(--spacing) * 4;
-    --ui-table-footer-pagination-height: 61px;
-    --ui-table-footer-selection-height: 49px;
-    --ui-table-max-height: calc(
-        100% - var(--ui-filters-height) - var(--ui-table-margin-top)
-    );
-
-    @media (width >= 40rem) {
-        --ui-table-margin-top: theme(--spacing) * 6;
-    }
-
-    @media (width < 48rem) {
-        --ui-table-footer-pagination-height: 97px;
-
-        &:has(#activeFilters) {
-            --ui-filters-height: 76px;
-        }
-    }
-}

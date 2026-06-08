@@ -44,7 +44,7 @@ function handelDeleteSuccess() {
 </script>
 
 <template>
-    <DashboardPanel :title="$t('page.parents.title')" :wrapBody="true">
+    <DashboardPanel :title="$t('page.parents.title')">
         <template v-if="canEdit" #right>
             <AppSlideover
                 :title="$t('form.parent.add.title')"
