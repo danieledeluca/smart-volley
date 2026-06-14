@@ -1,4 +1,5 @@
 import type {
+    BadgeProps,
     ButtonProps,
     CalendarProps,
     FileUploadProps,
@@ -52,4 +53,13 @@ export type FormFieldGroup<T> = {
     title?: string;
     icon?: string;
     fields: FormField<T>[];
+};
+
+export type DashboardCard = {
+    icon: string;
+    iconColor?: ButtonProps['color'];
+    title: string;
+    description: string;
+    badgeLabel?: string;
+    badgeColor?: BadgeProps['color'];
 };

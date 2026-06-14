@@ -6,9 +6,7 @@ export const useCoursesStore = defineStore('courses', () => {
         pending: coursesPending,
         error: coursesError,
         refresh: refreshCourses,
-    } = useLazyFetch('/api/courses', {
-        headers: useRequestHeaders(['cookie']),
-    });
+    } = useLazyFetch('/api/courses');
 
     const coursesItems = computed(() => {
         return courses.value?.map<SelectMenuItem>((course) => {

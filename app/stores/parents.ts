@@ -10,7 +10,6 @@ export const useParentsStore = defineStore('parents', () => {
         error: parentsError,
         refresh: refreshParents,
     } = useLazyFetch('/api/parents', {
-        headers: useRequestHeaders(['cookie']),
         query: filterState,
         watch: false,
     });

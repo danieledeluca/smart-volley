@@ -6,9 +6,7 @@ export const useSeasonsStore = defineStore('seasons', () => {
         pending: seasonsPending,
         error: seasonsError,
         refresh: refreshSeasons,
-    } = useLazyFetch('/api/seasons', {
-        headers: useRequestHeaders(['cookie']),
-    });
+    } = useLazyFetch('/api/seasons');
 
     const seasonsItems = computed(() => {
         return seasons.value?.map<SelectMenuItem>((season) => {

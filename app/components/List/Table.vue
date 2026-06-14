@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import type { PaginationState } from '@tanstack/vue-table';
+import type { PaginationState, TableMeta } from '@tanstack/vue-table';
 import type { FetchError } from 'ofetch';
 
 import { getPaginationRowModel } from '@tanstack/vue-table';
@@ -8,12 +8,14 @@ import { getPaginationRowModel } from '@tanstack/vue-table';
 const {
     tableData,
     tableColumns,
+    tableMeta,
     isLoading,
     error,
     showPagination = false,
 } = defineProps<{
     tableData?: T[];
     tableColumns?: TableColumn<T>[];
+    tableMeta?: TableMeta<T>;
     isLoading?: boolean;
     error?: FetchError;
     showPagination?: boolean;
@@ -68,18 +70,19 @@ defineExpose({
         <UTable
             ref="tableRef"
             v-model:pagination="pagination"
+            :data="tableData"
+            :columns="tableColumns"
+            :meta="tableMeta"
+            :paginationOptions="showPagination ? { getPaginationRowModel: getPaginationRowModel() } : undefined"
+            :loading="isLoading"
+            :sticky="!showPagination"
+            :virtualize="!showPagination"
             class="rounded-md border border-accented **:[thead]:text-nowrap"
             :class="{
                 'rounded-b-none': showPagination || hasSelectColumn,
                 '**:[thead]:bg-elevated': showPagination,
                 '**:[thead]:bg-elevated/75': !showPagination && hasSelectColumn,
             }"
-            :data="tableData"
-            :columns="tableColumns"
-            :paginationOptions="showPagination ? { getPaginationRowModel: getPaginationRowModel() } : undefined"
-            :loading="isLoading"
-            :sticky="!showPagination"
-            :virtualize="!showPagination"
             @select="handleSelect"
         />
         <template v-if="tableData.length > 0 && (showPagination || hasSelectColumn)">

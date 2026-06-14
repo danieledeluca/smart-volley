@@ -16,11 +16,18 @@ export const translations = {
         address_contacts: {
             record: {
                 address: 'Indirizzo',
-                city: 'Città',
+                city: 'Città',
                 email: 'Email',
                 phone_number: 'Numero di cellulare',
             },
             title: 'Indirizzo e contatti',
+        },
+        dashboard: {
+            enrollments: 'Iscrizioni',
+            expiring_certificates: 'Certificati in scadenza',
+            missing_payments: 'Pagamenti mancanti',
+            total_enrollments: 'Totale iscrizioni',
+            total_payments: 'Totale pagamenti',
         },
         athlete: {
             record: {

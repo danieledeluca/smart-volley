@@ -10,7 +10,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         error: enrollmentsError,
         refresh: refreshEnrollments,
     } = useLazyFetch('/api/enrollments', {
-        headers: useRequestHeaders(['cookie']),
         query: filterState,
         watch: false,
     });
@@ -23,7 +22,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         error: currentEnrollmentError,
         refresh: refreshCurrentEnrollment,
     } = useLazyFetch<SelectEnrollmentWithRelations>(enrollmentUrlWithId, {
-        headers: useRequestHeaders(['cookie']),
         immediate: false,
         watch: false,
     });

@@ -6,9 +6,7 @@ export const useActivitiesStore = defineStore('activities', () => {
         pending: activitiesPending,
         error: activitiesError,
         refresh: refreshActivities,
-    } = useLazyFetch('/api/activities', {
-        headers: useRequestHeaders(['cookie']),
-    });
+    } = useLazyFetch('/api/activities');
 
     const activitiesItems = computed(() => {
         return activities.value?.map<SelectItem>((activity) => {

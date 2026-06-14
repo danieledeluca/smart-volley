@@ -11,7 +11,6 @@ export const useAthletesStore = defineStore('athletes', () => {
         error: athletesError,
         refresh: refreshAthletes,
     } = useLazyFetch('/api/athletes', {
-        headers: useRequestHeaders(['cookie']),
         query: filterState,
         watch: false,
     });
@@ -38,7 +37,6 @@ export const useAthletesStore = defineStore('athletes', () => {
         error: currentAthleteError,
         refresh: refreshCurrentAthlete,
     } = useLazyFetch<SelectAthleteWithRelations>(athleteUrlWithId, {
-        headers: useRequestHeaders(['cookie']),
         immediate: false,
         watch: false,
     });

@@ -1,54 +1,97 @@
 <script setup lang="ts">
-import type { PageCardProps } from '@nuxt/ui';
-
 useSeoMeta({
     title: $t('page.dashboard.title'),
 });
 
-// TODO: placeholder
-const cards: PageCardProps[] = [
-    {
-        title: 'Theme',
-        description: 'Learn how to customize Nuxt UI components using Tailwind CSS.',
-        icon: 'i-lucide-swatch-book',
-        to: '/docs/getting-started/theme/design-system',
-        class: 'lg:col-span-2',
-        orientation: 'horizontal' as const,
-    },
-    {
-        title: 'Fonts',
-        description: 'Nuxt UI integrates with Nuxt Fonts to provide plug-and-play font optimization.',
-        icon: 'i-lucide-a-large-small',
-        to: '/docs/getting-started/integrations/fonts',
-        variant: 'soft' as const,
-    },
-    {
-        title: 'Color Mode',
-        description: 'Nuxt UI integrates with Nuxt Color Mode to switch between light and dark.',
-        icon: 'i-lucide-sun-moon',
-        to: '/docs/getting-started/integrations/color-mode',
-        variant: 'soft' as const,
-    },
-    {
-        title: 'Icons',
-        description: 'Nuxt UI integrates with Nuxt Icon to access over 200,000+ icons from Iconify.',
-        icon: 'i-lucide-smile',
-        to: '/docs/getting-started/integrations/icons',
-        class: 'lg:col-span-2',
-        orientation: 'horizontal' as const,
-        reverse: true,
-    },
-];
+const enrollmentsStore = useEnrollmentsStore();
+const seasonsStore = useSeasonsStore();
+
+const { enrollments, enrollmentsPending } = storeToRefs(enrollmentsStore);
+const { seasons, seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
+
+const season = ref();
+
+const currentSeason = computed(() => seasons.value?.find((_season) => _season.id === season.value));
+const dashboardCards = computed(() => {
+    if (!enrollments.value || !currentSeason.value) {
+        return [];
+    }
+
+    return getDashboardCards(enrollments.value, currentSeason.value);
+});
+
+const formField = computed<FormField<{ seasonId?: number }>>(() => {
+    return {
+        renderAs: 'select-menu',
+        formFieldProps: {
+            name: 'seasonId',
+        },
+        selectProps: {
+            placeholder: $t('form.field.season_id.placeholder'),
+            icon: 'i-lucide-calendar',
+            items: seasonsItems.value,
+            loading: seasonsPending.value,
+        },
+    };
+});
+
+onMounted(() => {
+    season.value = seasons.value?.[0]?.id;
+});
 </script>
 
 <template>
     <DashboardPanel :title="$t('page.dashboard.title')">
-        <UPageGrid>
-            <UPageCard
-                v-for="(card, index) in cards"
-                :key="index"
-                v-bind="card"
-            />
-        </UPageGrid>
+        <template #right>
+            <FormField v-model="season" :field="formField" :showDeleteButton="false" />
+        </template>
+        <template v-if="enrollmentsPending || !season">
+            <div class="flex gap-4">
+                <USkeleton class="size-8" />
+                <USkeleton class="h-8 w-full max-w-24" />
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full sm:col-span-2" />
+            </div>
+            <div>
+                <USkeleton class="h-1 w-full" />
+            </div>
+            <div class="flex gap-4">
+                <USkeleton class="size-8" />
+                <USkeleton class="h-8 w-full max-w-24" />
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full sm:col-span-2" />
+            </div>
+        </template>
+        <template v-else>
+            <template v-for="(data, activity, index) in dashboardCards" :key="activity">
+                <h2 class="flex items-center gap-4 text-2xl">
+                    <UButton variant="soft" :icon="data.icon" />
+                    <span>{{ activity }}</span>
+                </h2>
+                <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
+                    <DashboardCard
+                        v-for="(card, cardIndex) in data.cards"
+                        :key="card.title"
+                        v-bind="card"
+                        :class="{
+                            'md:col-span-3': cardIndex === 0 || cardIndex === 1,
+                            'md:col-span-2': cardIndex === 2 || cardIndex === 3,
+                            'sm:col-span-2': cardIndex === 4,
+                        }"
+                    />
+                </div>
+                <USeparator v-if="index !== Object.entries(dashboardCards).length - 1" icon="i-lucide-zap" />
+            </template>
+        </template>
     </DashboardPanel>
 </template>

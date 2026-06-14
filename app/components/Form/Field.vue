@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
-const { field } = defineProps<{
+const { field, showDeleteButton = true } = defineProps<{
     field: FormField<T>;
+    showDeleteButton?: boolean;
 }>();
 
 const slots = defineSlots();
@@ -49,7 +50,7 @@ const model = defineModel<T[keyof T]>();
                 />
             </UFormField>
             <UButton
-                v-if="field.renderAs.startsWith('select') && model"
+                v-if="showDeleteButton && field.renderAs.startsWith('select') && model"
                 icon="i-lucide-x"
                 variant="subtle"
                 color="error"
