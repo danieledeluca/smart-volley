@@ -22,13 +22,6 @@ export const translations = {
             },
             title: 'Indirizzo e contatti',
         },
-        dashboard: {
-            enrollments: 'Iscrizioni',
-            expiring_certificates: 'Certificati in scadenza',
-            missing_payments: 'Pagamenti mancanti',
-            total_enrollments: 'Totale iscrizioni',
-            total_payments: 'Totale pagamenti',
-        },
         athlete: {
             record: {
                 birthdate: 'Data di nascita',
@@ -44,6 +37,13 @@ export const translations = {
                 expiration_date: 'Scadenza certificato',
             },
             title: 'Certificato medico',
+        },
+        dashboard: {
+            enrollments: 'Iscrizioni',
+            expiring_certificates: 'Certificati in scadenza',
+            missing_payments: 'Pagamenti mancanti',
+            total_enrollments: 'Totale iscrizioni',
+            total_payments: 'Totale pagamenti',
         },
         enrollments: {
             title: 'Iscrizioni',
@@ -406,6 +406,7 @@ export const translations = {
             title: 'Certificati medici',
         },
         dashboard: {
+            error: 'Nessun dato trovato',
             title: 'Dashboard',
         },
         enrollment: {

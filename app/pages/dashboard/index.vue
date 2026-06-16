@@ -6,10 +6,10 @@ useSeoMeta({
 const enrollmentsStore = useEnrollmentsStore();
 const seasonsStore = useSeasonsStore();
 
-const { enrollments, enrollmentsPending } = storeToRefs(enrollmentsStore);
+const { enrollments, enrollmentsPending, enrollmentsError } = storeToRefs(enrollmentsStore);
 const { seasons, seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
 
-const season = ref();
+const season = ref<number>();
 
 const currentSeason = computed(() => seasons.value?.find((_season) => _season.id === season.value));
 const dashboardCards = computed(() => {
@@ -43,9 +43,14 @@ onMounted(() => {
 <template>
     <DashboardPanel :title="$t('page.dashboard.title')">
         <template #right>
-            <FormField v-model="season" :field="formField" :showDeleteButton="false" />
+            <FormField
+                v-if="(seasonsItems?.length || 0) > 0"
+                v-model="season"
+                :field="formField"
+                :showDeleteButton="false"
+            />
         </template>
-        <template v-if="enrollmentsPending || !season">
+        <template v-if="enrollmentsPending || ((seasonsItems?.length || 0) > 0 && !season)">
             <div class="flex gap-4">
                 <USkeleton class="size-8" />
                 <USkeleton class="h-8 w-full max-w-24" />
@@ -72,7 +77,13 @@ onMounted(() => {
                 <USkeleton class="size-8 h-40 w-full sm:col-span-2" />
             </div>
         </template>
-        <template v-else>
+        <UAlert
+            v-else-if="enrollmentsError"
+            :title="enrollmentsError.statusMessage"
+            color="error"
+            icon="i-lucide-circle-x"
+        />
+        <template v-else-if="(enrollments?.length || 0) > 0">
             <template v-for="(data, activity, index) in dashboardCards" :key="activity">
                 <h2 class="flex items-center gap-4 text-2xl">
                     <UButton variant="soft" :icon="data.icon" />
@@ -93,5 +104,11 @@ onMounted(() => {
                 <USeparator v-if="index !== Object.entries(dashboardCards).length - 1" icon="i-lucide-zap" />
             </template>
         </template>
+        <UAlert
+            v-else
+            :title="$t('page.dashboard.error')"
+            color="error"
+            icon="i-lucide-circle-x"
+        />
     </DashboardPanel>
 </template>
