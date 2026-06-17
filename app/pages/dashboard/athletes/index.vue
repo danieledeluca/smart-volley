@@ -74,7 +74,7 @@ function handelDeleteSuccess() {
                 v-model:open="deleteModalOpen"
                 :title="$t('form.athlete.multiple_delete.title')"
                 :description="$t('form.athlete.multiple_delete.description')"
-                :isDisabled="athletesPending || !(athleteTableRef?.selectRows()?.length || 0)"
+                :isDisabled="athletesPending || (athleteTableRef?.selectRows()?.length || 0) === 0"
                 :isLoading="athleteDeleteFormRef?.isLoading()"
                 @submit="athleteDeleteFormRef?.submit()"
             >

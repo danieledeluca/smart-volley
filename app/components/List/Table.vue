@@ -61,7 +61,7 @@ defineExpose({
 <template>
     <USkeleton v-if="isLoading && !tableData" class="h-full" />
     <UAlert
-        v-if="error"
+        v-else-if="error"
         :title="error.statusMessage"
         color="error"
         icon="i-lucide-circle-x"

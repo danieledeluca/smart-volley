@@ -76,7 +76,7 @@ function handelDeleteSuccess() {
                 v-model:open="deleteModalOpen"
                 :title="$t('form.enrollment.multiple_delete.title')"
                 :description="$t('form.enrollment.multiple_delete.description')"
-                :isDisabled="enrollmentsPending || !(enrollmentTableRef?.selectRows()?.length || 0)"
+                :isDisabled="enrollmentsPending || (enrollmentTableRef?.selectRows()?.length || 0) === 0"
                 :isLoading="enrollmentDeleteFormRef?.isLoading()"
                 @submit="enrollmentDeleteFormRef?.submit()"
             >

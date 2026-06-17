@@ -74,7 +74,7 @@ function handelDeleteSuccess() {
                 v-model:open="deleteModalOpen"
                 :title="$t('form.parent.multiple_delete.title')"
                 :description="$t('form.parent.multiple_delete.description')"
-                :isDisabled="parentsPending || !(parentTableRef?.selectRows()?.length || 0)"
+                :isDisabled="parentsPending || (parentTableRef?.selectRows()?.length || 0) === 0"
                 :isLoading="parentDeleteFormRef?.isLoading()"
                 @submit="parentDeleteFormRef?.submit()"
             >

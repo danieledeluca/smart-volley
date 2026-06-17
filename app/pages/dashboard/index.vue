@@ -31,12 +31,15 @@ const formField = computed<FormField<{ seasonId?: number }>>(() => {
             icon: 'i-lucide-calendar',
             items: seasonsItems.value,
             loading: seasonsPending.value,
+            disabled: !season.value,
         },
     };
 });
 
-onMounted(() => {
+watchEffect(() => {
     season.value = seasons.value?.[0]?.id;
+}, {
+    flush: 'post',
 });
 </script>
 
@@ -44,13 +47,13 @@ onMounted(() => {
     <DashboardPanel :title="$t('page.dashboard.title')">
         <template #right>
             <FormField
-                v-if="(seasonsItems?.length || 0) > 0"
+                v-if="seasonsItems && seasonsItems.length > 0"
                 v-model="season"
                 :field="formField"
                 :showDeleteButton="false"
             />
         </template>
-        <template v-if="enrollmentsPending || ((seasonsItems?.length || 0) > 0 && !season)">
+        <template v-if="enrollmentsPending || !season">
             <div class="flex gap-4">
                 <USkeleton class="size-8" />
                 <USkeleton class="h-8 w-full max-w-24" />
@@ -83,7 +86,7 @@ onMounted(() => {
             color="error"
             icon="i-lucide-circle-x"
         />
-        <template v-else-if="(enrollments?.length || 0) > 0">
+        <template v-else-if="enrollments && enrollments.length > 0">
             <template v-for="(data, activity, index) in dashboardCards" :key="activity">
                 <h2 class="flex items-center gap-4 text-2xl">
                     <UButton variant="soft" :icon="data.icon" />
