@@ -13,8 +13,8 @@ const { $csrfFetch } = useNuxtApp();
 const athleteFormRef = useTemplateRef('athleteFormRef');
 const { initialState } = useForm('athlete');
 
-const insertedAthlete = ref<InsertedAthlete | null>(null);
 const state = ref({ ...initialState });
+const insertedAthlete = ref<InsertedAthlete>();
 
 async function onSubmit(event: FormSubmitEvent<InsertAthlete>) {
     const athlete = await $csrfFetch('/api/athletes', {

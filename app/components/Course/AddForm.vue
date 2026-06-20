@@ -13,9 +13,8 @@ const { $csrfFetch } = useNuxtApp();
 const courseFormRef = useTemplateRef('courseFormRef');
 const { initialState } = useForm('course');
 
-const insertedCourse = ref<InsertedCourse | null>(null);
-
 const state = ref({ ...initialState });
+const insertedCourse = ref<InsertedCourse>();
 
 async function onSubmit(event: FormSubmitEvent<InsertCourse>) {
     const course = await $csrfFetch<InsertedCourse>('/api/courses', {

@@ -13,9 +13,8 @@ const { $csrfFetch } = useNuxtApp();
 const activityFormRef = useTemplateRef('activityFormRef');
 const { initialState } = useForm('activity');
 
-const insertedActivity = ref<InsertedActivity | null>(null);
-
 const state = ref({ ...initialState });
+const insertedActivity = ref<InsertedActivity>();
 
 async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
     const activity = await $csrfFetch<InsertedActivity>('/api/activities', {

@@ -13,9 +13,8 @@ const { $csrfFetch } = useNuxtApp();
 const seasonFormRef = useTemplateRef('seasonFormRef');
 const { initialState } = useForm('season');
 
-const insertedSeason = ref<InsertedSeason | null>(null);
-
 const state = ref({ ...initialState });
+const insertedSeason = ref<InsertedSeason>();
 
 async function onSubmit(event: FormSubmitEvent<InsertSeason>) {
     const season = await $csrfFetch<InsertedSeason>('/api/seasons', {

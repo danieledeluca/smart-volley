@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
+import type { UpdatedEnrollment } from '~~/lib/db/schema';
 
 import { InsertEnrollment } from '~~/lib/db/schema';
 import { FILE_ACCEPTED_TYPES } from '~~/lib/utils/constants';
@@ -9,7 +10,7 @@ const { enrollmentId } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    success: [];
+    success: [id?: number];
 }>();
 
 const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${enrollmentId}`);
@@ -20,18 +21,21 @@ const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 const { initialState } = useForm('enrollment');
 
 const state = ref({ ...initialState });
+const updatedEnrollment = ref<UpdatedEnrollment>();
 
 async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
-    await $csrfFetch(`/api/enrollments/${enrollmentId}`, {
+    const enrollment = await $csrfFetch<UpdatedEnrollment>(`/api/enrollments/${enrollmentId}`, {
         method: 'PUT',
         body: toFormData(event.data),
     });
+
+    updatedEnrollment.value = enrollment;
 }
 
 function onSubmitComplete() {
     enrollmentsStore.refreshEnrollments();
 
-    emit('success');
+    emit('success', updatedEnrollment.value?.id);
 }
 
 watchEffect(() => {

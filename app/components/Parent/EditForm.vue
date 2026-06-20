@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
+import type { UpdatedParent } from '~~/lib/db/schema';
 
 import { InsertParent } from '~~/lib/db/schema';
 
@@ -8,7 +9,7 @@ const { parentId } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    success: [];
+    success: [id?: number];
 }>();
 
 const { data: parent, pending, error } = useLazyFetch(`/api/parents/${parentId}`);
@@ -19,18 +20,21 @@ const parentFormRef = useTemplateRef('parentFormRef');
 const { initialState } = useForm('parent');
 
 const state = ref({ ...initialState });
+const updatedParent = ref<UpdatedParent>();
 
 async function onSubmit(event: FormSubmitEvent<InsertParent>) {
-    await $csrfFetch(`/api/parents/${parentId}`, {
+    const parent = await $csrfFetch<UpdatedParent>(`/api/parents/${parentId}`, {
         method: 'PUT',
         body: event.data,
     });
+
+    updatedParent.value = parent;
 }
 
 function onSubmitComplete() {
     parentsStore.refreshParents();
 
-    emit('success');
+    emit('success', updatedParent.value?.id);
 }
 
 watchEffect(() => {

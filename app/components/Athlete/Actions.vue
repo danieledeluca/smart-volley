@@ -6,8 +6,8 @@ const { athleteId } = defineProps<{
 const emit = defineEmits<{
     deleteComplete: [];
     deleteClose: [];
-    editComplete: [];
-    editClose: [];
+    editComplete: [id?: number];
+    editClose: [id?: number];
 }>();
 
 const athleteEditFormRef = useTemplateRef('athleteEditFormRef');
@@ -15,6 +15,8 @@ const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
+
+const updatedAthleteId = ref<number>();
 
 const isLoading = computed(() => {
     return Boolean(athleteEditFormRef.value?.isLoading()) || Boolean(athleteDeleteFormRef.value?.isLoading());
@@ -26,10 +28,11 @@ function handleDeleteSuccess() {
     emit('deleteComplete');
 }
 
-function handleEditSuccess() {
+function handleEditSuccess(id?: number) {
     openEdit.value = false;
+    updatedAthleteId.value = id;
 
-    emit('editComplete');
+    emit('editComplete', id);
 }
 </script>
 
@@ -45,7 +48,7 @@ function handleEditSuccess() {
         @delete="athleteDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"
         @edit="athleteEditFormRef?.submit"
-        @editClose="emit('editClose')"
+        @editClose="emit('editClose', updatedAthleteId)"
     >
         <template #delete>
             <AthleteDeleteForm ref="athleteDeleteFormRef" :athleteId @success="handleDeleteSuccess" />

@@ -5,7 +5,9 @@ const { enrollmentId } = defineProps<{
 
 const emit = defineEmits<{
     deleteComplete: [];
-    editComplete: [];
+    deleteClose: [];
+    editComplete: [id?: number];
+    editClose: [id?: number];
 }>();
 
 const enrollmentEditFormRef = useTemplateRef('enrollmentEditFormRef');
@@ -13,6 +15,8 @@ const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
+
+const updatedEnrollmentId = ref<number>();
 
 const isLoading = computed(() => {
     return Boolean(enrollmentEditFormRef.value?.isLoading()) || Boolean(enrollmentDeleteFormRef.value?.isLoading());
@@ -24,10 +28,11 @@ function handleDeleteSuccess() {
     emit('deleteComplete');
 }
 
-function handleEditSuccess() {
+function handleEditSuccess(id?: number) {
     openEdit.value = false;
+    updatedEnrollmentId.value = id;
 
-    emit('editComplete');
+    emit('editComplete', id);
 }
 </script>
 
@@ -41,7 +46,9 @@ function handleEditSuccess() {
         :editDescription="$t('form.enrollment.edit.description')"
         :isLoading
         @delete="enrollmentDeleteFormRef?.submit"
+        @deleteClose="emit('deleteClose')"
         @edit="enrollmentEditFormRef?.submit"
+        @editClose="emit('editClose', updatedEnrollmentId)"
     >
         <template #delete>
             <EnrollmentDeleteForm ref="enrollmentDeleteFormRef" :enrollmentId @success="handleDeleteSuccess" />

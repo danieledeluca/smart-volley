@@ -13,8 +13,8 @@ const { $csrfFetch } = useNuxtApp();
 const parentFormRef = useTemplateRef('parentFormRef');
 const { initialState } = useForm('parent');
 
-const insertedParent = ref<InsertedParent | null>(null);
 const state = ref({ ...initialState });
+const insertedParent = ref<InsertedParent>();
 
 async function onSubmit(event: FormSubmitEvent<InsertParent>) {
     const parent = await $csrfFetch<InsertedParent>('/api/parents', {

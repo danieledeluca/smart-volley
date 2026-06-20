@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
+import type { UpdatedAthlete } from '~~/lib/db/schema';
 
 import { InsertAthlete } from '~~/lib/db/schema';
 
@@ -8,7 +9,7 @@ const { athleteId } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    success: [];
+    success: [id?: number];
 }>();
 
 const { data: athlete, pending, error } = useLazyFetch(`/api/athletes/${athleteId}`);
@@ -19,18 +20,21 @@ const athleteFormRef = useTemplateRef('athleteFormRef');
 const { initialState } = useForm('athlete');
 
 const state = ref({ ...initialState });
+const updatedAthlete = ref<UpdatedAthlete>();
 
 async function onSubmit(event: FormSubmitEvent<InsertAthlete>) {
-    await $csrfFetch(`/api/athletes/${athleteId}`, {
+    const athlete = await $csrfFetch<UpdatedAthlete>(`/api/athletes/${athleteId}`, {
         method: 'PUT',
         body: event.data,
     });
+
+    updatedAthlete.value = athlete;
 }
 
 function onSubmitComplete() {
     athletesStore.refreshAthletes();
 
-    emit('success');
+    emit('success', updatedAthlete.value?.id);
 }
 
 watchEffect(() => {
