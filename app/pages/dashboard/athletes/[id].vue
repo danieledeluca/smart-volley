@@ -83,7 +83,7 @@ onMounted(async () => {
                     <AthleteActions
                         :athleteId="athlete.id"
                         @deleteComplete="navigateTo('/dashboard/athletes')"
-                        @editClose="athletesStore.refreshCurrentAthlete"
+                        @editClose="(id) => id ? athletesStore.refreshCurrentAthlete() : undefined"
                     />
                 </div>
             </div>

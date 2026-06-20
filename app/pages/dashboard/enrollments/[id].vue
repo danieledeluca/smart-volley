@@ -93,7 +93,7 @@ onMounted(async () => {
                     <EnrollmentActions
                         :enrollmentId="enrollment.id"
                         @deleteComplete="navigateTo('/dashboard/enrollments')"
-                        @editComplete="enrollmentsStore.refreshCurrentEnrollment"
+                        @editClose="(id) => id ? enrollmentsStore.refreshCurrentEnrollment() : undefined"
                     />
                 </div>
             </div>
