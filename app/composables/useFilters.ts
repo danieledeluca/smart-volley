@@ -1,4 +1,4 @@
-import type { SelectItem } from '@nuxt/ui';
+import type { CheckboxGroupItem, SelectItem } from '@nuxt/ui';
 import type { ParentsFiltersSchema } from '~~/shared/utils/zod-schema';
 
 import type {
@@ -23,7 +23,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const coursesStore = useCoursesStore();
 
     const { seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
-    const { activitiesItems, activitiesPending } = storeToRefs(activitiesStore);
+    const { activitiesItems } = storeToRefs(activitiesStore);
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
     // Initial states
@@ -91,7 +91,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         },
     ];
 
-    const certificateStatusItems: Array<SelectItem & { value: CertificateStatusEnum }> = [
+    const certificateStatusItems: Array<CheckboxGroupItem & { value: CertificateStatusEnum }> = [
         {
             label: $t('form.field.certificate_status.item.valid'),
             value: 'valid',
@@ -172,16 +172,19 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                     },
                 },
                 {
-                    renderAs: 'select',
+                    renderAs: 'radio-group',
                     formFieldProps: {
                         label: $t('form.field.activity_id.label'),
                         name: 'activityId',
                     },
-                    selectProps: {
-                        placeholder: $t('form.field.activity_id.placeholder'),
-                        icon: 'i-lucide-zap',
+                    radioGroupProps: {
                         items: activitiesItems.value,
-                        loading: activitiesPending.value,
+                        variant: 'table',
+                        orientation: 'horizontal',
+                        indicator: 'hidden',
+                        ui: {
+                            item: 'w-full',
+                        },
                     },
                 },
                 {
@@ -210,15 +213,19 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                     },
                 },
                 {
-                    renderAs: 'select',
+                    renderAs: 'checkbox-group',
                     formFieldProps: {
                         label: $t('form.field.certificate_status.label'),
                         name: 'certificateStatus',
                     },
-                    selectProps: {
-                        placeholder: $t('form.field.certificate_status.placeholder'),
-                        icon: 'i-lucide-briefcase-medical',
+                    checkboxGroupProps: {
                         items: certificateStatusItems,
+                        variant: 'table',
+                        orientation: 'horizontal',
+                        indicator: 'hidden',
+                        ui: {
+                            item: 'w-full',
+                        },
                     },
                 },
             ],

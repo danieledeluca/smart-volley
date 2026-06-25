@@ -32,7 +32,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
     const { athletesItems, athletesPending } = storeToRefs(athletesStore);
     const { parentsItems, parentsPending } = storeToRefs(parentsStore);
     const { seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
-    const { activitiesItems, activitiesPending } = storeToRefs(activitiesStore);
+    const { activitiesItems } = storeToRefs(activitiesStore);
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
     // Initial states
@@ -554,15 +554,19 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                 icon: 'i-lucide-zap',
                 fields: [
                     {
-                        renderAs: 'select-menu',
+                        renderAs: 'radio-group',
                         formFieldProps: {
                             name: 'activityId',
                             required: true,
                         },
-                        selectProps: {
-                            placeholder: $t('form.field.activity_id.placeholder'),
+                        radioGroupProps: {
                             items: activitiesItems.value,
-                            loading: activitiesPending.value,
+                            variant: 'table',
+                            orientation: 'horizontal',
+                            indicator: 'hidden',
+                            ui: {
+                                item: 'w-full',
+                            },
                         },
                     },
                 ],

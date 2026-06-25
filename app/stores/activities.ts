@@ -1,4 +1,4 @@
-import type { SelectItem } from '@nuxt/ui';
+import type { RadioGroupItem } from '@nuxt/ui';
 
 export const useActivitiesStore = defineStore('activities', () => {
     const {
@@ -9,7 +9,7 @@ export const useActivitiesStore = defineStore('activities', () => {
     } = useLazyFetch('/api/activities');
 
     const activitiesItems = computed(() => {
-        return activities.value?.map<SelectItem>((activity) => {
+        return activities.value?.map<RadioGroupItem>((activity) => {
             return {
                 label: activity.name,
                 value: activity.id,
