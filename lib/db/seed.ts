@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+// @ts-check
 import { Faker, it } from '@faker-js/faker';
 
 import type {
@@ -12,14 +13,14 @@ import type {
 
 import { formatPhoneNumber } from '../../app/utils/formatters';
 import db from './';
-import { activity, athlete, course, enrollment, parent, season } from './schema';
+import { activity, athlete, course, enrollment, enrollmentPaymentType, parent, season } from './schema';
 
 const faker = new Faker({
     locale: it,
 });
 
-function maybe<T>(callback: () => T) {
-    return faker.helpers.maybe(callback, { probability: 0.6 });
+function maybe<T>(callback: () => T, probability = 0.5) {
+    return faker.helpers.maybe(callback, { probability });
 }
 
 function createRandomUser() {
@@ -87,8 +88,8 @@ async function main() {
     await db.delete(athlete);
     await db.delete(parent);
     await db.delete(season);
-    await db.delete(activity);
     await db.delete(course);
+    await db.delete(activity);
 
     // Seasons
     const seasons: InsertSeason[] = [
@@ -140,9 +141,11 @@ async function main() {
     // Activities
     const activities: InsertActivity[] = [
         {
+            key: 'volley',
             name: 'Volley',
         },
         {
+            key: 'gymnastics',
             name: 'Ginnastica',
         },
     ];
@@ -236,6 +239,7 @@ async function main() {
             return Array.from({ length: 10 }, async () => {
                 const season = insertedSeasons[Math.floor(Math.random() * insertedSeasons.length)];
                 const course = insertedCourses[Math.floor(Math.random() * insertedCourses.length)];
+                const activity = insertedActivities.find((activity) => activity.id === course.activityId);
 
                 const key = `${athlete.id}-${season.id}-${course.id}`;
 
@@ -245,16 +249,88 @@ async function main() {
 
                 usedCombinations.add(key);
 
+                const isVolley = activity?.key === 'volley';
+                const isGymnastics = activity?.key === 'gymnastics';
+
+                const volleyProbability = Number(isVolley) / 2;
+                const gymnasticsProbability = Number(isGymnastics) / 2;
+
+                const volleyAccount = maybe(() => generateDecimal(300, 700), volleyProbability);
+                const volleyAccountProbability = volleyAccount ? 1 : 0;
+
+                const volleyBalance = maybe(() => generateDecimal(50, 250), volleyProbability);
+                const volleyBalanceProbability = volleyBalance ? 1 : 0;
+
+                const volleySecondBalance = maybe(() => generateDecimal(0, 100), volleyProbability);
+                const volleySecondBalanceProbability = volleySecondBalance ? 1 : 0;
+
+                const gymnasticsFirstInstallment = maybe(() => generateDecimal(100, 250), gymnasticsProbability);
+                const gymnasticsFirstInstallmentProbability = gymnasticsFirstInstallment ? 1 : 0;
+
+                const gymnasticsSecondInstallment = maybe(() => generateDecimal(100, 250), gymnasticsProbability);
+                const gymnasticsSecondInstallmentProbability = gymnasticsSecondInstallment ? 1 : 0;
+
+                const gymnasticsThirdInstallment = maybe(() => generateDecimal(100, 250), gymnasticsProbability);
+                const gymnasticsThirdInstallmentProbability = gymnasticsThirdInstallment ? 1 : 0;
+
                 return {
                     athleteId: athlete.id,
                     seasonId: season.id,
                     courseId: course.id,
-                    volleyAccount: maybe(() => generateDecimal(300, 700)),
-                    volleyBalance: maybe(() => generateDecimal(50, 250)),
-                    volleyBalanceSecondary: maybe(() => generateDecimal(0, 100)),
-                    firstInstallment: maybe(() => generateDecimal(100, 250)),
-                    secondInstallment: maybe(() => generateDecimal(100, 250)),
-                    thirdInstallment: maybe(() => generateDecimal(100, 250)),
+                    volleyAccount,
+                    volleyAccountDate: maybe(
+                        () => generateDate(new Date(season.startYear, 0), new Date()),
+                        volleyAccountProbability,
+                    ),
+                    volleyAccountType: maybe(
+                        () => faker.helpers.arrayElement(enrollmentPaymentType.enumValues),
+                        volleyAccountProbability,
+                    ),
+                    volleyBalance,
+                    volleyBalanceDate: maybe(
+                        () => generateDate(new Date(season.startYear, 0), new Date()),
+                        volleyBalanceProbability,
+                    ),
+                    volleyBalanceType: maybe(
+                        () => faker.helpers.arrayElement(enrollmentPaymentType.enumValues),
+                        volleyBalanceProbability,
+                    ),
+                    volleySecondBalance,
+                    volleySecondBalanceDate: maybe(
+                        () => generateDate(new Date(season.startYear, 0), new Date()),
+                        volleySecondBalanceProbability,
+                    ),
+                    volleySecondBalanceType: maybe(
+                        () => faker.helpers.arrayElement(enrollmentPaymentType.enumValues),
+                        volleySecondBalanceProbability,
+                    ),
+                    gymnasticsFirstInstallment,
+                    gymnasticsFirstInstallmentDate: maybe(
+                        () => generateDate(new Date(season.startYear, 0), new Date()),
+                        gymnasticsFirstInstallmentProbability,
+                    ),
+                    gymnasticsFirstInstallmentType: maybe(
+                        () => faker.helpers.arrayElement(enrollmentPaymentType.enumValues),
+                        gymnasticsFirstInstallmentProbability,
+                    ),
+                    gymnasticsSecondInstallment,
+                    gymnasticsSecondInstallmentDate: maybe(
+                        () => generateDate(new Date(season.startYear, 0), new Date()),
+                        gymnasticsSecondInstallmentProbability,
+                    ),
+                    gymnasticsSecondInstallmentType: maybe(
+                        () => faker.helpers.arrayElement(enrollmentPaymentType.enumValues),
+                        gymnasticsSecondInstallmentProbability,
+                    ),
+                    gymnasticsThirdInstallment,
+                    gymnasticsThirdInstallmentDate: maybe(
+                        () => generateDate(new Date(season.startYear, 0), new Date()),
+                        gymnasticsThirdInstallmentProbability,
+                    ),
+                    gymnasticsThirdInstallmentType: maybe(
+                        () => faker.helpers.arrayElement(enrollmentPaymentType.enumValues),
+                        gymnasticsThirdInstallmentProbability,
+                    ),
                     certificateExpirationDate:
                         maybe(() => generateDate(new Date(season.startYear, 0), new Date(season.endYear + 1, 0))),
                 } satisfies InsertEnrollment;
