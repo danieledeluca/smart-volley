@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends z.ZodType">
-import type { InferInput, SelectItem, SelectMenuItem } from '@nuxt/ui';
+import type { CheckboxGroupItem, InferInput, RadioGroupItem, SelectItem, SelectMenuItem } from '@nuxt/ui';
 import type z from 'zod';
 
 import { useDebounceFn } from '@vueuse/core';
@@ -42,11 +42,28 @@ const activeFilters = computed(() => {
         if (filterValue) {
             let value: string | undefined;
 
+            if (field.renderAs === 'checkbox-group') {
+                type CheckboxGroupItemWithValue = CheckboxGroupItem & { label: string; value: string };
+
+                value = (field.checkboxGroupProps?.items as CheckboxGroupItemWithValue[] | undefined)
+                    ?.filter((item) => (filterValue as string[]).includes(item.value))
+                    ?.map((item) => item.label)
+                    .join(', ');
+            }
+
+            if (field.renderAs === 'radio-group') {
+                type RadioGroupItemWithValue = RadioGroupItem & { label: string; value: string };
+
+                value = (field.radioGroupProps?.items as RadioGroupItemWithValue[] | undefined)
+                    ?.find((item) => item.value === filterValue)
+                    ?.label;
+            }
+
             if (field.renderAs === 'select') {
                 type SelectItemWithValue = SelectItem & { label: string; value: string };
 
                 value = (field.selectProps?.items as SelectItemWithValue[] | undefined)
-                    ?.find((item) => item?.value === filterValue)
+                    ?.find((item) => item.value === filterValue)
                     ?.label;
             }
 
@@ -54,7 +71,7 @@ const activeFilters = computed(() => {
                 type SelectMenuItemWithValue = SelectMenuItem & { label: string; value: string };
 
                 value = (field.selectProps?.items as SelectMenuItemWithValue[] | undefined)
-                    ?.find((item) => item?.value === filterValue)
+                    ?.find((item) => item.value === filterValue)
                     ?.label;
             }
 

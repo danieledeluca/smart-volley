@@ -6,10 +6,30 @@ const { field, showDeleteButton = true } = defineProps<{
 
 const slots = defineSlots();
 const model = defineModel<T[keyof T]>();
+
+const showField = computed(() => {
+    if (field.renderAs.startsWith('input')) {
+        return true;
+    }
+
+    if (field.renderAs === 'checkbox-group') {
+        return field.checkboxGroupProps?.items && field.checkboxGroupProps.items.length > 0;
+    }
+
+    if (field.renderAs === 'radio-group') {
+        return field.radioGroupProps?.items && field.radioGroupProps.items.length > 0;
+    }
+
+    if (field.renderAs === 'select' || field.renderAs === 'select-menu') {
+        return field.selectProps?.items && field.selectProps.items.length > 0;
+    }
+
+    return false;
+});
 </script>
 
 <template>
-    <div>
+    <div v-if="showField">
         <div class="flex items-end gap-2">
             <UFormField v-bind="field.formFieldProps" class="min-w-0 flex-1">
                 <UInput
@@ -35,6 +55,16 @@ const model = defineModel<T[keyof T]>();
                     :fileUploadProps="field.fileUploadProps"
                     :buttonProps="field.buttonProps"
                 />
+                <UCheckboxGroup
+                    v-if="field.renderAs === 'checkbox-group'"
+                    v-model="model"
+                    v-bind="field.checkboxGroupProps"
+                />
+                <URadioGroup
+                    v-if="field.renderAs === 'radio-group'"
+                    v-model="model"
+                    v-bind="field.radioGroupProps"
+                />
                 <USelect
                     v-if="field.renderAs === 'select'"
                     v-model="model"
@@ -48,6 +78,17 @@ const model = defineModel<T[keyof T]>();
                     class="w-full"
                     valueKey="value"
                 />
+                <template v-if="showDeleteButton && field.renderAs === 'radio-group' && model" #hint>
+                    <UButton
+                        variant="link"
+                        color="error"
+                        :label="$t('form.button.delete')"
+                        :ui="{
+                            base: 'p-0',
+                        }"
+                        @click.stop="model = undefined"
+                    />
+                </template>
             </UFormField>
             <UButton
                 v-if="showDeleteButton && field.renderAs.startsWith('select') && model"

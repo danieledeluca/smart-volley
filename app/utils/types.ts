@@ -2,11 +2,13 @@ import type {
     BadgeProps,
     ButtonProps,
     CalendarProps,
+    CheckboxGroupProps,
     FileUploadProps,
     FormFieldProps,
     InputDateProps,
     InputNumberProps,
     InputProps,
+    RadioGroupProps,
     SelectMenuProps,
     SelectProps,
 } from '@nuxt/ui';
@@ -33,6 +35,17 @@ type InputFileField = {
     buttonProps?: Omit<ButtonProps, 'label' | 'icon'>;
 };
 
+type CheckboxGroupField = {
+    renderAs: 'checkbox-group';
+    singleSelection?: boolean;
+    checkboxGroupProps?: CheckboxGroupProps;
+};
+
+type RadioGroupField = {
+    renderAs: 'radio-group';
+    radioGroupProps?: RadioGroupProps;
+};
+
 type SelectField = {
     renderAs: 'select';
     selectProps?: SelectProps;
@@ -44,10 +57,16 @@ type SelectMenuField = {
 };
 
 export type FormField<T> = {
-    renderAs: string;
     debounce?: boolean;
     formFieldProps: Omit<FormFieldProps, 'name'> & { name: string & keyof T };
-} & (InputField | InputNumberField | InputDateField | InputFileField | SelectField | SelectMenuField);
+} & (InputField
+    | InputNumberField
+    | InputDateField
+    | InputFileField
+    | CheckboxGroupField
+    | RadioGroupField
+    | SelectField
+    | SelectMenuField);
 
 export type FormFieldGroup<T> = {
     title?: string;
