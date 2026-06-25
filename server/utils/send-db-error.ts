@@ -32,6 +32,10 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
                 name: 'email',
                 message: $t('form.field.email.duplicate'),
             },
+            activity_key_unique: {
+                name: 'key',
+                message: $t('form.field.activity_key.duplicate'),
+            },
             activity_name_unique: {
                 name: 'name',
                 message: $t('form.field.activity_name.duplicate'),
@@ -45,6 +49,7 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
         const statusMessages: Record<string, string> = {
             enrollment_athleteId_seasonId_courseId_unique: $t('form.field.enrollment.duplicate'),
             season_startYear_endYear_unique: $t('form.field.season.duplicate'),
+            activity_key_name_unique: $t('form.field.activity.duplicate'),
         };
 
         const formError = constrainMessages[cause.constraint || ''];

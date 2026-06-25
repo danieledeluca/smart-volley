@@ -9,6 +9,7 @@ import type {
 } from '~~/lib/db/schema';
 
 import { CalendarDate } from '@internationalized/date';
+import { activityKey } from '~~/lib/db/schema';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '~~/lib/utils/constants';
 import { formatFileSize } from '~~/lib/utils/formatters';
 
@@ -74,6 +75,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
     };
 
     const activityInitialState: Partial<InsertActivity> = {
+        key: undefined,
         name: undefined,
     };
 
@@ -488,6 +490,23 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
 
     const activityFields = computed<FormField<InsertActivity>[]>(() => {
         return [
+            {
+                renderAs: 'select',
+                formFieldProps: {
+                    label: $t('form.field.activity_key.label'),
+                    name: 'key',
+                    required: true,
+                },
+                selectProps: {
+                    placeholder: $t('form.field.activity_key.placeholder'),
+                    items: activityKey.enumValues.map<SelectItem>((key) => {
+                        return {
+                            label: key,
+                            value: key,
+                        };
+                    }),
+                },
+            },
             {
                 renderAs: 'input',
                 formFieldProps: {

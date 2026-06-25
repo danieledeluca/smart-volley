@@ -169,11 +169,19 @@ export const translations = {
             },
         },
         field: {
+            activity: {
+                duplicate: 'L\'attività per questa chiave esiste già',
+            },
             activity_id: {
                 label: 'Attività',
                 not_found: 'Attività non trovata',
-                placeholder: 'Seleziona un\'attività',
                 required: 'L\'attività è obbligatoria',
+            },
+            activity_key: {
+                duplicate: 'La chiave esiste già',
+                label: 'Chiave attività',
+                placeholder: 'Inserisci la chiave dell\'attività',
+                required: 'La chiave dell\'attività è obbligatoria',
             },
             activity_name: {
                 duplicate: 'L\'attività esiste già',
