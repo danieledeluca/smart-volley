@@ -417,7 +417,6 @@ export const translations = {
             title: 'Certificati medici',
         },
         dashboard: {
-            error: 'Nessun dato trovato',
             title: 'Dashboard',
         },
         enrollment: {
@@ -432,6 +431,12 @@ export const translations = {
                 add: 'Nuova iscrizione',
             },
             title: 'Iscrizioni',
+        },
+        error: {
+            no_data: {
+                description: 'La pagina sembra essere vuota',
+                title: 'Nessun contenuto trovato',
+            },
         },
         home: {
             card: {

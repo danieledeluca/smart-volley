@@ -34,5 +34,7 @@ export const InsertActivity = createInsertSchema(activity, {
     updatedAt: true,
 });
 
+export type ActivityKeys = typeof activityKey.enumValues;
+
 export type InsertActivity = z.infer<typeof InsertActivity>;
 export type InsertedActivity = Awaited<ReturnType<typeof insertActivity>>;

@@ -1,4 +1,4 @@
-import type { SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
+import type { ActivityKeys, SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
 
 const PAYMENT_FIELDS = [
     'volleyAccount',
@@ -9,9 +9,9 @@ const PAYMENT_FIELDS = [
     'thirdInstallment',
 ] as (keyof Partial<SelectEnrollmentsWithRelations>)[];
 
-const ACTIVITY_ICONS: Record<string, string> = {
-    Volley: 'i-lucide-volleyball',
-    Ginnastica: 'i-lucide-dumbbell',
+const ACTIVITY_ICONS: Record<ActivityKeys[number], string> = {
+    volley: 'i-lucide-volleyball',
+    gymnastics: 'i-lucide-dumbbell',
 };
 
 const DEFAULT_ACTIVITY_ICON = 'i-lucide-zap';
@@ -29,7 +29,7 @@ function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
         return undefined;
     }
 
-    const percentage = `${Math.round(((firstValue / secondValue) * 100) - 100)}%`;
+    const percentage = `${(((firstValue / secondValue) * 100) - 100).toFixed(1)}%`;
     const difference = firstValue - secondValue;
 
     if (difference === 0) {
@@ -149,10 +149,11 @@ function getCurrentSeasonExpiringCertificate(
 }
 
 export function getDashboardCards(enrollments: SelectEnrollmentsWithRelations[], season: SelectSeasons) {
-    return Object.fromEntries(Object.entries(Object.groupBy(enrollments, (enrollment) => enrollment.activity.name))
+    return Object.fromEntries(Object.entries(Object.groupBy(enrollments, (enrollment) => enrollment.activity.key))
         .map(([activity, enrollments]) => {
             return [activity, {
-                icon: ACTIVITY_ICONS[activity] || DEFAULT_ACTIVITY_ICON,
+                icon: ACTIVITY_ICONS[activity as ActivityKeys[number]] || DEFAULT_ACTIVITY_ICON,
+                title: enrollments?.[0]?.activity.name || '',
                 cards: enrollments && [
                     getTotalEnrollmentsCard(enrollments, season),
                     getTotalPaymentsCard(enrollments, season),

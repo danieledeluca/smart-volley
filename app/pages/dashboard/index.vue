@@ -36,6 +36,10 @@ const formField = computed<FormField<{ seasonId?: number }>>(() => {
     };
 });
 
+const isLoading = computed(() => {
+    return enrollmentsPending.value || (seasonsItems.value && seasonsItems.value.length > 0 && !season.value);
+});
+
 watchEffect(() => {
     season.value = seasons.value?.[0]?.id;
 }, {
@@ -46,14 +50,9 @@ watchEffect(() => {
 <template>
     <DashboardPanel :title="$t('page.dashboard.title')">
         <template #right>
-            <FormField
-                v-if="seasonsItems && seasonsItems.length > 0"
-                v-model="season"
-                :field="formField"
-                :showDeleteButton="false"
-            />
+            <FormField v-model="season" :field="formField" :showDeleteButton="false" />
         </template>
-        <template v-if="enrollmentsPending || !season">
+        <template v-if="isLoading">
             <div class="flex gap-4">
                 <USkeleton class="size-8" />
                 <USkeleton class="h-8 w-full max-w-24" />
@@ -90,7 +89,7 @@ watchEffect(() => {
             <template v-for="(data, activity, index) in dashboardCards" :key="activity">
                 <h2 class="flex items-center gap-4 text-2xl">
                     <UButton variant="soft" :icon="data.icon" />
-                    <span>{{ activity }}</span>
+                    <span>{{ data.title }}</span>
                 </h2>
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
                     <DashboardCard
@@ -107,11 +106,6 @@ watchEffect(() => {
                 <USeparator v-if="index !== Object.entries(dashboardCards).length - 1" icon="i-lucide-zap" />
             </template>
         </template>
-        <UAlert
-            v-else
-            :title="$t('page.dashboard.error')"
-            color="error"
-            icon="i-lucide-circle-x"
-        />
+        <NoData v-else />
     </DashboardPanel>
 </template>
