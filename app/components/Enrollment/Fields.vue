@@ -43,6 +43,32 @@ function showField(fieldName: keyof InsertEnrollment) {
 
     return true;
 }
+
+watch(selectedCourse, (newSelectedCourse) => {
+    if (newSelectedCourse?.activity.key === 'volley') {
+        state.value.gymnasticsFirstInstallment = undefined;
+        state.value.gymnasticsFirstInstallmentDate = undefined;
+        state.value.gymnasticsFirstInstallmentType = undefined;
+        state.value.gymnasticsSecondInstallment = undefined;
+        state.value.gymnasticsSecondInstallmentDate = undefined;
+        state.value.gymnasticsSecondInstallmentType = undefined;
+        state.value.gymnasticsThirdInstallment = undefined;
+        state.value.gymnasticsThirdInstallmentDate = undefined;
+        state.value.gymnasticsThirdInstallmentType = undefined;
+    }
+
+    if (newSelectedCourse?.activity.key === 'gymnastics') {
+        state.value.volleyAccount = undefined;
+        state.value.volleyAccountDate = undefined;
+        state.value.volleyAccountType = undefined;
+        state.value.volleyBalance = undefined;
+        state.value.volleyBalanceDate = undefined;
+        state.value.volleyBalanceType = undefined;
+        state.value.volleySecondBalance = undefined;
+        state.value.volleySecondBalanceDate = undefined;
+        state.value.volleySecondBalanceType = undefined;
+    }
+});
 </script>
 
 <template>
@@ -72,7 +98,7 @@ function showField(fieldName: keyof InsertEnrollment) {
                             label: $t('form.button.add'),
                             loading: athleteFormRef?.[0]?.isLoading(),
                         }"
-                        @submit="athleteFormRef?.[0]?.submit"
+                        @submit="athleteFormRef?.[0]?.submit()"
                     >
                         <AthleteAddForm ref="athleteFormRef" @success="handleSuccess('athleteId', $event)" />
                     </AppModal>
@@ -92,7 +118,7 @@ function showField(fieldName: keyof InsertEnrollment) {
                             label: $t('form.button.add'),
                             loading: seasonFormRef?.[0]?.isLoading(),
                         }"
-                        @submit="seasonFormRef?.[0]?.submit"
+                        @submit="seasonFormRef?.[0]?.submit()"
                     >
                         <SeasonAddForm ref="seasonFormRef" @success="handleSuccess('seasonId', $event)" />
                     </AppModal>
@@ -112,7 +138,7 @@ function showField(fieldName: keyof InsertEnrollment) {
                             label: $t('form.button.add'),
                             loading: courseFormRef?.[0]?.isLoading(),
                         }"
-                        @submit="courseFormRef?.[0]?.submit"
+                        @submit="courseFormRef?.[0]?.submit()"
                     >
                         <CourseAddForm ref="courseFormRef" @success="handleSuccess('courseId', $event)" />
                     </AppModal>
