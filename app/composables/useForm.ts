@@ -349,7 +349,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
             },
             {
                 title: $t('form.enrollment.add.group.payment_information'),
-                icon: 'i-lucide-credit-card',
+                icon: 'i-lucide-badge-euro',
                 fields: [
                     {
                         renderAs: 'input-number',

@@ -99,7 +99,7 @@ onMounted(async () => {
             </div>
             <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
                 <div class="space-y-4 sm:space-y-6 lg:col-span-8">
-                    <ItemCard :title="$t('card.payments.title')" icon="i-lucide-credit-card">
+                    <ItemCard :title="$t('card.payments.title')" icon="i-lucide-badge-euro">
                         <ItemCardRecord
                             :label="$t('card.payments.record.account_volley')"
                             :value="enrollment.volleyAccount ? formatPrice(enrollment.volleyAccount) : EMPTY_VALUE"

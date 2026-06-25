@@ -205,7 +205,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                     },
                     selectProps: {
                         placeholder: $t('form.field.missing_payment.placeholder'),
-                        icon: 'i-lucide-credit-card',
+                        icon: 'i-lucide-badge-euro',
                         items: missingPaymentItems,
                     },
                 },

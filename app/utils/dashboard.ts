@@ -77,7 +77,7 @@ function getTotalPaymentsCard(enrollments: SelectEnrollmentsWithRelations[], sea
     const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
 
     return {
-        icon: 'i-lucide-piggy-bank',
+        icon: 'i-lucide-badge-euro',
         iconColor: 'success',
         title: $t('card.dashboard.total_payments'),
         description: formatPrice(totalPayments.toString()),
@@ -112,7 +112,7 @@ function getCurrentSeasonMissingPayments(
     }, 0);
 
     return {
-        icon: 'i-lucide-piggy-bank',
+        icon: 'i-lucide-badge-euro',
         iconColor: 'warning',
         title: $t('card.dashboard.missing_payments'),
         description: missingPayment.toString(),

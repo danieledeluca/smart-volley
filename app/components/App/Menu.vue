@@ -33,7 +33,7 @@ const navigationMenuItems = computed(() => {
                     {
                         label: $t('menu.payments'),
                         to: '/dashboard/payments',
-                        icon: 'i-lucide-piggy-bank',
+                        icon: 'i-lucide-badge-euro',
                         active: route.path === '/dashboard/payments',
                     },
                     {
