@@ -379,6 +379,9 @@ export const translations = {
                 title: 'Nuova stagione',
             },
         },
+        tooltip: {
+            delete: 'Seleziona almeno una riga',
+        },
     },
     menu: {
         athletes: 'Atleti',

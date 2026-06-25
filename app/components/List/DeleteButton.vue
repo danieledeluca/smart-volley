@@ -20,13 +20,6 @@ const open = defineModel<boolean>('open', {
         v-model:open="open"
         :title
         :description
-        :buttonProps="{
-            variant: 'subtle',
-            color: 'error',
-            label: $t('form.button.delete'),
-            icon: 'i-lucide-trash',
-            disabled: isDisabled,
-        }"
         :submitButtonProps="{
             color: 'error',
             label: $t('form.button.delete'),
@@ -34,6 +27,17 @@ const open = defineModel<boolean>('open', {
         }"
         @submit="emit('submit')"
     >
+        <template #button>
+            <UTooltip :text="$t('form.tooltip.delete')" :disabled="!isDisabled">
+                <UButton
+                    variant="subtle"
+                    color="error"
+                    :label="$t('form.button.delete')"
+                    icon="i-lucide-trash"
+                    :disabled="isDisabled"
+                />
+            </UTooltip>
+        </template>
         <slot />
     </AppModal>
 </template>
