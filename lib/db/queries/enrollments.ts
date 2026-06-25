@@ -1,15 +1,22 @@
 import type { SQL } from 'drizzle-orm';
 
-import { and, desc, eq, gt, ilike, inArray, isNull, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, ilike, inArray, isNull, lte, or, sql } from 'drizzle-orm';
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
-import type { InsertEnrollment } from '../schema';
+import type { EnrollmentPaymentField, EnrollmentPaymentTypes, InsertEnrollment } from '../schema';
 
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
 import { uploadFile } from '../../storage';
 import { athlete, course, enrollment } from '../schema';
+
+type Payment = {
+    name: EnrollmentPaymentField;
+    amount: string | null;
+    date: string | null;
+    type: EnrollmentPaymentTypes[number] | null;
+};
 
 function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     const conditions: SQL[] = [];
@@ -34,14 +41,22 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
         conditions.push(isNull(enrollment[filters.missingPayment]));
     }
 
-    if (filters?.certificateStatus) {
+    if (filters?.certificateStatus && filters.certificateStatus.length > 0) {
         const certificateStatusConditions: Record<CertificateStatusEnum, SQL> = {
             missing: isNull(enrollment.certificateExpirationDate),
             expired: lte(enrollment.certificateExpirationDate, sql`CURRENT_DATE`),
             valid: gt(enrollment.certificateExpirationDate, sql`CURRENT_DATE`),
         };
 
-        conditions.push(certificateStatusConditions[filters.certificateStatus]);
+        const selectedCertificateStatusConditions = filters.certificateStatus.map(
+            (status) => certificateStatusConditions[status],
+        );
+
+        const certificateStatusCondition = or(...selectedCertificateStatusConditions);
+
+        if (certificateStatusCondition) {
+            conditions.push(certificateStatusCondition);
+        }
     }
 
     return and(...conditions);
@@ -101,6 +116,7 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
                 with: {
                     activity: {
                         columns: {
+                            key: true,
                             name: true,
                         },
                     },
@@ -144,10 +160,55 @@ export async function findEnrollment(enrollmentId: number) {
         return result;
     }
 
+    const payments: Payment[] = result.course.activity.key === 'volley'
+        ? [
+                {
+                    name: 'volleyAccount',
+                    amount: result.volleyAccount,
+                    date: result.volleyAccountDate,
+                    type: result.volleyAccountType,
+                },
+                {
+                    name: 'volleyBalance',
+                    amount: result.volleyBalance,
+                    date: result.volleyBalanceDate,
+                    type: result.volleyBalanceType,
+                },
+                {
+                    name: 'volleySecondBalance',
+                    amount: result.volleySecondBalance,
+                    date: result.volleySecondBalanceDate,
+                    type: result.volleySecondBalanceType,
+                },
+            ]
+        : result.course.activity.key === 'gymnastics'
+            ? [
+                    {
+                        name: 'gymnasticsFirstInstallment',
+                        amount: result.gymnasticsFirstInstallment,
+                        date: result.gymnasticsFirstInstallmentDate,
+                        type: result.gymnasticsFirstInstallmentType,
+                    },
+                    {
+                        name: 'gymnasticsSecondInstallment',
+                        amount: result.gymnasticsSecondInstallment,
+                        date: result.gymnasticsSecondInstallmentDate,
+                        type: result.gymnasticsSecondInstallmentType,
+                    },
+                    {
+                        name: 'gymnasticsThirdInstallment',
+                        amount: result.gymnasticsThirdInstallment,
+                        date: result.gymnasticsThirdInstallmentDate,
+                        type: result.gymnasticsThirdInstallmentType,
+                    },
+                ]
+            : [];
+
     const { certificateStorageKey, ...rest } = result;
 
     return {
         ...rest,
+        payments,
         activity: rest.course.activity,
         certificateFile: Boolean(certificateStorageKey),
     };

@@ -1,0 +1,1 @@
+ALTER TABLE "activity" ADD CONSTRAINT "activity_key_name_unique" UNIQUE("key","name");

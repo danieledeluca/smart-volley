@@ -1,15 +1,7 @@
+import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/db/schema';
 import z from 'zod';
 
 // Fields schema
-export const MissingPaymentEnum = z.enum([
-    'volleyAccount',
-    'volleyBalance',
-    'volleyBalanceSecondary',
-    'firstInstallment',
-    'secondInstallment',
-    'thirdInstallment',
-]);
-
 export const CertificateStatusEnum = z.enum(['valid', 'expired', 'missing']);
 
 // Forms schema
@@ -26,8 +18,10 @@ export const EnrollmentsFiltersSchema = z.object({
     seasonId: z.coerce.number().optional(),
     activityId: z.coerce.number().optional(),
     courseId: z.coerce.number().optional(),
-    missingPayment: MissingPaymentEnum.optional(),
-    certificateStatus: CertificateStatusEnum.optional(),
+    missingPayment: z.enum(ENROLLMENT_PAYMENT_FIELDS).optional(),
+    certificateStatus: z.union([CertificateStatusEnum, z.array(CertificateStatusEnum)])
+        .transform((value) => Array.isArray(value) ? value : [value])
+        .optional(),
 });
 
 export const MultipleDeleteSchema = z.object({
@@ -35,7 +29,6 @@ export const MultipleDeleteSchema = z.object({
 });
 
 // Schema types
-export type MissingPaymentEnum = z.infer<typeof MissingPaymentEnum>;
 export type CertificateStatusEnum = z.infer<typeof CertificateStatusEnum>;
 
 export type AthletesFiltersSchema = z.infer<typeof AthletesFiltersSchema>;

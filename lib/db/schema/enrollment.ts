@@ -1,7 +1,7 @@
 import type { SerializeObject } from 'nitropack';
 
 import { relations } from 'drizzle-orm';
-import { date, integer, numeric, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
+import { date, integer, numeric, pgEnum, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
@@ -14,17 +14,31 @@ import { athlete } from './athlete';
 import { course } from './course';
 import { season } from './season';
 
+export const enrollmentPaymentType = pgEnum('enrollment_payment_type', ['cash', 'bank_transfer']);
+
 export const enrollment = pgTable('enrollment', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     athleteId: integer().notNull().references(() => athlete.id),
     seasonId: integer().notNull().references(() => season.id),
     courseId: integer().notNull().references(() => course.id),
     volleyAccount: numeric({ precision: 10, scale: 2 }),
+    volleyAccountDate: date(),
+    volleyAccountType: enrollmentPaymentType(),
     volleyBalance: numeric({ precision: 10, scale: 2 }),
-    volleyBalanceSecondary: numeric({ precision: 10, scale: 2 }),
-    firstInstallment: numeric({ precision: 10, scale: 2 }),
-    secondInstallment: numeric({ precision: 10, scale: 2 }),
-    thirdInstallment: numeric({ precision: 10, scale: 2 }),
+    volleyBalanceDate: date(),
+    volleyBalanceType: enrollmentPaymentType(),
+    volleySecondBalance: numeric({ precision: 10, scale: 2 }),
+    volleySecondBalanceDate: date(),
+    volleySecondBalanceType: enrollmentPaymentType(),
+    gymnasticsFirstInstallment: numeric({ precision: 10, scale: 2 }),
+    gymnasticsFirstInstallmentDate: date(),
+    gymnasticsFirstInstallmentType: enrollmentPaymentType(),
+    gymnasticsSecondInstallment: numeric({ precision: 10, scale: 2 }),
+    gymnasticsSecondInstallmentDate: date(),
+    gymnasticsSecondInstallmentType: enrollmentPaymentType(),
+    gymnasticsThirdInstallment: numeric({ precision: 10, scale: 2 }),
+    gymnasticsThirdInstallmentDate: date(),
+    gymnasticsThirdInstallmentType: enrollmentPaymentType(),
     certificateExpirationDate: date(),
     certificateStorageKey: text(),
     createdAt: timestamp().notNull().defaultNow(),
@@ -51,18 +65,32 @@ export const enrollmentRelations = relations(enrollment, ({ one }) => {
     };
 });
 
-const NumericSchema = z.string().transform((value) => !Number(value) ? undefined : value).optional();
+const PaymentAmountSchema = z.string().transform((value) => !Number(value) ? undefined : value).optional();
+const PaymentDateSchema = z.string().optional();
+const PaymentTypeSchema = z.enum(enrollmentPaymentType.enumValues).optional();
 
 export const InsertEnrollment = createInsertSchema(enrollment, {
     athleteId: z.coerce.number($t('form.field.athlete_id.required')),
     seasonId: z.coerce.number($t('form.field.season_id.required')),
     courseId: z.coerce.number($t('form.field.course_id.required')),
-    volleyAccount: NumericSchema,
-    volleyBalance: NumericSchema,
-    volleyBalanceSecondary: NumericSchema,
-    firstInstallment: NumericSchema,
-    secondInstallment: NumericSchema,
-    thirdInstallment: NumericSchema,
+    volleyAccount: PaymentAmountSchema,
+    volleyAccountDate: PaymentDateSchema,
+    volleyAccountType: PaymentTypeSchema,
+    volleyBalance: PaymentAmountSchema,
+    volleyBalanceDate: PaymentDateSchema,
+    volleyBalanceType: PaymentTypeSchema,
+    volleySecondBalance: PaymentAmountSchema,
+    volleySecondBalanceDate: PaymentDateSchema,
+    volleySecondBalanceType: PaymentTypeSchema,
+    gymnasticsFirstInstallment: PaymentAmountSchema,
+    gymnasticsFirstInstallmentDate: PaymentDateSchema,
+    gymnasticsFirstInstallmentType: PaymentTypeSchema,
+    gymnasticsSecondInstallment: PaymentAmountSchema,
+    gymnasticsSecondInstallmentDate: PaymentDateSchema,
+    gymnasticsSecondInstallmentType: PaymentTypeSchema,
+    gymnasticsThirdInstallment: PaymentAmountSchema,
+    gymnasticsThirdInstallmentDate: PaymentDateSchema,
+    gymnasticsThirdInstallmentType: PaymentTypeSchema,
     certificateExpirationDate: z.string().optional(),
     certificateStorageKey: z.instanceof(File)
         .refine((file) => file.size <= FILE_MAX_SIZE, {
@@ -96,6 +124,18 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
         });
     }
 });
+
+export const ENROLLMENT_PAYMENT_FIELDS = [
+    'volleyAccount',
+    'volleyBalance',
+    'volleySecondBalance',
+    'gymnasticsFirstInstallment',
+    'gymnasticsSecondInstallment',
+    'gymnasticsThirdInstallment',
+] as const;
+
+export type EnrollmentPaymentField = typeof ENROLLMENT_PAYMENT_FIELDS[number];
+export type EnrollmentPaymentTypes = typeof enrollmentPaymentType.enumValues;
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;
 export type SelectEnrollmentsWithRelations = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;

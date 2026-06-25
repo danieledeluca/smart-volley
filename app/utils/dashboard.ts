@@ -1,13 +1,6 @@
 import type { ActivityKeys, SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
 
-const PAYMENT_FIELDS = [
-    'volleyAccount',
-    'volleyBalance',
-    'volleyBalanceSecondary',
-    'firstInstallment',
-    'secondInstallment',
-    'thirdInstallment',
-] as (keyof Partial<SelectEnrollmentsWithRelations>)[];
+import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/db/schema';
 
 const ACTIVITY_ICONS: Record<ActivityKeys[number], string> = {
     volley: 'i-lucide-volleyball',
@@ -41,7 +34,7 @@ function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
 
 function getTotalPayments(enrollments: SelectEnrollmentsWithRelations[]) {
     return enrollments.reduce((acc, enrollment) => {
-        const totalPayments = PAYMENT_FIELDS.reduce((sum, field) => {
+        const totalPayments = ENROLLMENT_PAYMENT_FIELDS.reduce((sum, field) => {
             return sum + (Number(enrollment[field] ?? 0));
         }, 0);
 
@@ -106,7 +99,17 @@ function getCurrentSeasonMissingPayments(
 ): DashboardCard {
     const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
     const missingPayment = currentSeasonEnrollments.reduce((acc, enrollment) => {
-        const missingPayments = PAYMENT_FIELDS.filter((field) => !enrollment[field]).length;
+        const missingPayments = ENROLLMENT_PAYMENT_FIELDS.filter((field) => {
+            if (field.startsWith('volley') && enrollment.course.activity.key === 'volley') {
+                return !enrollment[field];
+            }
+
+            if (field.startsWith('gymnastics') && enrollment.course.activity.key === 'gymnastics') {
+                return !enrollment[field];
+            }
+
+            return false;
+        }).length;
 
         return acc + missingPayments;
     }, 0);

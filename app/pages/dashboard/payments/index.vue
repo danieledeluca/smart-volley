@@ -12,10 +12,10 @@ useSeoMeta({
             'athlete',
             'volleyAccount',
             'volleyBalance',
-            'volleyBalanceSecondary',
-            'firstInstallment',
-            'secondInstallment',
-            'thirdInstallment',
+            'volleySecondBalance',
+            'gymnasticsFirstInstallment',
+            'gymnasticsSecondInstallment',
+            'gymnasticsThirdInstallment',
         ]"
     />
 </template>

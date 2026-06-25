@@ -18,3 +18,7 @@ export function formatPrice(price: string) {
 export function formatPhoneNumber(phoneNumber: string) {
     return phoneNumber.replace(/\D/g, '');
 }
+
+export function camelToSnakeCase(text: string) {
+    return text.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+}

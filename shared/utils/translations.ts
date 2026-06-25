@@ -59,12 +59,12 @@ export const translations = {
         },
         payments: {
             record: {
-                account_volley: 'Acconto volley',
-                first_installment: 'Prima rata',
-                second_installment: 'Seconda rata',
-                third_installment: 'Terza rata',
-                volley_balance: 'Saldo volley',
-                volley_balance_secondary: 'Saldo volley 2',
+                gymnastics_first_installment: 'Prima rata',
+                gymnastics_second_installment: 'Seconda rata',
+                gymnastics_third_installment: 'Terza rata',
+                volley_account: 'Acconto',
+                volley_balance: 'Saldo',
+                volley_second_balance: 'Secondo saldo',
             },
             title: 'Pagamenti',
         },
@@ -274,16 +274,24 @@ export const translations = {
                 },
                 label: 'Trascina il file qui',
             },
-            first_installment: {
-                label: 'Prima rata',
-                placeholder: 'Inserisci la prima rata',
-            },
             fiscal_code: {
                 duplicate: 'Il codice fiscale esiste già',
                 error: 'Il codice fiscale non è valido',
                 label: 'Codice fiscale',
                 placeholder: 'Inserisci il codice fiscale',
                 required: 'Il codice fiscale è obbligatorio',
+            },
+            gymnastics_first_installment: {
+                label: 'Prima rata',
+                placeholder: 'Inserisci la prima rata',
+            },
+            gymnastics_second_installment: {
+                label: 'Seconda rata',
+                placeholder: 'Inserisci la seconda rata',
+            },
+            gymnastics_third_installment: {
+                label: 'Terza rata',
+                placeholder: 'Inserisci la terza rata',
             },
             missing_payment: {
                 label: 'Pagamento mancante',
@@ -297,6 +305,17 @@ export const translations = {
             parent_id: {
                 not_found: 'Genitore non trovato',
                 placeholder: 'Seleziona un genitore',
+            },
+            payment_date: {
+                label: 'Data del pagamento',
+            },
+            payment_type: {
+                item: {
+                    bank_transfer: 'Bonifico',
+                    cash: 'Contanti',
+                },
+                label: 'Tipologia di pagamento',
+                placeholder: 'Seleziona una tipologia di pagamento',
             },
             phone_number: {
                 duplicate: 'Il numero di cellulare esiste già',
@@ -314,30 +333,22 @@ export const translations = {
                 placeholder: 'Seleziona una stagione',
                 required: 'La stagione è obbligatoria',
             },
-            second_installment: {
-                label: 'Seconda rata',
-                placeholder: 'Inserisci la seconda rata',
-            },
             start_year: {
                 label: 'Anno d\'inizio',
                 placeholder: 'Inserisci l\'anno d\'inizio',
                 required: 'L\'anno d\'inizio è obbligatorio',
             },
-            third_installment: {
-                label: 'Terza rata',
-                placeholder: 'Inserisci la terza rata',
-            },
             volley_account: {
-                label: 'Acconto volley',
-                placeholder: 'Inserisci l\'acconto volley',
+                label: 'Acconto',
+                placeholder: 'Inserisci l\'acconto',
             },
             volley_balance: {
-                label: 'Saldo volley',
-                placeholder: 'Inserisci il saldo volley',
+                label: 'Saldo',
+                placeholder: 'Inserisci il saldo',
             },
-            volley_balance_secondary: {
-                label: 'Saldo volley 2',
-                placeholder: 'Inserisci il saldo volley 2',
+            volley_second_balance: {
+                label: 'Secondo saldo',
+                placeholder: 'Inserisci il secondo saldo',
             },
         },
         filter: {
@@ -500,16 +511,20 @@ export const translations = {
             certificate_expiration_date: 'Scadenza certificato',
             course: 'Corso',
             email: 'Email',
-            first_installment: 'Prima rata',
+            gymnastics_first_installment: 'Prima rata',
+            gymnastics_second_installment: 'Seconda rata',
+            gymnastics_third_installment: 'Terza rata',
             id: 'ID',
             name: 'Nome',
+            payment_amount: 'Importo',
+            payment_date: 'Data',
+            payment_name: 'Nome',
+            payment_type: 'Tipologia',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',
-            second_installment: 'Seconda rata',
-            third_installment: 'Terza rata',
-            volley_account: 'Acconto volley',
-            volley_balance: 'Saldo volley',
-            volley_balance_secondary: 'Saldo volley 2',
+            volley_account: 'Acconto',
+            volley_balance: 'Saldo',
+            volley_second_balance: 'Secondo saldo',
         },
         pagination: 'Visualizzati {start}-{end} di {total}',
         row_selected: '{selected} di {total} righe selezionate',

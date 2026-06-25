@@ -3,6 +3,7 @@ import type {
     SelectAthletes,
     SelectAthleteWithRelations,
     SelectEnrollmentsWithRelations,
+    SelectEnrollmentWithRelations,
     SelectParents,
 } from '~~/lib/db/schema';
 
@@ -219,13 +220,22 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
         course: getCourseTableColumn(),
         volleyAccount: getPriceTableColum('volleyAccount', $t('table.column.volley_account')),
         volleyBalance: getPriceTableColum('volleyBalance', $t('table.column.volley_balance')),
-        volleyBalanceSecondary: getPriceTableColum(
-            'volleyBalanceSecondary',
-            $t('table.column.volley_balance_secondary'),
+        volleySecondBalance: getPriceTableColum(
+            'volleySecondBalance',
+            $t('table.column.volley_second_balance'),
         ),
-        firstInstallment: getPriceTableColum('firstInstallment', $t('table.column.first_installment')),
-        secondInstallment: getPriceTableColum('secondInstallment', $t('table.column.second_installment')),
-        thirdInstallment: getPriceTableColum('thirdInstallment', $t('table.column.third_installment')),
+        gymnasticsFirstInstallment: getPriceTableColum(
+            'gymnasticsFirstInstallment',
+            $t('table.column.gymnastics_first_installment'),
+        ),
+        gymnasticsSecondInstallment: getPriceTableColum(
+            'gymnasticsSecondInstallment',
+            $t('table.column.gymnastics_second_installment'),
+        ),
+        gymnasticsThirdInstallment: getPriceTableColum(
+            'gymnasticsThirdInstallment',
+            $t('table.column.gymnastics_third_installment'),
+        ),
         certificateExpirationDate: {
             accessorKey: 'certificate_expiration_date',
             header: ({ column }) => h(TableSortDropdown, {
@@ -245,6 +255,37 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
             header: $t('table.column.certificate_download_url'),
             cell: ({ row }) => row.original.certificateFile
                 ? h(CertificateDownloadButton, { enrollmentId: row.original.id })
+                : EMPTY_VALUE,
+        },
+    };
+
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+}
+
+export function getEnrollmentPaymentsTableColumns(
+    columns: (keyof SelectEnrollmentWithRelations['payments'][number])[],
+) {
+    const tableColumns: TableColumns<SelectEnrollmentWithRelations['payments'][number]> = {
+        name: {
+            accessorKey: 'name',
+            header: $t('table.column.payment_name'),
+            cell: ({ row }) => $t(`table.column.${camelToSnakeCase(row.original.name)}`),
+        },
+        amount: {
+            accessorKey: 'amount',
+            header: $t('table.column.payment_amount'),
+            cell: ({ row }) => row.original.amount ? formatPrice(row.original.amount) : EMPTY_VALUE,
+        },
+        date: {
+            accessorKey: 'date',
+            header: $t('table.column.payment_date'),
+            cell: ({ row }) => row.original.date ? formatDate(row.original.date) : EMPTY_VALUE,
+        },
+        type: {
+            accessorKey: 'type',
+            header: $t('table.column.payment_type'),
+            cell: ({ row }) => row.original.type
+                ? $t(`form.field.payment_type.item.${row.original.type}`)
                 : EMPTY_VALUE,
         },
     };

@@ -77,10 +77,9 @@ defineExpose({
             :loading="isLoading"
             :sticky="!showPagination"
             :virtualize="!showPagination"
-            class="rounded-md border border-accented **:[thead]:text-nowrap"
+            class="rounded-md border border-accented **:[thead]:bg-elevated **:[thead]:text-nowrap"
             :class="{
                 'rounded-b-none': showPagination || hasSelectColumn,
-                '**:[thead]:bg-elevated': showPagination,
                 '**:[thead]:bg-elevated/75': !showPagination && hasSelectColumn,
             }"
             @select="handleSelect"

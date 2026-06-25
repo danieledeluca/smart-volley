@@ -109,11 +109,7 @@ onMounted(async () => {
                         </ItemCardRecord>
                     </ItemCard>
 
-                    <ItemCard
-                        :title="$t('card.enrollments.title')"
-                        icon="i-lucide-history"
-                        class="**:data-[slot=body]:p-0 **:data-[slot=body]:*:grid-cols-1 **:data-[slot=root]:rounded-t-none"
-                    >
+                    <ItemCard :title="$t('card.enrollments.title')" icon="i-lucide-history">
                         <ListTable
                             :tableData="athlete.enrollments"
                             :tableColumns="enrollmentsTableColumns"

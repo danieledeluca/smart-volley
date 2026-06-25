@@ -13,6 +13,8 @@ const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollme
 
 useSeoMeta({ title });
 
+const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name', 'amount', 'date', 'type']);
+
 onMounted(async () => {
     await nextTick();
     enrollmentsStore.refreshCurrentEnrollment();
@@ -100,38 +102,7 @@ onMounted(async () => {
             <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
                 <div class="space-y-4 sm:space-y-6 lg:col-span-8">
                     <ItemCard :title="$t('card.payments.title')" icon="i-lucide-badge-euro">
-                        <ItemCardRecord
-                            :label="$t('card.payments.record.account_volley')"
-                            :value="enrollment.volleyAccount ? formatPrice(enrollment.volleyAccount) : EMPTY_VALUE"
-                        />
-                        <ItemCardRecord
-                            :label="$t('card.payments.record.volley_balance')"
-                            :value="enrollment.volleyBalance ? formatPrice(enrollment.volleyBalance) : EMPTY_VALUE"
-                        />
-                        <ItemCardRecord
-                            :label="$t('card.payments.record.volley_balance_secondary')"
-                            :value="enrollment.volleyBalanceSecondary
-                                ? formatPrice(enrollment.volleyBalanceSecondary)
-                                : EMPTY_VALUE"
-                        />
-                        <ItemCardRecord
-                            :label="$t('card.payments.record.first_installment')"
-                            :value="enrollment.firstInstallment
-                                ? formatPrice(enrollment.firstInstallment)
-                                : EMPTY_VALUE"
-                        />
-                        <ItemCardRecord
-                            :label="$t('card.payments.record.second_installment')"
-                            :value="enrollment.secondInstallment
-                                ? formatPrice(enrollment.secondInstallment)
-                                : EMPTY_VALUE"
-                        />
-                        <ItemCardRecord
-                            :label="$t('card.payments.record.third_installment')"
-                            :value="enrollment.thirdInstallment
-                                ? formatPrice(enrollment.thirdInstallment)
-                                : EMPTY_VALUE"
-                        />
+                        <ListTable :tableData="enrollment.payments" :tableColumns="enrollmentPaymentsTableColumns" />
                     </ItemCard>
 
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">

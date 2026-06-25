@@ -113,6 +113,20 @@
       "when": 1780842252206,
       "tag": "0015_acoustic_joystick",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1782408413073,
+      "tag": "0016_flippant_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1782409472949,
+      "tag": "0017_next_nomad",
+      "breakpoints": true
     }
   ]
 }

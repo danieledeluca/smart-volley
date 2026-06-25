@@ -1,4 +1,4 @@
-import type { InputNumberProps } from '@nuxt/ui';
+import type { InputNumberProps, RadioGroupItem, RadioGroupProps, SelectItem } from '@nuxt/ui';
 import type {
     InsertActivity,
     InsertAthlete,
@@ -9,7 +9,7 @@ import type {
 } from '~~/lib/db/schema';
 
 import { CalendarDate } from '@internationalized/date';
-import { activityKey } from '~~/lib/db/schema';
+import { activityKey, enrollmentPaymentType } from '~~/lib/db/schema';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '~~/lib/utils/constants';
 import { formatFileSize } from '~~/lib/utils/formatters';
 
@@ -60,11 +60,23 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
         seasonId: undefined,
         courseId: undefined,
         volleyAccount: undefined,
+        volleyAccountDate: undefined,
+        volleyAccountType: undefined,
         volleyBalance: undefined,
-        volleyBalanceSecondary: undefined,
-        firstInstallment: undefined,
-        secondInstallment: undefined,
-        thirdInstallment: undefined,
+        volleyBalanceDate: undefined,
+        volleyBalanceType: undefined,
+        volleySecondBalance: undefined,
+        volleySecondBalanceDate: undefined,
+        volleySecondBalanceType: undefined,
+        gymnasticsFirstInstallment: undefined,
+        gymnasticsFirstInstallmentDate: undefined,
+        gymnasticsFirstInstallmentType: undefined,
+        gymnasticsSecondInstallment: undefined,
+        gymnasticsSecondInstallmentDate: undefined,
+        gymnasticsSecondInstallmentType: undefined,
+        gymnasticsThirdInstallment: undefined,
+        gymnasticsThirdInstallmentDate: undefined,
+        gymnasticsThirdInstallmentType: undefined,
         certificateExpirationDate: undefined,
         certificateStorageKey: undefined,
     };
@@ -108,6 +120,21 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
             currency: 'EUR',
             currencyDisplay: 'code',
             currencySign: 'accounting',
+        },
+    };
+
+    const paymentTypeFieldProps: RadioGroupProps = {
+        items: enrollmentPaymentType.enumValues.map<RadioGroupItem>((type) => {
+            return {
+                label: $t(`form.field.payment_type.item.${type}`),
+                value: type,
+            };
+        }),
+        variant: 'table',
+        orientation: 'horizontal',
+        indicator: 'hidden',
+        ui: {
+            item: 'w-full',
         },
     };
 
@@ -365,6 +392,23 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         },
                     },
                     {
+                        renderAs: 'input-date',
+                        formFieldProps: {
+                            label: $t('form.field.payment_date.label'),
+                            name: 'volleyAccountDate',
+                        },
+                    },
+                    {
+                        renderAs: 'radio-group',
+                        formFieldProps: {
+                            label: $t('form.field.payment_type.label'),
+                            name: 'volleyAccountType',
+                        },
+                        radioGroupProps: {
+                            ...paymentTypeFieldProps,
+                        },
+                    },
+                    {
                         renderAs: 'input-number',
                         formFieldProps: {
                             label: $t('form.field.volley_balance.label'),
@@ -376,47 +420,132 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         },
                     },
                     {
-                        renderAs: 'input-number',
+                        renderAs: 'input-date',
                         formFieldProps: {
-                            label: $t('form.field.volley_balance_secondary.label'),
-                            name: 'volleyBalanceSecondary',
+                            label: $t('form.field.payment_date.label'),
+                            name: 'volleyBalanceDate',
                         },
-                        inputProps: {
-                            placeholder: $t('form.field.volley_balance_secondary.placeholder'),
-                            ...paymentFieldsProps,
+                    },
+                    {
+                        renderAs: 'radio-group',
+                        formFieldProps: {
+                            label: $t('form.field.payment_type.label'),
+                            name: 'volleyBalanceType',
+                        },
+                        radioGroupProps: {
+                            ...paymentTypeFieldProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
                         formFieldProps: {
-                            label: $t('form.field.first_installment.label'),
-                            name: 'firstInstallment',
+                            label: $t('form.field.volley_second_balance.label'),
+                            name: 'volleySecondBalance',
                         },
                         inputProps: {
-                            placeholder: $t('form.field.first_installment.placeholder'),
+                            placeholder: $t('form.field.volley_second_balance.placeholder'),
                             ...paymentFieldsProps,
+                        },
+                    },
+                    {
+                        renderAs: 'input-date',
+                        formFieldProps: {
+                            label: $t('form.field.payment_date.label'),
+                            name: 'volleySecondBalanceDate',
+                        },
+                    },
+                    {
+                        renderAs: 'radio-group',
+                        formFieldProps: {
+                            label: $t('form.field.payment_type.label'),
+                            name: 'volleySecondBalanceType',
+                        },
+                        radioGroupProps: {
+                            ...paymentTypeFieldProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
                         formFieldProps: {
-                            label: $t('form.field.second_installment.label'),
-                            name: 'secondInstallment',
+                            label: $t('form.field.gymnastics_first_installment.label'),
+                            name: 'gymnasticsFirstInstallment',
                         },
                         inputProps: {
-                            placeholder: $t('form.field.second_installment.placeholder'),
+                            placeholder: $t('form.field.gymnastics_first_installment.placeholder'),
                             ...paymentFieldsProps,
+                        },
+                    },
+                    {
+                        renderAs: 'input-date',
+                        formFieldProps: {
+                            label: $t('form.field.payment_date.label'),
+                            name: 'gymnasticsFirstInstallmentDate',
+                        },
+                    },
+                    {
+                        renderAs: 'radio-group',
+                        formFieldProps: {
+                            label: $t('form.field.payment_type.label'),
+                            name: 'gymnasticsFirstInstallmentType',
+                        },
+                        radioGroupProps: {
+                            ...paymentTypeFieldProps,
                         },
                     },
                     {
                         renderAs: 'input-number',
                         formFieldProps: {
-                            label: $t('form.field.third_installment.label'),
-                            name: 'thirdInstallment',
+                            label: $t('form.field.gymnastics_second_installment.label'),
+                            name: 'gymnasticsSecondInstallment',
                         },
                         inputProps: {
-                            placeholder: $t('form.field.third_installment.placeholder'),
+                            placeholder: $t('form.field.gymnastics_second_installment.placeholder'),
                             ...paymentFieldsProps,
+                        },
+                    },
+                    {
+                        renderAs: 'input-date',
+                        formFieldProps: {
+                            label: $t('form.field.payment_date.label'),
+                            name: 'gymnasticsSecondInstallmentDate',
+                        },
+                    },
+                    {
+                        renderAs: 'radio-group',
+                        formFieldProps: {
+                            label: $t('form.field.payment_type.label'),
+                            name: 'gymnasticsSecondInstallmentType',
+                        },
+                        radioGroupProps: {
+                            ...paymentTypeFieldProps,
+                        },
+                    },
+                    {
+                        renderAs: 'input-number',
+                        formFieldProps: {
+                            label: $t('form.field.gymnastics_third_installment.label'),
+                            name: 'gymnasticsThirdInstallment',
+                        },
+                        inputProps: {
+                            placeholder: $t('form.field.gymnastics_third_installment.placeholder'),
+                            ...paymentFieldsProps,
+                        },
+                    },
+                    {
+                        renderAs: 'input-date',
+                        formFieldProps: {
+                            label: $t('form.field.payment_date.label'),
+                            name: 'gymnasticsThirdInstallmentDate',
+                        },
+                    },
+                    {
+                        renderAs: 'radio-group',
+                        formFieldProps: {
+                            label: $t('form.field.payment_type.label'),
+                            name: 'gymnasticsThirdInstallmentType',
+                        },
+                        radioGroupProps: {
+                            ...paymentTypeFieldProps,
                         },
                     },
                 ],

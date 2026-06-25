@@ -1,11 +1,11 @@
 import type { CheckboxGroupItem, SelectItem } from '@nuxt/ui';
+import type { EnrollmentPaymentField } from '~~/lib/db/schema';
 import type { ParentsFiltersSchema } from '~~/shared/utils/zod-schema';
 
 import type {
     AthletesFiltersSchema,
     CertificateStatusEnum,
     EnrollmentsFiltersSchema,
-    MissingPaymentEnum,
 } from '#imports';
 
 type FiltersSchemas = {
@@ -64,7 +64,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const filterState = filtersStates[formType];
 
     // Filters fields
-    const missingPaymentItems: Array<SelectItem & { value: MissingPaymentEnum }> = [
+    const missingPaymentItems: Array<SelectItem & { value: EnrollmentPaymentField }> = [
         {
             label: $t('form.field.volley_account.label'),
             value: 'volleyAccount',
@@ -74,20 +74,20 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
             value: 'volleyBalance',
         },
         {
-            label: $t('form.field.volley_balance_secondary.label'),
-            value: 'volleyBalanceSecondary',
+            label: $t('form.field.volley_second_balance.label'),
+            value: 'volleySecondBalance',
         },
         {
-            label: $t('form.field.first_installment.label'),
-            value: 'firstInstallment',
+            label: $t('form.field.gymnastics_first_installment.label'),
+            value: 'gymnasticsFirstInstallment',
         },
         {
-            label: $t('form.field.second_installment.label'),
-            value: 'secondInstallment',
+            label: $t('form.field.gymnastics_second_installment.label'),
+            value: 'gymnasticsSecondInstallment',
         },
         {
-            label: $t('form.field.third_installment.label'),
-            value: 'thirdInstallment',
+            label: $t('form.field.gymnastics_third_installment.label'),
+            value: 'gymnasticsThirdInstallment',
         },
     ];
 
