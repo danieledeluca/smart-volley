@@ -1,6 +1,6 @@
 import type { ActivityKeys, SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
 
-import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/db/schema';
+import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/utils/constants';
 
 const ACTIVITY_ICONS: Record<ActivityKeys[number], string> = {
     volley: 'i-lucide-volleyball',

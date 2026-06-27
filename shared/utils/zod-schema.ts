@@ -1,4 +1,4 @@
-import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/db/schema';
+import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/utils/constants';
 import z from 'zod';
 
 // Fields schema

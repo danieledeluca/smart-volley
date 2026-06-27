@@ -114,7 +114,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
 
     const paymentFieldsProps: InputNumberProps = {
         step: 10,
-        min: 0,
+        min: 10,
         formatOptions: {
             style: 'currency',
             currency: 'EUR',

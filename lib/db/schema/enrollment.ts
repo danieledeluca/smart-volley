@@ -8,7 +8,7 @@ import z from 'zod';
 import type { findEnrollment, findEnrollments, updateEnrollment } from '../queries/enrollments';
 
 import { $t } from '../../../shared/utils/i18n';
-import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
+import { ENROLLMENT_PAYMENT_FIELDS, FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
 import { formatFileSize } from '../../utils/formatters';
 import { athlete } from './athlete';
 import { course } from './course';
@@ -105,34 +105,31 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     updatedAt: true,
     deletedAt: true,
 }).superRefine((data, ctx) => {
-    const hasCertificateExpirationDate = Boolean(data.certificateExpirationDate);
-    const hasCertificateStorageKey = Boolean(data.certificateStorageKey);
+    ENROLLMENT_PAYMENT_FIELDS.forEach((baseField) => {
+        const fields = [baseField, `${baseField}Date`, `${baseField}Type`] as const;
 
-    if (hasCertificateExpirationDate && !hasCertificateStorageKey) {
-        ctx.addIssue({
-            code: 'custom',
-            path: ['certificateStorageKey'],
-            message: $t('form.field.certificate_storage_key.required'),
-        });
-    }
+        const hasMissing = fields.some((field) => !data[field]);
+        const hasAtLeastOne = fields.some((field) => data[field]);
 
-    if (hasCertificateStorageKey && !hasCertificateExpirationDate) {
-        ctx.addIssue({
-            code: 'custom',
-            path: ['certificateExpirationDate'],
-            message: $t('form.field.certificate_expiration_date.required'),
+        if (!hasMissing || !hasAtLeastOne) {
+            return;
+        }
+
+        fields.forEach((field) => {
+            if (!data[field]) {
+                ctx.addIssue({
+                    code: 'custom',
+                    path: [field],
+                    message: field.endsWith('Date')
+                        ? $t('form.field.payment_date.required')
+                        : field.endsWith('Type')
+                            ? $t('form.field.payment_type.required')
+                            : $t(`form.field.${camelToSnakeCase(field)}.required`),
+                });
+            }
         });
-    }
+    });
 });
-
-export const ENROLLMENT_PAYMENT_FIELDS = [
-    'volleyAccount',
-    'volleyBalance',
-    'volleySecondBalance',
-    'gymnasticsFirstInstallment',
-    'gymnasticsSecondInstallment',
-    'gymnasticsThirdInstallment',
-] as const;
 
 export type EnrollmentPaymentField = typeof ENROLLMENT_PAYMENT_FIELDS[number];
 export type EnrollmentPaymentTypes = typeof enrollmentPaymentType.enumValues;
