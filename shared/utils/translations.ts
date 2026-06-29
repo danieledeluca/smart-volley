@@ -407,6 +407,9 @@ export const translations = {
         tooltip: {
             delete: 'Seleziona almeno una riga',
         },
+        warning: {
+            no_data: 'Nessun dato',
+        },
     },
     menu: {
         athletes: 'Atleti',

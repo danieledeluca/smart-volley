@@ -7,7 +7,7 @@ const { field, showDeleteButton = true } = defineProps<{
 const slots = defineSlots();
 const model = defineModel<T[keyof T]>();
 
-const showField = computed(() => {
+function showField(field: FormField<T>) {
     if (field.renderAs.startsWith('input')) {
         return true;
     }
@@ -25,11 +25,11 @@ const showField = computed(() => {
     }
 
     return false;
-});
+}
 </script>
 
 <template>
-    <div v-if="showField">
+    <div>
         <div class="flex items-end gap-2">
             <UFormField v-bind="field.formFieldProps" class="min-w-0 flex-1">
                 <UInput
@@ -55,22 +55,49 @@ const showField = computed(() => {
                     :fileUploadProps="field.fileUploadProps"
                     :buttonProps="field.buttonProps"
                 />
-                <UCheckboxGroup
-                    v-if="field.renderAs === 'checkbox-group'"
-                    v-model="model"
-                    v-bind="field.checkboxGroupProps"
-                />
-                <URadioGroup
-                    v-if="field.renderAs === 'radio-group'"
-                    v-model="model"
-                    v-bind="field.radioGroupProps"
-                />
-                <USelect
-                    v-if="field.renderAs === 'select'"
-                    v-model="model"
-                    v-bind="field.selectProps"
-                    class="w-full"
-                />
+                <template v-if="field.renderAs === 'checkbox-group'">
+                    <UCheckboxGroup
+                        v-if="showField(field)"
+                        v-model="model"
+                        v-bind="field.checkboxGroupProps"
+                    />
+                    <UAlert
+                        v-else
+                        variant="subtle"
+                        color="warning"
+                        :title="$t('form.warning.no_data')"
+                        icon="i-lucide-triangle-alert"
+                    />
+                </template>
+                <template v-if="field.renderAs === 'radio-group'">
+                    <URadioGroup
+                        v-if="showField(field)"
+                        v-model="model"
+                        v-bind="field.radioGroupProps"
+                    />
+                    <UAlert
+                        v-else
+                        variant="subtle"
+                        color="warning"
+                        :title="$t('form.warning.no_data')"
+                        icon="i-lucide-triangle-alert"
+                    />
+                </template>
+                <template v-if="field.renderAs === 'select'">
+                    <USelect
+                        v-if="showField(field)"
+                        v-model="model"
+                        v-bind="field.selectProps"
+                        class="w-full"
+                    />
+                    <UAlert
+                        v-else
+                        variant="subtle"
+                        color="warning"
+                        :title="$t('form.warning.no_data')"
+                        icon="i-lucide-triangle-alert"
+                    />
+                </template>
                 <USelectMenu
                     v-if="field.renderAs === 'select-menu'"
                     v-model="model"
