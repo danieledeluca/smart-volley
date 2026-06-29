@@ -157,6 +157,17 @@ async function main() {
     const courses: InsertCourse[] = [
         {
             name: 'M',
+            description: 'Minivolley',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'SM',
+            description: 'Super minivolley',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'U10',
+            description: 'Under 10',
             activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
@@ -165,8 +176,18 @@ async function main() {
             activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
+            name: 'U13',
+            description: 'Under 13',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
             name: 'U14',
             description: 'Under 14',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'U15',
+            description: 'Under 15',
             activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
@@ -181,6 +202,7 @@ async function main() {
         },
         {
             name: 'TB',
+            description: 'Total body',
             activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
@@ -190,10 +212,32 @@ async function main() {
         },
         {
             name: 'P',
+            description: 'Pilates',
             activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
         {
             name: 'D',
+            description: 'Ginnastica dolce',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'NW',
+            description: 'Nordic walking',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'PA',
+            description: 'Pallavolo amatoriale',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'CSG',
+            description: 'Corri salta gioca',
+            activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
+        },
+        {
+            name: 'A',
+            description: 'Atletica',
             activityId: insertedActivities[Math.floor(Math.random() * insertedActivities.length)].id,
         },
     ];
