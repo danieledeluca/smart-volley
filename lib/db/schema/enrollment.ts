@@ -7,6 +7,7 @@ import z from 'zod';
 
 import type { findEnrollment, findEnrollments, updateEnrollment } from '../queries/enrollments';
 
+import { camelToSnakeCase } from '../../../app/utils/formatters';
 import { $t } from '../../../shared/utils/i18n';
 import { ENROLLMENT_PAYMENT_FIELDS, FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
 import { formatFileSize } from '../../utils/formatters';

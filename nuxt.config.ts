@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     },
     css: ['~/assets/css/main.css'],
     typescript: {
-        typeCheck: false,
+        typeCheck: true,
     },
     vite: {
         optimizeDeps: {
