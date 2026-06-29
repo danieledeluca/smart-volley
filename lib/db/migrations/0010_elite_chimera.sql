@@ -1,1 +1,0 @@
-ALTER TABLE "athlete" RENAME COLUMN "birthday" TO "birthdate";

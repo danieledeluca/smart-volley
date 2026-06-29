@@ -1,1 +1,0 @@
-ALTER TABLE "enrollment" ALTER COLUMN "certificate_expiration_date" DROP NOT NULL;
