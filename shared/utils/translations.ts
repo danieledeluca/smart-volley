@@ -235,9 +235,11 @@ export const translations = {
                 placeholder: 'Inserisci la città',
                 required: 'La città è obbligatoria',
             },
-            course_description: {
-                label: 'Descrizione del corso',
-                placeholder: 'Inserisci la descrizione del corso',
+            course_code: {
+                duplicate: 'Il corso esiste già',
+                label: 'Codice del corso',
+                placeholder: 'Inserisci il codice del corso',
+                required: 'Il codice del corso è obbligatorio',
             },
             course_id: {
                 label: 'Corso',
@@ -246,10 +248,8 @@ export const translations = {
                 required: 'Il corso è obbligatorio',
             },
             course_name: {
-                duplicate: 'Il corso esiste già',
                 label: 'Nome del corso',
                 placeholder: 'Inserisci il nome del corso',
-                required: 'Il nome del corso è obbligatorio',
             },
             email: {
                 duplicate: 'L\'email esiste già',

@@ -40,9 +40,9 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
                 name: 'name',
                 message: $t('form.field.activity_name.duplicate'),
             },
-            course_name_unique: {
+            course_code_unique: {
                 name: 'name',
-                message: $t('form.field.course_name.duplicate'),
+                message: $t('form.field.course_code.duplicate'),
             },
         };
 

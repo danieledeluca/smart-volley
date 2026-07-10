@@ -1,5 +1,5 @@
 {
-  "id": "37e45649-58d6-46bc-98a5-d92675a59790",
+  "id": "4c1c27e8-c61f-4763-ad4a-d465adebdf8c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -670,14 +670,14 @@
             "cycle": false
           }
         },
-        "name": {
-          "name": "name",
+        "code": {
+          "name": "code",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "description": {
-          "name": "description",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -721,11 +721,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "course_name_unique": {
-          "name": "course_name_unique",
+        "course_code_unique": {
+          "name": "course_code_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "name"
+            "code"
           ]
         }
       },

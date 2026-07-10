@@ -86,7 +86,7 @@ onMounted(async () => {
                             <UBadge
                                 variant="soft"
                                 color="neutral"
-                                :label="`${enrollment.activity.name} (${enrollment.course.name})`"
+                                :label="`${enrollment.activity.name} (${enrollment.course.code})`"
                             />
                         </span>
                     </template>
@@ -133,8 +133,8 @@ onMounted(async () => {
                         />
                         <ItemCardRecord
                             :label="$t('card.sport.record.course')"
-                            :value="`${enrollment.course.name} ${enrollment.course.description
-                                ? `- ${enrollment.course.description}`
+                            :value="`${enrollment.course.code} ${enrollment.course.name
+                                ? `- ${enrollment.course.name}`
                                 : ''}`"
                         />
                     </ItemCard>

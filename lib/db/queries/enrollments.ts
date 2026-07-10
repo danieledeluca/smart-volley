@@ -110,8 +110,8 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
             },
             course: {
                 columns: {
+                    code: true,
                     name: true,
-                    description: true,
                 },
                 with: {
                     activity: {

@@ -92,8 +92,8 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
     };
 
     const courseInitialState: Partial<InsertCourse> = {
+        code: undefined,
         name: undefined,
-        description: undefined,
         activityId: undefined,
     };
 
@@ -657,22 +657,22 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                     {
                         renderAs: 'input',
                         formFieldProps: {
-                            label: $t('form.field.course_name.label'),
-                            name: 'name',
+                            label: $t('form.field.course_code.label'),
+                            name: 'code',
                             required: true,
                         },
                         inputProps: {
-                            placeholder: $t('form.field.course_name.placeholder'),
+                            placeholder: $t('form.field.course_code.placeholder'),
                         },
                     },
                     {
                         renderAs: 'input',
                         formFieldProps: {
-                            label: $t('form.field.course_description.label'),
-                            name: 'description',
+                            label: $t('form.field.course_name.label'),
+                            name: 'name',
                         },
                         inputProps: {
-                            placeholder: $t('form.field.course_description.placeholder'),
+                            placeholder: $t('form.field.course_name.placeholder'),
                         },
                     },
 
