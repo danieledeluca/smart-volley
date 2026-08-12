@@ -1,25 +1,25 @@
+/* eslint-disable style/max-len */
 export default defineAppConfig({
     ui: {
-        button: {
+        formField: {
             slots: {
-                base: 'disabled:opacity-50',
+                root: 'group/form-field',
+            },
+        },
+        input: {
+            slots: {
+                base: 'group-has-data-[slot=error]/form-field:ring-error! group-has-data-[slot=error]/form-field:focus-visible:outline-error/25',
             },
         },
         inputDate: {
             slots: {
-                base: 'has-[+[data-slot="error"]]:ring-error',
+                base: 'group-has-data-[slot=error]/form-field:ring-error! group-has-data-[slot=error]/form-field:has-focus-visible:outline-error/25!',
                 trailing: 'pe-1!',
-            },
-        },
-        inputNumber: {
-            slots: {
-                root: '[&:has(+[data-slot="error"])_[data-slot="base"]]:ring-error',
             },
         },
         fileUpload: {
             slots: {
-                root: 'has-[+[data-slot="error"]]:**:ring-error',
-                base: 'ring ring-inset ring-accented border-none!',
+                base: 'ring ring-accented border-none! group-has-data-[slot=error]/form-field:ring-error',
             },
         },
         modal: {

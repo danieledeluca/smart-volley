@@ -35,6 +35,12 @@ type InputFileField = {
     buttonProps?: Omit<ButtonProps, 'label' | 'icon'>;
 };
 
+type InputAddressAutocomplete = {
+    renderAs: 'input-address';
+    inputProps?: Omit<InputProps, 'modelValue' | 'defaultValue'>;
+    autocompleteOptions?: google.maps.places.AutocompleteOptions;
+};
+
 type CheckboxGroupField = {
     renderAs: 'checkbox-group';
     singleSelection?: boolean;
@@ -63,6 +69,7 @@ export type FormField<T> = {
     | InputNumberField
     | InputDateField
     | InputFileField
+    | InputAddressAutocomplete
     | CheckboxGroupField
     | RadioGroupField
     | SelectField
@@ -81,4 +88,15 @@ export type DashboardCard = {
     description: string;
     badgeLabel?: string;
     badgeColor?: BadgeProps['color'];
+};
+
+export type ParsedAddress = {
+    street?: string;
+    postalCode?: string;
+    city?: string;
+    province?: string;
+    region?: string;
+    country: string;
+    formattedAddress: string;
+    placeId: string;
 };

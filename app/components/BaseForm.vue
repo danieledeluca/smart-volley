@@ -68,6 +68,7 @@ defineExpose({
         :schema
         :state
         class="grid gap-8"
+        autocomplete="off"
         @submit="handleSubmit"
     >
         <slot />

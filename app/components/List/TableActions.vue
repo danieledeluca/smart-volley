@@ -14,6 +14,7 @@ const emit = defineEmits<{
     deleteClose: [];
     edit: [];
     editClose: [];
+    interactOutside: [event: Event];
 }>();
 
 const openDelete = defineModel<boolean>('openDelete', {
@@ -75,6 +76,7 @@ const dropDownItems: DropdownMenuItem[] = [
         }"
         @submit="emit('edit')"
         @close="emit('editClose')"
+        @interactOutside="(event) => emit('interactOutside', event)"
     >
         <slot name="edit" />
     </AppSlideover>

@@ -13,6 +13,7 @@ const emit = defineEmits<{
     submit: [];
     cancel: [];
     close: [];
+    interactOutside: [event: Event];
 }>();
 
 const open = defineModel<boolean>('open', {
@@ -31,6 +32,9 @@ function handleCancel() {
         v-model:open="open"
         :title
         :description
+        :content="{
+            onInteractOutside: (event) => emit('interactOutside', event),
+        }"
         @after:leave="emit('close')"
     >
         <slot name="button">

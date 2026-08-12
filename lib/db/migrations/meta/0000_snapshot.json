@@ -1,5 +1,5 @@
 {
-  "id": "4c1c27e8-c61f-4763-ad4a-d465adebdf8c",
+  "id": "d711c079-2be7-4318-b527-e836b158b84f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -117,8 +117,44 @@
           "primaryKey": false,
           "notNull": true
         },
-        "birthplace": {
-          "name": "birthplace",
+        "birthplace_postal_code": {
+          "name": "birthplace_postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "birthplace_city": {
+          "name": "birthplace_city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "birthplace_province": {
+          "name": "birthplace_province",
+          "type": "char(2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "birthplace_region": {
+          "name": "birthplace_region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "birthplace_country": {
+          "name": "birthplace_country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "birthplace_formatted_address": {
+          "name": "birthplace_formatted_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "birthplace_place_id": {
+          "name": "birthplace_place_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -129,14 +165,50 @@
           "primaryKey": false,
           "notNull": true
         },
-        "city": {
-          "name": "city",
+        "address_street": {
+          "name": "address_street",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "address": {
-          "name": "address",
+        "address_postal_code": {
+          "name": "address_postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_city": {
+          "name": "address_city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_province": {
+          "name": "address_province",
+          "type": "char(2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_region": {
+          "name": "address_region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_country": {
+          "name": "address_country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_formatted_address": {
+          "name": "address_formatted_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_place_id": {
+          "name": "address_place_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true

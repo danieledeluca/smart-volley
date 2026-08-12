@@ -1,2 +1,27 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+/* Google Place Autocomplete */
+.pac-container {
+    @apply pointer-events-auto mt-2.5 rounded-md border-none bg-default shadow-sm ring ring-default after:hidden;
+}
+
+.pac-item {
+    @apply border-t-accented p-3 leading-none text-default/50 first:border-none hover:bg-elevated/50;
+}
+
+.pac-item-selected {
+    @apply bg-elevated/50;
+}
+
+.pac-icon {
+    @apply hidden;
+}
+
+.pac-item-query {
+    @apply text-default;
+}
+
+.gm-err-autocomplete {
+    @apply pl-2.5 bg-none!;
+}

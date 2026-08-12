@@ -95,7 +95,17 @@ onMounted(async () => {
                             :label="$t('card.athlete.record.birthdate')"
                             :value="formatDate(athlete.birthdate)"
                         />
-                        <ItemCardRecord :label="$t('card.athlete.record.birthplace')" :value="athlete.birthplace" />
+                        <ItemCardRecord
+                            :label="$t('card.athlete.record.birthplace')"
+                            :value="athlete.birthplaceFormattedAddress"
+                        >
+                            <template #actions>
+                                <CopyButton
+                                    :label="$t('card.athlete.record.birthplace')"
+                                    :value="athlete.birthplaceFormattedAddress"
+                                />
+                            </template>
+                        </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.athlete.record.fiscal_code')"
                             :value="athlete.fiscalCode"
@@ -120,8 +130,17 @@ onMounted(async () => {
                 </div>
                 <div class="space-y-4 sm:space-y-6 lg:col-span-4">
                     <ItemCard :title="$t('card.address_contacts.title')" icon="i-lucide-notebook">
-                        <ItemCardRecord :label="$t('card.address_contacts.record.city')" :value="athlete.city" />
-                        <ItemCardRecord :label="$t('card.address_contacts.record.address')" :value="athlete.address" />
+                        <ItemCardRecord
+                            :label="$t('card.address_contacts.record.address')"
+                            :value="athlete.addressFormattedAddress"
+                        >
+                            <template #actions>
+                                <CopyButton
+                                    :label="$t('card.address_contacts.record.address')"
+                                    :value="athlete.addressFormattedAddress"
+                                />
+                            </template>
+                        </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.address_contacts.record.phone_number')"
                             :value="athlete.phoneNumber"

@@ -6,13 +6,13 @@ const { title, icon } = defineProps<{
 </script>
 
 <template>
-    <div>
+    <fieldset>
         <div v-if="title && icon" class="mb-4 flex items-center gap-3 border-b border-b-accented pb-2 text-xl">
-            <UButton variant="soft" :icon="icon" />
+            <UButton variant="soft" :icon="icon" tabindex="-1" />
             <div>{{ title }}</div>
         </div>
         <div class="space-y-4">
             <slot />
         </div>
-    </div>
+    </fieldset>
 </template>

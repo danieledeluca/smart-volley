@@ -12,7 +12,12 @@ const {
 <template>
     <div class="rounded-lg bg-elevated/50 p-4 ring ring-default sm:p-6">
         <div class="relative">
-            <UButton variant="soft" :color="iconColor" :icon />
+            <UButton
+                variant="soft"
+                :color="iconColor"
+                :icon
+                tabindex="-1"
+            />
             <div class="mt-6 text-sm text-muted uppercase">
                 {{ title }}
             </div>

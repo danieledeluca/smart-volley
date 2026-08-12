@@ -41,7 +41,6 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
         birthdate: undefined,
         birthplace: undefined,
         fiscalCode: undefined,
-        city: undefined,
         address: undefined,
         phoneNumber: undefined,
         email: undefined,
@@ -170,7 +169,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         },
                     },
                     {
-                        renderAs: 'input',
+                        renderAs: 'input-address',
                         formFieldProps: {
                             label: $t('form.field.birthplace.label'),
                             name: 'birthplace',
@@ -178,6 +177,9 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         },
                         inputProps: {
                             placeholder: $t('form.field.birthplace.placeholder'),
+                        },
+                        autocompleteOptions: {
+                            types: ['(regions)'],
                         },
                     },
                     {
@@ -198,18 +200,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                 icon: 'i-lucide-notebook',
                 fields: [
                     {
-                        renderAs: 'input',
-                        formFieldProps: {
-                            label: $t('form.field.city.label'),
-                            name: 'city',
-                            required: true,
-                        },
-                        inputProps: {
-                            placeholder: $t('form.field.city.placeholder'),
-                        },
-                    },
-                    {
-                        renderAs: 'input',
+                        renderAs: 'input-address',
                         formFieldProps: {
                             label: $t('form.field.address.label'),
                             name: 'address',
@@ -217,6 +208,9 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         },
                         inputProps: {
                             placeholder: $t('form.field.address.placeholder'),
+                        },
+                        autocompleteOptions: {
+                            types: ['address'],
                         },
                     },
                     {

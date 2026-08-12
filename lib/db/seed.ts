@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 // @ts-check
 import { Faker, it } from '@faker-js/faker';
+import crypto from 'node:crypto';
 
 import type {
     InsertActivity,
@@ -27,10 +28,9 @@ function createRandomUser() {
     return {
         name: faker.person.fullName(),
         birthdate: faker.date.birthdate({ mode: 'age', min: 10, max: 65 }).toISOString().split('T')[0],
-        birthplace: faker.location.city(),
+        birthplace: generateBirthplace(),
         fiscalCode: generateFiscalCode(),
-        city: faker.location.city(),
-        address: faker.location.streetAddress(),
+        address: generateAddress(),
         phoneNumber: formatPhoneNumber(faker.phone.number({ style: 'international' })),
         email: faker.internet.email().toLowerCase(),
     };
@@ -38,6 +38,46 @@ function createRandomUser() {
 
 function generateUsers(count: number) {
     return faker.helpers.multiple(createRandomUser, { count });
+}
+
+function generateBirthplace() {
+    const postalCode = faker.location.zipCode();
+    const province = faker.location.state({ abbreviated: true });
+    const city = faker.location.city();
+    const region = faker.location.state();
+    const country = faker.location.country();
+    const formattedAddress = [postalCode, province, city, region, country].filter(String).join(', ');
+
+    return {
+        postalCode,
+        province,
+        city,
+        region,
+        country,
+        formattedAddress,
+        placeId: crypto.randomUUID(),
+    };
+}
+
+function generateAddress() {
+    const street = faker.location.streetAddress();
+    const postalCode = faker.location.zipCode();
+    const province = faker.location.state({ abbreviated: true });
+    const city = faker.location.city();
+    const region = faker.location.state();
+    const country = faker.location.country();
+    const formattedAddress = [street, postalCode, province, city, region, country].filter(String).join(', ');
+
+    return {
+        street,
+        postalCode,
+        province,
+        city,
+        region,
+        country,
+        formattedAddress,
+        placeId: crypto.randomUUID(),
+    };
 }
 
 function generateFiscalCode() {
@@ -254,13 +294,12 @@ async function main() {
     console.log('Parents inserted successfully');
 
     // Athletes
-    const athletes: InsertAthlete[] = generateUsers(200).map((user) => {
+    const athletes = generateUsers(200).map<InsertAthlete>((user) => {
         return {
             name: user.name,
             birthdate: user.birthdate,
             birthplace: user.birthplace,
             fiscalCode: user.fiscalCode,
-            city: user.city,
             address: user.address,
             phoneNumber: maybe(() => user.phoneNumber),
             email: maybe(() => user.email),
@@ -268,7 +307,27 @@ async function main() {
         };
     });
 
-    const insertedAthletes = await db.insert(athlete).values(athletes).returning();
+    const insertedAthletes = await db.insert(athlete).values(athletes.map((athlete) => {
+        const { birthplace, address, ...rest } = athlete;
+        return {
+            ...rest,
+            birthplacePostalCode: athlete.birthplace.postalCode,
+            birthplaceCity: athlete.birthplace.city,
+            birthplaceProvince: athlete.birthplace.province,
+            birthplaceRegion: athlete.birthplace.region,
+            birthplaceCountry: athlete.birthplace.country,
+            birthplaceFormattedAddress: athlete.birthplace.formattedAddress,
+            birthplacePlaceId: athlete.birthplace.placeId,
+            addressStreet: athlete.address.street,
+            addressPostalCode: athlete.address.postalCode,
+            addressCity: athlete.address.city,
+            addressProvince: athlete.address.province,
+            addressRegion: athlete.address.region,
+            addressCountry: athlete.address.country,
+            addressFormattedAddress: athlete.address.formattedAddress,
+            addressPlaceId: athlete.address.placeId,
+        };
+    })).returning();
     console.log('Athletes inserted successfully');
 
     // Enrollments

@@ -9,7 +9,7 @@ const { title, icon } = defineProps<{
     <UCard variant="subtle" class="@container has-[table]:**:data-[slot=body]:p-0 has-[table]:**:data-[slot=body]:*:grid-cols-1 has-[table]:**:data-[slot=root]:rounded-t-none">
         <template #header>
             <h2 class="flex items-center gap-4 text-xl">
-                <UButton variant="soft" :icon="icon" />
+                <UButton variant="soft" :icon="icon" tabindex="-1" />
                 <span>{{ title }}</span>
             </h2>
         </template>

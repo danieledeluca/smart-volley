@@ -30,6 +30,15 @@ if (canEdit.value) {
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ athleteId: row.id })));
 }
 
+function handleInteractOutside(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Inside Google Place Autocomplete
+    if (target.closest('.pac-container')) {
+        event.preventDefault();
+    }
+}
+
 async function handleFiltersUpdate() {
     await athletesStore.refreshAthletes();
 
@@ -58,6 +67,7 @@ function handelDeleteSuccess() {
                     loading: athleteAddFormRef?.isLoading(),
                 }"
                 @submit="athleteAddFormRef?.submit"
+                @interactOutside="handleInteractOutside"
             >
                 <AthleteAddForm ref="athleteAddFormRef" />
             </AppSlideover>

@@ -23,6 +23,15 @@ const openModal = reactive<Partial<Record<keyof InsertEnrollment, boolean>>>({
     courseId: false,
 });
 
+function handleInteractOutside(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Inside Google Place Autocomplete
+    if (target.closest('.pac-container')) {
+        event.preventDefault();
+    }
+}
+
 function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnrollment[K]) {
     openModal[key] = false;
     state.value[key] = id;
@@ -99,6 +108,7 @@ watch(selectedCourse, (newSelectedCourse) => {
                             loading: athleteFormRef?.[0]?.isLoading(),
                         }"
                         @submit="athleteFormRef?.[0]?.submit()"
+                        @interactOutside="handleInteractOutside"
                     >
                         <AthleteAddForm ref="athleteFormRef" @success="handleSuccess('athleteId', $event)" />
                     </AppModal>

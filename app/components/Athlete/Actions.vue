@@ -22,6 +22,15 @@ const isLoading = computed(() => {
     return Boolean(athleteEditFormRef.value?.isLoading()) || Boolean(athleteDeleteFormRef.value?.isLoading());
 });
 
+function handleInteractOutside(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Inside Google Place Autocomplete
+    if (target.closest('.pac-container')) {
+        event.preventDefault();
+    }
+}
+
 function handleDeleteSuccess() {
     openDelete.value = false;
 
@@ -49,6 +58,7 @@ function handleEditSuccess(id?: number) {
         @deleteClose="emit('deleteClose')"
         @edit="athleteEditFormRef?.submit"
         @editClose="emit('editClose', updatedAthleteId)"
+        @interactOutside="handleInteractOutside"
     >
         <template #delete>
             <AthleteDeleteForm ref="athleteDeleteFormRef" :athleteId @success="handleDeleteSuccess" />

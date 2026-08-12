@@ -88,7 +88,7 @@ watchEffect(() => {
         <template v-else-if="enrollments && enrollments.length > 0">
             <template v-for="(data, activity, index) in dashboardCards" :key="activity">
                 <h2 class="flex items-center gap-4 text-2xl">
-                    <UButton variant="soft" :icon="data.icon" />
+                    <UButton variant="soft" :icon="data.icon" tabindex="-1" />
                     <span>{{ data.title }}</span>
                 </h2>
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">

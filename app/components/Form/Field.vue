@@ -37,6 +37,7 @@ function showField(field: FormField<T>) {
                     v-model="model"
                     v-bind="field.inputProps"
                     class="w-full"
+                    role="presentation"
                 />
                 <FormFieldNumber
                     v-if="field.renderAs === 'input-number'"
@@ -54,6 +55,12 @@ function showField(field: FormField<T>) {
                     v-model="model"
                     :fileUploadProps="field.fileUploadProps"
                     :buttonProps="field.buttonProps"
+                />
+                <FormFieldAddress
+                    v-if="field.renderAs === 'input-address'"
+                    v-model="model"
+                    :inputProps="field.inputProps"
+                    :autocompleteOptions="field.autocompleteOptions"
                 />
                 <template v-if="field.renderAs === 'checkbox-group'">
                     <UCheckboxGroup

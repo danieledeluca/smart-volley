@@ -1,4 +1,4 @@
-import './lib/env';
+import env from './lib/env';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -15,6 +15,11 @@ export default defineNuxtConfig({
     css: ['~/assets/css/main.css'],
     typescript: {
         typeCheck: true,
+        tsConfig: {
+            compilerOptions: {
+                types: ['google.maps'],
+            },
+        },
     },
     vite: {
         optimizeDeps: {
@@ -36,6 +41,11 @@ export default defineNuxtConfig({
     routeRules: {
         '/dashboard/**': {
             appLayout: 'dashboard',
+        },
+    },
+    runtimeConfig: {
+        public: {
+            googleMapsApiKey: env.GOOGLE_MAPS_API_KEY,
         },
     },
 });

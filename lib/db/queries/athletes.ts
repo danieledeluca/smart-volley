@@ -7,6 +7,31 @@ import type { InsertAthlete } from '../schema';
 import db from '..';
 import { athlete, enrollment } from '../schema';
 
+function mapBirthplaceToColumns(birthplace: InsertAthlete['birthplace']) {
+    return {
+        birthplacePostalCode: birthplace.postalCode || null,
+        birthplaceCity: birthplace.city || null,
+        birthplaceProvince: birthplace.province || null,
+        birthplaceRegion: birthplace.region || null,
+        birthplaceCountry: birthplace.country,
+        birthplaceFormattedAddress: birthplace.formattedAddress,
+        birthplacePlaceId: birthplace.placeId,
+    };
+}
+
+function mapAddressToColumns(address: InsertAthlete['address']) {
+    return {
+        addressStreet: address.street,
+        addressPostalCode: address.postalCode,
+        addressCity: address.city,
+        addressProvince: address.province,
+        addressRegion: address.region,
+        addressCountry: address.country,
+        addressFormattedAddress: address.formattedAddress,
+        addressPlaceId: address.placeId,
+    };
+}
+
 export async function findAthletes(athleteName?: string) {
     return await db.query.athlete.findMany({
         where: and(
@@ -66,16 +91,34 @@ export async function findAthlete(athleteId: number) {
 }
 
 export async function insertAthlete(data: InsertAthlete) {
+    const { birthplace, address, phoneNumber = null, email = null, parentId = null, ...rest } = data;
+
     const [created] = await db.insert(athlete)
-        .values(data)
+        .values({
+            ...rest,
+            ...mapBirthplaceToColumns(birthplace),
+            ...mapAddressToColumns(address),
+            phoneNumber,
+            email,
+            parentId,
+        })
         .returning();
 
     return created;
 }
 
 export async function updateAthlete(data: InsertAthlete, athleteId: number) {
+    const { birthplace, address, phoneNumber = null, email = null, parentId = null, ...rest } = data;
+
     const [updated] = await db.update(athlete)
-        .set(data)
+        .set({
+            ...rest,
+            ...mapBirthplaceToColumns(birthplace),
+            ...mapAddressToColumns(address),
+            phoneNumber,
+            email,
+            parentId,
+        })
         .where(eq(athlete.id, athleteId))
         .returning();
 

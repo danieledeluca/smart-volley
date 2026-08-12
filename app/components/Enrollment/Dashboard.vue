@@ -59,7 +59,7 @@ function handelDeleteSuccess() {
                     label: $t('form.button.add'),
                     loading: enrollmentFormRef?.isLoading(),
                 }"
-                @submit="enrollmentFormRef?.submit()"
+                @submit="enrollmentFormRef?.submit"
             >
                 <EnrollmentAddForm ref="enrollmentFormRef" />
             </AppSlideover>
