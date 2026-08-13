@@ -5,7 +5,7 @@ export const translations = {
             admin: 'Admin',
             manager: 'Gestore',
             viewer: 'Osservatore',
-            waiting: 'In attesa',
+            waiting: 'In attesa...',
         },
         sign_out: 'Esci',
         sing_in: {
@@ -489,6 +489,10 @@ export const translations = {
                 },
             },
             hero: {
+                button: {
+                    dashboard: 'Dashboard',
+                    waiting: 'In attesa di approvazione',
+                },
                 description: 'Smart Volley è la piattaforma digitale della società Vis et Virtus, pensata per semplificare la gestione degli atleti iscritti, tenere traccia delle iscrizioni e dei pagamenti, e monitorare la validità dei certificati medici.',
                 head_line: 'Vis et Virtus',
                 title: 'Smart Volley',

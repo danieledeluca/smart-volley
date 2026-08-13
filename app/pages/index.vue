@@ -35,10 +35,18 @@ const features: PageFeatureProps[] = [
             />
             <UButton
                 v-else-if="canView"
-                label="Dashboard"
+                :label="$t('page.home.hero.button.dashboard')"
                 to="/dashboard"
                 icon="i-lucide-layout-dashboard"
                 size="xl"
+            />
+            <UButton
+                v-else
+                :label="$t('page.home.hero.button.waiting')"
+                variant="soft"
+                color="neutral"
+                size="xl"
+                :loading="true"
             />
         </template>
     </UPageHero>
