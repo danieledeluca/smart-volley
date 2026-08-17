@@ -6,10 +6,9 @@ import type {
     SelectEnrollmentWithRelations,
     SelectParents,
 } from '~~/lib/db/schema';
+import type { ComponentProps } from 'vue-component-type-helpers';
 
 import UCheckbox from '@nuxt/ui/components/Checkbox.vue';
-
-import type { ComponentProps } from '#build/types/layouts';
 
 import User from '~/components/App/User.vue';
 import CertificateDate from '~/components/Certificate/Date.vue';
@@ -136,7 +135,7 @@ export function getActionsTableColumn<T extends { id: number }, C extends Compon
 ): TableColumn<T> {
     return {
         id: 'actions',
-        cell: ({ row }) => h(component, props?.(row.original)),
+        cell: ({ row }) => h(component, props(row.original)),
         meta: {
             class: {
                 td: 'text-right',
