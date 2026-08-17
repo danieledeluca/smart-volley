@@ -41,7 +41,7 @@ export const translations = {
         dashboard: {
             enrollments: 'Iscrizioni',
             expiring_certificates: 'Certificati in scadenza',
-            missing_payments: 'Pagamenti mancanti',
+            payments: 'Pagamenti',
             total_enrollments: 'Totale iscrizioni',
             total_payments: 'Totale pagamenti',
         },

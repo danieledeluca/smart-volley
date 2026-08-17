@@ -13,11 +13,11 @@ const season = ref<number>();
 
 const currentSeason = computed(() => seasons.value?.find((_season) => _season.id === season.value));
 const dashboardCards = computed(() => {
-    if (!enrollments.value || !currentSeason.value) {
+    if (!enrollments.value || !seasons.value || !currentSeason.value) {
         return [];
     }
 
-    return getDashboardCards(enrollments.value, currentSeason.value);
+    return getDashboardCards(enrollments.value, seasons.value, currentSeason.value);
 });
 
 const formField = computed<FormField<{ seasonId?: number }>>(() => {
@@ -58,11 +58,11 @@ watchEffect(() => {
                 <USkeleton class="h-8 w-full max-w-24" />
             </div>
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
                 <USkeleton class="size-8 h-40 w-full md:col-span-2" />
                 <USkeleton class="size-8 h-40 w-full md:col-span-2" />
-                <USkeleton class="size-8 h-40 w-full sm:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full sm:col-span-2 md:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
             </div>
             <div>
                 <USkeleton class="h-1 w-full" />
@@ -72,11 +72,11 @@ watchEffect(() => {
                 <USkeleton class="h-8 w-full max-w-24" />
             </div>
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
                 <USkeleton class="size-8 h-40 w-full md:col-span-2" />
                 <USkeleton class="size-8 h-40 w-full md:col-span-2" />
-                <USkeleton class="size-8 h-40 w-full sm:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full sm:col-span-2 md:col-span-2" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
             </div>
         </template>
         <UAlert
@@ -97,9 +97,9 @@ watchEffect(() => {
                         :key="card.title"
                         v-bind="card"
                         :class="{
-                            'md:col-span-3': cardIndex === 0 || cardIndex === 1,
-                            'md:col-span-2': cardIndex === 2 || cardIndex === 3,
-                            'sm:col-span-2': cardIndex === 4,
+                            'md:col-span-2': cardIndex === 0 || cardIndex === 1 || cardIndex === 2,
+                            'md:col-span-3': cardIndex === 3 || cardIndex === 4,
+                            'sm:col-span-2': cardIndex === 2,
                         }"
                     />
                 </div>

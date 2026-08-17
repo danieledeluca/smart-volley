@@ -42,7 +42,34 @@ function getTotalPayments(enrollments: SelectEnrollmentsWithRelations[]) {
     }, 0);
 }
 
-function getTotalEnrollmentsCard(enrollments: SelectEnrollmentsWithRelations[], season: SelectSeasons): DashboardCard {
+function getTotalEnrollmentsCard(
+    enrollments: SelectEnrollmentsWithRelations[],
+    seasons: SelectSeasons[],
+): DashboardCard {
+    return {
+        icon: 'i-lucide-list',
+        title: $t('card.dashboard.total_enrollments'),
+        description: enrollments.length.toString(),
+        badgeLabel: `${seasons.at(-1)?.startYear}/${seasons[0]?.endYear}`,
+    };
+}
+
+function getTotalPaymentsCard(enrollments: SelectEnrollmentsWithRelations[], seasons: SelectSeasons[]): DashboardCard {
+    const totalPayments = getTotalPayments(enrollments);
+
+    return {
+        icon: 'i-lucide-badge-euro',
+        iconColor: 'success',
+        title: $t('card.dashboard.total_payments'),
+        description: formatPrice(totalPayments.toString()),
+        badgeLabel: `${seasons.at(-1)?.startYear}/${seasons[0]?.endYear}`,
+    };
+}
+
+function getCurrentSeasonEnrollmentsCard(
+    enrollments: SelectEnrollmentsWithRelations[],
+    season: SelectSeasons,
+): DashboardCard {
     const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
     const lastSeasonEnrollments = getLastSeasonEnrollments(enrollments, season);
 
@@ -51,18 +78,20 @@ function getTotalEnrollmentsCard(enrollments: SelectEnrollmentsWithRelations[], 
 
     return {
         icon: 'i-lucide-list',
-        title: $t('card.dashboard.total_enrollments'),
-        description: enrollments.length.toString(),
+        title: $t('card.dashboard.enrollments'),
+        description: currentSeasonEnrollments.length.toString(),
         badgeLabel,
         badgeColor: badgeColorValue > 0 ? 'success' : 'error',
     };
 }
 
-function getTotalPaymentsCard(enrollments: SelectEnrollmentsWithRelations[], season: SelectSeasons): DashboardCard {
+function getCurrentSeasonPaymentsCard(
+    enrollments: SelectEnrollmentsWithRelations[],
+    season: SelectSeasons,
+): DashboardCard {
     const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
     const lastSeasonEnrollments = getLastSeasonEnrollments(enrollments, season);
 
-    const totalPayments = getTotalPayments(enrollments);
     const currentSeasonPayments = getTotalPayments(currentSeasonEnrollments);
     const lastSeasonPayments = getTotalPayments(lastSeasonEnrollments);
 
@@ -72,58 +101,14 @@ function getTotalPaymentsCard(enrollments: SelectEnrollmentsWithRelations[], sea
     return {
         icon: 'i-lucide-badge-euro',
         iconColor: 'success',
-        title: $t('card.dashboard.total_payments'),
-        description: formatPrice(totalPayments.toString()),
+        title: $t('card.dashboard.payments'),
+        description: formatPrice(currentSeasonPayments.toString()),
         badgeLabel,
         badgeColor: badgeColorValue > 0 ? 'success' : 'error',
     };
 }
 
-function getCurrentSeasonEnrollmentsCard(
-    enrollments: SelectEnrollmentsWithRelations[],
-    season: SelectSeasons,
-): DashboardCard {
-    const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
-
-    return {
-        icon: 'i-lucide-list',
-        title: $t('card.dashboard.enrollments'),
-        description: currentSeasonEnrollments.length.toString(),
-        badgeLabel: `${season.startYear}/${season.endYear}`,
-    };
-}
-
-function getCurrentSeasonMissingPayments(
-    enrollments: SelectEnrollmentsWithRelations[],
-    season: SelectSeasons,
-): DashboardCard {
-    const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
-    const missingPayment = currentSeasonEnrollments.reduce((acc, enrollment) => {
-        const missingPayments = ENROLLMENT_PAYMENT_FIELDS.filter((field) => {
-            if (field.startsWith('volley') && enrollment.course.activity.key === 'volley') {
-                return !enrollment[field];
-            }
-
-            if (field.startsWith('gymnastics') && enrollment.course.activity.key === 'gymnastics') {
-                return !enrollment[field];
-            }
-
-            return false;
-        }).length;
-
-        return acc + missingPayments;
-    }, 0);
-
-    return {
-        icon: 'i-lucide-badge-euro',
-        iconColor: 'warning',
-        title: $t('card.dashboard.missing_payments'),
-        description: missingPayment.toString(),
-        badgeLabel: `${season.startYear}/${season.endYear}`,
-    };
-}
-
-function getCurrentSeasonExpiringCertificate(
+function getCurrentSeasonExpiringCertificateCard(
     enrollments: SelectEnrollmentsWithRelations[],
     season: SelectSeasons,
 ): DashboardCard {
@@ -147,22 +132,25 @@ function getCurrentSeasonExpiringCertificate(
         iconColor: 'error',
         title: $t('card.dashboard.expiring_certificates'),
         description: expiringCertificate.toString(),
-        badgeLabel: `${season.startYear}/${season.endYear}`,
     };
 }
 
-export function getDashboardCards(enrollments: SelectEnrollmentsWithRelations[], season: SelectSeasons) {
+export function getDashboardCards(
+    enrollments: SelectEnrollmentsWithRelations[],
+    seasons: SelectSeasons[],
+    season: SelectSeasons,
+) {
     return Object.fromEntries(Object.entries(Object.groupBy(enrollments, (enrollment) => enrollment.activity.key))
         .map(([activity, enrollments]) => {
             return [activity, {
                 icon: ACTIVITY_ICONS[activity as ActivityKeys[number]] || DEFAULT_ACTIVITY_ICON,
-                title: enrollments?.[0]?.activity.name || '',
-                cards: enrollments && [
-                    getTotalEnrollmentsCard(enrollments, season),
-                    getTotalPaymentsCard(enrollments, season),
+                title: enrollments[0]?.activity.name || '',
+                cards: [
                     getCurrentSeasonEnrollmentsCard(enrollments, season),
-                    getCurrentSeasonMissingPayments(enrollments, season),
-                    getCurrentSeasonExpiringCertificate(enrollments, season),
+                    getCurrentSeasonPaymentsCard(enrollments, season),
+                    getCurrentSeasonExpiringCertificateCard(enrollments, season),
+                    getTotalEnrollmentsCard(enrollments, seasons),
+                    getTotalPaymentsCard(enrollments, seasons),
                 ],
             }];
         }),
