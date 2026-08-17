@@ -107,7 +107,7 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     deletedAt: true,
 }).superRefine((data, ctx) => {
     ENROLLMENT_PAYMENT_FIELDS.forEach((baseField) => {
-        const fields = [baseField, `${baseField}Date`, `${baseField}Type`] as const;
+        const fields = [baseField, `${baseField}Type`] as const;
 
         const hasMissing = fields.some((field) => !data[field]);
         const hasAtLeastOne = fields.some((field) => data[field]);
@@ -121,11 +121,9 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
                 ctx.addIssue({
                     code: 'custom',
                     path: [field],
-                    message: field.endsWith('Date')
-                        ? $t('form.field.payment_date.required')
-                        : field.endsWith('Type')
-                            ? $t('form.field.payment_type.required')
-                            : $t(`form.field.${camelToSnakeCase(field)}.required`),
+                    message: field.endsWith('Type')
+                        ? $t('form.field.payment_type.required')
+                        : $t(`form.field.${camelToSnakeCase(field)}.required`),
                 });
             }
         });

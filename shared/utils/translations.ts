@@ -309,7 +309,6 @@ export const translations = {
             },
             payment_date: {
                 label: 'Data del pagamento',
-                required: 'La data del pagamento è obbligatoria',
             },
             payment_type: {
                 item: {
