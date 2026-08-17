@@ -7,7 +7,8 @@ export const ENROLLMENT_PAYMENT_FIELDS = [
     'gymnasticsThirdInstallment',
 ] as const;
 
-export const FISCAL_CODE_REGEX = /^[A-Z]{6}\d{2}[A-EHLMPR-T](\d{2})[A-Z]\d{3}[A-Z]$/;
+// eslint-disable-next-line style/max-len
+export const FISCAL_CODE_REGEX = /^[A-Z]{6}\d{2}[A-EHLMPRST](?:0[1-9]|[12]\d|3[01]|4[1-9]|5\d|6\d|7[01])[A-Z]\d{3}[A-Z]$/;
 export const PHONE_NUMBER_REGEX = /^\+?\d{7,15}$/;
 
 export const KILOBYTE = 1024;
