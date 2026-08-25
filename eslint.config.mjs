@@ -17,7 +17,7 @@ export default withNuxt(
                 semi: true,
                 braceStyle: '1tbs',
             },
-            ignores: ['**/*.md', '**/migrations/*'],
+            ignores: ['**/migrations/*'],
         },
         {
             ...eslintPluginBetterTailwindcss.configs.recommended,

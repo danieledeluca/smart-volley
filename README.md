@@ -15,16 +15,16 @@ Management platform for the **Vis et Virtus** sports club. Handles athlete regis
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Nuxt 4, Vue 3, TypeScript |
-| UI | Nuxt UI, Tailwind CSS |
-| State | Pinia |
-| Tables | TanStack Vue Table |
-| Auth | Better Auth (Google OAuth) |
-| Database | PostgreSQL (Neon), Drizzle ORM |
-| Storage | Cloudflare R2 (S3-compatible) |
-| Validation | Zod |
+| Layer      | Technology                     |
+| ---------- | ------------------------------ |
+| Framework  | Nuxt 4, Vue 3, TypeScript      |
+| UI         | Nuxt UI, Tailwind CSS          |
+| State      | Pinia                          |
+| Tables     | TanStack Vue Table             |
+| Auth       | Better Auth (Google OAuth)     |
+| Database   | PostgreSQL (Neon), Drizzle ORM |
+| Storage    | Cloudflare R2 (S3-compatible)  |
+| Validation | Zod                            |
 
 ## Getting Started
 
@@ -54,35 +54,35 @@ npm run dev        # Start dev server
 
 ### Environment Variables
 
-| Variable | Description |
-|---|---|
-| `NODE_ENV` | `development` or `production` |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `BETTER_AUTH_SECRET` | Secret for session signing |
-| `BETTER_AUTH_URL` | App base URL (e.g. `http://localhost:3000`) |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
-| `GOOGLE_MAPS_API_KEY` | Google Maps/Places API key |
-| `R2_ACCOUNT_ID` | Cloudflare account ID |
-| `R2_ACCESS_KEY_ID` | R2 access key |
-| `R2_SECRET_ACCESS_KEY` | R2 secret key |
-| `R2_BUCKET_NAME` | R2 bucket name |
+| Variable               | Description                                 |
+| ---------------------- | ------------------------------------------- |
+| `NODE_ENV`             | `development` or `production`               |
+| `DATABASE_URL`         | PostgreSQL connection string                |
+| `BETTER_AUTH_SECRET`   | Secret for session signing                  |
+| `BETTER_AUTH_URL`      | App base URL (e.g. `http://localhost:3000`) |
+| `GOOGLE_CLIENT_ID`     | Google OAuth client ID                      |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret                  |
+| `GOOGLE_MAPS_API_KEY`  | Google Maps/Places API key                  |
+| `R2_ACCOUNT_ID`        | Cloudflare account ID                       |
+| `R2_ACCESS_KEY_ID`     | R2 access key                               |
+| `R2_SECRET_ACCESS_KEY` | R2 secret key                               |
+| `R2_BUCKET_NAME`       | R2 bucket name                              |
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start dev server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-| `npm run lint:fix` | Run ESLint with auto-fix |
-| `npm run typecheck` | TypeScript type checking |
+| Command               | Description                      |
+| --------------------- | -------------------------------- |
+| `npm run dev`         | Start dev server                 |
+| `npm run build`       | Production build                 |
+| `npm run preview`     | Preview production build         |
+| `npm run lint`        | Run ESLint                       |
+| `npm run lint:fix`    | Run ESLint with auto-fix         |
+| `npm run typecheck`   | TypeScript type checking         |
 | `npm run db:generate` | Generate Drizzle migration files |
-| `npm run db:migrate` | Run pending migrations |
-| `npm run db:push` | Push schema directly to database |
-| `npm run db:studio` | Open Drizzle Kit Studio |
-| `npm run db:seed` | Seed database with sample data |
+| `npm run db:migrate`  | Run pending migrations           |
+| `npm run db:push`     | Push schema directly to database |
+| `npm run db:studio`   | Open Drizzle Kit Studio          |
+| `npm run db:seed`     | Seed database with sample data   |
 
 ## License
 
