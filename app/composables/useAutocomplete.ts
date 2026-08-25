@@ -22,6 +22,7 @@ export function useAutocomplete(
 
         let street = '';
         let streetNumber = '';
+        let subPremise = '';
         let locality = '';
         let city = '';
 
@@ -33,6 +34,10 @@ export function useAutocomplete(
 
                 case 'street_number':
                     streetNumber = component.long_name;
+                    break;
+
+                case 'subpremise':
+                    subPremise = component.long_name;
                     break;
 
                 case 'postal_code':
@@ -64,6 +69,7 @@ export function useAutocomplete(
             }
         });
 
+        streetNumber = [streetNumber, subPremise].filter(String).join('/');
         parsedAddress.street = [street, streetNumber].filter(String).join(', ') || undefined;
         parsedAddress.city = locality || city || undefined;
 

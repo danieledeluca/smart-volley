@@ -1,5 +1,5 @@
 {
-  "id": "d711c079-2be7-4318-b527-e836b158b84f",
+  "id": "48229f72-f586-4ede-aa55-b9bfa4099381",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -131,7 +131,7 @@
         },
         "birthplace_province": {
           "name": "birthplace_province",
-          "type": "char(2)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -185,7 +185,7 @@
         },
         "address_province": {
           "name": "address_province",
-          "type": "char(2)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
