@@ -4,9 +4,9 @@ import type { DrizzleError } from 'drizzle-orm';
 import type { H3Event } from 'h3';
 
 export default function sendDbError(event: H3Event, error: DrizzleError) {
-    const cause = error.cause as NeonDbError;
+    const cause = error.cause as NeonDbError | undefined;
 
-    if (cause.code === '23505') {
+    if (cause?.code === '23505') {
         const constrainMessages: Record<string, FormError> = {
             athlete_fiscalCode_unique: {
                 name: 'fiscalCode',
@@ -62,7 +62,7 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
         }));
     }
 
-    if (cause.code === '23503') {
+    if (cause?.code === '23503') {
         const constraintMessages: Record<string, FormError> = {
             athlete_parent_id_parent_id_fk: {
                 name: 'parentId',
