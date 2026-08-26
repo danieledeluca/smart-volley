@@ -282,17 +282,14 @@ export const translations = {
             gymnastics_first_installment: {
                 label: 'Prima rata',
                 placeholder: 'Inserisci la prima rata',
-                required: 'La prima rata è obbligatoria',
             },
             gymnastics_second_installment: {
                 label: 'Seconda rata',
                 placeholder: 'Inserisci la seconda rata',
-                required: 'La seconda rata è obbligatoria',
             },
             gymnastics_third_installment: {
                 label: 'Terza rata',
                 placeholder: 'Inserisci la terza rata',
-                required: 'La terza rata è obbligatoria',
             },
             missing_payment: {
                 label: 'Pagamento mancante',
@@ -317,7 +314,6 @@ export const translations = {
                 },
                 label: 'Tipologia di pagamento',
                 placeholder: 'Seleziona una tipologia di pagamento',
-                required: 'La tipologia di pagamento è obbligatoria',
             },
             phone_number: {
                 duplicate: 'Il numero di cellulare esiste già',
@@ -343,17 +339,14 @@ export const translations = {
             volley_account: {
                 label: 'Acconto',
                 placeholder: 'Inserisci l\'acconto',
-                required: 'L\'acconto è obbligatorio',
             },
             volley_balance: {
                 label: 'Saldo',
                 placeholder: 'Inserisci il saldo',
-                required: 'Il saldo è obbligatorio',
             },
             volley_second_balance: {
                 label: 'Secondo saldo',
                 placeholder: 'Inserisci il secondo saldo',
-                required: 'Il secondo saldo è obbligatorio',
             },
         },
         filter: {
