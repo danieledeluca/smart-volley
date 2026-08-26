@@ -5,11 +5,11 @@ import { date, integer, numeric, pgEnum, pgTable, text, timestamp, unique } from
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
+import type { ENROLLMENT_PAYMENT_FIELDS } from '../../utils/constants';
 import type { findEnrollment, findEnrollments, updateEnrollment } from '../queries/enrollments';
 
-import { camelToSnakeCase } from '../../../app/utils/formatters';
 import { $t } from '../../../shared/utils/i18n';
-import { ENROLLMENT_PAYMENT_FIELDS, FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
+import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
 import { formatFileSize } from '../../utils/formatters';
 import { athlete } from './athlete';
 import { course } from './course';
@@ -105,29 +105,6 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
-}).superRefine((data, ctx) => {
-    ENROLLMENT_PAYMENT_FIELDS.forEach((baseField) => {
-        const fields = [baseField, `${baseField}Type`] as const;
-
-        const hasMissing = fields.some((field) => !data[field]);
-        const hasAtLeastOne = fields.some((field) => data[field]);
-
-        if (!hasMissing || !hasAtLeastOne) {
-            return;
-        }
-
-        fields.forEach((field) => {
-            if (!data[field]) {
-                ctx.addIssue({
-                    code: 'custom',
-                    path: [field],
-                    message: field.endsWith('Type')
-                        ? $t('form.field.payment_type.required')
-                        : $t(`form.field.${camelToSnakeCase(field)}.required`),
-                });
-            }
-        });
-    });
 });
 
 export type EnrollmentPaymentField = typeof ENROLLMENT_PAYMENT_FIELDS[number];
