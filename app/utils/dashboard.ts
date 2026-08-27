@@ -112,12 +112,13 @@ function getCurrentSeasonExpiringCertificateCard(
     enrollments: SelectEnrollmentsWithRelations[],
     season: SelectSeasons,
 ): DashboardCard {
+    const currentDate = new Date();
+    const thirtyDaysFromNow = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+
     const expiringCertificate = getCurrentSeasonEnrollments(enrollments, season)
         .reduce((acc, enrollment) => {
             if (enrollment.certificateExpirationDate) {
                 const expirationDate = new Date(enrollment.certificateExpirationDate);
-                const currentDate = new Date();
-                const thirtyDaysFromNow = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
                 if (expirationDate > currentDate && expirationDate <= thirtyDaysFromNow) {
                     acc++;
@@ -132,6 +133,9 @@ function getCurrentSeasonExpiringCertificateCard(
         iconColor: 'error',
         title: $t('card.dashboard.expiring_certificates'),
         description: expiringCertificate.toString(),
+        badgeLabel: formatDate(thirtyDaysFromNow.toString(), {
+            dateStyle: 'medium',
+        }),
     };
 }
 

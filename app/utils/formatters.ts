@@ -1,6 +1,7 @@
-export function formatDate(date: string) {
+export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
     const formatter = new Intl.DateTimeFormat('it-IT', {
         dateStyle: 'long',
+        ...options,
     });
 
     return formatter.format(new Date(date));
