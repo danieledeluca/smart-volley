@@ -19,9 +19,10 @@ export const EnrollmentsFiltersSchema = z.object({
     activityId: z.coerce.number().optional(),
     courseId: z.coerce.number().optional(),
     missingPayment: z.enum(ENROLLMENT_PAYMENT_FIELDS).optional(),
-    certificateStatus: z.union([CertificateStatusEnum, z.array(CertificateStatusEnum)])
-        .transform((value) => Array.isArray(value) ? value : [value])
-        .optional(),
+    certificateStatus: z.preprocess(
+        (value) => typeof value === 'string' ? value.split(',') : value,
+        z.array(CertificateStatusEnum).optional(),
+    ),
 });
 
 export const MultipleDeleteSchema = z.object({

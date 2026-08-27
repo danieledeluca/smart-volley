@@ -41,7 +41,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         watch: false,
     });
 
-    effect(() => {
+    watchEffect(() => {
         if (!route.name?.toString().startsWith('dashboard-athletes')) {
             clearFilters();
         }

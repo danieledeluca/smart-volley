@@ -1,12 +1,8 @@
 import type { CheckboxGroupItem, SelectItem } from '@nuxt/ui';
 import type { EnrollmentPaymentField } from '~~/lib/db/schema';
-import type { ParentsFiltersSchema } from '~~/shared/utils/zod-schema';
+import type { CertificateStatusEnum } from '~~/shared/utils/zod-schema';
 
-import type {
-    AthletesFiltersSchema,
-    CertificateStatusEnum,
-    EnrollmentsFiltersSchema,
-} from '#imports';
+import { AthletesFiltersSchema, EnrollmentsFiltersSchema, ParentsFiltersSchema } from '~~/shared/utils/zod-schema';
 
 type FiltersSchemas = {
     athlete: AthletesFiltersSchema;
@@ -15,6 +11,7 @@ type FiltersSchemas = {
 };
 
 export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
+    const route = useRoute();
     const athletesStore = useAthletesStore();
     const parentsStore = useParentsStore();
     const enrollmentsStore = useEnrollmentsStore();
@@ -26,14 +23,16 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const { activitiesItems } = storeToRefs(activitiesStore);
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
-    // Initial states
-    const athletesFiltersInitialState: AthletesFiltersSchema = {
+    // Empty states
+    const athletesFiltersEmptyState: AthletesFiltersSchema = {
         name: undefined,
     };
-    const parentsFiltersInitialState: ParentsFiltersSchema = {
+
+    const parentsFiltersEmptyState: ParentsFiltersSchema = {
         name: undefined,
     };
-    const enrollmentsFiltersInitialState: EnrollmentsFiltersSchema = {
+
+    const enrollmentsFiltersEmptyState: EnrollmentsFiltersSchema = {
         athleteName: undefined,
         seasonId: undefined,
         activityId: undefined,
@@ -42,13 +41,29 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         certificateStatus: undefined,
     };
 
-    const initialStates: { [K in keyof FiltersSchemas]: FiltersSchemas[K] } = {
-        athlete: athletesFiltersInitialState,
-        parent: parentsFiltersInitialState,
-        enrollment: enrollmentsFiltersInitialState,
+    const emptyStates: { [K in keyof FiltersSchemas]: FiltersSchemas[K] } = {
+        athlete: athletesFiltersEmptyState,
+        parent: parentsFiltersEmptyState,
+        enrollment: enrollmentsFiltersEmptyState,
     };
 
-    const initialState = initialStates[formType];
+    const emptyState = emptyStates[formType];
+
+    // Initial states
+    const athletesResult = AthletesFiltersSchema.safeParse(route.query);
+    const athletesFiltersInitialState = athletesResult.success
+        ? { ...athletesResult.data }
+        : athletesFiltersEmptyState;
+
+    const parentsResult = ParentsFiltersSchema.safeParse(route.query);
+    const parentsFiltersInitialState = parentsResult.success
+        ? { ...parentsResult.data }
+        : parentsFiltersEmptyState;
+
+    const enrollmentsResult = EnrollmentsFiltersSchema.safeParse(route.query);
+    const enrollmentsFiltersInitialState = enrollmentsResult.success
+        ? { ...enrollmentsResult.data }
+        : enrollmentsFiltersEmptyState;
 
     // States
     const athletesFiltersState = ref({ ...athletesFiltersInitialState });
@@ -242,7 +257,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
 
     // Clear filters
     const clearFilters = () => {
-        filterState.value = { ...initialState };
+        filterState.value = { ...emptyState };
 
         const refreshLists: { [K in keyof FiltersSchemas]: () => void } = {
             athlete: athletesStore.refreshAthletes,

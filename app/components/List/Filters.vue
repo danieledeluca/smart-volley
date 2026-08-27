@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T extends z.ZodType">
 import type { CheckboxGroupItem, InferInput, RadioGroupItem, SelectItem, SelectMenuItem } from '@nuxt/ui';
+import type { LocationQueryRaw } from 'vue-router';
 import type z from 'zod';
 
 import { useDebounceFn } from '@vueuse/core';
@@ -19,6 +20,9 @@ const emit = defineEmits<{
 const state = defineModel<Partial<FormData>>('state', {
     required: true,
 });
+
+const router = useRouter();
+const route = useRoute();
 
 const openFilters = ref(false);
 
@@ -88,20 +92,42 @@ const activeFilters = computed(() => {
     }, []);
 });
 
-const debouncedUpdate = useDebounceFn(() => {
+function syncQueryParams() {
+    const query: LocationQueryRaw = {
+        ...route.query,
+    };
+
+    fields.flat().forEach((field) => query[field.formFieldProps.name] = getQueryParamValue(field));
+
+    router.replace({ query });
     emit('update');
-}, 500);
+}
+
+const debouncedSync = useDebounceFn(() => syncQueryParams(), 500);
+
+function getQueryParamValue(field: FormField<FormData>) {
+    const value = state.value[field.formFieldProps.name];
+
+    if (field.renderAs === 'checkbox-group') {
+        return value
+            ? (value as string[]).length > 0
+                    ? (value as string[]).join(',')
+                    : undefined
+            : undefined;
+    }
+
+    return value !== undefined && value !== '' ? String(value) : undefined;
+}
 
 function handleFormFieldUpdate(field: FormField<FormData>) {
-    if (field.debounce) {
-        debouncedUpdate();
-    } else {
-        emit('update');
-    }
+    field.debounce ? debouncedSync() : syncQueryParams();
 }
 
 function handleClear() {
     if (activeFilters.value.length > 0) {
+        debouncedSync.cancel();
+
+        router.replace({ query: undefined });
         emit('clear');
     }
 }
@@ -109,8 +135,12 @@ function handleClear() {
 function handleRemoveFilter(filterName: keyof FormData) {
     state.value[filterName] = undefined;
 
-    emit('update');
+    syncQueryParams();
 }
+
+onMounted(() => {
+    syncQueryParams();
+});
 </script>
 
 <template>

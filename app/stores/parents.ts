@@ -27,7 +27,7 @@ export const useParentsStore = defineStore('parents', () => {
         });
     });
 
-    effect(() => {
+    watchEffect(() => {
         if (!route.name?.toString().startsWith('dashboard-parents')) {
             clearFilters();
         }
