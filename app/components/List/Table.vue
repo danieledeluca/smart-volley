@@ -33,7 +33,7 @@ const slots = defineSlots<{
 
 const tableRef = useTemplateRef('tableRef');
 
-const globalFilter = ref(getQueryValue('filter'));
+const globalFilter = ref('');
 const pagination = ref<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
@@ -58,6 +58,10 @@ function handleSelect(_event: Event, row: TableRow<T>) {
 defineExpose({
     selectRows: () => tableRef.value?.tableApi.getFilteredSelectedRowModel().rows,
     toggleAllPageRowsSelected: (value?: boolean) => tableRef.value?.tableApi.toggleAllPageRowsSelected(value),
+});
+
+onMounted(() => {
+    globalFilter.value = getQueryValue('filter');
 });
 </script>
 
