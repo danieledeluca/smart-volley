@@ -80,7 +80,7 @@ defineExpose({
                 v-if="showFilter"
                 v-model="globalFilter"
                 class="max-sm:flex-1"
-                placeholder="Filter..."
+                :placeholder="$t('table.global_filter.placeholder')"
                 icon="i-lucide-search"
             />
             <slot />

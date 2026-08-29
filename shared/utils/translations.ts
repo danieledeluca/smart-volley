@@ -531,6 +531,9 @@ export const translations = {
             volley_balance: 'Saldo',
             volley_second_balance: 'Secondo saldo',
         },
+        global_filter: {
+            placeholder: 'Filtra...',
+        },
         pagination: 'Visualizzati {start}-{end} di {total}',
         row_selected: '{selected} di {total} righe selezionate',
         sort: {
