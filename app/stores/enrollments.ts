@@ -26,17 +26,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         watch: false,
     });
 
-    watchEffect(() => {
-        const enrollmentRoutes = ['dashboard-enrollments', 'dashboard-payment', 'dashboard-certificates'];
-        const isEnrollmentRoute = enrollmentRoutes.some((enrollmentRoute) => {
-            return route.name?.toString()?.startsWith(enrollmentRoute);
-        });
-
-        if (!isEnrollmentRoute) {
-            clearFilters();
-        }
-    });
-
     return {
         enrollments,
         enrollmentsPending,

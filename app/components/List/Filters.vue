@@ -1,6 +1,4 @@
 <script setup lang="ts" generic="T = object">
-import type { LocationQueryRaw } from 'vue-router';
-
 const { fields: fieldGroups } = defineProps<{
     fields: FormFieldGroup<T>[];
 }>();
@@ -14,42 +12,19 @@ const state = defineModel<Partial<T>>('state', {
     required: true,
 });
 
-const router = useRouter();
-const route = useRoute();
-
 const activeFiltersRef = useTemplateRef('activeFiltersRef');
 const openFilters = ref(false);
 
 const fields = computed(() => fieldGroups.map((group) => group.fields).flat());
 
-function getQueryParamValue(field: FormField<T>) {
-    const value = state.value[field.formFieldProps.name];
-
-    if (field.renderAs === 'checkbox-group') {
-        return value
-            ? (value as string[]).length > 0
-                    ? (value as string[]).join(',')
-                    : undefined
-            : undefined;
-    }
-
-    return value !== undefined && value !== '' ? String(value) : undefined;
-}
-
-function handleFormFieldUpdate() {
-    const query: LocationQueryRaw = {
-        ...route.query,
-    };
-
-    fields.value.forEach((field) => query[field.formFieldProps.name] = getQueryParamValue(field));
-
-    router.replace({ query });
+function handleUpdate(key: string, value?: Partial<T>[keyof T]) {
+    setQueryValue(key, value ? String(value) : undefined);
     emit('update');
 }
 
-function handleClear() {
+function handleCancel() {
     if ((activeFiltersRef.value?.activeFilters().length || 0) > 0) {
-        router.replace({ query: undefined });
+        clearQuery();
         emit('clear');
     }
 }
@@ -57,11 +32,17 @@ function handleClear() {
 function handleRemove(filterName: keyof T) {
     state.value[filterName] = undefined;
 
-    handleFormFieldUpdate();
+    handleUpdate(filterName.toString(), undefined);
 }
 
 onMounted(() => {
-    handleFormFieldUpdate();
+    const values = Object.fromEntries(fields.value.map((field) => {
+        const value = state.value[field.formFieldProps.name];
+
+        return [field.formFieldProps.name, value ? String(value) : undefined];
+    }));
+
+    setQueryValues(values);
 });
 </script>
 
@@ -87,7 +68,7 @@ onMounted(() => {
                 label: $t('form.filter.button.apply'),
             }"
             @submit="openFilters = false"
-            @cancel="handleClear"
+            @cancel="handleCancel"
         >
             <template #button>
                 <UChip :show="(activeFiltersRef?.activeFilters().length || 0) > 0">
@@ -111,7 +92,7 @@ onMounted(() => {
                         :key="fieldIndex"
                         v-model="state[field.formFieldProps.name]"
                         :field
-                        @update:modelValue="handleFormFieldUpdate"
+                        @update:modelValue="(value) => handleUpdate(field.formFieldProps.name, value)"
                     />
                 </FormFieldGroup>
             </div>

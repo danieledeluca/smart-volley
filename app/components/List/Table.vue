@@ -33,7 +33,7 @@ const slots = defineSlots<{
 
 const tableRef = useTemplateRef('tableRef');
 
-const globalFilter = ref('');
+const globalFilter = ref(getQueryValue('filter'));
 const pagination = ref<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
@@ -82,6 +82,7 @@ defineExpose({
                 class="max-sm:flex-1"
                 :placeholder="$t('table.global_filter.placeholder')"
                 icon="i-lucide-search"
+                @update:modelValue="(value) => setQueryValue('filter', value)"
             />
             <slot />
         </div>
