@@ -33,6 +33,7 @@ function getNameTableColumn<T extends { id: number; name: string; fiscalCode: st
 ): TableColumn<T> {
     return {
         accessorKey: 'name',
+        accessorFn: (row) => `${row.name} ${row.fiscalCode}`,
         header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
         cell: ({ row }) => h(User, {
             userProps: {
@@ -48,6 +49,7 @@ function getNameTableColumn<T extends { id: number; name: string; fiscalCode: st
 function getPhoneNumberTableColumn<T extends { phoneNumber: string | null }>(): TableColumn<T> {
     return {
         accessorKey: 'phoneNumber',
+        accessorFn: (row) => row.phoneNumber,
         header: $t('table.column.phone_number'),
         cell: ({ row }) => {
             if (row.original.phoneNumber) {
@@ -65,6 +67,7 @@ function getPhoneNumberTableColumn<T extends { phoneNumber: string | null }>(): 
 function getEmailTableColumn<T extends { email: string | null }>(): TableColumn<T> {
     return {
         accessorKey: 'email',
+        accessorFn: (row) => row.email,
         header: $t('table.column.email'),
         cell: ({ row }) => {
             if (row.original.email) {
@@ -204,6 +207,7 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
         id: getIdTableColumn(),
         athlete: {
             accessorKey: 'athlete',
+            accessorFn: (row) => `${row.athlete.name} ${row.athlete.fiscalCode}`,
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.athlete') }),
             cell: ({ row }) => h(User, {
                 userProps: {
@@ -236,7 +240,7 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
             $t('table.column.gymnastics_third_installment'),
         ),
         certificateExpirationDate: {
-            accessorKey: 'certificate_expiration_date',
+            accessorKey: 'certificateExpirationDate',
             header: ({ column }) => h(TableSortDropdown, {
                 column,
                 label: $t('table.column.certificate_expiration_date'),
@@ -250,7 +254,7 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
             ),
         },
         certificateFile: {
-            accessorKey: 'certificate_download_url',
+            accessorKey: 'certificateFile',
             header: $t('table.column.certificate_download_url'),
             cell: ({ row }) => row.original.certificateFile
                 ? h(CertificateDownloadButton, { enrollmentId: row.original.id })

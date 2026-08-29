@@ -1,4 +1,4 @@
-import { desc, eq, ilike, inArray } from 'drizzle-orm';
+import { desc, eq, inArray } from 'drizzle-orm';
 
 import type { MultipleDeleteSchema } from '#imports';
 
@@ -7,9 +7,8 @@ import type { InsertParent } from '../schema';
 import db from '..';
 import { parent } from '../schema';
 
-export async function findParents(parentName?: string) {
+export async function findParents() {
     return await db.query.parent.findMany({
-        where: parentName ? ilike(parent.name, `%${parentName}%`) : undefined,
         orderBy: desc(parent.id),
     });
 }

@@ -63,7 +63,6 @@ type SelectMenuField = {
 };
 
 export type FormField<T> = {
-    debounce?: boolean;
     formFieldProps: Omit<FormFieldProps, 'name'> & { name: string & keyof T };
 } & (InputField
     | InputNumberField

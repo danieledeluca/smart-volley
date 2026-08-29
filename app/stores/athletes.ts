@@ -3,7 +3,6 @@ import type { SelectAthleteWithRelations } from '~~/lib/db/schema';
 
 export const useAthletesStore = defineStore('athletes', () => {
     const route = useRoute();
-    const { filterState, filterFields, clearFilters } = useFilters('athlete');
 
     const {
         data: athletes,
@@ -11,7 +10,6 @@ export const useAthletesStore = defineStore('athletes', () => {
         error: athletesError,
         refresh: refreshAthletes,
     } = useLazyFetch('/api/athletes', {
-        query: filterState,
         watch: false,
     });
 
@@ -41,12 +39,6 @@ export const useAthletesStore = defineStore('athletes', () => {
         watch: false,
     });
 
-    watchEffect(() => {
-        if (!route.name?.toString().startsWith('dashboard-athletes')) {
-            clearFilters();
-        }
-    });
-
     return {
         athletes,
         athletesItems,
@@ -55,10 +47,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         currentAthlete,
         currentAthletePending,
         currentAthleteError,
-        filterState,
-        filterFields,
         refreshAthletes,
         refreshCurrentAthlete,
-        clearFilters,
     };
 });

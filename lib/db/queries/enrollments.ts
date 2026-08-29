@@ -1,6 +1,6 @@
 import type { SQL } from 'drizzle-orm';
 
-import { and, desc, eq, gt, ilike, inArray, isNull, lte, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNull, lte, or, sql } from 'drizzle-orm';
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
@@ -20,10 +20,6 @@ type Payment = {
 
 function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     const conditions: SQL[] = [];
-
-    if (filters?.athleteName) {
-        conditions.push(ilike(athlete.name, `%${filters.athleteName}%`));
-    }
 
     if (filters?.seasonId) {
         conditions.push(eq(enrollment.seasonId, filters.seasonId));

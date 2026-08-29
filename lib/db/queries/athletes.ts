@@ -1,6 +1,6 @@
 import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schema';
 
-import { and, desc, eq, ilike, inArray, isNull } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNull } from 'drizzle-orm';
 
 import type { InsertAthlete } from '../schema';
 
@@ -32,12 +32,9 @@ function mapAddressToColumns(address: InsertAthlete['address']) {
     };
 }
 
-export async function findAthletes(athleteName?: string) {
+export async function findAthletes() {
     return await db.query.athlete.findMany({
-        where: and(
-            athleteName ? ilike(athlete.name, `%${athleteName}%`) : undefined,
-            isNull(athlete.deletedAt),
-        ),
+        where: isNull(athlete.deletedAt),
         columns: {
             id: true,
             name: true,

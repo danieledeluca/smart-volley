@@ -12,6 +12,7 @@ const {
     isLoading,
     error,
     showPagination = false,
+    showFilter = false,
 } = defineProps<{
     tableData?: T[];
     tableColumns?: TableColumn<T>[];
@@ -19,14 +20,20 @@ const {
     isLoading?: boolean;
     error?: FetchError;
     showPagination?: boolean;
+    showFilter?: boolean;
 }> ();
 
 const emit = defineEmits<{
     select: [event: Event, row: TableRow<T>];
 }>();
 
+const slots = defineSlots<{
+    default?: (props?: object) => VNode[];
+}>();
+
 const tableRef = useTemplateRef('tableRef');
 
+const globalFilter = ref('');
 const pagination = ref<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
@@ -48,10 +55,6 @@ function handleSelect(_event: Event, row: TableRow<T>) {
     hasSelectColumn.value ? row.toggleSelected(!row.getIsSelected()) : emit('select', _event, row);
 }
 
-watch(() => tableData, () => {
-    pagination.value.pageIndex = 0;
-});
-
 defineExpose({
     selectRows: () => tableRef.value?.tableApi.getFilteredSelectedRowModel().rows,
     toggleAllPageRowsSelected: (value?: boolean) => tableRef.value?.tableApi.toggleAllPageRowsSelected(value),
@@ -59,7 +62,12 @@ defineExpose({
 </script>
 
 <template>
-    <USkeleton v-if="isLoading && !tableData" class="h-full" />
+    <template v-if="isLoading && !tableData">
+        <div v-if="showFilter || !!slots.default" class="flex items-center gap-4 max-md:flex-wrap sm:gap-6">
+            <USkeleton v-if="showFilter" class="h-8 w-51.25" />
+        </div>
+        <USkeleton class="h-full" />
+    </template>
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"
@@ -67,13 +75,23 @@ defineExpose({
         icon="i-lucide-circle-x"
     />
     <template v-else-if="tableData">
+        <div v-if="showFilter || !!slots.default" class="flex items-center gap-4 max-md:flex-wrap sm:gap-6">
+            <UInput
+                v-if="showFilter"
+                v-model="globalFilter"
+                class="max-sm:flex-1"
+                placeholder="Filter..."
+                icon="i-lucide-search"
+            />
+            <slot />
+        </div>
         <UTable
             ref="tableRef"
+            v-model:globalFilter="globalFilter"
             v-model:pagination="pagination"
             :data="tableData"
             :columns="tableColumns"
             :meta="tableMeta"
-            :paginationOptions="showPagination ? { getPaginationRowModel: getPaginationRowModel() } : undefined"
             :loading="isLoading"
             :sticky="!showPagination"
             :virtualize="!showPagination"
@@ -82,6 +100,18 @@ defineExpose({
                 'rounded-b-none': showPagination || hasSelectColumn,
                 '**:[thead]:bg-elevated/75': !showPagination && hasSelectColumn,
             }"
+            :paginationOptions="showPagination ? {
+                getPaginationRowModel: getPaginationRowModel(),
+            } : undefined"
+            :globalFilterOptions="showFilter ? {
+                getColumnCanGlobalFilter: (column) => {
+                    if (column.id === 'id') {
+                        return false
+                    }
+
+                    return true
+                },
+            } : undefined"
             @select="handleSelect"
         />
         <template v-if="tableData.length > 0 && (showPagination || hasSelectColumn)">

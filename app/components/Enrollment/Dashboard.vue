@@ -64,36 +64,39 @@ function handelDeleteSuccess() {
                 <EnrollmentAddForm ref="enrollmentFormRef" />
             </AppSlideover>
         </template>
-        <ListFilters
-            v-model:state="filterState"
-            :schema="EnrollmentsFiltersSchema"
-            :fields="filterFields"
-            @update="handleFiltersUpdate"
-            @clear="enrollmentsStore.clearFilters"
-        >
-            <ListDeleteButton
-                v-if="canEdit"
-                v-model:open="deleteModalOpen"
-                :title="$t('form.enrollment.multiple_delete.title')"
-                :description="$t('form.enrollment.multiple_delete.description')"
-                :isDisabled="enrollmentsPending || (enrollmentTableRef?.selectRows()?.length || 0) === 0"
-                :isLoading="enrollmentDeleteFormRef?.isLoading()"
-                @submit="enrollmentDeleteFormRef?.submit()"
-            >
-                <EnrollmentMultipleDeleteForm
-                    ref="enrollmentDeleteFormRef"
-                    :enrollments="enrollmentTableRef?.selectRows()?.map((row) => row.original) || []"
-                    @success="handelDeleteSuccess"
-                />
-            </ListDeleteButton>
-        </ListFilters>
         <ListTable
             ref="enrollmentTableRef"
             :tableData="enrollments"
             :tableColumns
             :isLoading="enrollmentsPending"
             :error="enrollmentsError"
+            :showFilter="true"
             @select="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
-        />
+        >
+            <template #default>
+                <ListFilters
+                    v-model:state="filterState"
+                    :fields="filterFields"
+                    @update="handleFiltersUpdate"
+                    @clear="enrollmentsStore.clearFilters"
+                >
+                    <ListDeleteButton
+                        v-if="canEdit"
+                        v-model:open="deleteModalOpen"
+                        :title="$t('form.enrollment.multiple_delete.title')"
+                        :description="$t('form.enrollment.multiple_delete.description')"
+                        :isDisabled="enrollmentsPending || (enrollmentTableRef?.selectRows()?.length || 0) === 0"
+                        :isLoading="enrollmentDeleteFormRef?.isLoading()"
+                        @submit="enrollmentDeleteFormRef?.submit()"
+                    >
+                        <EnrollmentMultipleDeleteForm
+                            ref="enrollmentDeleteFormRef"
+                            :enrollments="enrollmentTableRef?.selectRows()?.map((row) => row.original) || []"
+                            @success="handelDeleteSuccess"
+                        />
+                    </ListDeleteButton>
+                </ListFilters>
+            </template>
+        </ListTable>
     </DashboardPanel>
 </template>

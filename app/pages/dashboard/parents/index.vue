@@ -9,13 +9,7 @@ const authStore = useAuthStore();
 const { canEdit } = storeToRefs(authStore);
 
 const parentsStore = useParentsStore();
-const {
-    parents,
-    parentsPending,
-    parentsError,
-    filterState,
-    filterFields,
-} = storeToRefs(parentsStore);
+const { parents, parentsPending, parentsError } = storeToRefs(parentsStore);
 
 const parentFormRef = useTemplateRef('parentFormRef');
 const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
@@ -28,12 +22,6 @@ const tableColumns = getParentsTableColumns(['id', 'name', 'phoneNumber', 'email
 if (canEdit.value) {
     tableColumns.unshift(getSelectTableColumn());
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ parentId: row.id })));
-}
-
-async function handleFiltersUpdate() {
-    await parentsStore.refreshParents();
-
-    parentTableRef.value?.toggleAllPageRowsSelected(false);
 }
 
 function handelDeleteSuccess() {
@@ -62,35 +50,33 @@ function handelDeleteSuccess() {
                 <ParentAddForm ref="parentFormRef" />
             </AppSlideover>
         </template>
-        <ListFilters
-            v-model:state="filterState"
-            :schema="ParentsFiltersSchema"
-            :fields="filterFields"
-            @update="handleFiltersUpdate"
-            @clear="parentsStore.clearFilters"
-        >
-            <ListDeleteButton
-                v-if="canEdit"
-                v-model:open="deleteModalOpen"
-                :title="$t('form.parent.multiple_delete.title')"
-                :description="$t('form.parent.multiple_delete.description')"
-                :isDisabled="parentsPending || (parentTableRef?.selectRows()?.length || 0) === 0"
-                :isLoading="parentDeleteFormRef?.isLoading()"
-                @submit="parentDeleteFormRef?.submit()"
-            >
-                <ParentMultipleDeleteForm
-                    ref="parentDeleteFormRef"
-                    :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
-                    @success="handelDeleteSuccess"
-                />
-            </ListDeleteButton>
-        </ListFilters>
         <ListTable
             ref="parentTableRef"
             :tableData="parents"
             :tableColumns
             :isLoading="parentsPending"
             :error="parentsError"
-        />
+            :showFilter="true"
+        >
+            <template #default>
+                <div class="ml-auto">
+                    <ListDeleteButton
+                        v-if="canEdit"
+                        v-model:open="deleteModalOpen"
+                        :title="$t('form.parent.multiple_delete.title')"
+                        :description="$t('form.parent.multiple_delete.description')"
+                        :isDisabled="parentsPending || (parentTableRef?.selectRows()?.length || 0) === 0"
+                        :isLoading="parentDeleteFormRef?.isLoading()"
+                        @submit="parentDeleteFormRef?.submit()"
+                    >
+                        <ParentMultipleDeleteForm
+                            ref="parentDeleteFormRef"
+                            :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
+                            @success="handelDeleteSuccess"
+                        />
+                    </ListDeleteButton>
+                </div>
+            </template>
+        </ListTable>
     </DashboardPanel>
 </template>
