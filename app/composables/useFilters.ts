@@ -141,7 +141,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                 ],
             },
             {
-                title: 'Payments',
+                title: $t('form.filter.group.payments'),
                 icon: 'i-lucide-badge-euro',
                 fields: [
                     {
@@ -158,7 +158,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                 ],
             },
             {
-                title: 'Certificates',
+                title: $t('form.filter.group.certificate'),
                 icon: 'i-lucide-briefcase-medical',
                 fields: [
                     {

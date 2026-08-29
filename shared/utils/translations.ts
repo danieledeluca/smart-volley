@@ -356,6 +356,10 @@ export const translations = {
                 open: 'Filtri',
             },
             description: 'Applica i filtri per restringere i risultati.',
+            group: {
+                certificate: 'Certificato',
+                payments: 'Pagamenti',
+            },
             title: 'Filtri',
         },
         parent: {
