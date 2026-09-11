@@ -86,4 +86,4 @@ npm run dev        # Start dev server
 
 ## License
 
-[MIT](LICENSE) — Daniele De Luca, 2026
+[MIT](LICENSE)
