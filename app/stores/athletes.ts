@@ -9,9 +9,7 @@ export const useAthletesStore = defineStore('athletes', () => {
         pending: athletesPending,
         error: athletesError,
         refresh: refreshAthletes,
-    } = useLazyFetch('/api/athletes', {
-        watch: false,
-    });
+    } = useLazyFetch('/api/athletes');
 
     const athletesItems = computed(() => {
         const sortedAthletes = athletes.value?.toSorted((athleteA, athleteB) => {

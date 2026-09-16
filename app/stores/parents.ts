@@ -6,9 +6,7 @@ export const useParentsStore = defineStore('parents', () => {
         pending: parentsPending,
         error: parentsError,
         refresh: refreshParents,
-    } = useLazyFetch('/api/parents', {
-        watch: false,
-    });
+    } = useLazyFetch('/api/parents');
 
     const parentsItems = computed(() => {
         const sortedParents = parents.value?.toSorted((parentA, parentB) => {
