@@ -10,6 +10,8 @@ const emit = defineEmits<{
     editClose: [id?: number];
 }>();
 
+const route = useRoute();
+
 const enrollmentEditFormRef = useTemplateRef('enrollmentEditFormRef');
 const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
 
@@ -40,10 +42,25 @@ function handleEditSuccess(id?: number) {
     <ListTableActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
-        :deleteTitle="$t('form.enrollment.delete.title')"
-        :deleteDescription="$t('form.enrollment.delete.description')"
-        :editTitle="$t('form.enrollment.edit.title')"
-        :editDescription="$t('form.enrollment.edit.description')"
+        :pageId="enrollmentId"
+        :copy="{
+            label: $t('table.action.copy', { name: $t('form.field.enrollment_id.label') }),
+            successMessage: $t('toast.copy', { name: $t('form.field.enrollment_id.label') }),
+        }"
+        :viewDetails="route.name !== 'dashboard-enrollments-id' ? {
+            label: $t('table.action.view_details.enrollment'),
+            path: `/dashboard/enrollments/${enrollmentId}`,
+        } : undefined"
+        :edit="{
+            label: $t('table.action.edit.enrollment'),
+            title: $t('form.enrollment.edit.title'),
+            description: $t('form.enrollment.edit.description'),
+        }"
+        :delete="{
+            label: $t('table.action.delete.enrollment'),
+            title: $t('form.enrollment.delete.title'),
+            description: $t('form.enrollment.delete.description'),
+        }"
         :isLoading
         @delete="enrollmentDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"

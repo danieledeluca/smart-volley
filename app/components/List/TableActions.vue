@@ -1,11 +1,28 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
 
-const { deleteTitle, deleteDescription, editTitle, editDescription, isLoading } = defineProps<{
-    deleteTitle: string;
-    deleteDescription?: string;
-    editTitle: string;
-    editDescription?: string;
+import { useClipboard } from '@vueuse/core';
+
+const { pageId, copy: copyConfig, viewDetails, edit, delete: deleteConfig, isLoading } = defineProps<{
+    pageId?: number;
+    copy?: {
+        label: string;
+        successMessage: string;
+    };
+    viewDetails?: {
+        label: string;
+        path: string;
+    };
+    edit: {
+        label: string;
+        title: string;
+        description: string;
+    };
+    delete: {
+        label: string;
+        title: string;
+        description?: string;
+    };
     isLoading?: boolean;
 }>();
 
@@ -24,9 +41,59 @@ const openEdit = defineModel<boolean>('openEdit', {
     default: false,
 });
 
+const toast = useToast();
+const { copy } = useClipboard();
+
 const dropDownItems: DropdownMenuItem[] = [
     {
-        label: $t('form.button.edit'),
+        type: 'label',
+        label: $t('table.action.label'),
+    },
+];
+
+if (pageId && copyConfig) {
+    dropDownItems.push(
+        {
+            label: copyConfig.label,
+            icon: 'i-lucide-copy',
+            async onSelect() {
+                await copy(pageId.toString());
+
+                toast.add({
+                    id: pageId,
+                    title: copyConfig.successMessage,
+                    color: 'success',
+                    icon: 'i-lucide-circle-check',
+                });
+            },
+        },
+    );
+
+    if (!viewDetails) {
+        dropDownItems.push(
+            {
+                type: 'separator',
+            },
+        );
+    }
+}
+
+if (viewDetails) {
+    dropDownItems.push(
+        {
+            label: viewDetails.label,
+            icon: 'i-lucide-list',
+            to: viewDetails.path,
+        },
+        {
+            type: 'separator',
+        },
+    );
+}
+
+dropDownItems.push(
+    {
+        label: edit.label,
         icon: 'i-lucide-edit',
         color: 'warning',
         onSelect() {
@@ -34,14 +101,14 @@ const dropDownItems: DropdownMenuItem[] = [
         },
     },
     {
-        label: $t('form.button.delete'),
+        label: deleteConfig.label,
         icon: 'i-lucide-trash',
         color: 'error',
         onSelect() {
             openDelete.value = true;
         },
     },
-];
+);
 </script>
 
 <template>
@@ -54,8 +121,8 @@ const dropDownItems: DropdownMenuItem[] = [
     </UDropdownMenu>
     <AppModal
         v-model:open="openDelete"
-        :title="deleteTitle"
-        :description="deleteDescription"
+        :title="deleteConfig.title"
+        :description="deleteConfig.description"
         :submitButtonProps="{
             color: 'error',
             label: $t('form.button.delete'),
@@ -68,8 +135,8 @@ const dropDownItems: DropdownMenuItem[] = [
     </AppModal>
     <AppSlideover
         v-model:open="openEdit"
-        :title="editTitle"
-        :description="editDescription"
+        :title="edit.title"
+        :description="edit.description"
         :submitButtonProps="{
             label: $t('form.button.edit'),
             loading: isLoading,

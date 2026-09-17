@@ -10,6 +10,8 @@ const emit = defineEmits<{
     editClose: [id?: number];
 }>();
 
+const route = useRoute();
+
 const athleteEditFormRef = useTemplateRef('athleteEditFormRef');
 const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 
@@ -49,10 +51,25 @@ function handleEditSuccess(id?: number) {
     <ListTableActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
-        :deleteTitle="$t('form.athlete.delete.title')"
-        :deleteDescription="$t('form.athlete.delete.description')"
-        :editTitle="$t('form.athlete.edit.title')"
-        :editDescription="$t('form.athlete.edit.description')"
+        :pageId="athleteId"
+        :copy="{
+            label: $t('table.action.copy', { name: $t('form.field.athlete_id.label') }),
+            successMessage: $t('toast.copy', { name: $t('form.field.athlete_id.label') }),
+        }"
+        :viewDetails="route.name !== 'dashboard-athletes-id' ? {
+            label: $t('table.action.view_details.athlete'),
+            path: `/dashboard/athletes/${athleteId}`,
+        } : undefined"
+        :edit="{
+            label: $t('table.action.edit.athlete'),
+            title: $t('form.athlete.edit.title'),
+            description: $t('form.athlete.edit.description'),
+        }"
+        :delete="{
+            label: $t('table.action.delete.athlete'),
+            title: $t('form.athlete.delete.title'),
+            description: $t('form.athlete.delete.description'),
+        }"
         :isLoading
         @delete="athleteDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"

@@ -195,6 +195,7 @@ export const translations = {
                 required: 'L\'indirizzo è obbligatorio',
             },
             athlete_id: {
+                label: 'ID atleta',
                 not_found: 'Atleta non trovato',
                 placeholder: 'Seleziona un\'atleta',
                 required: 'L\'atleta è obbligatorio',
@@ -266,6 +267,9 @@ export const translations = {
             enrollment: {
                 duplicate: 'L\'iscrizione per questo/a atleta, stagione e corso esiste già',
             },
+            enrollment_id: {
+                label: 'ID iscrizione',
+            },
             file_upload: {
                 button: {
                     label: 'Seleziona file',
@@ -301,6 +305,7 @@ export const translations = {
                 required: 'Il nome è obbligatorio',
             },
             parent_id: {
+                label: 'ID genitore',
                 not_found: 'Genitore non trovato',
                 placeholder: 'Seleziona un genitore',
             },
@@ -513,6 +518,24 @@ export const translations = {
         },
     },
     table: {
+        action: {
+            copy: 'Copia {name}',
+            delete: {
+                athlete: 'Elimina atleta',
+                enrollment: 'Elimina iscrizione',
+                parent: 'Elimina genitore',
+            },
+            edit: {
+                athlete: 'Modifica atleta',
+                enrollment: 'Modifica iscrizione',
+                parent: 'Modifica genitore',
+            },
+            label: 'Azioni',
+            view_details: {
+                athlete: 'Vedi dettagli atleta',
+                enrollment: 'Vedi dettagli iscrizione',
+            },
+        },
         column: {
             activity: 'Attività',
             athlete: 'Atleta',

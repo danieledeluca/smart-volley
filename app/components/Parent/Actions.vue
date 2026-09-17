@@ -40,10 +40,21 @@ function handleEditSuccess(id?: number) {
     <ListTableActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
-        :deleteTitle="$t('form.parent.delete.title')"
-        :deleteDescription="$t('form.parent.delete.description')"
-        :editTitle="$t('form.parent.edit.title')"
-        :editDescription="$t('form.parent.edit.description')"
+        :pageId="parentId"
+        :copy="{
+            label: $t('table.action.copy', { name: $t('form.field.parent_id.label') }),
+            successMessage: $t('toast.copy', { name: $t('form.field.parent_id.label') }),
+        }"
+        :edit="{
+            label: $t('table.action.edit.parent'),
+            title: $t('form.parent.edit.title'),
+            description: $t('form.parent.edit.description'),
+        }"
+        :delete="{
+            label: $t('table.action.delete.parent'),
+            title: $t('form.parent.delete.title'),
+            description: $t('form.parent.delete.description'),
+        }"
         :isLoading
         @delete="parentDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"
