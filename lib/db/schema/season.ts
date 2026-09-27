@@ -5,7 +5,7 @@ import { integer, pgTable, timestamp, unique } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { findSeasons, insertSeason } from '../queries/seasons';
+import type { findSeasons, insertSeason, updateSeason } from '../queries/seasons';
 
 import { $t } from '../../../shared/utils/i18n';
 import { enrollment } from './enrollment';
@@ -40,3 +40,4 @@ export const InsertSeason = createInsertSchema(season, {
 export type InsertSeason = z.infer<typeof InsertSeason>;
 export type InsertedSeason = Awaited<ReturnType<typeof insertSeason>>;
 export type SelectSeasons = SerializeObject<Awaited<ReturnType<typeof findSeasons>>[number]>;
+export type UpdatedSeason = Awaited<ReturnType<typeof updateSeason>>;

@@ -18,7 +18,7 @@ const { pageId, copy: copyConfig, viewDetails, edit, delete: deleteConfig, isLoa
         title: string;
         description: string;
     };
-    delete: {
+    delete?: {
         label: string;
         title: string;
         description?: string;
@@ -68,14 +68,6 @@ if (pageId && copyConfig) {
             },
         },
     );
-
-    if (!viewDetails) {
-        dropDownItems.push(
-            {
-                type: 'separator',
-            },
-        );
-    }
 }
 
 if (viewDetails) {
@@ -85,6 +77,11 @@ if (viewDetails) {
             icon: 'i-lucide-list',
             to: viewDetails.path,
         },
+    );
+}
+
+if (dropDownItems.length > 1) {
+    dropDownItems.push(
         {
             type: 'separator',
         },
@@ -100,15 +97,20 @@ dropDownItems.push(
             openEdit.value = true;
         },
     },
-    {
-        label: deleteConfig.label,
-        icon: 'i-lucide-trash',
-        color: 'error',
-        onSelect() {
-            openDelete.value = true;
-        },
-    },
 );
+
+if (deleteConfig) {
+    dropDownItems.push(
+        {
+            label: deleteConfig.label,
+            icon: 'i-lucide-trash',
+            color: 'error',
+            onSelect() {
+                openDelete.value = true;
+            },
+        },
+    );
+}
 </script>
 
 <template>
@@ -120,6 +122,7 @@ dropDownItems.push(
         />
     </UDropdownMenu>
     <AppModal
+        v-if="deleteConfig"
         v-model:open="openDelete"
         :title="deleteConfig.title"
         :description="deleteConfig.description"

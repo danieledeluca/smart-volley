@@ -1,10 +1,13 @@
 import type { TableColumn } from '@nuxt/ui';
 import type {
+    SelectActivities,
     SelectAthletes,
     SelectAthleteWithRelations,
+    SelectCourses,
     SelectEnrollmentsWithRelations,
     SelectEnrollmentWithRelations,
     SelectParents,
+    SelectSeasons,
 } from '~~/lib/db/schema';
 import type { ComponentProps } from 'vue-component-type-helpers';
 
@@ -19,6 +22,10 @@ import PhoneNumberButtons from '~/components/PhoneNumberButtons.vue';
 
 type TableColumns<T> = Partial<Record<keyof T, TableColumn<T>>>;
 
+function filterColumns<T>(columns: (keyof T)[], tableColumns: TableColumns<T>) {
+    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+}
+
 // Common columns
 function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
     return {
@@ -28,7 +35,15 @@ function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
     };
 }
 
-function getNameTableColumn<T extends { id: number; name: string; fiscalCode: string }>(
+function getNameTableColumn<T extends { name: string | null }>(): TableColumn<T> {
+    return {
+        accessorKey: 'name',
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
+        cell: ({ row }) => row.original.name,
+    };
+}
+
+function getUserTableColumn<T extends { id: number; name: string; fiscalCode: string }>(
     detailPagePath?: string,
 ): TableColumn<T> {
     return {
@@ -169,12 +184,12 @@ export function getSelectTableColumn<T>(): TableColumn<T> {
 export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
     const tableColumns: TableColumns<SelectAthletes> = {
         id: getIdTableColumn(),
-        name: getNameTableColumn(`/dashboard/athletes/`),
+        name: getUserTableColumn(`/dashboard/athletes/`),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
     };
 
-    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+    return filterColumns(columns, tableColumns);
 }
 
 export function getAthleteEnrollmentsTableColumns(
@@ -186,19 +201,19 @@ export function getAthleteEnrollmentsTableColumns(
         course: getCourseTableColumn(),
     };
 
-    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+    return filterColumns(columns, tableColumns);
 }
 
 // Parents
 export function getParentsTableColumns(columns: (keyof SelectParents)[]) {
     const tableColumns: TableColumns<SelectParents> = {
         id: getIdTableColumn(),
-        name: getNameTableColumn(),
+        name: getUserTableColumn(),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
     };
 
-    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+    return filterColumns(columns, tableColumns);
 }
 
 // Enrollments
@@ -262,7 +277,7 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
         },
     };
 
-    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+    return filterColumns(columns, tableColumns);
 }
 
 export function getEnrollmentPaymentsTableColumns(
@@ -293,5 +308,55 @@ export function getEnrollmentPaymentsTableColumns(
         },
     };
 
-    return columns.map((column) => tableColumns[column]).filter((column) => !!column);
+    return filterColumns(columns, tableColumns);
+}
+
+// Seasons
+export function getSeasonsTableColumns(columns: (keyof SelectSeasons)[]) {
+    const tableColumns: TableColumns<SelectSeasons> = {
+        id: getIdTableColumn(),
+        startYear: {
+            accessorKey: 'startYear',
+            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.start_year') }),
+            cell: ({ row }) => row.original.startYear,
+        },
+        endYear: {
+            accessorKey: 'endYear',
+            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.end_year') }),
+            cell: ({ row }) => row.original.endYear,
+        },
+    };
+
+    return filterColumns(columns, tableColumns);
+}
+
+// Activities
+export function getActivitiesTableColumns(columns: (keyof SelectActivities)[]) {
+    const tableColumns: TableColumns<SelectActivities> = {
+        id: getIdTableColumn(),
+        name: getNameTableColumn(),
+        key: {
+            accessorKey: 'key',
+            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.key') }),
+            cell: ({ row }) => row.original.key,
+        },
+    };
+
+    return filterColumns(columns, tableColumns);
+}
+
+// Courses
+export function getCoursesTableColumns(columns: (keyof SelectCourses)[]) {
+    const tableColumns: TableColumns<SelectCourses> = {
+        id: getIdTableColumn(),
+        code: {
+            accessorKey: 'code',
+            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.code') }),
+            cell: ({ row }) => row.original.code,
+        },
+        name: getNameTableColumn(),
+        activity: getActivityTableColumn(),
+    };
+
+    return filterColumns(columns, tableColumns);
 }

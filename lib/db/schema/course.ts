@@ -1,9 +1,11 @@
+import type { SerializeObject } from 'nitropack';
+
 import { relations } from 'drizzle-orm';
 import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { insertCourse } from '../queries/courses';
+import type { findCourses, insertCourse, updateCourse } from '../queries/courses';
 
 import { $t } from '../../../shared/utils/i18n';
 import { activity } from './activity';
@@ -39,3 +41,5 @@ export const InsertCourse = createInsertSchema(course, {
 
 export type InsertCourse = z.infer<typeof InsertCourse>;
 export type InsertedCourse = Awaited<ReturnType<typeof insertCourse>>;
+export type SelectCourses = SerializeObject<Awaited<ReturnType<typeof findCourses>>[number]>;
+export type UpdatedCourse = Awaited<ReturnType<typeof updateCourse>>;

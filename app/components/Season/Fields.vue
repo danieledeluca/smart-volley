@@ -9,10 +9,12 @@ const { formFields } = useForm('season');
 </script>
 
 <template>
-    <FormField
-        v-for="(field, index) in formFields"
-        :key="index"
-        v-model="state[field.formFieldProps.name]"
-        :field
-    />
+    <div class="space-y-4">
+        <FormField
+            v-for="(field, index) in formFields"
+            :key="index"
+            v-model="state[field.formFieldProps.name]"
+            :field
+        />
+    </div>
 </template>

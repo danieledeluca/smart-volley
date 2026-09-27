@@ -5,14 +5,24 @@ const state = defineModel<Partial<InsertActivity>>('state', {
     required: true,
 });
 
+const authStore = useAuthStore();
+const { isAdmin } = storeToRefs(authStore);
+
 const { formFields } = useForm('activity');
+
+function showField(fieldName: keyof InsertActivity) {
+    if (fieldName === 'key') {
+        return isAdmin.value;
+    }
+
+    return true;
+}
 </script>
 
 <template>
-    <FormField
-        v-for="(field, index) in formFields"
-        :key="index"
-        v-model="state[field.formFieldProps.name]"
-        :field
-    />
+    <div class="space-y-4">
+        <template v-for="(field, index) in formFields" :key="index">
+            <FormField v-if="showField(field.formFieldProps.name)" v-model="state[field.formFieldProps.name]" :field />
+        </template>
+    </div>
 </template>

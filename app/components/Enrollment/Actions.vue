@@ -17,7 +17,6 @@ const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
-
 const updatedEnrollmentId = ref<number>();
 
 const isLoading = computed(() => {
@@ -44,8 +43,8 @@ function handleEditSuccess(id?: number) {
         v-model:openEdit="openEdit"
         :pageId="enrollmentId"
         :copy="{
-            label: $t('table.action.copy', { name: $t('form.field.enrollment_id.label') }),
-            successMessage: $t('toast.copy', { name: $t('form.field.enrollment_id.label') }),
+            label: $t('table.action.copy.label', { name: $t('table.action.copy.enrollment_id') }),
+            successMessage: $t('toast.copy', { name: $t('table.action.copy.enrollment_id') }),
         }"
         :viewDetails="route.name !== 'dashboard-enrollments-id' ? {
             label: $t('table.action.view_details.enrollment'),

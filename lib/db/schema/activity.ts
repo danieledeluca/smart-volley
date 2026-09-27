@@ -1,9 +1,11 @@
+import type { SerializeObject } from 'nitropack';
+
 import { relations } from 'drizzle-orm';
 import { integer, pgEnum, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { insertActivity } from '../queries/activities';
+import type { findActivities, insertActivity, updateActivity } from '../queries/activities';
 
 import { $t } from '../../../shared/utils/i18n';
 import { course } from './course';
@@ -38,3 +40,5 @@ export type ActivityKeys = typeof activityKey.enumValues;
 
 export type InsertActivity = z.infer<typeof InsertActivity>;
 export type InsertedActivity = Awaited<ReturnType<typeof insertActivity>>;
+export type SelectActivities = SerializeObject<Awaited<ReturnType<typeof findActivities>>[number]>;
+export type UpdatedActivity = Awaited<ReturnType<typeof updateActivity>>;

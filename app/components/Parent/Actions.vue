@@ -15,7 +15,6 @@ const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
-
 const updatedParentId = ref<number>();
 
 const isLoading = computed(() => {
@@ -42,8 +41,8 @@ function handleEditSuccess(id?: number) {
         v-model:openEdit="openEdit"
         :pageId="parentId"
         :copy="{
-            label: $t('table.action.copy', { name: $t('form.field.parent_id.label') }),
-            successMessage: $t('toast.copy', { name: $t('form.field.parent_id.label') }),
+            label: $t('table.action.copy.label', { name: $t('table.action.copy.parent_id') }),
+            successMessage: $t('toast.copy', { name: $t('table.action.copy.parent_id') }),
         }"
         :edit="{
             label: $t('table.action.edit.parent'),

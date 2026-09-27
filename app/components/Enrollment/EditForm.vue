@@ -77,7 +77,7 @@ defineExpose({
 </script>
 
 <template>
-    <USkeleton v-if="pending" class="h-full" />
+    <EnrollmentEditFormLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"
@@ -85,7 +85,7 @@ defineExpose({
         icon="i-lucide-circle-x"
     />
     <BaseForm
-        v-if="enrollment"
+        v-else-if="enrollment"
         ref="enrollmentFormRef"
         v-model:state="state"
         :schema="InsertEnrollment"

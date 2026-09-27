@@ -55,7 +55,7 @@ defineExpose({
 </script>
 
 <template>
-    <USkeleton v-if="pending" class="h-full" />
+    <ParentEditFormLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"
@@ -63,7 +63,7 @@ defineExpose({
         icon="i-lucide-circle-x"
     />
     <BaseForm
-        v-if="parent"
+        v-else-if="parent"
         ref="parentFormRef"
         v-model:state="state"
         :schema="InsertParent"

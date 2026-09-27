@@ -17,7 +17,6 @@ const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
-
 const updatedAthleteId = ref<number>();
 
 const isLoading = computed(() => {
@@ -53,8 +52,8 @@ function handleEditSuccess(id?: number) {
         v-model:openEdit="openEdit"
         :pageId="athleteId"
         :copy="{
-            label: $t('table.action.copy', { name: $t('form.field.athlete_id.label') }),
-            successMessage: $t('toast.copy', { name: $t('form.field.athlete_id.label') }),
+            label: $t('table.action.copy.label', { name: $t('table.action.copy.athlete_id') }),
+            successMessage: $t('toast.copy', { name: $t('table.action.copy.athlete_id') }),
         }"
         :viewDetails="route.name !== 'dashboard-athletes-id' ? {
             label: $t('table.action.view_details.athlete'),

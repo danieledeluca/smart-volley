@@ -51,10 +51,32 @@ const navigationMenuItems = computed(() => {
         items.push(
             [
                 {
+                    type: 'label',
+                    label: $t('menu.manager_only'),
+                },
+                {
                     label: $t('menu.parents'),
                     to: '/dashboard/parents',
                     icon: 'i-lucide-users',
                     active: route.path === '/dashboard/parents',
+                },
+                {
+                    label: $t('menu.seasons'),
+                    to: '/dashboard/seasons',
+                    icon: 'i-lucide-calendar',
+                    active: route.path === '/dashboard/seasons',
+                },
+                {
+                    label: $t('menu.activities'),
+                    to: '/dashboard/activities',
+                    icon: 'i-lucide-zap',
+                    active: route.path === '/dashboard/activities',
+                },
+                {
+                    label: $t('menu.courses'),
+                    to: '/dashboard/courses',
+                    icon: 'i-lucide-dumbbell',
+                    active: route.path === '/dashboard/courses',
                 },
             ],
         );

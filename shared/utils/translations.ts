@@ -84,6 +84,11 @@ export const translations = {
                 success: 'Attività aggiunta con successo',
                 title: 'Nuova attività',
             },
+            edit: {
+                description: 'Compila i campi per modificare le informazioni dell\'attività.',
+                success: 'Attività modificata con successo',
+                title: 'Modifica attività',
+            },
         },
         athlete: {
             add: {
@@ -132,6 +137,11 @@ export const translations = {
                 },
                 success: 'Corso aggiunto con successo',
                 title: 'Nuovo corso',
+            },
+            edit: {
+                description: 'Compila i campi per modificare le informazioni del corso.',
+                success: 'Corso modificato con successo',
+                title: 'Modifica corso',
             },
         },
         enrollment: {
@@ -195,7 +205,6 @@ export const translations = {
                 required: 'L\'indirizzo è obbligatorio',
             },
             athlete_id: {
-                label: 'ID atleta',
                 not_found: 'Atleta non trovato',
                 placeholder: 'Seleziona un\'atleta',
                 required: 'L\'atleta è obbligatorio',
@@ -267,9 +276,6 @@ export const translations = {
             enrollment: {
                 duplicate: 'L\'iscrizione per questo/a atleta, stagione e corso esiste già',
             },
-            enrollment_id: {
-                label: 'ID iscrizione',
-            },
             file_upload: {
                 button: {
                     label: 'Seleziona file',
@@ -305,7 +311,6 @@ export const translations = {
                 required: 'Il nome è obbligatorio',
             },
             parent_id: {
-                label: 'ID genitore',
                 not_found: 'Genitore non trovato',
                 placeholder: 'Seleziona un genitore',
             },
@@ -404,6 +409,11 @@ export const translations = {
                 success: 'Stagione aggiunta con successo',
                 title: 'Nuova stagione',
             },
+            edit: {
+                description: 'Compila i campi per modificare le informazioni della stagione.',
+                success: 'Stagione modificata con successo',
+                title: 'Modifica stagione',
+            },
         },
         tooltip: {
             delete: 'Seleziona almeno una riga',
@@ -413,14 +423,27 @@ export const translations = {
         },
     },
     menu: {
+        activities: 'Attività',
         athletes: 'Atleti',
         certificates: 'Certificati medici',
+        courses: 'Corsi',
         dashboard: 'Dashboard',
         enrollments: 'Iscrizioni',
+        manager_only: 'Per soli manager',
         parents: 'Genitori',
         payments: 'Pagamenti',
+        seasons: 'Stagioni',
     },
     page: {
+        activities: {
+            button: {
+                add: 'Nuova attività',
+            },
+            title: 'Attività',
+        },
+        activity: {
+            error: 'Attività non trovato',
+        },
         athlete: {
             button: {
                 back: 'Lista atleti',
@@ -436,6 +459,15 @@ export const translations = {
         },
         certificates: {
             title: 'Certificati medici',
+        },
+        course: {
+            error: 'Corso non trovato',
+        },
+        courses: {
+            button: {
+                add: 'Nuovo corso',
+            },
+            title: 'Corsi',
         },
         dashboard: {
             title: 'Dashboard',
@@ -516,19 +548,39 @@ export const translations = {
         payments: {
             title: 'Pagamenti',
         },
+        season: {
+            error: 'Stagione non trovata',
+        },
+        seasons: {
+            button: {
+                add: 'Nuova stagione',
+            },
+            title: 'Stagioni',
+        },
     },
     table: {
         action: {
-            copy: 'Copia {name}',
+            copy: {
+                activity_id: 'ID attività',
+                athlete_id: 'ID atleta',
+                course_id: 'ID corso',
+                enrollment_id: 'ID iscrizione',
+                label: 'Copia {name}',
+                parent_id: 'ID genitore',
+                season_id: 'ID stagione',
+            },
             delete: {
                 athlete: 'Elimina atleta',
                 enrollment: 'Elimina iscrizione',
                 parent: 'Elimina genitore',
             },
             edit: {
+                activity: 'Modifica attività',
                 athlete: 'Modifica atleta',
+                course: 'Modifica corso',
                 enrollment: 'Modifica iscrizione',
                 parent: 'Modifica genitore',
+                season: 'Modifica stagione',
             },
             label: 'Azioni',
             view_details: {
@@ -541,12 +593,15 @@ export const translations = {
             athlete: 'Atleta',
             certificate_download_url: 'Download certificato',
             certificate_expiration_date: 'Scadenza certificato',
+            code: 'Codice',
             course: 'Corso',
             email: 'Email',
+            end_year: 'Anno di fine',
             gymnastics_first_installment: 'Prima rata',
             gymnastics_second_installment: 'Seconda rata',
             gymnastics_third_installment: 'Terza rata',
             id: 'ID',
+            key: 'Chiave',
             name: 'Nome',
             payment_amount: 'Importo',
             payment_date: 'Data',
@@ -554,6 +609,7 @@ export const translations = {
             payment_type: 'Tipologia',
             phone_number: 'Numero di cellulare',
             season: 'Stagione',
+            start_year: 'Anno d\'inizio',
             volley_account: 'Acconto',
             volley_balance: 'Saldo',
             volley_second_balance: 'Secondo saldo',
