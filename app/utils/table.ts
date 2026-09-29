@@ -7,6 +7,7 @@ import type {
     SelectEnrollmentsWithRelations,
     SelectEnrollmentWithRelations,
     SelectParents,
+    SelectParentWithRelations,
     SelectSeasons,
 } from '~~/lib/db/schema';
 import type { ComponentProps } from 'vue-component-type-helpers';
@@ -35,10 +36,12 @@ function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
     };
 }
 
-function getNameTableColumn<T extends { name: string | null }>(): TableColumn<T> {
+function getNameTableColumn<T extends { name: string | null }>(useSort = true): TableColumn<T> {
     return {
         accessorKey: 'name',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
+        header: useSort
+            ? ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') })
+            : $t('table.column.name'),
         cell: ({ row }) => row.original.name,
     };
 }
@@ -184,7 +187,7 @@ export function getSelectTableColumn<T>(): TableColumn<T> {
 export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
     const tableColumns: TableColumns<SelectAthletes> = {
         id: getIdTableColumn(),
-        name: getUserTableColumn(`/dashboard/athletes/`),
+        name: getUserTableColumn('/dashboard/athletes/'),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
     };
@@ -208,9 +211,22 @@ export function getAthleteEnrollmentsTableColumns(
 export function getParentsTableColumns(columns: (keyof SelectParents)[]) {
     const tableColumns: TableColumns<SelectParents> = {
         id: getIdTableColumn(),
-        name: getUserTableColumn(),
+        name: getUserTableColumn('/dashboard/parents/'),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
+    };
+
+    return filterColumns(columns, tableColumns);
+}
+
+export function getParentAthletesTableColumns(columns: (keyof SelectParentWithRelations['athletes'][number])[]) {
+    const tableColumns: TableColumns<SelectParentWithRelations['athletes'][number]> = {
+        name: getNameTableColumn(false),
+        fiscalCode: {
+            accessorKey: 'fiscalCode',
+            header: $t('table.column.fiscal_code'),
+            cell: ({ row }) => row.original.fiscalCode,
+        },
     };
 
     return filterColumns(columns, tableColumns);

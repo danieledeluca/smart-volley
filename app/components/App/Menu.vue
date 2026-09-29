@@ -51,14 +51,10 @@ const navigationMenuItems = computed(() => {
         items.push(
             [
                 {
-                    type: 'label',
-                    label: $t('menu.manager_only'),
-                },
-                {
                     label: $t('menu.parents'),
                     to: '/dashboard/parents',
                     icon: 'i-lucide-users',
-                    active: route.path === '/dashboard/parents',
+                    active: route.path.startsWith('/dashboard/parents'),
                 },
                 {
                     label: $t('menu.seasons'),

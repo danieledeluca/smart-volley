@@ -22,21 +22,15 @@ export const translations = {
             },
             title: 'Indirizzo e contatti',
         },
-        athlete: {
-            record: {
-                birthdate: 'Data di nascita',
-                birthplace: 'Luogo di nascita',
-                fiscal_code: 'Codice fiscale',
-                name: 'Nome e cognome',
-            },
-            title: 'Informazioni personali',
-        },
         certificate: {
             record: {
                 download_url: 'Download certificato',
                 expiration_date: 'Scadenza certificato',
             },
             title: 'Certificato medico',
+        },
+        children: {
+            title: 'Figli',
         },
         dashboard: {
             enrollments: 'Iscrizioni',
@@ -52,7 +46,7 @@ export const translations = {
             record: {
                 email: 'Email genitore',
                 fiscal_code: 'Codice fiscale genitore',
-                name: 'Nome genitore',
+                name: 'Nome e cognome genitore',
                 phone_number: 'Numero di cellulare genitore',
             },
             title: 'Informazioni genitore',
@@ -67,6 +61,15 @@ export const translations = {
                 volley_second_balance: 'Secondo saldo',
             },
             title: 'Pagamenti',
+        },
+        personal_information: {
+            record: {
+                birthdate: 'Data di nascita',
+                birthplace: 'Luogo di nascita',
+                fiscal_code: 'Codice fiscale',
+                name: 'Nome e cognome',
+            },
+            title: 'Informazioni personali',
         },
         sport: {
             record: {
@@ -429,7 +432,6 @@ export const translations = {
         courses: 'Corsi',
         dashboard: 'Dashboard',
         enrollments: 'Iscrizioni',
-        manager_only: 'Per soli manager',
         parents: 'Genitori',
         payments: 'Pagamenti',
         seasons: 'Stagioni',
@@ -537,7 +539,11 @@ export const translations = {
             },
         },
         parent: {
+            button: {
+                back: 'Lista genitori',
+            },
             error: 'Genitore non trovato',
+            title: 'Dettagli genitore',
         },
         parents: {
             button: {
@@ -586,6 +592,7 @@ export const translations = {
             view_details: {
                 athlete: 'Vedi dettagli atleta',
                 enrollment: 'Vedi dettagli iscrizione',
+                parent: 'Vedi dettagli genitore',
             },
         },
         column: {
@@ -597,6 +604,7 @@ export const translations = {
             course: 'Corso',
             email: 'Email',
             end_year: 'Anno di fine',
+            fiscal_code: 'Codice fiscale',
             gymnastics_first_installment: 'Prima rata',
             gymnastics_second_installment: 'Seconda rata',
             gymnastics_third_installment: 'Terza rata',

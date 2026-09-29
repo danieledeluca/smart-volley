@@ -10,6 +10,8 @@ const emit = defineEmits<{
     editClose: [id?: number];
 }>();
 
+const route = useRoute();
+
 const parentEditFormRef = useTemplateRef('parentEditFormRef');
 const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
 
@@ -44,6 +46,10 @@ function handleEditSuccess(id?: number) {
             label: $t('table.action.copy.label', { name: $t('table.action.copy.parent_id') }),
             successMessage: $t('toast.copy', { name: $t('table.action.copy.parent_id') }),
         }"
+        :viewDetails="route.name !== 'dashboard-parents-id' ? {
+            label: $t('table.action.view_details.parent'),
+            path: `/dashboard/parents/${parentId}`,
+        } : undefined"
         :edit="{
             label: $t('table.action.edit.parent'),
             title: $t('form.parent.edit.title'),

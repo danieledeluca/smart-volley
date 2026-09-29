@@ -89,30 +89,30 @@ onMounted(async () => {
             </div>
             <div class="grid gap-4 sm:gap-6 lg:grid-cols-12">
                 <div class="space-y-4 sm:space-y-6 lg:col-span-8">
-                    <ItemCard :title="$t('card.athlete.title')" icon="i-lucide-id-card">
-                        <ItemCardRecord :label="$t('card.athlete.record.name')" :value="athlete.name" />
+                    <ItemCard :title="$t('card.personal_information.title')" icon="i-lucide-id-card">
+                        <ItemCardRecord :label="$t('card.personal_information.record.name')" :value="athlete.name" />
                         <ItemCardRecord
-                            :label="$t('card.athlete.record.birthdate')"
+                            :label="$t('card.personal_information.record.birthdate')"
                             :value="formatDate(athlete.birthdate)"
                         />
                         <ItemCardRecord
-                            :label="$t('card.athlete.record.birthplace')"
+                            :label="$t('card.personal_information.record.birthplace')"
                             :value="athlete.birthplaceFormattedAddress"
                         >
                             <template #actions>
                                 <CopyButton
-                                    :label="$t('card.athlete.record.birthplace')"
+                                    :label="$t('card.personal_information.record.birthplace')"
                                     :value="athlete.birthplaceFormattedAddress"
                                 />
                             </template>
                         </ItemCardRecord>
                         <ItemCardRecord
-                            :label="$t('card.athlete.record.fiscal_code')"
+                            :label="$t('card.personal_information.record.fiscal_code')"
                             :value="athlete.fiscalCode"
                         >
                             <template #actions>
                                 <CopyButton
-                                    :label="$t('card.athlete.record.fiscal_code')"
+                                    :label="$t('card.personal_information.record.fiscal_code')"
                                     :value="athlete.fiscalCode"
                                 />
                             </template>
@@ -161,7 +161,15 @@ onMounted(async () => {
                         :title="$t('card.parent.title')"
                         icon="i-lucide-user"
                     >
-                        <ItemCardRecord :label="$t('card.parent.record.name')" :value="athlete.parent.name" />
+                        <ItemCardRecord :label="$t('card.parent.record.name')" :value="athlete.parent.name">
+                            <template #actions>
+                                <UButton
+                                    variant="ghost"
+                                    icon="i-lucide-arrow-up-right"
+                                    :href="`/dashboard/parents/${athlete.parent.id}`"
+                                />
+                            </template>
+                        </ItemCardRecord>
                         <ItemCardRecord
                             :label="$t('card.parent.record.fiscal_code')"
                             :value="athlete.parent.fiscalCode"
