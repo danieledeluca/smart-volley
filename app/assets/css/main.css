@@ -1,6 +1,24 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@layer components {
+    .details-grid {
+        @apply grid gap-4 sm:gap-6 lg:grid-cols-12;
+    }
+
+    .details-col {
+        @apply space-y-4 sm:space-y-6;
+    }
+
+    .details-col-main {
+        @apply lg:col-span-8;
+    }
+
+    .details-col-aside {
+        @apply lg:col-span-4;
+    }
+}
+
 /* Google Place Autocomplete */
 .pac-container {
     @apply pointer-events-auto mt-2.5 rounded-md border-none bg-default shadow-sm ring ring-default after:hidden;
