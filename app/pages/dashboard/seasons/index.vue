@@ -6,12 +6,11 @@ useSeoMeta({
 });
 
 const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
-
 const seasonsStore = useSeasonsStore();
-const { seasons, seasonsPending, seasonsError } = storeToRefs(seasonsStore);
-
 const seasonFormRef = useTemplateRef('seasonFormRef');
+
+const { canEdit } = storeToRefs(authStore);
+const { seasons, seasonsPending, seasonsError } = storeToRefs(seasonsStore);
 
 const tableColumns = getSeasonsTableColumns(['id', 'startYear', 'endYear']);
 

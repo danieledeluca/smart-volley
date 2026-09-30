@@ -8,12 +8,11 @@ useSeoMeta({
 });
 
 const authStore = useAuthStore();
-const { isAdmin, canEdit } = storeToRefs(authStore);
-
 const activitiesStore = useActivitiesStore();
-const { activities, activitiesPending, activitiesError } = storeToRefs(activitiesStore);
-
 const activityFormRef = useTemplateRef('activityFormRef');
+
+const { isAdmin, canEdit } = storeToRefs(authStore);
+const { activities, activitiesPending, activitiesError } = storeToRefs(activitiesStore);
 
 const columns: (keyof SelectActivities)[] = ['id', 'name'];
 

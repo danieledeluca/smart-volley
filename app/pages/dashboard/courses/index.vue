@@ -6,12 +6,11 @@ useSeoMeta({
 });
 
 const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
-
 const coursesStore = useCoursesStore();
-const { courses, coursesPending, coursesError } = storeToRefs(coursesStore);
-
 const courseFormRef = useTemplateRef('courseFormRef');
+
+const { canEdit } = storeToRefs(authStore);
+const { courses, coursesPending, coursesError } = storeToRefs(coursesStore);
 
 const tableColumns = getCoursesTableColumns(['id', 'code', 'name', 'activity']);
 

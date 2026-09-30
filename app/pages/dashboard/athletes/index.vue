@@ -7,13 +7,12 @@ useSeoMeta({
 
 const authStore = useAuthStore();
 const athletesStore = useAthletesStore();
-
-const { canEdit } = storeToRefs(authStore);
-const { athletes, athletesPending, athletesError } = storeToRefs(athletesStore);
-
 const athleteAddFormRef = useTemplateRef('athleteAddFormRef');
 const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 const athleteTableRef = useTemplateRef('athleteTableRef');
+
+const { canEdit } = storeToRefs(authStore);
+const { athletes, athletesPending, athletesError } = storeToRefs(athletesStore);
 
 const deleteModalOpen = ref(false);
 

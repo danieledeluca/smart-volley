@@ -6,14 +6,13 @@ useSeoMeta({
 });
 
 const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
-
 const parentsStore = useParentsStore();
-const { parents, parentsPending, parentsError } = storeToRefs(parentsStore);
-
 const parentFormRef = useTemplateRef('parentFormRef');
 const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
 const parentTableRef = useTemplateRef('parentTableRef');
+
+const { canEdit } = storeToRefs(authStore);
+const { parents, parentsPending, parentsError } = storeToRefs(parentsStore);
 
 const deleteModalOpen = ref(false);
 

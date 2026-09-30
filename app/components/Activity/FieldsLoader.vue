@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const authStore = useAuthStore();
+
 const { isAdmin } = storeToRefs(authStore);
 </script>
 

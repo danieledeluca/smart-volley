@@ -2,6 +2,7 @@
 import type { PageFeatureProps } from '@nuxt/ui';
 
 const authStore = useAuthStore();
+
 const { user, canView } = storeToRefs(authStore);
 
 const features: PageFeatureProps[] = [

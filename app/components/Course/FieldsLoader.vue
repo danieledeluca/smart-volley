@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const authStore = useAuthStore();
+
+const { isAdmin } = storeToRefs(authStore);
 </script>
 
 <template>
@@ -20,7 +22,7 @@ const authStore = useAuthStore();
             <div class="space-y-4">
                 <div>
                     <USkeleton class="h-12.5 w-full" />
-                    <USkeleton v-if="authStore.isAdmin" class="mt-2 h-8 w-full" />
+                    <USkeleton v-if="isAdmin" class="mt-2 h-8 w-full" />
                 </div>
             </div>
         </div>

@@ -6,9 +6,9 @@ const state = defineModel<Partial<InsertActivity>>('state', {
 });
 
 const authStore = useAuthStore();
-const { isAdmin } = storeToRefs(authStore);
-
 const { formFields } = useForm('activity');
+
+const { isAdmin } = storeToRefs(authStore);
 
 function showField(fieldName: keyof InsertActivity) {
     if (fieldName === 'key') {
