@@ -54,7 +54,7 @@ defineExpose({
 </script>
 
 <template>
-    <CourseEditFormLoader v-if="pending" />
+    <CourseFieldsLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"

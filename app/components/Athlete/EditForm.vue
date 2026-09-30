@@ -76,7 +76,7 @@ defineExpose({
 </script>
 
 <template>
-    <AthleteEditFormLoader v-if="pending" />
+    <AthleteFieldsLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"

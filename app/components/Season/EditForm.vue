@@ -53,7 +53,7 @@ defineExpose({
 </script>
 
 <template>
-    <SeasonEditFormLoader v-if="pending" />
+    <SeasonFieldsLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"

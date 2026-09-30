@@ -53,7 +53,7 @@ defineExpose({
 </script>
 
 <template>
-    <ActivityEditFormLoader v-if="pending" />
+    <ActivityFieldsLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"

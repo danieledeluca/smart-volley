@@ -77,7 +77,7 @@ defineExpose({
 </script>
 
 <template>
-    <EnrollmentEditFormLoader v-if="pending" />
+    <EnrollmentFieldsLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"

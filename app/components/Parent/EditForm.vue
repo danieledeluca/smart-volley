@@ -55,7 +55,7 @@ defineExpose({
 </script>
 
 <template>
-    <ParentEditFormLoader v-if="pending" />
+    <ParentFieldsLoader v-if="pending" />
     <UAlert
         v-else-if="error"
         :title="error.statusMessage"
