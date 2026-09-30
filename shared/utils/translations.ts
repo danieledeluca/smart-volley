@@ -46,7 +46,7 @@ export const translations = {
             record: {
                 email: 'Email genitore',
                 fiscal_code: 'Codice fiscale genitore',
-                name: 'Nome e cognome genitore',
+                name: 'Cognome e nome genitore',
                 phone_number: 'Numero di cellulare genitore',
             },
             title: 'Informazioni genitore',
@@ -67,7 +67,7 @@ export const translations = {
                 birthdate: 'Data di nascita',
                 birthplace: 'Luogo di nascita',
                 fiscal_code: 'Codice fiscale',
-                name: 'Nome e cognome',
+                name: 'Cognome e nome',
             },
             title: 'Informazioni personali',
         },
@@ -309,9 +309,9 @@ export const translations = {
                 placeholder: 'Seleziona un pagamento',
             },
             name: {
-                label: 'Nome e cognome',
-                placeholder: 'Inserisci il nome',
-                required: 'Il nome è obbligatorio',
+                label: 'Cognome e nome',
+                placeholder: 'Inserisci il cognome e il nome',
+                required: 'Il cognome e il nome sono obbligatori',
             },
             parent_id: {
                 not_found: 'Genitore non trovato',
