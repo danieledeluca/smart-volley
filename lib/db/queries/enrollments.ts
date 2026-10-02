@@ -1,6 +1,6 @@
 import type { SQL } from 'drizzle-orm';
 
-import { and, desc, eq, gt, inArray, isNull, lte, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, or, sql } from 'drizzle-orm';
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
@@ -9,7 +9,8 @@ import type { EnrollmentPaymentField, EnrollmentPaymentTypes, InsertEnrollment }
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
 import { uploadFile } from '../../storage';
-import { athlete, course, enrollment } from '../schema';
+import { athlete, course, enrollment, season } from '../schema';
+import { findSeason } from './seasons';
 
 type Payment = {
     name: EnrollmentPaymentField;
@@ -56,6 +57,32 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     }
 
     return and(...conditions);
+}
+
+async function findLatestCertificate(athleteId: number, seasonId: number) {
+    const currentSeason = await findSeason(seasonId);
+
+    if (!currentSeason) {
+        return undefined;
+    }
+
+    const [row] = await db
+        .select({
+            certificateExpirationDate: enrollment.certificateExpirationDate,
+            certificateStorageKey: enrollment.certificateStorageKey,
+        })
+        .from(enrollment)
+        .innerJoin(season, eq(season.id, enrollment.seasonId))
+        .where(and(
+            eq(enrollment.athleteId, athleteId),
+            lt(season.startYear, currentSeason.startYear),
+            isNull(enrollment.deletedAt),
+            isNotNull(enrollment.certificateExpirationDate),
+        ))
+        .orderBy(desc(season.startYear))
+        .limit(1);
+
+    return row;
 }
 
 async function getCertificateStorageKey(data: InsertEnrollment) {
@@ -225,6 +252,22 @@ export async function findEnrollmentCertificateStorageKey(enrollmentId: number) 
 }
 
 export async function insertEnrollment(data: InsertEnrollment) {
+    const missingCertificate = !data.certificateExpirationDate && !data.certificateStorageKey;
+    const inherited = missingCertificate
+        ? await findLatestCertificate(data.athleteId, data.seasonId)
+        : undefined;
+
+    if (inherited) {
+        const [created] = await db.insert(enrollment)
+            .values({
+                ...data,
+                ...inherited,
+            })
+            .returning();
+
+        return created;
+    }
+
     const certificateStorageKey = await getCertificateStorageKey(data);
     const { certificateStorageKey: _, ...rest } = data;
 
