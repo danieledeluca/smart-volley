@@ -571,6 +571,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         formFieldProps: {
                             label: $t('form.field.certificate_expiration_date.label'),
                             name: 'certificateExpirationDate',
+                            help: $t('form.field.certificate_expiration_date.help'),
                         },
                     },
                 ],

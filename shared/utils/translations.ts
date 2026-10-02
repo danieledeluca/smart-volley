@@ -223,6 +223,7 @@ export const translations = {
                 required: 'Il luogo di nascita è obbligatorio',
             },
             certificate_expiration_date: {
+                help: 'Se data di scadenza e file restano vuoti, verranno usati quelli dell\'ultima iscrizione.',
                 label: 'Data di scadenza',
             },
             certificate_status: {
