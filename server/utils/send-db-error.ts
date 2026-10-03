@@ -57,7 +57,7 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
 
         return sendError(event, createError({
             statusCode: 409,
-            statusMessage: statusMessage || 'Conflict',
+            statusMessage: statusMessage || $t('error.conflict'),
             data: formError ? [formError] : undefined,
         }));
     }
@@ -90,7 +90,7 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
 
         return sendError(event, createError({
             statusCode: 422,
-            statusMessage: 'Unprocessable Entity',
+            statusMessage: $t('error.unprocessable_entity'),
             data: formError ? [formError] : undefined,
         }));
     }

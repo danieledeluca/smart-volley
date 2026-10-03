@@ -42,7 +42,7 @@ async function handleSubmit(event: FormSubmitEvent<FormDataOutput>) {
             formErrors.value = error.data?.data;
         } else {
             toast.add({
-                description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
+                description: getApiError(error),
                 color: 'error',
                 icon: 'i-lucide-circle-x',
             });

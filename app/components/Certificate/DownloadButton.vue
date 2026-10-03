@@ -18,7 +18,7 @@ async function handleClick() {
         const error = err as FetchError;
 
         toast.add({
-            description: error.statusMessage || DEFAULT_SERVER_ERROR_MESSAGE,
+            description: getApiError(error),
             color: 'error',
             icon: 'i-lucide-circle-x',
         });

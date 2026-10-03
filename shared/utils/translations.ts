@@ -80,6 +80,11 @@ export const translations = {
             title: 'Sport',
         },
     },
+    error: {
+        conflict: 'Conflict',
+        server: 'An unknown error occurred.',
+        unprocessable_entity: 'Unprocessable Entity',
+    },
     form: {
         activity: {
             add: {
@@ -445,7 +450,7 @@ export const translations = {
             title: 'Attività',
         },
         activity: {
-            error: 'Attività non trovato',
+            error: 'Attività non trovata',
         },
         athlete: {
             button: {

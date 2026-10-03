@@ -22,7 +22,7 @@ onMounted(async () => {
         <ParentDetailsLoader v-if="pending" />
         <UAlert
             v-else-if="error"
-            :title="error.statusMessage"
+            :title="getApiError(error)"
             color="error"
             icon="i-lucide-circle-x"
         />

@@ -81,7 +81,7 @@ watchEffect(() => {
         </template>
         <UAlert
             v-else-if="enrollmentsError"
-            :title="enrollmentsError.statusMessage"
+            :title="getApiError(enrollmentsError)"
             color="error"
             icon="i-lucide-circle-x"
         />

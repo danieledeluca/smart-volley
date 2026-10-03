@@ -1,9 +1,10 @@
 <script setup lang="ts" generic="T">
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { PaginationState, TableMeta } from '@tanstack/vue-table';
-import type { FetchError } from 'ofetch';
 
 import { getPaginationRowModel } from '@tanstack/vue-table';
+
+import type { NuxtError } from '#app';
 
 const {
     tableData,
@@ -18,7 +19,7 @@ const {
     tableColumns?: TableColumn<T>[];
     tableMeta?: TableMeta<T>;
     isLoading?: boolean;
-    error?: FetchError;
+    error?: NuxtError<unknown>;
     showPagination?: boolean;
     showFilter?: boolean;
 }> ();
@@ -74,7 +75,7 @@ onMounted(() => {
     </template>
     <UAlert
         v-else-if="error"
-        :title="error.statusMessage"
+        :title="getApiError(error)"
         color="error"
         icon="i-lucide-circle-x"
     />
