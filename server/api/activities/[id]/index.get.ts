@@ -1,8 +1,13 @@
 import { findActivity } from '~~/lib/db/queries/activities';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
-    const activity = await findActivity(id);
+    const result = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!result.success) {
+        return sendZodError(event, result.error);
+    }
+
+    const activity = await findActivity(result.data.id);
 
     if (!activity) {
         throw createError({

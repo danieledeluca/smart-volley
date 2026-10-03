@@ -4,7 +4,12 @@ import { updateCourse } from '~~/lib/db/queries/courses';
 import { InsertCourse } from '~~/lib/db/schema';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
+    const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!routerParamsResult.success) {
+        return sendZodError(event, routerParamsResult.error);
+    }
+
     const result = await readValidatedBody(event, InsertCourse.safeParse);
 
     if (!result.success) {
@@ -12,7 +17,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateCourse(result.data, id);
+        return await updateCourse(result.data, routerParamsResult.data.id);
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

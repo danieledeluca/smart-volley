@@ -4,7 +4,12 @@ import { updateParent } from '~~/lib/db/queries/parents';
 import { InsertParent } from '~~/lib/db/schema';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
+    const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!routerParamsResult.success) {
+        return sendZodError(event, routerParamsResult.error);
+    }
+
     const result = await readValidatedBody(event, InsertParent.safeParse);
 
     if (!result.success) {
@@ -12,7 +17,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateParent(result.data, id);
+        return await updateParent(result.data, routerParamsResult.data.id);
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

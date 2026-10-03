@@ -4,7 +4,12 @@ import { updateEnrollment } from '~~/lib/db/queries/enrollments';
 import { InsertEnrollment } from '~~/lib/db/schema';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
+    const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!routerParamsResult.success) {
+        return sendZodError(event, routerParamsResult.error);
+    }
+
     const formData = await readFormData(event);
     const result = InsertEnrollment.safeParse(Object.fromEntries(formData.entries()));
 
@@ -13,7 +18,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateEnrollment(result.data, id);
+        return await updateEnrollment(result.data, routerParamsResult.data.id);
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

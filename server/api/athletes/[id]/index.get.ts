@@ -1,8 +1,13 @@
 import { findAthlete } from '~~/lib/db/queries/athletes';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
-    const athlete = await findAthlete(id);
+    const result = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!result.success) {
+        return sendZodError(event, result.error);
+    }
+
+    const athlete = await findAthlete(result.data.id);
 
     if (!athlete) {
         throw createError({

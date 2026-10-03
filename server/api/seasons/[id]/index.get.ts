@@ -1,8 +1,13 @@
 import { findSeason } from '~~/lib/db/queries/seasons';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
-    const season = await findSeason(id);
+    const result = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!result.success) {
+        return sendZodError(event, result.error);
+    }
+
+    const season = await findSeason(result.data.id);
 
     if (!season) {
         throw createError({

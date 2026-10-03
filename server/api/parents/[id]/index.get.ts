@@ -1,8 +1,13 @@
 import { findParent } from '~~/lib/db/queries/parents';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
-    const parent = await findParent(id);
+    const result = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!result.success) {
+        return sendZodError(event, result.error);
+    }
+
+    const parent = await findParent(result.data.id);
 
     if (!parent) {
         throw createError({

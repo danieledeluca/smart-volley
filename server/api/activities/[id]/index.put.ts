@@ -4,7 +4,12 @@ import { updateActivity } from '~~/lib/db/queries/activities';
 import { InsertActivity } from '~~/lib/db/schema';
 
 export default defineAuthenticatedEventHandler(async (event) => {
-    const id = Number(getRouterParam(event, 'id'));
+    const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
+
+    if (!routerParamsResult.success) {
+        return sendZodError(event, routerParamsResult.error);
+    }
+
     const result = await readValidatedBody(event, InsertActivity.safeParse);
 
     if (!result.success) {
@@ -12,7 +17,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateActivity(result.data, id);
+        return await updateActivity(result.data, routerParamsResult.data.id);
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }
