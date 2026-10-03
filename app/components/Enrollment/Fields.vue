@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { InsertEnrollment } from '~~/lib/db/schema';
 
+const { formAction } = defineProps<{
+    formAction: FormAction;
+}>();
+
 const state = defineModel<Partial<InsertEnrollment>>('state', {
     required: true,
 });
 
 const coursesStore = useCoursesStore();
 
-const { formFields } = useForm('enrollment');
+const { formFields } = useForm('enrollment', formAction);
 
 const athleteFormRef = useTemplateRef('athleteFormRef');
 const seasonFormRef = useTemplateRef('seasonFormRef');

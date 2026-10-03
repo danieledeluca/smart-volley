@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import type { InsertActivity } from '~~/lib/db/schema';
 
+const { formAction } = defineProps<{
+    formAction: FormAction;
+}>();
+
 const state = defineModel<Partial<InsertActivity>>('state', {
     required: true,
 });
 
 const authStore = useAuthStore();
-const { formFields } = useForm('activity');
+const { formFields } = useForm('activity', formAction);
 
 const { isAdmin } = storeToRefs(authStore);
 

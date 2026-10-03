@@ -22,7 +22,7 @@ type FormSchemas = {
     course: InsertCourse;
 };
 
-export function useForm<K extends keyof FormSchemas>(formType: K) {
+export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: FormAction) {
     const athletesStore = useAthletesStore();
     const parentsStore = useParentsStore();
     const seasonsStore = useSeasonsStore();
@@ -571,7 +571,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K) {
                         formFieldProps: {
                             label: $t('form.field.certificate_expiration_date.label'),
                             name: 'certificateExpirationDate',
-                            help: $t('form.field.certificate_expiration_date.help'),
+                            help: formAction === 'add' ? $t('form.field.certificate_expiration_date.help') : undefined,
                         },
                     },
                 ],

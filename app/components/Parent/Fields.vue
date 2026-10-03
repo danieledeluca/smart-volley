@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import type { InsertParent } from '~~/lib/db/schema';
 
+const { formAction } = defineProps<{
+    formAction: FormAction;
+}>();
+
 const state = defineModel<Partial<InsertParent>>('state', {
     required: true,
 });
 
-const { formFields } = useForm('parent');
+const { formFields } = useForm('parent', formAction);
 </script>
 
 <template>

@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import type { InsertCourse } from '~~/lib/db/schema';
 
+const { formAction } = defineProps<{
+    formAction: FormAction;
+}>();
+
 const state = defineModel<Partial<InsertCourse>>('state', {
     required: true,
 });
 
 const authStore = useAuthStore();
-const { formFields } = useForm('course');
+const { formFields } = useForm('course', formAction);
 const activityFormRef = useTemplateRef('activityFormRef');
 
 const { isAdmin } = storeToRefs(authStore);

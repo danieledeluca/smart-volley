@@ -70,6 +70,6 @@ defineExpose({
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.season.edit.success')"
     >
-        <SeasonFields v-model:state="state" />
+        <SeasonFields v-model:state="state" formAction="edit" />
     </BaseForm>
 </template>

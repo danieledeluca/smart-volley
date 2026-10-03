@@ -49,6 +49,6 @@ defineExpose({
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.activity.add.success')"
     >
-        <ActivityFields v-model:state="state" />
+        <ActivityFields v-model:state="state" formAction="add" />
     </BaseForm>
 </template>

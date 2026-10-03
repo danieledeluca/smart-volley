@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import type { InsertAthlete } from '~~/lib/db/schema';
 
+const { formAction } = defineProps<{
+    formAction: FormAction;
+}>();
+
 const state = defineModel<Partial<InsertAthlete>>('state', {
     required: true,
 });
 
-const { formFields } = useForm('athlete');
+const { formFields } = useForm('athlete', formAction);
 const parentFormRef = useTemplateRef('parentFormRef');
 
 const openParentModal = ref(false);

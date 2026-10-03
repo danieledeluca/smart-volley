@@ -99,3 +99,5 @@ export type ParsedAddress = {
     formattedAddress: string;
     placeId: string;
 };
+
+export type FormAction = 'add' | 'edit';

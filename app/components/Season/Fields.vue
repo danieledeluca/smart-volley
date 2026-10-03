@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import type { InsertSeason } from '~~/lib/db/schema';
 
+const { formAction } = defineProps<{
+    formAction: FormAction;
+}>();
+
 const state = defineModel<Partial<InsertSeason>>('state', {
     required: true,
 });
 
-const { formFields } = useForm('season');
+const { formFields } = useForm('season', formAction);
 </script>
 
 <template>

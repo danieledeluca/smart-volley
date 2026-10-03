@@ -94,6 +94,6 @@ defineExpose({
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.enrollment.edit.success')"
     >
-        <EnrollmentFields v-model:state="state" />
+        <EnrollmentFields v-model:state="state" formAction="edit" />
     </BaseForm>
 </template>

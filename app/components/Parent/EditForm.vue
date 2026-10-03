@@ -72,6 +72,6 @@ defineExpose({
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.parent.edit.success')"
     >
-        <ParentFields v-model:state="state" />
+        <ParentFields v-model:state="state" formAction="edit" />
     </BaseForm>
 </template>
