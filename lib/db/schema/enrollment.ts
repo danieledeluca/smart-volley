@@ -5,7 +5,6 @@ import { date, integer, numeric, pgEnum, pgTable, text, timestamp, unique } from
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { ENROLLMENT_PAYMENT_FIELDS } from '../../utils/constants';
 import type { findEnrollment, findEnrollments, updateEnrollment } from '../queries/enrollments';
 
 import { $t } from '../../../shared/utils/i18n';
@@ -22,6 +21,15 @@ export const enrollment = pgTable('enrollment', {
     athleteId: integer().notNull().references(() => athlete.id),
     seasonId: integer().notNull().references(() => season.id),
     courseId: integer().notNull().references(() => course.id),
+    firstPayment: numeric({ precision: 10, scale: 2 }),
+    firstPaymentDate: date(),
+    firstPaymentType: enrollmentPaymentType(),
+    secondPayment: numeric({ precision: 10, scale: 2 }),
+    secondPaymentDate: date(),
+    secondPaymentType: enrollmentPaymentType(),
+    thirdPayment: numeric({ precision: 10, scale: 2 }),
+    thirdPaymentDate: date(),
+    thirdPaymentType: enrollmentPaymentType(),
     volleyAccount: numeric({ precision: 10, scale: 2 }),
     volleyAccountDate: date(),
     volleyAccountType: enrollmentPaymentType(),
@@ -74,6 +82,15 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     athleteId: z.coerce.number($t('form.field.athlete_id.required')),
     seasonId: z.coerce.number($t('form.field.season_id.required')),
     courseId: z.coerce.number($t('form.field.course_id.required')),
+    firstPayment: PaymentAmountSchema,
+    firstPaymentDate: PaymentDateSchema,
+    firstPaymentType: PaymentTypeSchema,
+    secondPayment: PaymentAmountSchema,
+    secondPaymentDate: PaymentDateSchema,
+    secondPaymentType: PaymentTypeSchema,
+    thirdPayment: PaymentAmountSchema,
+    thirdPaymentDate: PaymentDateSchema,
+    thirdPaymentType: PaymentTypeSchema,
     volleyAccount: PaymentAmountSchema,
     volleyAccountDate: PaymentDateSchema,
     volleyAccountType: PaymentTypeSchema,
@@ -106,9 +123,6 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     updatedAt: true,
     deletedAt: true,
 });
-
-export type EnrollmentPaymentField = typeof ENROLLMENT_PAYMENT_FIELDS[number];
-export type EnrollmentPaymentTypes = typeof enrollmentPaymentType.enumValues;
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;
 export type SelectEnrollmentsWithRelations = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;

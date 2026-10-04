@@ -4,20 +4,13 @@ import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, or, sql } from 
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
-import type { EnrollmentPaymentField, EnrollmentPaymentTypes, InsertEnrollment } from '../schema';
+import type { InsertEnrollment } from '../schema';
 
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
 import { uploadFile } from '../../storage';
 import { athlete, course, enrollment, season } from '../schema';
 import { findSeason } from './seasons';
-
-type Payment = {
-    name: EnrollmentPaymentField;
-    amount: string | null;
-    date: string | null;
-    type: EnrollmentPaymentTypes[number] | null;
-};
 
 function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     const conditions: SQL[] = [];
@@ -32,10 +25,6 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
 
     if (filters?.courseId) {
         conditions.push(eq(enrollment.courseId, filters.courseId));
-    }
-
-    if (filters?.missingPayment) {
-        conditions.push(isNull(enrollment[filters.missingPayment]));
     }
 
     if (filters?.certificateStatus && filters.certificateStatus.length > 0) {
@@ -183,49 +172,26 @@ export async function findEnrollment(enrollmentId: number) {
         return result;
     }
 
-    const payments: Payment[] = result.course.activity.key === 'volley'
-        ? [
-                {
-                    name: 'volleyAccount',
-                    amount: result.volleyAccount,
-                    date: result.volleyAccountDate,
-                    type: result.volleyAccountType,
-                },
-                {
-                    name: 'volleyBalance',
-                    amount: result.volleyBalance,
-                    date: result.volleyBalanceDate,
-                    type: result.volleyBalanceType,
-                },
-                {
-                    name: 'volleySecondBalance',
-                    amount: result.volleySecondBalance,
-                    date: result.volleySecondBalanceDate,
-                    type: result.volleySecondBalanceType,
-                },
-            ]
-        : result.course.activity.key === 'gymnastics'
-            ? [
-                    {
-                        name: 'gymnasticsFirstInstallment',
-                        amount: result.gymnasticsFirstInstallment,
-                        date: result.gymnasticsFirstInstallmentDate,
-                        type: result.gymnasticsFirstInstallmentType,
-                    },
-                    {
-                        name: 'gymnasticsSecondInstallment',
-                        amount: result.gymnasticsSecondInstallment,
-                        date: result.gymnasticsSecondInstallmentDate,
-                        type: result.gymnasticsSecondInstallmentType,
-                    },
-                    {
-                        name: 'gymnasticsThirdInstallment',
-                        amount: result.gymnasticsThirdInstallment,
-                        date: result.gymnasticsThirdInstallmentDate,
-                        type: result.gymnasticsThirdInstallmentType,
-                    },
-                ]
-            : [];
+    const payments = [
+        {
+            name: 'firstPayment',
+            amount: result.firstPayment,
+            date: result.firstPaymentDate,
+            type: result.firstPaymentType,
+        },
+        {
+            name: 'secondPayment',
+            amount: result.secondPayment,
+            date: result.secondPaymentDate,
+            type: result.secondPaymentType,
+        },
+        {
+            name: 'thirdPayment',
+            amount: result.thirdPayment,
+            date: result.thirdPaymentDate,
+            type: result.thirdPaymentType,
+        },
+    ];
 
     const { certificateStorageKey, ...rest } = result;
 

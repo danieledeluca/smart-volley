@@ -1,7 +1,5 @@
 import type { ActivityKeys, SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
 
-import { ENROLLMENT_PAYMENT_FIELDS } from '~~/lib/utils/constants';
-
 const ACTIVITY_ICONS: Record<ActivityKeys[number], string> = {
     volley: 'i-lucide-volleyball',
     gymnastics: 'i-lucide-dumbbell',
@@ -34,9 +32,9 @@ function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
 
 function getTotalPayments(enrollments: SelectEnrollmentsWithRelations[]) {
     return enrollments.reduce((acc, enrollment) => {
-        const totalPayments = ENROLLMENT_PAYMENT_FIELDS.reduce((sum, field) => {
-            return sum + (Number(enrollment[field] ?? 0));
-        }, 0);
+        const totalPayments = Number(enrollment.firstPayment || 0)
+            + Number(enrollment.secondPayment || 0)
+            + Number(enrollment.thirdPayment || 0);
 
         return acc + totalPayments;
     }, 0);

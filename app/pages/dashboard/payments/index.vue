@@ -7,15 +7,6 @@ useSeoMeta({
 <template>
     <EnrollmentDashboard
         :title="$t('page.payments.title')"
-        :tableColumns="[
-            'id',
-            'athlete',
-            'volleyAccount',
-            'volleyBalance',
-            'volleySecondBalance',
-            'gymnasticsFirstInstallment',
-            'gymnasticsSecondInstallment',
-            'gymnasticsThirdInstallment',
-        ]"
+        :tableColumns="['id', 'athlete', 'firstPayment', 'secondPayment', 'thirdPayment']"
     />
 </template>

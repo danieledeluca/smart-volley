@@ -252,24 +252,9 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
         season: getSeasonTableColumn(),
         activity: getActivityTableColumn(),
         course: getCourseTableColumn(),
-        volleyAccount: getPriceTableColum('volleyAccount', $t('table.column.volley_account')),
-        volleyBalance: getPriceTableColum('volleyBalance', $t('table.column.volley_balance')),
-        volleySecondBalance: getPriceTableColum(
-            'volleySecondBalance',
-            $t('table.column.volley_second_balance'),
-        ),
-        gymnasticsFirstInstallment: getPriceTableColum(
-            'gymnasticsFirstInstallment',
-            $t('table.column.gymnastics_first_installment'),
-        ),
-        gymnasticsSecondInstallment: getPriceTableColum(
-            'gymnasticsSecondInstallment',
-            $t('table.column.gymnastics_second_installment'),
-        ),
-        gymnasticsThirdInstallment: getPriceTableColum(
-            'gymnasticsThirdInstallment',
-            $t('table.column.gymnastics_third_installment'),
-        ),
+        firstPayment: getPriceTableColum('firstPayment', $t('table.column.first_payment')),
+        secondPayment: getPriceTableColum('secondPayment', $t('table.column.second_payment')),
+        thirdPayment: getPriceTableColum('thirdPayment', $t('table.column.second_payment')),
         certificateExpirationDate: {
             accessorKey: 'certificateExpirationDate',
             header: ({ column }) => h(TableSortDropdown, {

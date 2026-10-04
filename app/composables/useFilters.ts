@@ -1,5 +1,4 @@
-import type { CheckboxGroupItem, SelectItem } from '@nuxt/ui';
-import type { EnrollmentPaymentField } from '~~/lib/db/schema';
+import type { CheckboxGroupItem } from '@nuxt/ui';
 import type { CertificateStatusEnum } from '~~/shared/utils/zod-schema';
 
 import { EnrollmentsFiltersSchema } from '~~/shared/utils/zod-schema';
@@ -24,7 +23,6 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         seasonId: undefined,
         activityId: undefined,
         courseId: undefined,
-        missingPayment: undefined,
         certificateStatus: undefined,
     };
 
@@ -50,33 +48,6 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const filterState = filtersStates[formType];
 
     // Filters fields
-    const missingPaymentItems: Array<SelectItem & { value: EnrollmentPaymentField }> = [
-        {
-            label: $t('form.field.volley_account.label'),
-            value: 'volleyAccount',
-        },
-        {
-            label: $t('form.field.volley_balance.label'),
-            value: 'volleyBalance',
-        },
-        {
-            label: $t('form.field.volley_second_balance.label'),
-            value: 'volleySecondBalance',
-        },
-        {
-            label: $t('form.field.gymnastics_first_installment.label'),
-            value: 'gymnasticsFirstInstallment',
-        },
-        {
-            label: $t('form.field.gymnastics_second_installment.label'),
-            value: 'gymnasticsSecondInstallment',
-        },
-        {
-            label: $t('form.field.gymnastics_third_installment.label'),
-            value: 'gymnasticsThirdInstallment',
-        },
-    ];
-
     const certificateStatusItems: Array<CheckboxGroupItem & { value: CertificateStatusEnum }> = [
         {
             label: $t('form.field.certificate_status.item.valid'),
@@ -136,23 +107,6 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
                             icon: 'i-lucide-dumbbell',
                             items: coursesItems.value,
                             loading: coursesPending.value,
-                        },
-                    },
-                ],
-            },
-            {
-                title: $t('form.filter.group.payments'),
-                icon: 'i-lucide-badge-euro',
-                fields: [
-                    {
-                        renderAs: 'select',
-                        formFieldProps: {
-                            label: $t('form.field.missing_payment.label'),
-                            name: 'missingPayment',
-                        },
-                        selectProps: {
-                            placeholder: $t('form.field.missing_payment.placeholder'),
-                            items: missingPaymentItems,
                         },
                     },
                 ],
