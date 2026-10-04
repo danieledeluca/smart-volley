@@ -181,11 +181,9 @@ async function main() {
     // Activities
     const activities: InsertActivity[] = [
         {
-            key: 'volley',
             name: 'Volley',
         },
         {
-            key: 'gymnastics',
             name: 'Ginnastica',
         },
     ];

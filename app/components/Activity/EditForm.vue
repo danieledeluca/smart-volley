@@ -41,7 +41,6 @@ watchEffect(() => {
     if (activity.value) {
         state.value = {
             name: activity.value.name,
-            key: activity.value.key,
         };
     }
 });

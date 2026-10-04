@@ -9,11 +9,8 @@ const state = defineModel<Partial<InsertCourse>>('state', {
     required: true,
 });
 
-const authStore = useAuthStore();
 const { formFields } = useForm('course', formAction);
 const activityFormRef = useTemplateRef('activityFormRef');
-
-const { isAdmin } = storeToRefs(authStore);
 
 const openActivityModal = ref(false);
 
@@ -36,7 +33,7 @@ function handleSuccess(id?: number) {
             v-model="state[field.formFieldProps.name]"
             :field
         >
-            <template v-if="isAdmin" #activityId-post>
+            <template #activityId-post>
                 <AppModal
                     v-model:open="openActivityModal"
                     :title="$t('form.activity.add.title')"

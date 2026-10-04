@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { SelectActivities } from '~~/lib/db/schema';
-
 import Actions from '~/components/Activity/Actions.vue';
 
 useSeoMeta({
@@ -14,13 +12,7 @@ const activityFormRef = useTemplateRef('activityFormRef');
 const { isAdmin, canEdit } = storeToRefs(authStore);
 const { activities, activitiesPending, activitiesError } = storeToRefs(activitiesStore);
 
-const columns: (keyof SelectActivities)[] = ['id', 'name'];
-
-if (isAdmin.value) {
-    columns.push('key');
-}
-
-const tableColumns = getActivitiesTableColumns(columns);
+const tableColumns = getActivitiesTableColumns(['id', 'name']);
 
 if (canEdit.value) {
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ activityId: row.id })));

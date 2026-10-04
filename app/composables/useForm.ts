@@ -1,4 +1,4 @@
-import type { InputNumberProps, RadioGroupItem, RadioGroupProps, SelectItem } from '@nuxt/ui';
+import type { InputNumberProps, RadioGroupItem, RadioGroupProps } from '@nuxt/ui';
 import type {
     InsertActivity,
     InsertAthlete,
@@ -9,7 +9,7 @@ import type {
 } from '~~/lib/db/schema';
 
 import { CalendarDate } from '@internationalized/date';
-import { activityKey, enrollmentPaymentType } from '~~/lib/db/schema';
+import { enrollmentPaymentType } from '~~/lib/db/schema';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '~~/lib/utils/constants';
 import { formatFileSize } from '~~/lib/utils/formatters';
 
@@ -77,7 +77,6 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
     };
 
     const activityInitialState: Partial<InsertActivity> = {
-        key: undefined,
         name: undefined,
     };
 
@@ -521,23 +520,6 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
 
     const activityFields = computed<FormField<InsertActivity>[]>(() => {
         return [
-            {
-                renderAs: 'select',
-                formFieldProps: {
-                    label: $t('form.field.activity_key.label'),
-                    name: 'key',
-                    required: true,
-                },
-                selectProps: {
-                    placeholder: $t('form.field.activity_key.placeholder'),
-                    items: activityKey.enumValues.map<SelectItem>((key) => {
-                        return {
-                            label: key,
-                            value: key,
-                        };
-                    }),
-                },
-            },
             {
                 renderAs: 'input',
                 formFieldProps: {

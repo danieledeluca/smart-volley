@@ -1,8 +1,8 @@
-import type { ActivityKeys, SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
+import type { SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
 
-const ACTIVITY_ICONS: Record<ActivityKeys[number], string> = {
-    volley: 'i-lucide-volleyball',
-    gymnastics: 'i-lucide-dumbbell',
+const ACTIVITY_ICONS: Record<string, string> = {
+    Volley: 'i-lucide-volleyball',
+    Ginnastica: 'i-lucide-dumbbell',
 };
 
 const DEFAULT_ACTIVITY_ICON = 'i-lucide-zap';
@@ -142,18 +142,20 @@ export function getDashboardCards(
     seasons: SelectSeasons[],
     season: SelectSeasons,
 ) {
-    return Object.fromEntries(Object.entries(Object.groupBy(enrollments, (enrollment) => enrollment.activity.key))
+    return Object.fromEntries(Object.entries(Object.groupBy(enrollments, (enrollment) => enrollment.activity.name))
         .map(([activity, enrollments]) => {
             return [activity, {
-                icon: ACTIVITY_ICONS[activity as ActivityKeys[number]] || DEFAULT_ACTIVITY_ICON,
-                title: enrollments[0]?.activity.name || '',
-                cards: [
-                    getCurrentSeasonEnrollmentsCard(enrollments, season),
-                    getCurrentSeasonPaymentsCard(enrollments, season),
-                    getCurrentSeasonExpiringCertificateCard(enrollments, season),
-                    getTotalEnrollmentsCard(enrollments, seasons),
-                    getTotalPaymentsCard(enrollments, seasons),
-                ],
+                icon: ACTIVITY_ICONS[activity] || DEFAULT_ACTIVITY_ICON,
+                title: enrollments?.[0]?.activity.name || '',
+                cards: enrollments
+                    ? [
+                            getCurrentSeasonEnrollmentsCard(enrollments, season),
+                            getCurrentSeasonPaymentsCard(enrollments, season),
+                            getCurrentSeasonExpiringCertificateCard(enrollments, season),
+                            getTotalEnrollmentsCard(enrollments, seasons),
+                            getTotalPaymentsCard(enrollments, seasons),
+                        ]
+                    : [],
             }];
         }),
     );

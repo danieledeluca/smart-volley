@@ -336,11 +336,6 @@ export function getActivitiesTableColumns(columns: (keyof SelectActivities)[]) {
     const tableColumns: TableColumns<SelectActivities> = {
         id: getIdTableColumn(),
         name: getNameTableColumn(),
-        key: {
-            accessorKey: 'key',
-            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.key') }),
-            cell: ({ row }) => row.original.key,
-        },
     };
 
     return filterColumns(columns, tableColumns);
