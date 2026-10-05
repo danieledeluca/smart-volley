@@ -31,9 +31,11 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
         v-bind="dropdownMenuProps"
         :items="dropdownMenuItems"
         :modal="false"
-        :content="{ align: 'end' }"
+        :content="{
+            align: 'end',
+        }"
     >
-        <UButton v-bind="buttonProps" :disabled="isLoading">
+        <UButton v-bind="buttonProps" :disabled="isLoading" class="data-[state=open]:bg-elevated">
             <UUser
                 v-bind="userProps"
                 :name="user.name"
