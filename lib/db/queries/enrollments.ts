@@ -124,11 +124,11 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
                 columns: {
                     code: true,
                     name: true,
+                    activityId: true,
                 },
                 with: {
                     activity: {
                         columns: {
-                            key: true,
                             name: true,
                         },
                     },
