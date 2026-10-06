@@ -7,8 +7,8 @@
             </div>
             <div class="space-y-4">
                 <div v-for="m in 2" :key="m">
-                    <USkeleton class="mb-1 h-5 w-1/3" />
-                    <USkeleton class="h-8 w-full" />
+                    <USkeleton class="h-5 w-1/3" />
+                    <USkeleton class="mt-1 h-8 w-full" />
                 </div>
             </div>
         </div>
