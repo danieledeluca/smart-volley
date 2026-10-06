@@ -458,6 +458,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
                         renderAs: 'input-file',
                         formFieldProps: {
                             name: 'certificateStorageKey',
+                            help: formAction === 'edit' ? $t('form.field.certificate_storage_key.help') : undefined,
                         },
                         fileUploadProps: {
                             description: $t(

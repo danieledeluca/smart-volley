@@ -231,6 +231,7 @@ export const translations = {
                     type: 'Il file non è valido, scegli un file valido (PNG, JPG, WebP o PDF)',
                     upload: 'Errore nel caricamento del certificato',
                 },
+                help: 'L\'anteprima di un certificato già caricato non è disponibile. Per sostituirlo, elimina prima il file esistente.',
             },
             city: {
                 label: 'Città',
