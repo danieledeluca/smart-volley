@@ -250,7 +250,7 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
         course: getCourseTableColumn(),
         firstPayment: getPriceTableColum('firstPayment', $t('table.column.first_payment')),
         secondPayment: getPriceTableColum('secondPayment', $t('table.column.second_payment')),
-        thirdPayment: getPriceTableColum('thirdPayment', $t('table.column.second_payment')),
+        thirdPayment: getPriceTableColum('thirdPayment', $t('table.column.third_payment')),
         certificateExpirationDate: {
             accessorKey: 'certificateExpirationDate',
             header: ({ column }) => h(TableSortDropdown, {
