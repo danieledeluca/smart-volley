@@ -63,6 +63,6 @@ const features: PageFeatureProps[] = [
         <template #description>
             <div v-html="$t('page.home.section.description')" />
         </template>
-        <NuxtImg src="authentication.svg" class="w-full" />
+        <NuxtImg src="authentication.svg" class="w-full" :alt="$t('page.home.hero.title')" />
     </UPageSection>
 </template>

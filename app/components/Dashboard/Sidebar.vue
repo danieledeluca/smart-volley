@@ -11,7 +11,7 @@
         <template #header="{ collapsed }">
             <ULink to="/">
                 <AppLogo v-if="!collapsed" class="max-h-8" />
-                <NuxtImg v-else src="logo-small.png" />
+                <NuxtImg v-else src="logo-small.png" alt="Smart Volley Logo" />
             </ULink>
         </template>
 
