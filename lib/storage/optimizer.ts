@@ -2,7 +2,8 @@ import { Buffer } from 'node:buffer';
 import { PageSizes, PDFDocument } from 'pdf-lib';
 import sharp from 'sharp';
 
-import { A4_HEIGHT, A4_WIDTH } from '../utils/constants';
+const A4_WIDTH = 1240;
+const A4_HEIGHT = 1754;
 
 export async function optimizeAndConvertToPdf(file: File) {
     const inputBuffer = await file.arrayBuffer();

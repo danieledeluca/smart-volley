@@ -8,7 +8,7 @@ import z from 'zod';
 import type { findAthlete, findAthletes, insertAthlete, updateAthlete } from '../queries/athletes';
 
 import { $t } from '../../../shared/utils/i18n';
-import { FISCAL_CODE_REGEX, PHONE_NUMBER_REGEX } from '../../utils/constants';
+import { EmailSchema, FiscalCodeSchema, NameSchema, PhoneNumberSchema } from '../../utils/zod-schemas';
 import { enrollment } from './enrollment';
 import { parent } from './parent';
 
@@ -54,22 +54,12 @@ export const athleteRelations = relations(athlete, ({ one, many }) => {
 });
 
 export const InsertAthlete = createInsertSchema(athlete, {
-    name: z.string($t('form.field.name.required')).trim().nonempty($t('form.field.name.required')),
+    name: NameSchema,
     birthdate: z.string($t('form.field.birthdate.required'))
         .refine((value) => new Date(value) <= new Date(), $t('form.field.birthdate.error')),
-    fiscalCode: z.string($t('form.field.fiscal_code.required'))
-        .transform((value) => value.toUpperCase())
-        .pipe(z.string().regex(FISCAL_CODE_REGEX, $t('form.field.fiscal_code.error'))),
-    phoneNumber: z.string()
-        .trim()
-        .transform((value) => value || undefined)
-        .refine((value) => !value || PHONE_NUMBER_REGEX.test(value), $t('form.field.phone_number.error'))
-        .optional(),
-    email: z.string()
-        .trim()
-        .transform((value) => value || undefined)
-        .refine((value) => !value || z.email().safeParse(value).success, $t('form.field.email.error'))
-        .optional(),
+    fiscalCode: FiscalCodeSchema,
+    phoneNumber: PhoneNumberSchema,
+    email: EmailSchema,
     parentId: z.union([z.literal('').transform(() => undefined), z.coerce.number()]).optional(),
 }).extend({
     birthplace: z.object({

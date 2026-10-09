@@ -1,4 +1,4 @@
-import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schema';
+import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schemas';
 
 import { and, desc, eq, inArray, isNull } from 'drizzle-orm';
 

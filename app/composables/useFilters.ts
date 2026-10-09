@@ -1,7 +1,7 @@
 import type { CheckboxGroupItem } from '@nuxt/ui';
-import type { CertificateStatusEnum } from '~~/shared/utils/zod-schema';
+import type { CertificateStatusEnum } from '~~/shared/utils/zod-schemas';
 
-import { EnrollmentsFiltersSchema } from '~~/shared/utils/zod-schema';
+import { EnrollmentsFiltersSchema } from '~~/shared/utils/zod-schemas';
 
 type FiltersSchemas = {
     enrollment: EnrollmentsFiltersSchema;
