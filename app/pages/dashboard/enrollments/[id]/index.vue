@@ -27,7 +27,7 @@ onMounted(async () => {
                 :label="$t('page.enrollment.button.back')"
             />
         </template>
-        <EnrollmentDetailsLoader v-if="pending" />
+        <EnrollmentDetailsLoader v-if="pending && !enrollment" />
         <UAlert
             v-else-if="error"
             :title="getApiError(error)"

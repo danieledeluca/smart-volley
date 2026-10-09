@@ -23,7 +23,7 @@ onMounted(async () => {
         <template #right>
             <UButton icon="i-lucide-arrow-left" to="/dashboard/athletes" :label="$t('page.athlete.button.back')" />
         </template>
-        <AthleteDetailsLoader v-if="pending" />
+        <AthleteDetailsLoader v-if="pending && !athlete" />
         <UAlert
             v-else-if="error"
             :title="getApiError(error)"

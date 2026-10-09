@@ -19,7 +19,7 @@ onMounted(async () => {
         <template #right>
             <UButton icon="i-lucide-arrow-left" to="/dashboard/parents" :label="$t('page.parent.button.back')" />
         </template>
-        <ParentDetailsLoader v-if="pending" />
+        <ParentDetailsLoader v-if="pending && !parent" />
         <UAlert
             v-else-if="error"
             :title="getApiError(error)"
