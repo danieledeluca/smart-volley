@@ -113,7 +113,10 @@ export async function updateAthlete(data: InsertAthlete, athleteId: number) {
             email,
             parentId,
         })
-        .where(eq(athlete.id, athleteId))
+        .where(and(
+            eq(athlete.id, athleteId),
+            isNull(athlete.deletedAt),
+        ))
         .returning();
 
     return updated;
@@ -126,7 +129,10 @@ export async function deleteAthletes(data: MultipleDeleteSchema) {
 
     const deleted = await db.update(athlete)
         .set({ deletedAt: new Date() })
-        .where(inArray(athlete.id, data.ids))
+        .where(and(
+            inArray(athlete.id, data.ids),
+            isNull(athlete.deletedAt),
+        ))
         .returning();
 
     return deleted;
@@ -135,7 +141,10 @@ export async function deleteAthletes(data: MultipleDeleteSchema) {
 export async function deleteAthlete(athleteId: number) {
     const [deleted] = await db.update(athlete)
         .set({ deletedAt: new Date() })
-        .where(eq(athlete.id, athleteId))
+        .where(and(
+            eq(athlete.id, athleteId),
+            isNull(athlete.deletedAt),
+        ))
         .returning();
 
     return deleted;

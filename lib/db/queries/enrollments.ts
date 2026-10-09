@@ -140,6 +140,7 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
             isNull(enrollment.deletedAt),
         ),
         orderBy: desc(enrollment.id),
+
     });
 
     return result.map(({ certificateStorageKey, ...rest }) => {
@@ -279,7 +280,10 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
             certificateExpirationDate,
             ...(certificateStorageKey !== undefined && { certificateStorageKey }),
         })
-        .where(eq(enrollment.id, enrollmentId))
+        .where(and(
+            eq(enrollment.id, enrollmentId),
+            isNull(enrollment.deletedAt),
+        ))
         .returning();
 
     return updated;
@@ -292,7 +296,10 @@ export async function deleteEnrollments(data: MultipleDeleteSchema) {
 
     const deleted = await db.update(enrollment)
         .set({ deletedAt: new Date() })
-        .where(inArray(enrollment.id, data.ids))
+        .where(and(
+            inArray(enrollment.id, data.ids),
+            isNull(enrollment.deletedAt),
+        ))
         .returning();
 
     return deleted;
@@ -301,7 +308,10 @@ export async function deleteEnrollments(data: MultipleDeleteSchema) {
 export async function deleteEnrollment(enrollmentId: number) {
     const [deleted] = await db.update(enrollment)
         .set({ deletedAt: new Date() })
-        .where(eq(enrollment.id, enrollmentId))
+        .where(and(
+            eq(enrollment.id, enrollmentId),
+            isNull(enrollment.deletedAt),
+        ))
         .returning();
 
     return deleted;
