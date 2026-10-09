@@ -8,7 +8,7 @@ export const translations = {
             waiting: 'In attesa...',
         },
         sign_out: 'Esci',
-        sing_in: {
+        sign_in: {
             google: 'Accedi con Google',
         },
     },
@@ -16,7 +16,6 @@ export const translations = {
         address_contacts: {
             record: {
                 address: 'Indirizzo',
-                city: 'Città',
                 email: 'Email',
                 phone_number: 'Numero di cellulare',
             },
@@ -73,11 +72,11 @@ export const translations = {
         },
     },
     error: {
-        conflict: 'Conflict',
-        edit_role: 'Non puoi modificare il tuo ruolo',
-        server: 'An unknown error occurred.',
-        unauthorized: 'Unauthorized',
-        unprocessable_entity: 'Unprocessable Entity',
+        conflict: 'The request could not be completed due to a conflict with the current state of the resource.',
+        forbidden: 'You don\'t have permission to access this resource',
+        generic: 'An unexpected error occurred. Please try again later.',
+        unauthorized: 'You are not authenticated. Please log in to continue.',
+        unprocessable_content: 'The request was understood, but the provided data is invalid.',
     },
     form: {
         activity: {
@@ -105,7 +104,7 @@ export const translations = {
             },
             delete: {
                 body: 'Sei sicuro di voler eliminare questo atleta? Questa azione è irreversibile.',
-                description: 'Attenzione! Stai per eliminare un\'atleta.',
+                description: 'Attenzione! Stai per eliminare un atleta.',
                 success: 'Atleta eliminato con successo',
                 title: 'Elimina atleta',
             },
@@ -190,7 +189,7 @@ export const translations = {
                 duplicate: 'L\'attività esiste già',
                 label: 'Nome attività',
                 placeholder: 'Inserisci il nome dell\'attività',
-                required: 'Il nome dell\'attività è obbligatoria',
+                required: 'Il nome dell\'attività è obbligatorio',
             },
             address: {
                 label: 'Indirizzo',
@@ -199,7 +198,7 @@ export const translations = {
             },
             athlete_id: {
                 not_found: 'Atleta non trovato',
-                placeholder: 'Seleziona un\'atleta',
+                placeholder: 'Seleziona un atleta',
                 required: 'L\'atleta è obbligatorio',
             },
             birthdate: {
@@ -235,11 +234,6 @@ export const translations = {
                 },
                 help: 'L\'anteprima di un certificato già caricato non è disponibile. Per sostituirlo, elimina prima il file esistente.',
             },
-            city: {
-                label: 'Città',
-                placeholder: 'Inserisci la città',
-                required: 'La città è obbligatoria',
-            },
             course_code: {
                 duplicate: 'Il corso esiste già',
                 label: 'Codice del corso',
@@ -259,7 +253,7 @@ export const translations = {
             },
             email: {
                 duplicate: 'L\'email esiste già',
-                error: 'L\'email non valida',
+                error: 'L\'email non è valida',
                 label: 'Email',
                 placeholder: 'Inserisci l\'email',
             },
@@ -291,7 +285,7 @@ export const translations = {
             name: {
                 label: 'Cognome e nome',
                 placeholder: 'Inserisci il cognome e il nome',
-                required: 'Il cognome e il nome sono obbligatorio',
+                required: 'Il cognome e il nome sono obbligatori',
             },
             parent_id: {
                 not_found: 'Genitore non trovato',
@@ -316,7 +310,6 @@ export const translations = {
                 error: 'Il numero di cellulare non è valido',
                 label: 'Numero di cellulare',
                 placeholder: 'Inserisci il numero di cellulare',
-                required: 'Il numero di cellulare è obbligatorio',
             },
             season: {
                 duplicate: 'La stagione per questo arco di tempo esiste già',
@@ -331,9 +324,9 @@ export const translations = {
                 label: 'Secondo pagamento',
             },
             start_year: {
-                label: 'Anno d\'inizio',
-                placeholder: 'Inserisci l\'anno d\'inizio',
-                required: 'L\'anno d\'inizio è obbligatorio',
+                label: 'Anno di inizio',
+                placeholder: 'Inserisci l\'anno di inizio',
+                required: 'L\'anno di inizio è obbligatorio',
             },
             third_payment: {
                 label: 'Terzo pagamento',
@@ -482,25 +475,6 @@ export const translations = {
             },
         },
         home: {
-            card: {
-                athletes: {
-                    description: 'Consulta la lista completa degli atleti iscritti.',
-                    title: 'Atleti',
-                },
-                certificates: {
-                    description: 'Consulta lo stato di validità dei certificati medici degli atleti.',
-                    title: 'Certificati medici',
-                },
-                enrollments: {
-                    description: 'Consulta la lista completa delle iscrizioni degli atleti.',
-                    title: 'Iscrizioni',
-                },
-                payments: {
-                    description: 'Consulta lo stato dei pagamenti effettuati.',
-                    title: 'Pagamenti',
-                },
-                tooltip: 'Accedi per vedere il contenuto',
-            },
             feature: {
                 manager: {
                     description: 'Può visualizzare e modificare tutti i dati',
@@ -554,7 +528,7 @@ export const translations = {
         settings: {
             users: {
                 card: {
-                    description: 'Assegna un ruolo a chi si è registrato o rimuovi l’accesso',
+                    description: 'Assegna un ruolo a chi si è registrato o rimuovi l\'accesso',
                     title: 'Utenti',
                 },
                 filter: {
@@ -565,7 +539,10 @@ export const translations = {
             },
         },
         user: {
-            error: 'Utente non trovato',
+            error: {
+                not_able: 'Non puoi modificare il tuo ruolo',
+                not_found: 'Utente non trovato',
+            },
         },
     },
     table: {
@@ -619,7 +596,7 @@ export const translations = {
             phone_number: 'Numero di cellulare',
             season: 'Stagione',
             second_payment: 'Secondo pagamento',
-            start_year: 'Anno d\'inizio',
+            start_year: 'Anno di inizio',
             third_payment: 'Terzo pagamento',
         },
         global_filter: {

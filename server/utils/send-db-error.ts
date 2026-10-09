@@ -85,7 +85,7 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
 
         return sendError(event, createError({
             statusCode: 422,
-            statusMessage: $t('error.unprocessable_entity'),
+            statusMessage: $t('error.unprocessable_content'),
             data: formError ? [formError] : undefined,
         }));
     }

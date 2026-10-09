@@ -5,6 +5,9 @@ useHead({
     titleTemplate: (titleChunk) => {
         return titleChunk ? `${titleChunk} | Smart Volley` : 'Smart Volley';
     },
+    htmlAttrs: {
+        lang: 'it',
+    },
 });
 </script>
 

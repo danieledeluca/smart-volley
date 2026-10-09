@@ -62,7 +62,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
     <UButton
         v-else
         v-bind="buttonProps"
-        :label="$t('auth.sing_in.google')"
+        :label="$t('auth.sign_in.google')"
         icon="i-logos-google-icon"
         :loading="isLoading"
         @click="authStore.signIn"

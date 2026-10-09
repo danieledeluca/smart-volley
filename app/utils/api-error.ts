@@ -13,5 +13,5 @@ type ApiErrorBody = {
 };
 
 export function getApiError(error: NuxtError<unknown> | FetchError<unknown>) {
-    return (error.data as ApiErrorBody)?.statusMessage || error.statusText || $t('error.server');
+    return (error.data as ApiErrorBody)?.statusMessage || error.statusText || $t('error.generic');
 }

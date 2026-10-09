@@ -15,7 +15,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     if (routerParamsResult.data.id === Number(user.id)) {
         throw createError({
             statusCode: 400,
-            statusMessage: $t('error.edit_role'),
+            statusMessage: $t('page.user.error.not_able'),
         });
     }
 
@@ -31,7 +31,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
         if (!updated) {
             return sendError(event, createError({
                 statusCode: 404,
-                statusMessage: $t('page.user.error'),
+                statusMessage: $t('page.user.error.not_found'),
             }));
         }
 
