@@ -9,6 +9,7 @@ const emit = defineEmits<{
     success: [];
 }>();
 
+const parentsStore = useParentsStore();
 const { $csrfFetch } = useNuxtApp();
 const parentFormRef = useTemplateRef('parentFormRef');
 
@@ -22,6 +23,8 @@ async function onSubmit() {
 }
 
 function onSubmitComplete() {
+    parentsStore.refreshParents();
+
     emit('success');
 }
 
