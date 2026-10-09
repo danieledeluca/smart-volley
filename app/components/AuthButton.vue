@@ -35,11 +35,12 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
             align: 'end',
         }"
     >
-        <UButton v-bind="buttonProps" :disabled="isLoading" class="data-[state=open]:bg-elevated">
+        <UButton v-bind="buttonProps" :disabled="isLoading" class="min-w-0 data-[state=open]:bg-elevated">
             <UUser
                 v-bind="userProps"
                 :name="user.name"
                 :description="user.role ? $t(`auth.role.${user.role.toString()}`) : $t('auth.role.waiting')"
+                class="text-start"
                 :avatar="{
                     src: user.image && !isLoading ? user.image : undefined,
                     alt: user.name,
@@ -49,7 +50,12 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
                         icon: 'animate-spin',
                     },
                 }"
-                class="w-full max-w-full text-start **:data-[slot=wrapper]:max-w-[calc(100%-32px-8px)] **:data-[slot=wrapper]:*:truncate"
+                :ui="{
+                    root: 'min-w-0',
+                    wrapper: 'min-w-0',
+                    name: 'truncate',
+                    description: 'truncate',
+                }"
             />
         </UButton>
     </UDropdownMenu>

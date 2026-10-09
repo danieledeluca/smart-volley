@@ -10,15 +10,6 @@
                 :buttonProps="{
                     variant: 'ghost',
                     color: 'neutral',
-                    class: 'max-w-[calc(100%-32px-6px)] max-sm:px-1.5',
-                    ui: {
-                        label: 'max-w-[calc(100%-20px-6px)] max-sm:hidden',
-                    },
-                }"
-                :userProps="{
-                    ui: {
-                        wrapper: 'max-sm:hidden',
-                    },
                 }"
             />
         </template>

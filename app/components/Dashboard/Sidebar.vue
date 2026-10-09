@@ -31,7 +31,6 @@
                 :buttonProps="{
                     variant: 'ghost',
                     color: 'neutral',
-                    class: collapsed ? '' : 'max-w-[calc(100%-32px-6px)]',
                     trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
                     block: true,
                     square: collapsed,
@@ -40,11 +39,7 @@
                     },
                 }"
                 :userProps="{
-                    class: collapsed ? '' : 'max-w-[calc(100%-20px-6px-2px)]!',
-                    ui: {
-                        avatar: collapsed ? 'size-5' : '',
-                        wrapper: collapsed ? 'hidden' : '',
-                    },
+                    size: collapsed ? '2xs' : undefined,
                 }"
             />
         </template>
