@@ -10,14 +10,8 @@ export const useCoursesStore = defineStore('courses', () => {
 
     const coursesItems = computed(() => {
         return courses.value?.map<SelectMenuItem>((course) => {
-            let label = course.code;
-
-            if (course.name) {
-                label += ` - ${course.name}`;
-            }
-
             return {
-                label,
+                label: `${course.code} - ${course.name}`,
                 description: course.activity.name,
                 value: course.id,
             };

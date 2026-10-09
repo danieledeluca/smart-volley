@@ -116,19 +116,15 @@ function getActivityTableColumn<T extends { activity: { name: string } }>(): Tab
     };
 }
 
-function getCourseTableColumn<T extends { course: { code: string; name: string | null } }>(): TableColumn<T> {
+function getCourseTableColumn<T extends { course: { code: string; name: string } }>(): TableColumn<T> {
     return {
         accessorKey: 'course',
         header: $t('table.column.course'),
         cell: ({ row }) => {
-            if (row.original.course.name) {
-                return [
-                    h('span', undefined, row.original.course.code),
-                    h('span', { class: 'text-xs' }, ` - ${row.original.course.name}`),
-                ];
-            }
-
-            return row.original.course.code;
+            return [
+                h('span', undefined, row.original.course.code),
+                h('span', { class: 'text-xs' }, ` - ${row.original.course.name}`),
+            ];
         },
     };
 }

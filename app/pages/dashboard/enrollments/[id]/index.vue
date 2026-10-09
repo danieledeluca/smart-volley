@@ -83,9 +83,7 @@ onMounted(async () => {
                         />
                         <ItemCardRecord
                             :label="$t('card.sport.record.course')"
-                            :value="`${enrollment.course.code} ${enrollment.course.name
-                                ? `- ${enrollment.course.name}`
-                                : ''}`"
+                            :value="`${enrollment.course.code} - ${enrollment.course.name}`"
                         />
                     </ItemCard>
                 </div>

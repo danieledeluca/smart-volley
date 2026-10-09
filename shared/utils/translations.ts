@@ -255,6 +255,7 @@ export const translations = {
             course_name: {
                 label: 'Nome del corso',
                 placeholder: 'Inserisci il nome del corso',
+                required: 'Il nome del corso è obbligatorio',
             },
             email: {
                 duplicate: 'L\'email esiste già',
@@ -290,7 +291,7 @@ export const translations = {
             name: {
                 label: 'Cognome e nome',
                 placeholder: 'Inserisci il cognome e il nome',
-                required: 'Il cognome e il nome sono obbligatori',
+                required: 'Il cognome e il nome sono obbligatorio',
             },
             parent_id: {
                 not_found: 'Genitore non trovato',

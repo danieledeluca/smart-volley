@@ -29,13 +29,8 @@ export async function insertCourse(data: InsertCourse) {
 }
 
 export async function updateCourse(data: InsertCourse, courseId: number) {
-    const { name = null, ...rest } = data;
-
     const [updated] = await db.update(course)
-        .set({
-            ...rest,
-            name,
-        })
+        .set(data)
         .where(eq(course.id, courseId))
         .returning();
 
