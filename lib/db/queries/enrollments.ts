@@ -4,7 +4,7 @@ import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, or, sql } f
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
-import type { InsertEnrollment, UpdateEnrollment } from '../schema';
+import type { InsertEnrollment } from '../schema';
 
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
@@ -290,7 +290,7 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
         ...rest
     } = data;
 
-    let updated: UpdateEnrollment | undefined;
+    let updated;
 
     try {
         [updated] = await db.update(enrollment)
