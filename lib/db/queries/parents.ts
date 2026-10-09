@@ -33,8 +33,14 @@ export async function insertParent(data: InsertParent) {
 }
 
 export async function updateParent(data: InsertParent, parentId: number) {
+    const { phoneNumber = null, email = null, ...rest } = data;
+
     const [updated] = await db.update(parent)
-        .set(data)
+        .set({
+            ...rest,
+            phoneNumber,
+            email,
+        })
         .where(eq(parent.id, parentId))
         .returning();
 

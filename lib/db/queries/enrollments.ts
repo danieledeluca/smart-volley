@@ -249,11 +249,34 @@ export async function insertEnrollment(data: InsertEnrollment) {
 
 export async function updateEnrollment(data: InsertEnrollment, enrollmentId: number) {
     const certificateStorageKey = await getCertificateStorageKey(data);
-    const { certificateStorageKey: _, ...rest } = data;
+    const {
+        firstPayment = null,
+        firstPaymentDate = null,
+        firstPaymentType = null,
+        secondPayment = null,
+        secondPaymentDate = null,
+        secondPaymentType = null,
+        thirdPayment = null,
+        thirdPaymentDate = null,
+        thirdPaymentType = null,
+        certificateExpirationDate = null,
+        certificateStorageKey: _,
+        ...rest
+    } = data;
 
     const [updated] = await db.update(enrollment)
         .set({
             ...rest,
+            firstPayment,
+            firstPaymentDate,
+            firstPaymentType,
+            secondPayment,
+            secondPaymentDate,
+            secondPaymentType,
+            thirdPayment,
+            thirdPaymentDate,
+            thirdPaymentType,
+            certificateExpirationDate,
             ...(certificateStorageKey !== undefined && { certificateStorageKey }),
         })
         .where(eq(enrollment.id, enrollmentId))

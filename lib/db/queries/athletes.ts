@@ -88,16 +88,13 @@ export async function findAthlete(athleteId: number) {
 }
 
 export async function insertAthlete(data: InsertAthlete) {
-    const { birthplace, address, phoneNumber = null, email = null, parentId = null, ...rest } = data;
+    const { birthplace, address, ...rest } = data;
 
     const [created] = await db.insert(athlete)
         .values({
             ...rest,
             ...mapBirthplaceToColumns(birthplace),
             ...mapAddressToColumns(address),
-            phoneNumber,
-            email,
-            parentId,
         })
         .returning();
 
