@@ -20,7 +20,7 @@ const activityFormRef = useTemplateRef('activityFormRef');
 const { initialState } = useForm('activity');
 
 const state = ref({ ...initialState });
-const updatedSeason = ref<UpdatedActivity>();
+const updatedActivity = ref<UpdatedActivity>();
 
 async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
     const activity = await $csrfFetch<UpdatedActivity>(`/api/activities/${activityId}`, {
@@ -28,13 +28,13 @@ async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
         body: event.data,
     });
 
-    updatedSeason.value = activity;
+    updatedActivity.value = activity;
 }
 
 function onSubmitComplete() {
     activitiesStore.refreshActivities();
 
-    emit('success', updatedSeason.value?.id);
+    emit('success', updatedActivity.value?.id);
 }
 
 watchEffect(() => {
