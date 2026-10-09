@@ -9,7 +9,7 @@ const authStore = useAuthStore();
 const activitiesStore = useActivitiesStore();
 const activityFormRef = useTemplateRef('activityFormRef');
 
-const { isAdmin, canEdit } = storeToRefs(authStore);
+const { canEdit } = storeToRefs(authStore);
 const { activities, activitiesPending, activitiesError } = storeToRefs(activitiesStore);
 
 const tableColumns = getActivitiesTableColumns(['id', 'name']);
@@ -21,7 +21,7 @@ if (canEdit.value) {
 
 <template>
     <DashboardPanel :title="$t('page.activities.title')">
-        <template v-if="isAdmin" #right>
+        <template v-if="canEdit" #right>
             <AppSlideover
                 :title="$t('form.activity.add.title')"
                 :description="$t('form.activity.add.description')"
