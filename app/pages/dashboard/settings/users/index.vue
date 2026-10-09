@@ -3,9 +3,9 @@ useSeoMeta({
     title: $t('page.settings.users.title'),
 });
 
-const authStore = useAuthStore();
+const usersStore = useUsersStore();
 
-const { users, usersPending, usersError } = storeToRefs(authStore);
+const { users, usersPending, usersError } = storeToRefs(usersStore);
 
 const q = ref('');
 

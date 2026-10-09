@@ -11,7 +11,7 @@ const { user } = defineProps<{
 
 const toast = useToast();
 const { $csrfFetch } = useNuxtApp();
-const authStore = useAuthStore();
+const usersStore = useUsersStore();
 
 const isLoading = ref(false);
 
@@ -52,7 +52,7 @@ async function handleUpdate(userRole: UserRoleSchema) {
             },
         });
 
-        await authStore.refreshUsers();
+        await usersStore.refreshUsers();
 
         toast.add({
             description: $t('form.user_role.edit.success'),

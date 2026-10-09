@@ -47,13 +47,6 @@ export const useAuthStore = defineStore('auth', () => {
         navigateTo('/');
     }
 
-    const {
-        data: users,
-        pending: usersPending,
-        error: usersError,
-        refresh: refreshUsers,
-    } = useLazyFetch('/api/users');
-
     return {
         session,
         user,
@@ -61,11 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
         isAdmin,
         canView,
         canEdit,
-        users,
-        usersPending,
-        usersError,
         signIn,
         signOut,
-        refreshUsers,
     };
 });
