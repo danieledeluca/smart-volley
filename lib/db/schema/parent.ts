@@ -1,13 +1,13 @@
 import type { SerializeObject } from 'nitropack';
 import type z from 'zod';
 
-import { EmailSchema, FiscalCodeSchema, NameSchema, PhoneNumberSchema } from '~~/lib/utils/zod-schemas';
 import { relations, sql } from 'drizzle-orm';
 import { char, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 
 import type { findParent, findParents, insertParent, updateParent } from '../queries/parents';
 
+import { EmailSchema, FiscalCodeSchema, NameSchema, PhoneNumberSchema } from '../../utils/zod-schemas';
 import { athlete } from './athlete';
 
 export const parent = pgTable('parent', {

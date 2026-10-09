@@ -188,90 +188,93 @@ async function main() {
         },
     ];
 
-    await db.insert(activity).values(activities).returning();
+    const insertedActivities = await db.insert(activity).values(activities).returning();
     console.log('Activities inserted successfully');
 
     // Courses
+    const volleyActivityId = insertedActivities.find((activity) => activity.name === 'Volley')?.id || 1;
+    const gymnasticsActivityId = insertedActivities.find((activity) => activity.name === 'Ginnastica')?.id || 2;
+
     const courses: InsertCourse[] = [
         {
             code: 'M',
             name: 'Minivolley',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'SM',
             name: 'Super minivolley',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'U10',
             name: 'Under 10',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'U12',
             name: 'Under 12',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'U13',
             name: 'Under 13',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'U14',
             name: 'Under 14',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'U15',
             name: 'Under 15',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'U16',
             name: 'Under 16',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: '2D',
             name: 'Seconda divisione',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'PA',
             name: 'Pallavolo amatoriale',
-            activityId: 1,
+            activityId: volleyActivityId,
         },
         {
             code: 'TB',
             name: 'Total body',
-            activityId: 2,
+            activityId: gymnasticsActivityId,
         },
         {
             code: 'Z',
             name: 'Zumba',
-            activityId: 2,
+            activityId: gymnasticsActivityId,
         },
         {
             code: 'P',
             name: 'Pilates',
-            activityId: 2,
+            activityId: gymnasticsActivityId,
         },
         {
             code: 'D',
             name: 'Dolce',
-            activityId: 2,
+            activityId: gymnasticsActivityId,
         },
         {
             code: 'NW',
             name: 'Nordic walking',
-            activityId: 2,
+            activityId: gymnasticsActivityId,
         },
         {
             code: 'CSG',
             name: 'Corri salta gioca',
-            activityId: 2,
+            activityId: gymnasticsActivityId,
         },
     ];
 
@@ -279,7 +282,7 @@ async function main() {
     console.log('Courses inserted successfully');
 
     // Parents
-    const parents: InsertParent[] = generateUsers(50).map((user) => {
+    const parents = generateUsers(50).map<InsertParent>((user) => {
         return {
             name: user.name,
             fiscalCode: user.fiscalCode,
@@ -406,4 +409,4 @@ main().then(() => {
 }).catch((err) => {
     console.error(err);
     process.exit(1);
-}); ;
+});
