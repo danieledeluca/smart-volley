@@ -23,7 +23,7 @@ if (canEdit.value) {
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ parentId: row.id })));
 }
 
-function handelDeleteSuccess() {
+function handleDeleteSuccess() {
     deleteModalOpen.value = false;
 
     parentTableRef.value?.toggleAllPageRowsSelected(false);
@@ -71,7 +71,7 @@ function handelDeleteSuccess() {
                         <ParentMultipleDeleteForm
                             ref="parentDeleteFormRef"
                             :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
-                            @success="handelDeleteSuccess"
+                            @success="handleDeleteSuccess"
                         />
                     </ListDeleteButton>
                 </div>

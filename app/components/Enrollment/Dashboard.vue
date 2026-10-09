@@ -38,7 +38,7 @@ async function handleFiltersUpdate() {
     enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
 }
 
-function handelDeleteSuccess() {
+function handleDeleteSuccess() {
     deleteModalOpen.value = false;
 
     enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
@@ -92,7 +92,7 @@ function handelDeleteSuccess() {
                         <EnrollmentMultipleDeleteForm
                             ref="enrollmentDeleteFormRef"
                             :enrollments="enrollmentTableRef?.selectRows()?.map((row) => row.original) || []"
-                            @success="handelDeleteSuccess"
+                            @success="handleDeleteSuccess"
                         />
                     </ListDeleteButton>
                 </ListFilters>

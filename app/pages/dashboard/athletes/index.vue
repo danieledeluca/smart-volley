@@ -32,7 +32,7 @@ function handleInteractOutside(event: Event) {
     }
 }
 
-function handelDeleteSuccess() {
+function handleDeleteSuccess() {
     deleteModalOpen.value = false;
 
     athleteTableRef.value?.toggleAllPageRowsSelected(false);
@@ -82,7 +82,7 @@ function handelDeleteSuccess() {
                         <AthleteMultipleDeleteForm
                             ref="athleteDeleteFormRef"
                             :athletes="athleteTableRef?.selectRows()?.map((row) => row.original) || []"
-                            @success="handelDeleteSuccess"
+                            @success="handleDeleteSuccess"
                         />
                     </ListDeleteButton>
                 </div>
