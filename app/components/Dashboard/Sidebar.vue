@@ -16,7 +16,7 @@
         </template>
 
         <template #default="{ collapsed }">
-            <AppMenu :collapsed orientation="vertical" />
+            <AppMenu :collapsed />
         </template>
 
         <template #footer="{ collapsed }">

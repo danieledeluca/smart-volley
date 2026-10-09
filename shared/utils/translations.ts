@@ -74,7 +74,9 @@ export const translations = {
     },
     error: {
         conflict: 'Conflict',
+        edit_role: 'Non puoi modificare il tuo ruolo',
         server: 'An unknown error occurred.',
+        unauthorized: 'Unauthorized',
         unprocessable_entity: 'Unprocessable Entity',
     },
     form: {
@@ -335,6 +337,9 @@ export const translations = {
             third_payment: {
                 label: 'Terzo pagamento',
             },
+            user_role: {
+                placeholder: 'Seleziona un ruolo',
+            },
         },
         filter: {
             button: {
@@ -394,6 +399,11 @@ export const translations = {
         tooltip: {
             delete: 'Seleziona almeno una riga',
         },
+        user_role: {
+            edit: {
+                success: 'Ruolo utente aggiornato con successo',
+            },
+        },
         warning: {
             no_data: 'Nessun dato',
         },
@@ -408,6 +418,10 @@ export const translations = {
         parents: 'Genitori',
         payments: 'Pagamenti',
         seasons: 'Stagioni',
+        settings: {
+            label: 'Impostazioni',
+            users: 'Utenti',
+        },
     },
     page: {
         activities: {
@@ -535,6 +549,22 @@ export const translations = {
                 add: 'Nuova stagione',
             },
             title: 'Stagioni',
+        },
+        settings: {
+            users: {
+                card: {
+                    description: 'Assegna un ruolo a chi si è registrato o rimuovi l’accesso',
+                    title: 'Utenti',
+                },
+                filter: {
+                    placeholder: 'Cerca utenti',
+                },
+                no_data: 'Nessun risultato trovato per: {name}',
+                title: 'Utenti',
+            },
+        },
+        user: {
+            error: 'Utente non trovato',
         },
     },
     table: {

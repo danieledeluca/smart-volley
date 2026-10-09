@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { NavigationMenuItem, NavigationMenuProps } from '@nuxt/ui';
+import type { NavigationMenuItem } from '@nuxt/ui';
 
-const navigationMenuProps = defineProps<Omit<NavigationMenuProps, 'items'>>();
+const { collapsed } = defineProps<{
+    collapsed: boolean;
+}>();
 
 const route = useRoute();
 const authStore = useAuthStore();
 
-const { canEdit } = storeToRefs(authStore);
+const { isAdmin, canEdit } = storeToRefs(authStore);
 
 const navigationMenuItems = computed(() => {
     const items: NavigationMenuItem[][] = [
@@ -80,8 +82,33 @@ const navigationMenuItems = computed(() => {
 
     return items;
 });
+
+const adminNavigationMenuItems = computed<NavigationMenuItem[]>(() => {
+    return [
+        {
+            label: $t('menu.settings.label'),
+            to: '/dashboard/settings/users',
+            icon: 'i-lucide-settings',
+            active: route.path.startsWith('/dashboard/settings'),
+        },
+    ];
+});
 </script>
 
 <template>
-    <UNavigationMenu v-bind="navigationMenuProps" :items="navigationMenuItems" />
+    <UNavigationMenu
+        :items="navigationMenuItems"
+        :collapsed
+        orientation="vertical"
+        tooltip
+        popover
+    />
+    <UNavigationMenu
+        v-if="isAdmin"
+        :items="adminNavigationMenuItems"
+        :collapsed
+        orientation="vertical"
+        tooltip
+        class="mt-auto"
+    />
 </template>
