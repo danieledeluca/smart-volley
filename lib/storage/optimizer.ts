@@ -4,19 +4,35 @@ import sharp from 'sharp';
 
 const A4_WIDTH = 1240;
 const A4_HEIGHT = 1754;
+const PDF_SIGNATURE = '%PDF-';
+
+function isPdf(buffer: Buffer) {
+    return buffer.subarray(0, PDF_SIGNATURE.length).toString('latin1') === PDF_SIGNATURE;
+}
 
 export async function optimizeAndConvertToPdf(file: File) {
-    const inputBuffer = await file.arrayBuffer();
+    const input = Buffer.from(await file.arrayBuffer());
 
-    const optimized = await sharp(Buffer.from(inputBuffer))
-        .resize(A4_WIDTH, A4_HEIGHT, {
-            fit: 'contain',
-            background: {
-                r: 255,
-                g: 255,
-                b: 255,
-                alpha: 1,
-            },
+    if (isPdf(input)) {
+        await PDFDocument.load(input);
+
+        return input;
+    }
+
+    const rotated = await sharp(input).rotate().toBuffer({
+        resolveWithObject: true,
+    });
+    const isLandscape = rotated.info.width > rotated.info.height;
+
+    const [pageWidth, pageHeight] = isLandscape ? [PageSizes.A4[1], PageSizes.A4[0]] : PageSizes.A4;
+    const [maxWidth, maxHeight] = isLandscape ? [A4_HEIGHT, A4_WIDTH] : [A4_WIDTH, A4_HEIGHT];
+
+    const { data, info } = await sharp(rotated.data)
+        .flatten({
+            background: '#FFFFFF',
+        })
+        .resize(maxWidth, maxHeight, {
+            fit: 'inside',
             withoutEnlargement: true,
         })
         .jpeg({
@@ -24,18 +40,23 @@ export async function optimizeAndConvertToPdf(file: File) {
             progressive: true,
             mozjpeg: true,
         })
-        .toBuffer();
+        .toBuffer({
+            resolveWithObject: true,
+        });
 
     const pdfDoc = await PDFDocument.create();
-    const image = await pdfDoc.embedJpg(optimized);
+    const image = await pdfDoc.embedJpg(data);
+    const page = pdfDoc.addPage([pageWidth, pageHeight]);
 
-    const page = pdfDoc.addPage(PageSizes.A4);
+    const scale = Math.min(pageWidth / info.width, pageHeight / info.height);
+    const width = info.width * scale;
+    const height = info.height * scale;
 
     page.drawImage(image, {
-        x: 0,
-        y: 0,
-        width: PageSizes.A4[0],
-        height: PageSizes.A4[1],
+        x: (pageWidth - width) / 2,
+        y: (pageHeight - height) / 2,
+        width,
+        height,
     });
 
     return Buffer.from(await pdfDoc.save());
