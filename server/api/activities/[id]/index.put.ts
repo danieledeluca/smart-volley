@@ -17,7 +17,16 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateActivity(result.data, routerParamsResult.data.id);
+        const activity = await updateActivity(result.data, routerParamsResult.data.id);
+
+        if (!activity) {
+            return sendError(event, createError({
+                statusCode: 404,
+                statusMessage: $t('page.activity.error'),
+            }));
+        }
+
+        return activity;
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

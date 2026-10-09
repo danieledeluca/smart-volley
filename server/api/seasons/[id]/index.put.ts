@@ -17,7 +17,16 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateSeason(result.data, routerParamsResult.data.id);
+        const season = await updateSeason(result.data, routerParamsResult.data.id);
+
+        if (!season) {
+            return sendError(event, createError({
+                statusCode: 404,
+                statusMessage: $t('page.season.error'),
+            }));
+        }
+
+        return season;
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

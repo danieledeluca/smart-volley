@@ -17,7 +17,16 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateParent(result.data, routerParamsResult.data.id);
+        const parent = await updateParent(result.data, routerParamsResult.data.id);
+
+        if (!parent) {
+            return sendError(event, createError({
+                statusCode: 404,
+                statusMessage: $t('page.parent.error'),
+            }));
+        }
+
+        return parent;
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

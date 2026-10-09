@@ -18,7 +18,16 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await updateEnrollment(result.data, routerParamsResult.data.id);
+        const enrollment = await updateEnrollment(result.data, routerParamsResult.data.id);
+
+        if (!enrollment) {
+            return sendError(event, createError({
+                statusCode: 404,
+                statusMessage: $t('page.enrollment.error'),
+            }));
+        }
+
+        return enrollment;
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }

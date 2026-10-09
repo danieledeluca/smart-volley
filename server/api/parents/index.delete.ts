@@ -10,7 +10,9 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        return await deleteParents(result.data);
+        await deleteParents(result.data);
+
+        setResponseStatus(event, 204);
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }
