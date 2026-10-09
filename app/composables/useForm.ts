@@ -555,6 +555,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
                         formFieldProps: {
                             label: $t('form.field.course_name.label'),
                             name: 'name',
+                            required: true,
                         },
                         inputProps: {
                             placeholder: $t('form.field.course_name.placeholder'),
