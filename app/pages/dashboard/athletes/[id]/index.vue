@@ -117,7 +117,7 @@ onMounted(async () => {
                                 <UButton
                                     variant="ghost"
                                     icon="i-lucide-arrow-up-right"
-                                    :href="`/dashboard/parents/${athlete.parent.id}`"
+                                    :to="`/dashboard/parents/${athlete.parent.id}`"
                                 />
                             </template>
                         </ItemCardRecord>
