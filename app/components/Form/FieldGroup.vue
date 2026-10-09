@@ -8,7 +8,7 @@ const { title, icon } = defineProps<{
 <template>
     <fieldset>
         <div v-if="title && icon" class="mb-4 flex items-center gap-3 border-b border-b-accented pb-2 text-xl">
-            <UButton variant="soft" :icon="icon" tabindex="-1" />
+            <ButtonIcon :name="icon" color="success" />
             <div>{{ title }}</div>
         </div>
         <div class="space-y-4">

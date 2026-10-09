@@ -21,12 +21,7 @@ const {
         }"
     >
         <template #leading>
-            <UButton
-                variant="soft"
-                :color="iconColor"
-                :icon
-                tabindex="-1"
-            />
+            <ButtonIcon :name="icon" :color="iconColor" />
         </template>
         <UBadge
             v-if="badgeLabel"
