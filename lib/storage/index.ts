@@ -1,4 +1,4 @@
-import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import env from '../env';
@@ -14,8 +14,17 @@ export async function uploadFile(key: string, file: File) {
         Body: pdfBuffer,
         ContentType: 'application/pdf',
     }));
+}
 
-    return key;
+export async function deleteFile(key: string) {
+    try {
+        await r2.send(new DeleteObjectCommand({
+            Bucket: env.R2_BUCKET_NAME,
+            Key: key,
+        }));
+    } catch (error) {
+        console.error(`Failed to delete file ${key}`, error);
+    }
 }
 
 export async function getSignedFileUrl(key: string, expiresIn = 60 * 10) {

@@ -4,6 +4,10 @@ import type { DrizzleError } from 'drizzle-orm';
 import type { H3Event } from 'h3';
 
 export default function sendDbError(event: H3Event, error: DrizzleError) {
+    if (isError(error)) {
+        return sendError(event, error);
+    }
+
     const cause = error.cause as NeonDbError | undefined;
 
     if (cause?.code === '23505') {

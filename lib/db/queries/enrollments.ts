@@ -1,14 +1,14 @@
 import type { SQL } from 'drizzle-orm';
 
-import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, or, sql } from 'drizzle-orm';
 
 import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
 
-import type { InsertEnrollment } from '../schema';
+import type { InsertEnrollment, UpdateEnrollment } from '../schema';
 
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
-import { uploadFile } from '../../storage';
+import { deleteFile, uploadFile } from '../../storage';
 import { athlete, course, enrollment, season } from '../schema';
 import { findSeason } from './seasons';
 
@@ -84,14 +84,30 @@ async function getCertificateStorageKey(data: InsertEnrollment) {
     }
 
     try {
-        const certificateStorageKey = await uploadFile(
-            `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`,
-            data.certificateStorageKey,
-        );
+        const certificateStorageKey = `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`;
+
+        await uploadFile(certificateStorageKey, data.certificateStorageKey);
 
         return certificateStorageKey;
     } catch {
-        throw new Error($t('form.field.certificate_storage_key.error.upload'));
+        throw createError({
+            statusCode: 422,
+            statusMessage: $t('form.field.certificate_storage_key.error.upload'),
+        });
+    }
+}
+
+async function deleteCertificate(storageKey: string, excludeEnrollmentId?: number) {
+    const [reference] = await db.select({ id: enrollment.id })
+        .from(enrollment)
+        .where(and(
+            eq(enrollment.certificateStorageKey, storageKey),
+            excludeEnrollmentId ? ne(enrollment.id, excludeEnrollmentId) : undefined,
+        ))
+        .limit(1);
+
+    if (!reference) {
+        await deleteFile(storageKey);
     }
 }
 
@@ -238,17 +254,26 @@ export async function insertEnrollment(data: InsertEnrollment) {
     const certificateStorageKey = await getCertificateStorageKey(data);
     const { certificateStorageKey: _, ...rest } = data;
 
-    const [created] = await db.insert(enrollment)
-        .values({
-            ...rest,
-            ...(certificateStorageKey !== undefined && { certificateStorageKey }),
-        })
-        .returning();
+    try {
+        const [created] = await db.insert(enrollment)
+            .values({
+                ...rest,
+                ...(certificateStorageKey !== undefined && { certificateStorageKey }),
+            })
+            .returning();
 
-    return created;
+        return created;
+    } catch (error) {
+        if (certificateStorageKey) {
+            await deleteFile(certificateStorageKey);
+        }
+
+        throw error;
+    }
 }
 
 export async function updateEnrollment(data: InsertEnrollment, enrollmentId: number) {
+    const previousKey = await findEnrollmentCertificateStorageKey(enrollmentId);
     const certificateStorageKey = await getCertificateStorageKey(data);
     const {
         firstPayment = null,
@@ -265,26 +290,40 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
         ...rest
     } = data;
 
-    const [updated] = await db.update(enrollment)
-        .set({
-            ...rest,
-            firstPayment,
-            firstPaymentDate,
-            firstPaymentType,
-            secondPayment,
-            secondPaymentDate,
-            secondPaymentType,
-            thirdPayment,
-            thirdPaymentDate,
-            thirdPaymentType,
-            certificateExpirationDate,
-            ...(certificateStorageKey !== undefined && { certificateStorageKey }),
-        })
-        .where(and(
-            eq(enrollment.id, enrollmentId),
-            isNull(enrollment.deletedAt),
-        ))
-        .returning();
+    let updated: UpdateEnrollment | undefined;
+
+    try {
+        [updated] = await db.update(enrollment)
+            .set({
+                ...rest,
+                firstPayment,
+                firstPaymentDate,
+                firstPaymentType,
+                secondPayment,
+                secondPaymentDate,
+                secondPaymentType,
+                thirdPayment,
+                thirdPaymentDate,
+                thirdPaymentType,
+                certificateExpirationDate,
+                ...(certificateStorageKey !== undefined && { certificateStorageKey }),
+            })
+            .where(and(
+                eq(enrollment.id, enrollmentId),
+                isNull(enrollment.deletedAt),
+            ))
+            .returning();
+    } catch (error) {
+        if (certificateStorageKey) {
+            await deleteFile(certificateStorageKey);
+        }
+
+        throw error;
+    }
+
+    if (updated && previousKey && certificateStorageKey !== undefined && certificateStorageKey !== previousKey) {
+        await deleteCertificate(previousKey, enrollmentId);
+    }
 
     return updated;
 }
