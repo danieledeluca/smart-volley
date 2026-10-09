@@ -3,11 +3,16 @@ useSeoMeta({
     title: $t('page.dashboard.title'),
 });
 
-const enrollmentsStore = useEnrollmentsStore();
-const seasonsStore = useSeasonsStore();
+const dashBoardStore = useDashboardStore();
 
-const { enrollments, enrollmentsPending, enrollmentsError } = storeToRefs(enrollmentsStore);
-const { seasons, seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
+const {
+    enrollments,
+    enrollmentsPending,
+    enrollmentsError,
+    seasons,
+    seasonsItems,
+    seasonsPending,
+} = storeToRefs(dashBoardStore);
 
 const season = ref<number>();
 
