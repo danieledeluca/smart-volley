@@ -146,7 +146,7 @@ if (deleteConfig) {
         }"
         @submit="emit('edit')"
         @close="emit('editClose')"
-        @interactOutside="(event) => emit('interactOutside', event)"
+        @interactOutside="emit('interactOutside', $event)"
     >
         <slot name="edit" />
     </AppSlideover>

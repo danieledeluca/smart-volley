@@ -87,7 +87,7 @@ onMounted(() => {
                 class="max-sm:flex-1"
                 :placeholder="$t('table.global_filter.placeholder')"
                 icon="i-lucide-search"
-                @update:modelValue="(value) => setQueryValue('filter', value)"
+                @update:modelValue="setQueryValue('filter', $event)"
             />
             <slot />
         </div>
@@ -144,7 +144,7 @@ onMounted(() => {
                     :page="(tableRef?.tableApi?.getState().pagination.pageIndex || 0) + 1"
                     :itemsPerPage="tableRef?.tableApi?.getState().pagination.pageSize"
                     :total="tableRef?.tableApi?.getFilteredRowModel().rows.length"
-                    @update:page="(p) => tableRef?.tableApi?.setPageIndex(p - 1)"
+                    @update:page="tableRef?.tableApi?.setPageIndex($event - 1)"
                 />
             </div>
         </template>

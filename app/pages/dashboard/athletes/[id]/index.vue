@@ -35,7 +35,7 @@ onMounted(async () => {
                 <AthleteActions
                     :athleteId="athlete.id"
                     @deleteComplete="navigateTo('/dashboard/athletes')"
-                    @editClose="(id) => id ? athletesStore.refreshCurrentAthlete() : undefined"
+                    @editClose="$event ? athletesStore.refreshCurrentAthlete() : undefined"
                 />
             </PageUser>
             <div class="details-grid">

@@ -92,7 +92,7 @@ onMounted(() => {
                         :key="fieldIndex"
                         v-model="state[field.formFieldProps.name]"
                         :field
-                        @update:modelValue="(value) => handleUpdate(field.formFieldProps.name, value)"
+                        @update:modelValue="handleUpdate(field.formFieldProps.name, $event)"
                     />
                 </FormFieldGroup>
             </div>

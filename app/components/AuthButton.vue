@@ -59,6 +59,6 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
         :label="$t('auth.sing_in.google')"
         icon="i-logos-google-icon"
         :loading="isLoading"
-        @click="authStore.signIn()"
+        @click="authStore.signIn"
     />
 </template>

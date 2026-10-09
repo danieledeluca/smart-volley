@@ -46,7 +46,7 @@ onMounted(async () => {
                 <EnrollmentActions
                     :enrollmentId="enrollment.id"
                     @deleteComplete="navigateTo('/dashboard/enrollments')"
-                    @editClose="(id) => id ? enrollmentsStore.refreshCurrentEnrollment() : undefined"
+                    @editClose="$event ? enrollmentsStore.refreshCurrentEnrollment() : undefined"
                 />
             </PageUser>
             <div class="details-grid">

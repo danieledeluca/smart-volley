@@ -31,7 +31,7 @@ onMounted(async () => {
                 <ParentActions
                     :parentId="parent.id"
                     @deleteComplete="navigateTo('/dashboard/parents')"
-                    @editClose="(id) => id ? parentsStore.refreshCurrentParent() : undefined"
+                    @editClose="$event ? parentsStore.refreshCurrentParent() : undefined"
                 />
             </PageUser>
             <div class="details-grid">
