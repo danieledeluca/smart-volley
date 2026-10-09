@@ -39,4 +39,6 @@ export default defineAuthenticatedEventHandler(async (event) => {
     } catch (error) {
         sendDbError(event, error as DrizzleError);
     }
+}, {
+    roles: ['admin'],
 });

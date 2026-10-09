@@ -17,4 +17,6 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     setResponseStatus(event, 204);
+}, {
+    roles: ['admin', 'manager'],
 });
