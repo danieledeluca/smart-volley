@@ -13,14 +13,27 @@ import { athlete, course, enrollment, season } from '../schema';
 import { findSeason } from './seasons';
 
 function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
-    const conditions: SQL[] = [];
+    const conditions: SQL[] = [
+        isNull(enrollment.deletedAt),
+        inArray(
+            enrollment.athleteId,
+            db.select({ id: athlete.id })
+                .from(athlete)
+                .where(isNull(athlete.deletedAt)),
+        ),
+    ];
 
     if (filters?.seasonId) {
         conditions.push(eq(enrollment.seasonId, filters.seasonId));
     }
 
     if (filters?.activityId) {
-        conditions.push(eq(course.activityId, filters.activityId));
+        conditions.push(inArray(
+            enrollment.courseId,
+            db.select({ id: course.id })
+                .from(course)
+                .where(eq(course.activityId, filters.activityId)),
+        ));
     }
 
     if (filters?.courseId) {
@@ -112,15 +125,6 @@ async function deleteCertificate(storageKey: string, excludeEnrollmentId?: numbe
 }
 
 export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
-    const filteredIds = await db.select({ id: enrollment.id })
-        .from(enrollment)
-        .innerJoin(athlete, and(
-            eq(enrollment.athleteId, athlete.id),
-            isNull(athlete.deletedAt),
-        ))
-        .innerJoin(course, eq(enrollment.courseId, course.id))
-        .where(buildEnrollmentFilters(filters));
-
     const result = await db.query.enrollment.findMany({
         with: {
             athlete: {
@@ -151,10 +155,7 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
                 },
             },
         },
-        where: and(
-            inArray(enrollment.id, filteredIds.map((filter) => filter.id)),
-            isNull(enrollment.deletedAt),
-        ),
+        where: buildEnrollmentFilters(filters),
         orderBy: desc(enrollment.id),
 
     });
