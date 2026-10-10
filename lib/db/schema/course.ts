@@ -1,7 +1,7 @@
 import type { SerializeObject } from 'nitropack';
 
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { index, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
@@ -18,7 +18,9 @@ export const course = pgTable('course', {
     activityId: integer().notNull().references(() => activity.id),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
-});
+}, (table) => [
+    index().on(table.activityId),
+]);
 
 export const courseRelations = relations(course, ({ one, many }) => {
     return {

@@ -1,7 +1,7 @@
 import type { SerializeObject } from 'nitropack';
 
 import { relations } from 'drizzle-orm';
-import { date, integer, numeric, pgEnum, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
+import { date, index, integer, numeric, pgEnum, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
@@ -37,6 +37,8 @@ export const enrollment = pgTable('enrollment', {
     deletedAt: timestamp(),
 }, (table) => [
     unique().on(table.athleteId, table.seasonId, table.courseId),
+    index().on(table.seasonId),
+    index().on(table.courseId),
 ]);
 
 export const enrollmentRelations = relations(enrollment, ({ one }) => {

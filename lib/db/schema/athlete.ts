@@ -1,7 +1,7 @@
 import type { SerializeObject } from 'nitropack';
 
 import { relations, sql } from 'drizzle-orm';
-import { char, date, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { char, date, index, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
@@ -41,6 +41,7 @@ export const athlete = pgTable('athlete', {
 }, (table) => [
     uniqueIndex().on(table.phoneNumber).where(sql`${table.phoneNumber} IS NOT NULL`),
     uniqueIndex().on(table.email).where(sql`${table.email} IS NOT NULL`),
+    index().on(table.parentId),
 ]);
 
 export const athleteRelations = relations(athlete, ({ one, many }) => {

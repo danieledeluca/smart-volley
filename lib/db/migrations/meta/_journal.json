@@ -43,6 +43,13 @@
       "when": 1791559775265,
       "tag": "0005_milky_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791667245881,
+      "tag": "0006_blushing_young_avengers",
+      "breakpoints": true
     }
   ]
 }
