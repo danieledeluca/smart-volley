@@ -1,21 +1,12 @@
 <script setup lang="ts">
-const athletesStore = useAthletesStore();
-const {
-    currentAthlete: athlete,
-    currentAthletePending: pending,
-    currentAthleteError: error,
-} = storeToRefs(athletesStore);
+const route = useRoute();
+const { data: athlete, pending, error, refresh } = useLazyFetch(`/api/athletes/${route.params.id}`);
 
 const title = computed(() => athlete.value?.name || $t('page.athlete.title'));
 
 useSeoMeta({ title });
 
 const enrollmentsTableColumns = getAthleteEnrollmentsTableColumns(['season', 'activity', 'course']);
-
-onMounted(async () => {
-    await nextTick();
-    athletesStore.refreshCurrentAthlete();
-});
 </script>
 
 <template>
@@ -35,7 +26,7 @@ onMounted(async () => {
                 <AthleteActions
                     :athleteId="athlete.id"
                     @deleteComplete="navigateTo('/dashboard/athletes')"
-                    @editClose="$event ? athletesStore.refreshCurrentAthlete() : undefined"
+                    @editClose="$event ? refresh() : undefined"
                 />
             </PageUser>
             <div class="details-grid">

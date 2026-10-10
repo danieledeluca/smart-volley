@@ -1,7 +1,4 @@
-import type { SelectEnrollmentWithRelations } from '~~/lib/db/schema';
-
 export const useEnrollmentsStore = defineStore('enrollments', () => {
-    const route = useRoute();
     const { filterState, filterFields, clearFilters } = useFilters('enrollment');
 
     const {
@@ -14,29 +11,13 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         watch: false,
     });
 
-    const enrollmentUrlWithId = computed(() => `/api/enrollments/${route.params.id}`);
-
-    const {
-        data: currentEnrollment,
-        pending: currentEnrollmentPending,
-        error: currentEnrollmentError,
-        refresh: refreshCurrentEnrollment,
-    } = useLazyFetch<SelectEnrollmentWithRelations>(enrollmentUrlWithId, {
-        immediate: false,
-        watch: false,
-    });
-
     return {
         enrollments,
         enrollmentsPending,
         enrollmentsError,
-        currentEnrollment,
-        currentEnrollmentPending,
-        currentEnrollmentError,
         filterState,
         filterFields,
         refreshEnrollments,
-        refreshCurrentEnrollment,
         clearFilters,
     };
 });

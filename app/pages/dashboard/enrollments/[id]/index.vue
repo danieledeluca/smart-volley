@@ -1,21 +1,12 @@
 <script setup lang="ts">
-const enrollmentsStore = useEnrollmentsStore();
-const {
-    currentEnrollment: enrollment,
-    currentEnrollmentPending: pending,
-    currentEnrollmentError: error,
-} = storeToRefs(enrollmentsStore);
+const route = useRoute();
+const { data: enrollment, pending, error, refresh } = useLazyFetch(`/api/enrollments/${route.params.id}`);
 
 const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollment.title'));
 
 useSeoMeta({ title });
 
 const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name', 'amount', 'date', 'type']);
-
-onMounted(async () => {
-    await nextTick();
-    enrollmentsStore.refreshCurrentEnrollment();
-});
 </script>
 
 <template>
@@ -46,7 +37,7 @@ onMounted(async () => {
                 <EnrollmentActions
                     :enrollmentId="enrollment.id"
                     @deleteComplete="navigateTo('/dashboard/enrollments')"
-                    @editClose="$event ? enrollmentsStore.refreshCurrentEnrollment() : undefined"
+                    @editClose="$event ? refresh() : undefined"
                 />
             </PageUser>
             <div class="details-grid">

@@ -1,9 +1,6 @@
 import type { SelectMenuItem } from '@nuxt/ui';
-import type { SelectParentWithRelations } from '~~/lib/db/schema';
 
 export const useParentsStore = defineStore('parents', () => {
-    const route = useRoute();
-
     const {
         data: parents,
         pending: parentsPending,
@@ -24,27 +21,11 @@ export const useParentsStore = defineStore('parents', () => {
         });
     });
 
-    const parentUrlWithId = computed(() => `/api/parents/${route.params.id}`);
-
-    const {
-        data: currentParent,
-        pending: currentParentPending,
-        error: currentParentError,
-        refresh: refreshCurrentParent,
-    } = useLazyFetch<SelectParentWithRelations>(parentUrlWithId, {
-        immediate: false,
-        watch: false,
-    });
-
     return {
         parents,
         parentsItems,
         parentsPending,
         parentsError,
-        currentParent,
-        currentParentPending,
-        currentParentError,
         refreshParents,
-        refreshCurrentParent,
     };
 });

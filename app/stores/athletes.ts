@@ -1,9 +1,6 @@
 import type { SelectMenuItem } from '@nuxt/ui';
-import type { SelectAthleteWithRelations } from '~~/lib/db/schema';
 
 export const useAthletesStore = defineStore('athletes', () => {
-    const route = useRoute();
-
     const {
         data: athletes,
         pending: athletesPending,
@@ -25,27 +22,11 @@ export const useAthletesStore = defineStore('athletes', () => {
         });
     });
 
-    const athleteUrlWithId = computed(() => `/api/athletes/${route.params.id}`);
-
-    const {
-        data: currentAthlete,
-        pending: currentAthletePending,
-        error: currentAthleteError,
-        refresh: refreshCurrentAthlete,
-    } = useLazyFetch<SelectAthleteWithRelations>(athleteUrlWithId, {
-        immediate: false,
-        watch: false,
-    });
-
     return {
         athletes,
         athletesItems,
         athletesPending,
         athletesError,
-        currentAthlete,
-        currentAthletePending,
-        currentAthleteError,
         refreshAthletes,
-        refreshCurrentAthlete,
     };
 });

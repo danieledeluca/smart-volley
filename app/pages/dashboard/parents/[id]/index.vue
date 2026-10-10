@@ -1,17 +1,12 @@
 <script setup lang="ts">
-const parentsStore = useParentsStore();
-const { currentParent: parent, currentParentPending: pending, currentParentError: error } = storeToRefs(parentsStore);
+const route = useRoute();
+const { data: parent, pending, error, refresh } = useLazyFetch(`/api/parents/${route.params.id}`);
 
 const title = computed(() => parent.value?.name || $t('page.parent.title'));
 
 useSeoMeta({ title });
 
 const athletesTableColumns = getParentAthletesTableColumns(['name', 'fiscalCode']);
-
-onMounted(async () => {
-    await nextTick();
-    parentsStore.refreshCurrentParent();
-});
 </script>
 
 <template>
@@ -31,7 +26,7 @@ onMounted(async () => {
                 <ParentActions
                     :parentId="parent.id"
                     @deleteComplete="navigateTo('/dashboard/parents')"
-                    @editClose="$event ? parentsStore.refreshCurrentParent() : undefined"
+                    @editClose="$event ? refresh() : undefined"
                 />
             </PageUser>
             <div class="details-grid">
