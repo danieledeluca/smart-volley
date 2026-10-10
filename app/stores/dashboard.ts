@@ -3,18 +3,27 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
     const { seasons, seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
 
-    const {
-        data: enrollments,
-        pending: enrollmentsPending,
-        error: enrollmentsError,
-    } = useLazyFetch('/api/enrollments');
+    const seasonId = ref<number>();
+
+    const { data: stats, pending: statsPending, error: statsError } = useLazyFetch('/api/dashboard', {
+        query: {
+            seasonId,
+        },
+    });
+
+    watchEffect(() => {
+        seasonId.value = seasons.value?.[0]?.id;
+    }, {
+        flush: 'post',
+    });
 
     return {
-        enrollments,
-        enrollmentsPending,
-        enrollmentsError,
+        stats,
+        statsPending,
+        statsError,
         seasons,
         seasonsItems,
         seasonsPending,
+        seasonId,
     };
 });

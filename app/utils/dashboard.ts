@@ -1,19 +1,4 @@
-import type { SelectEnrollmentsWithRelations, SelectSeasons } from '~~/lib/db/schema';
-
-const ACTIVITY_ICONS: Record<string, string> = {
-    Volley: 'i-lucide-volleyball',
-    Ginnastica: 'i-lucide-dumbbell',
-};
-
-const DEFAULT_ACTIVITY_ICON = 'i-lucide-zap';
-
-function getCurrentSeasonEnrollments(enrollments: SelectEnrollmentsWithRelations[], season: SelectSeasons) {
-    return enrollments.filter((enrollment) => enrollment.season.startYear === season.startYear);
-}
-
-function getLastSeasonEnrollments(enrollments: SelectEnrollmentsWithRelations[], season: SelectSeasons) {
-    return enrollments.filter((enrollment) => enrollment.season.endYear === season.startYear);
-}
+import type { DashboardStats } from '~~/lib/db/queries/dashboard';
 
 function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
     if (secondValue === 0) {
@@ -30,133 +15,70 @@ function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
     return difference > 0 ? `+${percentage}` : percentage;
 }
 
-function getTotalPayments(enrollments: SelectEnrollmentsWithRelations[]) {
-    return enrollments.reduce((acc, enrollment) => {
-        const totalPayments = Number(enrollment.firstPayment || 0)
-            + Number(enrollment.secondPayment || 0)
-            + Number(enrollment.thirdPayment || 0);
-
-        return acc + totalPayments;
-    }, 0);
-}
-
-function getTotalEnrollmentsCard(
-    enrollments: SelectEnrollmentsWithRelations[],
-    seasons: SelectSeasons[],
-): DashboardCard {
+function getTotalEnrollmentsCard(stats: DashboardStats): DashboardCard {
     return {
         icon: 'i-lucide-list',
         title: $t('card.dashboard.total_enrollments'),
-        description: enrollments.length.toString(),
-        badgeLabel: `${seasons.at(-1)?.startYear}/${seasons[0]?.endYear}`,
+        description: stats.totalEnrollments.toString(),
     };
 }
 
-function getTotalPaymentsCard(enrollments: SelectEnrollmentsWithRelations[], seasons: SelectSeasons[]): DashboardCard {
-    const totalPayments = getTotalPayments(enrollments);
-
+function getTotalPaymentsCard(stats: DashboardStats): DashboardCard {
     return {
         icon: 'i-lucide-badge-euro',
         iconColor: 'success',
         title: $t('card.dashboard.total_payments'),
-        description: formatPrice(totalPayments.toString()),
-        badgeLabel: `${seasons.at(-1)?.startYear}/${seasons[0]?.endYear}`,
+        description: formatPrice(stats.totalPayments),
     };
 }
 
-function getCurrentSeasonEnrollmentsCard(
-    enrollments: SelectEnrollmentsWithRelations[],
-    season: SelectSeasons,
-): DashboardCard {
-    const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
-    const lastSeasonEnrollments = getLastSeasonEnrollments(enrollments, season);
-
-    const badgeLabel = getPercentageLabel(currentSeasonEnrollments.length, lastSeasonEnrollments.length);
+function getCurrentSeasonEnrollmentsCard(stats: DashboardStats): DashboardCard {
+    const badgeLabel = getPercentageLabel(stats.currentEnrollments, stats.previousEnrollments);
     const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
 
     return {
         icon: 'i-lucide-list',
         title: $t('card.dashboard.enrollments'),
-        description: currentSeasonEnrollments.length.toString(),
+        description: stats.currentEnrollments.toString(),
         badgeLabel,
         badgeColor: badgeColorValue > 0 ? 'success' : 'error',
     };
 }
 
-function getCurrentSeasonPaymentsCard(
-    enrollments: SelectEnrollmentsWithRelations[],
-    season: SelectSeasons,
-): DashboardCard {
-    const currentSeasonEnrollments = getCurrentSeasonEnrollments(enrollments, season);
-    const lastSeasonEnrollments = getLastSeasonEnrollments(enrollments, season);
-
-    const currentSeasonPayments = getTotalPayments(currentSeasonEnrollments);
-    const lastSeasonPayments = getTotalPayments(lastSeasonEnrollments);
-
-    const badgeLabel = getPercentageLabel(currentSeasonPayments, lastSeasonPayments);
+function getCurrentSeasonPaymentsCard(stats: DashboardStats): DashboardCard {
+    const badgeLabel = getPercentageLabel(Number(stats.currentPayments), Number(stats.previousPayments));
     const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
 
     return {
         icon: 'i-lucide-badge-euro',
         iconColor: 'success',
         title: $t('card.dashboard.payments'),
-        description: formatPrice(currentSeasonPayments.toString()),
+        description: formatPrice(stats.currentPayments),
         badgeLabel,
         badgeColor: badgeColorValue > 0 ? 'success' : 'error',
     };
 }
 
-function getCurrentSeasonExpiringCertificateCard(
-    enrollments: SelectEnrollmentsWithRelations[],
-    season: SelectSeasons,
-): DashboardCard {
-    const currentDate = new Date();
-    const thirtyDaysFromNow = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-    const expiringCertificate = getCurrentSeasonEnrollments(enrollments, season)
-        .reduce((acc, enrollment) => {
-            if (enrollment.certificateExpirationDate) {
-                const expirationDate = new Date(enrollment.certificateExpirationDate);
-
-                if (expirationDate > currentDate && expirationDate <= thirtyDaysFromNow) {
-                    acc++;
-                }
-            }
-
-            return acc;
-        }, 0);
+function getCurrentSeasonExpiringCertificateCard(stats: DashboardStats): DashboardCard {
+    const thirtyDaysFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     return {
         icon: 'i-lucide-briefcase-medical',
         iconColor: 'error',
         title: $t('card.dashboard.expiring_certificates'),
-        description: expiringCertificate.toString(),
+        description: stats.expiringCertificates.toString(),
         badgeLabel: formatDate(thirtyDaysFromNow.toString(), {
             dateStyle: 'medium',
         }),
     };
 }
 
-export function getDashboardCards(
-    enrollments: SelectEnrollmentsWithRelations[],
-    seasons: SelectSeasons[],
-    season: SelectSeasons,
-) {
-    return Object.fromEntries(Object.entries(Object.groupBy(enrollments, (enrollment) => enrollment.activity.name))
-        .map(([activity, enrollments]) => {
-            return [activity, {
-                icon: ACTIVITY_ICONS[activity] || DEFAULT_ACTIVITY_ICON,
-                title: enrollments?.[0]?.activity.name || '',
-                cards: enrollments
-                    ? [
-                            getCurrentSeasonEnrollmentsCard(enrollments, season),
-                            getCurrentSeasonPaymentsCard(enrollments, season),
-                            getCurrentSeasonExpiringCertificateCard(enrollments, season),
-                            getTotalEnrollmentsCard(enrollments, seasons),
-                            getTotalPaymentsCard(enrollments, seasons),
-                        ]
-                    : [],
-            }];
-        }),
-    );
+export function getDashboardCards(stats: DashboardStats) {
+    return [
+        getCurrentSeasonEnrollmentsCard(stats),
+        getCurrentSeasonPaymentsCard(stats),
+        getCurrentSeasonExpiringCertificateCard(stats),
+        getTotalEnrollmentsCard(stats),
+        getTotalPaymentsCard(stats),
+    ];
 }

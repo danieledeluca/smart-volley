@@ -6,24 +6,14 @@ useSeoMeta({
 const dashBoardStore = useDashboardStore();
 
 const {
-    enrollments,
-    enrollmentsPending,
-    enrollmentsError,
+    stats,
+    statsPending,
+    statsError,
     seasons,
     seasonsItems,
     seasonsPending,
+    seasonId,
 } = storeToRefs(dashBoardStore);
-
-const season = ref<number>();
-
-const currentSeason = computed(() => seasons.value?.find((_season) => _season.id === season.value));
-const dashboardCards = computed(() => {
-    if (!enrollments.value || !seasons.value || !currentSeason.value) {
-        return [];
-    }
-
-    return getDashboardCards(enrollments.value, seasons.value, currentSeason.value);
-});
 
 const formField = computed<FormField<{ seasonId?: number }>>(() => {
     return {
@@ -35,27 +25,21 @@ const formField = computed<FormField<{ seasonId?: number }>>(() => {
             placeholder: $t('form.field.season_id.placeholder'),
             icon: 'i-lucide-calendar',
             items: seasonsItems.value,
-            loading: seasonsPending.value,
-            disabled: !season.value,
+            loading: seasonsPending.value || !seasonId.value,
+            disabled: !seasonId.value,
         },
     };
 });
 
 const isLoading = computed(() => {
-    return enrollmentsPending.value || (seasonsItems.value && seasonsItems.value.length > 0 && !season.value);
-});
-
-watchEffect(() => {
-    season.value = seasons.value?.[0]?.id;
-}, {
-    flush: 'post',
+    return statsPending.value || (seasonsItems.value && seasonsItems.value.length > 0 && !seasonId.value);
 });
 </script>
 
 <template>
     <DashboardPanel :title="$t('page.dashboard.title')">
         <template #right>
-            <FormField v-model="season" :field="formField" :showDeleteButton="false" />
+            <FormField v-model="seasonId" :field="formField" :showDeleteButton="false" />
         </template>
         <template v-if="isLoading">
             <div class="flex gap-4">
@@ -63,11 +47,9 @@ watchEffect(() => {
                 <USkeleton class="h-8 w-full max-w-24" />
             </div>
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
-                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
+                <USkeleton v-for="n in 2" :key="n" class="size-8 h-40 w-full md:col-span-2" />
                 <USkeleton class="size-8 h-40 w-full sm:col-span-2 md:col-span-2" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton v-for="n in 2" :key="n" class="size-8 h-40 w-full md:col-span-3" />
             </div>
             <div>
                 <USkeleton class="h-1 w-full" />
@@ -77,30 +59,28 @@ watchEffect(() => {
                 <USkeleton class="h-8 w-full max-w-24" />
             </div>
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
-                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-2" />
+                <USkeleton v-for="n in 2" :key="n" class="size-8 h-40 w-full md:col-span-2" />
                 <USkeleton class="size-8 h-40 w-full sm:col-span-2 md:col-span-2" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
-                <USkeleton class="size-8 h-40 w-full md:col-span-3" />
+                <USkeleton v-for="n in 2" :key="n" class="size-8 h-40 w-full md:col-span-3" />
             </div>
         </template>
         <UAlert
-            v-else-if="enrollmentsError"
-            :title="getApiError(enrollmentsError)"
+            v-else-if="statsError"
+            :title="getApiError(statsError)"
             color="error"
             icon="i-lucide-circle-x"
         />
-        <template v-else-if="enrollments && enrollments.length > 0">
-            <template v-for="(data, activity, index) in dashboardCards" :key="activity">
-                <h2 class="flex items-center gap-4 text-2xl">
-                    <ButtonIcon :name="data.icon" color="success" />
-                    <span>{{ data.title }}</span>
-                </h2>
+        <template v-else-if="stats">
+            <template v-for="(activityStats, index) in stats" :key="activityStats.activityId">
+                <div class="flex items-center gap-4 text-2xl">
+                    <span>{{ activityStats.activityName }}</span>
+                </div>
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
                     <DashboardCard
-                        v-for="(card, cardIndex) in data.cards"
-                        :key="card.title"
+                        v-for="(card, cardIndex) in getDashboardCards(activityStats)"
+                        :key="cardIndex"
                         v-bind="card"
+                        :badgeLabel="card.badgeLabel || `${seasons?.at(-1)?.startYear}/${seasons?.[0]?.endYear}`"
                         :class="{
                             'md:col-span-2': cardIndex === 0 || cardIndex === 1 || cardIndex === 2,
                             'md:col-span-3': cardIndex === 3 || cardIndex === 4,
@@ -108,7 +88,7 @@ watchEffect(() => {
                         }"
                     />
                 </div>
-                <USeparator v-if="index !== Object.entries(dashboardCards).length - 1" icon="i-lucide-zap" />
+                <USeparator v-if="index !== stats.length - 1" icon="i-lucide-zap" />
             </template>
         </template>
         <NoData v-else />
