@@ -20,6 +20,7 @@ export async function findDashboardStats(seasonStartYear: number) {
     const result = await db.select({
         activityId: activity.id,
         activityName: activity.name,
+        activityIcon: activity.icon,
         totalEnrollments: sql<number>`count(*)::int`,
         totalPayments: sql<string>`coalesce(sum(${payments}), 0)::text`,
         currentEnrollments: sql<number>`(count(*) FILTER (WHERE ${inCurrent}))::int`,

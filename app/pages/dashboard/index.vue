@@ -73,6 +73,7 @@ const isLoading = computed(() => {
         <template v-else-if="stats">
             <template v-for="(activityStats, index) in stats" :key="activityStats.activityId">
                 <div class="flex items-center gap-4 text-2xl">
+                    <ButtonIcon :name="activityStats.activityIcon" color="success" />
                     <span>{{ activityStats.activityName }}</span>
                 </div>
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">

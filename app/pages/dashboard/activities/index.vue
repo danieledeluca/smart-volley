@@ -12,7 +12,7 @@ const activityFormRef = useTemplateRef('activityFormRef');
 const { canEdit } = storeToRefs(authStore);
 const { activities, activitiesPending, activitiesError } = storeToRefs(activitiesStore);
 
-const tableColumns = getActivitiesTableColumns(['id', 'name']);
+const tableColumns = getActivitiesTableColumns(['id', 'name', 'icon']);
 
 if (canEdit.value) {
     tableColumns.push(getActionsTableColumn(Actions, (row) => ({ activityId: row.id })));

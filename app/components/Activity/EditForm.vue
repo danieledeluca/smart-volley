@@ -3,6 +3,7 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 import type { UpdatedActivity } from '~~/lib/db/schema';
 
 import { InsertActivity } from '~~/lib/db/schema';
+import { ACTIVITY_ICON_PREFIX } from '~~/lib/utils/constants';
 
 const { activityId } = defineProps<{
     activityId: number;
@@ -15,6 +16,7 @@ const emit = defineEmits<{
 const { data: activity, pending, error } = useLazyFetch(`/api/activities/${activityId}`);
 
 const activitiesStore = useActivitiesStore();
+const dashboardStore = useDashboardStore();
 const { $csrfFetch } = useNuxtApp();
 const activityFormRef = useTemplateRef('activityFormRef');
 const { initialState } = useForm('activity');
@@ -33,6 +35,7 @@ async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
 
 function onSubmitComplete() {
     activitiesStore.refreshActivities();
+    dashboardStore.refreshStats();
 
     emit('success', updatedActivity.value?.id);
 }
@@ -41,6 +44,7 @@ watchEffect(() => {
     if (activity.value) {
         state.value = {
             name: activity.value.name,
+            icon: activity.value.icon.replace(ACTIVITY_ICON_PREFIX, ''),
         };
     }
 });

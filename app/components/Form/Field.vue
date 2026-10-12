@@ -36,9 +36,18 @@ function showField(field: FormField<T>) {
                     v-if="field.renderAs === 'input'"
                     v-model="model"
                     v-bind="field.inputProps"
-                    class="w-full"
-                    role="presentation"
-                />
+                    class="flex w-full items-center gap-2"
+                >
+                    <template
+                        v-if="!!slots[`${field.formFieldProps.name}-leading`] && !field.inputProps?.leadingIcon"
+                        #leading
+                    >
+                        <slot :name="`${field.formFieldProps.name}-leading`" />
+                    </template>
+                    <template v-if="!!slots[`${field.formFieldProps.name}-input-after`]">
+                        <slot :name="`${field.formFieldProps.name}-input-after`" />
+                    </template>
+                </UInput>
                 <FormFieldNumber
                     v-if="field.renderAs === 'input-number'"
                     v-model="model"

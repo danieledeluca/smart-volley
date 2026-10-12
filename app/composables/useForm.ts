@@ -10,7 +10,12 @@ import type {
 
 import { CalendarDate } from '@internationalized/date';
 import { enrollmentPaymentType } from '~~/lib/db/schema';
-import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '~~/lib/utils/constants';
+import {
+    ACTIVITY_ICON_PREFIX,
+    DEFAULT_ACTIVITY_ICON,
+    FILE_ACCEPTED_TYPES,
+    FILE_MAX_SIZE,
+} from '~~/lib/utils/constants';
 import { formatFileSize } from '~~/lib/utils/formatters';
 
 type FormSchemas = {
@@ -78,6 +83,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
 
     const activityInitialState: Partial<InsertActivity> = {
         name: undefined,
+        icon: DEFAULT_ACTIVITY_ICON.replace(ACTIVITY_ICON_PREFIX, ''),
     };
 
     const courseInitialState: Partial<InsertCourse> = {
@@ -530,6 +536,20 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
                 },
                 inputProps: {
                     placeholder: $t('form.field.activity_name.placeholder'),
+                },
+            },
+            {
+                renderAs: 'input',
+                formFieldProps: {
+                    label: $t('form.field.activity_icon.label'),
+                    name: 'icon',
+                    require: true,
+                },
+                inputProps: {
+                    placeholder: $t('form.field.activity_icon.placeholder'),
+                    ui: {
+                        base: 'pl-16',
+                    },
                 },
             },
         ];

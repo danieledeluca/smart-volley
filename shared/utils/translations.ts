@@ -7,10 +7,10 @@ export const translations = {
             viewer: 'Osservatore',
             waiting: 'In attesa...',
         },
-        sign_out: 'Esci',
         sign_in: {
             google: 'Accedi con Google',
         },
+        sign_out: 'Esci',
     },
     card: {
         address_contacts: {
@@ -180,6 +180,13 @@ export const translations = {
             },
         },
         field: {
+            activity_icon: {
+                error: 'L\'icona non è esiste nella libreria Lucide',
+                help: 'Scegli un\'icona dalla libreria Lucide. A destra vedi l\'anteprima.',
+                label: 'Icona',
+                placeholder: 'volleyball',
+                required: 'L\'icona è obbligatoria',
+            },
             activity_id: {
                 label: 'Attività',
                 not_found: 'Attività non trovata',
@@ -187,9 +194,9 @@ export const translations = {
             },
             activity_name: {
                 duplicate: 'L\'attività esiste già',
-                label: 'Nome attività',
-                placeholder: 'Inserisci il nome dell\'attività',
-                required: 'Il nome dell\'attività è obbligatorio',
+                label: 'Nome',
+                placeholder: 'Inserisci il nome',
+                required: 'Il nome è obbligatorio',
             },
             address: {
                 label: 'Indirizzo',
@@ -236,9 +243,9 @@ export const translations = {
             },
             course_code: {
                 duplicate: 'Il corso esiste già',
-                label: 'Codice del corso',
-                placeholder: 'Inserisci il codice del corso',
-                required: 'Il codice del corso è obbligatorio',
+                label: 'Codice',
+                placeholder: 'Inserisci il codice',
+                required: 'Il codice è obbligatorio',
             },
             course_id: {
                 label: 'Corso',
@@ -247,9 +254,9 @@ export const translations = {
                 required: 'Il corso è obbligatorio',
             },
             course_name: {
-                label: 'Nome del corso',
-                placeholder: 'Inserisci il nome del corso',
-                required: 'Il nome del corso è obbligatorio',
+                label: 'Nome',
+                placeholder: 'Inserisci il nome',
+                required: 'Il nome è obbligatorio',
             },
             email: {
                 duplicate: 'L\'email esiste già',
@@ -587,6 +594,7 @@ export const translations = {
             end_year: 'Anno di fine',
             first_payment: 'Primo pagamento',
             fiscal_code: 'Codice fiscale',
+            icon: 'Icona',
             id: 'ID',
             name: 'Nome',
             payment_amount: 'Importo',

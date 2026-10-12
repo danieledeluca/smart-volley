@@ -13,6 +13,7 @@ import type {
 import type { ComponentProps } from 'vue-component-type-helpers';
 
 import UCheckbox from '@nuxt/ui/components/Checkbox.vue';
+import UIcon from '@nuxt/ui/components/Icon.vue';
 
 import User from '~/components/App/User.vue';
 import CertificateDate from '~/components/Certificate/Date.vue';
@@ -332,6 +333,14 @@ export function getActivitiesTableColumns(columns: (keyof SelectActivities)[]) {
     const tableColumns: TableColumns<SelectActivities> = {
         id: getIdTableColumn(),
         name: getNameTableColumn(),
+        icon: {
+            accessorKey: 'icon',
+            header: $t('table.column.icon'),
+            cell: ({ row }) => h('div', { class: 'flex items-center gap-2' }, [
+                h(UIcon, { name: row.original.icon, class: 'size-6' }),
+                row.original.icon,
+            ]),
+        },
     };
 
     return filterColumns(columns, tableColumns);

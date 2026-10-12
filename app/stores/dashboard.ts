@@ -5,7 +5,12 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
     const seasonId = ref<number>();
 
-    const { data: stats, pending: statsPending, error: statsError } = useLazyFetch('/api/dashboard', {
+    const {
+        data: stats,
+        pending: statsPending,
+        error: statsError,
+        refresh: refreshStats,
+    } = useLazyFetch('/api/dashboard', {
         query: {
             seasonId,
         },
@@ -25,5 +30,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
         seasonsItems,
         seasonsPending,
         seasonId,
+        refreshStats,
     };
 });
