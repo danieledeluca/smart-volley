@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Actions from '~/components/Athlete/Actions.vue';
+import DetailsActions from '~/components/Athlete/DetailsActions.vue';
 
 useSeoMeta({
     title: $t('page.athletes.title'),
@@ -17,11 +17,8 @@ const { athletes, athletesPending, athletesError } = storeToRefs(athletesStore);
 const deleteModalOpen = ref(false);
 
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
-
-if (canEdit.value) {
-    tableColumns.unshift(getSelectTableColumn());
-    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ athleteId: row.id })));
-}
+tableColumns.unshift(getSelectTableColumn());
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ athleteId: row.id })));
 
 function handleInteractOutside(event: Event) {
     const target = event.target as HTMLElement;
@@ -70,21 +67,26 @@ function handleDeleteSuccess() {
         >
             <template #default>
                 <div class="ml-auto">
-                    <ListDeleteButton
-                        v-if="canEdit"
-                        v-model:open="deleteModalOpen"
-                        :title="$t('form.athlete.multiple_delete.title')"
-                        :description="$t('form.athlete.multiple_delete.description')"
-                        :isDisabled="athletesPending || (athleteTableRef?.selectRows()?.length || 0) === 0"
-                        :isLoading="athleteDeleteFormRef?.isLoading()"
+                    <ListActions
+                        v-model:openDelete="deleteModalOpen"
+                        :deleteModal="{
+                            title: $t('form.athlete.multiple_delete.title', {
+                                quantity: (athleteTableRef?.selectRows()?.length || 0).toString(),
+                            }),
+                            description: $t('form.athlete.multiple_delete.description'),
+                            isDisabled: athletesPending || (athleteTableRef?.selectRows()?.length || 0) === 0,
+                            isLoading: Boolean(athleteDeleteFormRef?.isLoading()),
+                        }"
                         @submit="athleteDeleteFormRef?.submit()"
                     >
-                        <AthleteMultipleDeleteForm
-                            ref="athleteDeleteFormRef"
-                            :athletes="athleteTableRef?.selectRows()?.map((row) => row.original) || []"
-                            @success="handleDeleteSuccess"
-                        />
-                    </ListDeleteButton>
+                        <template #delete>
+                            <AthleteMultipleDeleteForm
+                                ref="athleteDeleteFormRef"
+                                :athletes="athleteTableRef?.selectRows()?.map((row) => row.original) || []"
+                                @success="handleDeleteSuccess"
+                            />
+                        </template>
+                    </ListActions>
                 </div>
             </template>
         </ListTable>

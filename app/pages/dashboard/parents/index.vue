@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Actions from '~/components/Parent/Actions.vue';
+import DetailsActions from '~/components/Parent/DetailsActions.vue';
 
 useSeoMeta({
     title: $t('page.parents.title'),
@@ -17,11 +17,8 @@ const { parents, parentsPending, parentsError } = storeToRefs(parentsStore);
 const deleteModalOpen = ref(false);
 
 const tableColumns = getParentsTableColumns(['id', 'name', 'phoneNumber', 'email']);
-
-if (canEdit.value) {
-    tableColumns.unshift(getSelectTableColumn());
-    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ parentId: row.id })));
-}
+tableColumns.unshift(getSelectTableColumn());
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ parentId: row.id })));
 
 function handleDeleteSuccess() {
     deleteModalOpen.value = false;
@@ -59,21 +56,26 @@ function handleDeleteSuccess() {
         >
             <template #default>
                 <div class="ml-auto">
-                    <ListDeleteButton
-                        v-if="canEdit"
-                        v-model:open="deleteModalOpen"
-                        :title="$t('form.parent.multiple_delete.title')"
-                        :description="$t('form.parent.multiple_delete.description')"
-                        :isDisabled="parentsPending || (parentTableRef?.selectRows()?.length || 0) === 0"
-                        :isLoading="parentDeleteFormRef?.isLoading()"
+                    <ListActions
+                        v-model:openDelete="deleteModalOpen"
+                        :deleteModal="{
+                            title: $t('form.parent.multiple_delete.title', {
+                                quantity: (parentTableRef?.selectRows()?.length || 0).toString(),
+                            }),
+                            description: $t('form.parent.multiple_delete.description'),
+                            isDisabled: parentsPending || (parentTableRef?.selectRows()?.length || 0) === 0,
+                            isLoading: Boolean(parentDeleteFormRef?.isLoading()),
+                        }"
                         @submit="parentDeleteFormRef?.submit()"
                     >
-                        <ParentMultipleDeleteForm
-                            ref="parentDeleteFormRef"
-                            :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
-                            @success="handleDeleteSuccess"
-                        />
-                    </ListDeleteButton>
+                        <template #delete>
+                            <ParentMultipleDeleteForm
+                                ref="parentDeleteFormRef"
+                                :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
+                                @success="handleDeleteSuccess"
+                            />
+                        </template>
+                    </ListActions>
                 </div>
             </template>
         </ListTable>

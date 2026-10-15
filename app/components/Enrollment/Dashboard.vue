@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
 
-import Actions from '~/components/Enrollment/Actions.vue';
+import DetailsActions from '~/components/Enrollment/DetailsActions.vue';
 
 const { title, tableColumns: _tableColumns } = defineProps<{
     title: string;
@@ -26,11 +26,8 @@ const {
 const deleteModalOpen = ref(false);
 
 const tableColumns = getEnrollmentsTableColumns(_tableColumns);
-
-if (canEdit.value) {
-    tableColumns.unshift(getSelectTableColumn());
-    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ enrollmentId: row.id })));
-}
+tableColumns.unshift(getSelectTableColumn());
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ enrollmentId: row.id })));
 
 async function handleFiltersUpdate() {
     await enrollmentsStore.refreshEnrollments();
@@ -80,21 +77,26 @@ function handleDeleteSuccess() {
                     @update="handleFiltersUpdate"
                     @clear="enrollmentsStore.clearFilters"
                 >
-                    <ListDeleteButton
-                        v-if="canEdit"
-                        v-model:open="deleteModalOpen"
-                        :title="$t('form.enrollment.multiple_delete.title')"
-                        :description="$t('form.enrollment.multiple_delete.description')"
-                        :isDisabled="enrollmentsPending || (enrollmentTableRef?.selectRows()?.length || 0) === 0"
-                        :isLoading="enrollmentDeleteFormRef?.isLoading()"
+                    <ListActions
+                        v-model:openDelete="deleteModalOpen"
+                        :deleteModal="{
+                            title: $t('form.enrollment.multiple_delete.title', {
+                                quantity: (enrollmentTableRef?.selectRows()?.length || 0).toString(),
+                            }),
+                            description: $t('form.enrollment.multiple_delete.description'),
+                            isDisabled: enrollmentsPending || (enrollmentTableRef?.selectRows()?.length || 0) === 0,
+                            isLoading: Boolean(enrollmentDeleteFormRef?.isLoading()),
+                        }"
                         @submit="enrollmentDeleteFormRef?.submit()"
                     >
-                        <EnrollmentMultipleDeleteForm
-                            ref="enrollmentDeleteFormRef"
-                            :enrollments="enrollmentTableRef?.selectRows()?.map((row) => row.original) || []"
-                            @success="handleDeleteSuccess"
-                        />
-                    </ListDeleteButton>
+                        <template #delete>
+                            <EnrollmentMultipleDeleteForm
+                                ref="enrollmentDeleteFormRef"
+                                :enrollments="enrollmentTableRef?.selectRows()?.map((row) => row.original) || []"
+                                @success="handleDeleteSuccess"
+                            />
+                        </template>
+                    </ListActions>
                 </ListFilters>
             </template>
         </ListTable>

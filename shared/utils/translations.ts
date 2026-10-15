@@ -1,5 +1,15 @@
 /* eslint-disable style/max-len */
 export const translations = {
+    action: {
+        copy_id: {
+            label: 'Copia ID',
+            success: 'ID',
+        },
+        delete: 'Elimina',
+        edit: 'Modifica',
+        label: 'Azioni',
+        view_details: 'Vedi dettagli',
+    },
     auth: {
         role: {
             admin: 'Admin',
@@ -103,8 +113,7 @@ export const translations = {
                 title: 'Nuovo atleta',
             },
             delete: {
-                body: 'Sei sicuro di voler eliminare questo atleta? Questa azione è irreversibile.',
-                description: 'Attenzione! Stai per eliminare un atleta.',
+                description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Atleta eliminato con successo',
                 title: 'Elimina atleta',
             },
@@ -114,13 +123,9 @@ export const translations = {
                 title: 'Modifica atleta',
             },
             multiple_delete: {
-                body: 'Sei sicuro di voler eliminare questi atleti? Questa azione è irreversibile.',
-                button: {
-                    show_selected: 'Mostra gli atleti selezionati',
-                },
-                description: 'Attenzione! Stai per eliminare più atleti.',
+                description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Atleti eliminati con successo',
-                title: 'Elimina atleti',
+                title: 'Elimina {quantity} atleti',
             },
         },
         button: {
@@ -159,8 +164,7 @@ export const translations = {
                 title: 'Nuova iscrizione',
             },
             delete: {
-                body: 'Sei sicuro di voler eliminare questa iscrizione? Questa azione è irreversibile.',
-                description: 'Attenzione! Stai per eliminare un\'iscrizione.',
+                description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Iscrizione eliminata con successo',
                 title: 'Elimina iscrizione',
             },
@@ -170,13 +174,9 @@ export const translations = {
                 title: 'Modifica iscrizione',
             },
             multiple_delete: {
-                body: 'Sei sicuro di voler eliminare queste iscrizioni? Questa azione è irreversibile.',
-                button: {
-                    show_selected: 'Mostra le iscrizioni selezionate',
-                },
-                description: 'Attenzione! Stai per eliminare più iscrizioni.',
+                description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Iscrizioni eliminate con successo',
-                title: 'Elimina iscrizioni',
+                title: 'Elimina {quantity} iscrizioni',
             },
         },
         field: {
@@ -365,8 +365,7 @@ export const translations = {
                 title: 'Nuovo genitore',
             },
             delete: {
-                body: 'Sei sicuro di voler eliminare questo genitore? Questa azione è irreversibile.',
-                description: 'Attenzione! Stai per eliminare un genitore.',
+                description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Genitore eliminato con successo',
                 title: 'Elimina genitore',
             },
@@ -376,13 +375,9 @@ export const translations = {
                 title: 'Modifica genitore',
             },
             multiple_delete: {
-                body: 'Sei sicuro di voler eliminare questi genitori? Questa azione è irreversibile.',
-                button: {
-                    show_selected: 'Mostra i genitori selezionati',
-                },
-                description: 'Attenzione! Stai per eliminare più genitori.',
+                description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Genitori eliminati con successo',
-                title: 'Elimina genitori',
+                title: 'Elimina {quantity} genitori',
             },
         },
         season: {
@@ -553,36 +548,6 @@ export const translations = {
         },
     },
     table: {
-        action: {
-            copy: {
-                activity_id: 'ID attività',
-                athlete_id: 'ID atleta',
-                course_id: 'ID corso',
-                enrollment_id: 'ID iscrizione',
-                label: 'Copia {name}',
-                parent_id: 'ID genitore',
-                season_id: 'ID stagione',
-            },
-            delete: {
-                athlete: 'Elimina atleta',
-                enrollment: 'Elimina iscrizione',
-                parent: 'Elimina genitore',
-            },
-            edit: {
-                activity: 'Modifica attività',
-                athlete: 'Modifica atleta',
-                course: 'Modifica corso',
-                enrollment: 'Modifica iscrizione',
-                parent: 'Modifica genitore',
-                season: 'Modifica stagione',
-            },
-            label: 'Azioni',
-            view_details: {
-                athlete: 'Vedi dettagli atleta',
-                enrollment: 'Vedi dettagli iscrizione',
-                parent: 'Vedi dettagli genitore',
-            },
-        },
         column: {
             activity: 'Attività',
             athlete: 'Atleta',

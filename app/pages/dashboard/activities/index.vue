@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Actions from '~/components/Activity/Actions.vue';
+import DetailsActions from '~/components/Activity/DetailsActions.vue';
 
 useSeoMeta({
     title: $t('page.activities.title'),
@@ -15,7 +15,7 @@ const { activities, activitiesPending, activitiesError } = storeToRefs(activitie
 const tableColumns = getActivitiesTableColumns(['id', 'name', 'icon']);
 
 if (canEdit.value) {
-    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ activityId: row.id })));
+    tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ activityId: row.id })));
 }
 </script>
 

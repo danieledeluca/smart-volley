@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Actions from '~/components/Course/Actions.vue';
+import DetailsActions from '~/components/Course/DetailsActions.vue';
 
 useSeoMeta({
     title: $t('page.courses.title'),
@@ -15,7 +15,7 @@ const { courses, coursesPending, coursesError } = storeToRefs(coursesStore);
 const tableColumns = getCoursesTableColumns(['id', 'code', 'name', 'activity']);
 
 if (canEdit.value) {
-    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ courseId: row.id })));
+    tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ courseId: row.id })));
 }
 </script>
 

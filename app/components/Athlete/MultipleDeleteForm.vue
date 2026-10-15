@@ -43,29 +43,5 @@ defineExpose({
         :onSubmitComplete
         :submitButtonLabel="$t('form.button.delete')"
         :successMessage="$t('form.athlete.multiple_delete.success')"
-    >
-        <div>{{ $t('form.athlete.multiple_delete.body') }}</div>
-        <UCollapsible>
-            <UButton
-                variant="outline"
-                color="neutral"
-                :label="$t('form.athlete.multiple_delete.button.show_selected')"
-                trailingIcon="i-lucide-chevron-down"
-                block
-            />
-
-            <template #content>
-                <div class="mt-4 flex flex-col gap-4">
-                    <AppUser
-                        v-for="athlete in athletes"
-                        :key="athlete.id"
-                        :userProps="{
-                            name: athlete.name,
-                            description: athlete.fiscalCode,
-                        }"
-                    />
-                </div>
-            </template>
-        </UCollapsible>
-    </BaseForm>
+    />
 </template>

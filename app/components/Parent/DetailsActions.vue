@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import DetailsActions from '~/components/Details/Actions.vue';
+
 const { parentId } = defineProps<{
     parentId: number;
 }>();
@@ -19,10 +21,6 @@ const openDelete = ref(false);
 const openEdit = ref(false);
 const updatedParentId = ref<number>();
 
-const isLoading = computed(() => {
-    return Boolean(parentEditFormRef.value?.isLoading()) || Boolean(parentDeleteFormRef.value?.isLoading());
-});
-
 function handleDeleteSuccess() {
     openDelete.value = false;
 
@@ -38,29 +36,21 @@ function handleEditSuccess(id?: number) {
 </script>
 
 <template>
-    <ListTableActions
+    <DetailsActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
         :pageId="parentId"
-        :copy="{
-            label: $t('table.action.copy.label', { name: $t('table.action.copy.parent_id') }),
-            successMessage: $t('toast.copy', { name: $t('table.action.copy.parent_id') }),
-        }"
-        :viewDetails="route.name !== 'dashboard-parents-id' ? {
-            label: $t('table.action.view_details.parent'),
-            path: `/dashboard/parents/${parentId}`,
-        } : undefined"
-        :edit="{
-            label: $t('table.action.edit.parent'),
+        :detailsPath="route.name !== 'dashboard-parents-id' ? `/dashboard/parents/${parentId}` : undefined"
+        :editModal="{
             title: $t('form.parent.edit.title'),
             description: $t('form.parent.edit.description'),
+            isLoading: Boolean(parentEditFormRef?.isLoading()),
         }"
-        :delete="{
-            label: $t('table.action.delete.parent'),
+        :deleteModal="{
             title: $t('form.parent.delete.title'),
             description: $t('form.parent.delete.description'),
+            isLoading: Boolean(parentDeleteFormRef?.isLoading()),
         }"
-        :isLoading
         @delete="parentDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"
         @edit="parentEditFormRef?.submit"
@@ -72,5 +62,5 @@ function handleEditSuccess(id?: number) {
         <template #edit>
             <ParentEditForm ref="parentEditFormRef" :parentId @success="handleEditSuccess" />
         </template>
-    </ListTableActions>
+    </DetailsActions>
 </template>

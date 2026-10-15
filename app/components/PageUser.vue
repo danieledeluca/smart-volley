@@ -8,9 +8,6 @@ const { name, link, badgeLabels } = defineProps<{
 const slots = defineSlots<{
     default?: (props?: object) => VNode[];
 }>();
-
-const authStore = useAuthStore();
-const { canEdit } = storeToRefs(authStore);
 </script>
 
 <template>
@@ -39,7 +36,7 @@ const { canEdit } = storeToRefs(authStore);
                 </span>
             </template>
         </AppUser>
-        <div v-if="canEdit && !!slots.default" class="ml-auto">
+        <div v-if="!!slots.default" class="ml-auto">
             <slot />
         </div>
     </div>

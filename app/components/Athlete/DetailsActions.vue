@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import DetailsActions from '~/components/Details/Actions.vue';
+
 const { athleteId } = defineProps<{
     athleteId: number;
 }>();
@@ -18,10 +20,6 @@ const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 const openDelete = ref(false);
 const openEdit = ref(false);
 const updatedAthleteId = ref<number>();
-
-const isLoading = computed(() => {
-    return Boolean(athleteEditFormRef.value?.isLoading()) || Boolean(athleteDeleteFormRef.value?.isLoading());
-});
 
 function handleInteractOutside(event: Event) {
     const target = event.target as HTMLElement;
@@ -47,29 +45,21 @@ function handleEditSuccess(id?: number) {
 </script>
 
 <template>
-    <ListTableActions
+    <DetailsActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
         :pageId="athleteId"
-        :copy="{
-            label: $t('table.action.copy.label', { name: $t('table.action.copy.athlete_id') }),
-            successMessage: $t('toast.copy', { name: $t('table.action.copy.athlete_id') }),
-        }"
-        :viewDetails="route.name !== 'dashboard-athletes-id' ? {
-            label: $t('table.action.view_details.athlete'),
-            path: `/dashboard/athletes/${athleteId}`,
-        } : undefined"
-        :edit="{
-            label: $t('table.action.edit.athlete'),
+        :detailsPath="route.name !== 'dashboard-athletes-id' ? `/dashboard/athletes/${athleteId}` : undefined"
+        :editModal="{
             title: $t('form.athlete.edit.title'),
             description: $t('form.athlete.edit.description'),
+            isLoading: Boolean(athleteEditFormRef?.isLoading()),
         }"
-        :delete="{
-            label: $t('table.action.delete.athlete'),
+        :deleteModal="{
             title: $t('form.athlete.delete.title'),
             description: $t('form.athlete.delete.description'),
+            isLoading: Boolean(athleteDeleteFormRef?.isLoading()),
         }"
-        :isLoading
         @delete="athleteDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"
         @edit="athleteEditFormRef?.submit"
@@ -82,5 +72,5 @@ function handleEditSuccess(id?: number) {
         <template #edit>
             <AthleteEditForm ref="athleteEditFormRef" :athleteId @success="handleEditSuccess" />
         </template>
-    </ListTableActions>
+    </DetailsActions>
 </template>

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { ButtonProps } from '@nuxt/ui';
 
-const { title, description, buttonProps, cancelButtonProps, submitButtonProps } = defineProps<{
+const { title, description, buttonProps, cancelButtonProps, submitButtonProps, showModalBody = true } = defineProps<{
     title: string;
     description?: string;
     buttonProps?: ButtonProps;
     cancelButtonProps?: Omit<ButtonProps, 'variant' | 'color'>;
     submitButtonProps?: ButtonProps;
+    showModalBody?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -34,6 +35,9 @@ function handleCancel() {
         :description
         :content="{
             onInteractOutside: (event) => emit('interactOutside', event),
+        }"
+        :ui="{
+            body: !showModalBody ? 'hidden' : undefined,
         }"
         @after:leave="emit('close')"
     >

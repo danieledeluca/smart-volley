@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import DetailsActions from '~/components/Details/Actions.vue';
+
 const { enrollmentId } = defineProps<{
     enrollmentId: number;
 }>();
@@ -19,10 +21,6 @@ const openDelete = ref(false);
 const openEdit = ref(false);
 const updatedEnrollmentId = ref<number>();
 
-const isLoading = computed(() => {
-    return Boolean(enrollmentEditFormRef.value?.isLoading()) || Boolean(enrollmentDeleteFormRef.value?.isLoading());
-});
-
 function handleDeleteSuccess() {
     openDelete.value = false;
 
@@ -38,29 +36,21 @@ function handleEditSuccess(id?: number) {
 </script>
 
 <template>
-    <ListTableActions
+    <DetailsActions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
         :pageId="enrollmentId"
-        :copy="{
-            label: $t('table.action.copy.label', { name: $t('table.action.copy.enrollment_id') }),
-            successMessage: $t('toast.copy', { name: $t('table.action.copy.enrollment_id') }),
-        }"
-        :viewDetails="route.name !== 'dashboard-enrollments-id' ? {
-            label: $t('table.action.view_details.enrollment'),
-            path: `/dashboard/enrollments/${enrollmentId}`,
-        } : undefined"
-        :edit="{
-            label: $t('table.action.edit.enrollment'),
+        :detailsPath="route.name !== 'dashboard-enrollments-id' ? `/dashboard/enrollments/${enrollmentId}` : undefined"
+        :editModal="{
             title: $t('form.enrollment.edit.title'),
             description: $t('form.enrollment.edit.description'),
+            isLoading: Boolean(enrollmentEditFormRef?.isLoading()),
         }"
-        :delete="{
-            label: $t('table.action.delete.enrollment'),
+        :deleteModal="{
             title: $t('form.enrollment.delete.title'),
             description: $t('form.enrollment.delete.description'),
+            isLoading: Boolean(enrollmentDeleteFormRef?.isLoading()),
         }"
-        :isLoading
         @delete="enrollmentDeleteFormRef?.submit"
         @deleteClose="emit('deleteClose')"
         @edit="enrollmentEditFormRef?.submit"
@@ -72,5 +62,5 @@ function handleEditSuccess(id?: number) {
         <template #edit>
             <EnrollmentEditForm ref="enrollmentEditFormRef" :enrollmentId @success="handleEditSuccess" />
         </template>
-    </ListTableActions>
+    </DetailsActions>
 </template>

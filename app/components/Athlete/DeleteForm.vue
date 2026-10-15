@@ -38,7 +38,5 @@ defineExpose({
         :onSubmitComplete
         :submitButtonLabel="$t('form.button.delete')"
         :successMessage="$t('form.athlete.delete.success')"
-    >
-        <div>{{ $t('form.athlete.delete.body') }}</div>
-    </BaseForm>
+    />
 </template>

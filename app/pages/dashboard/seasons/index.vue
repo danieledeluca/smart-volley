@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Actions from '~/components/Season/Actions.vue';
+import DetailsActions from '~/components/Season/DetailsActions.vue';
 
 useSeoMeta({
     title: $t('page.seasons.title'),
@@ -15,7 +15,7 @@ const { seasons, seasonsPending, seasonsError } = storeToRefs(seasonsStore);
 const tableColumns = getSeasonsTableColumns(['id', 'startYear', 'endYear']);
 
 if (canEdit.value) {
-    tableColumns.push(getActionsTableColumn(Actions, (row) => ({ seasonId: row.id })));
+    tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ seasonId: row.id })));
 }
 </script>
 
