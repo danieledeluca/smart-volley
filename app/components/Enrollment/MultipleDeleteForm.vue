@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
+import type { SelectEnrollmentsSerialized } from '~~/lib/db/schema';
 
 const { enrollments } = defineProps<{
-    enrollments: SelectEnrollmentsWithRelations[];
+    enrollments: SelectEnrollmentsSerialized[];
 }>();
 
 const emit = defineEmits<{

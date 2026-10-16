@@ -43,5 +43,6 @@ export const InsertCourse = createInsertSchema(course, {
 
 export type InsertCourse = z.infer<typeof InsertCourse>;
 export type InsertedCourse = Awaited<ReturnType<typeof insertCourse>>;
-export type SelectCourses = SerializeObject<Awaited<ReturnType<typeof findCourses>>[number]>;
+export type SelectCourses = Awaited<ReturnType<typeof findCourses>>[number];
+export type SelectCoursesSerialized = SerializeObject<SelectCourses>;
 export type UpdatedCourse = Awaited<ReturnType<typeof updateCourse>>;

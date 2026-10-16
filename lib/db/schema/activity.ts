@@ -40,5 +40,6 @@ export const InsertActivity = createInsertSchema(activity, {
 
 export type InsertActivity = z.infer<typeof InsertActivity>;
 export type InsertedActivity = Awaited<ReturnType<typeof insertActivity>>;
-export type SelectActivities = SerializeObject<Awaited<ReturnType<typeof findActivities>>[number]>;
+export type SelectActivities = Awaited<ReturnType<typeof findActivities>>[number];
+export type SelectActivitiesSerialized = SerializeObject<SelectActivities>;
 export type UpdatedActivity = Awaited<ReturnType<typeof updateActivity>>;

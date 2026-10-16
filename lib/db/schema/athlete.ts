@@ -136,6 +136,8 @@ export const InsertAthlete = createInsertSchema(athlete, {
 
 export type InsertAthlete = z.infer<typeof InsertAthlete>;
 export type InsertedAthlete = Awaited<ReturnType<typeof insertAthlete>>;
-export type SelectAthletes = SerializeObject<Awaited<ReturnType<typeof findAthletes>>[number]>;
-export type SelectAthleteWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findAthlete>>>>;
+export type SelectAthletes = Awaited<ReturnType<typeof findAthletes>>[number];
+export type SelectAthletesSerialized = SerializeObject<SelectAthletes>;
+export type SelectAthlete = Awaited<ReturnType<typeof findAthlete>>;
+export type SelectAthleteSerialized = SerializeObject<NonNullable<SelectAthlete>>;
 export type UpdatedAthlete = Awaited<ReturnType<typeof updateAthlete>>;

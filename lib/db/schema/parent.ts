@@ -41,6 +41,8 @@ export const InsertParent = createInsertSchema(parent, {
 
 export type InsertParent = z.infer<typeof InsertParent>;
 export type InsertedParent = Awaited<ReturnType<typeof insertParent>>;
-export type SelectParents = SerializeObject<Awaited<ReturnType<typeof findParents>>[number]>;
-export type SelectParentWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findParent>>>>;
+export type SelectParents = Awaited<ReturnType<typeof findParents>>[number];
+export type SelectParentsSerialized = SerializeObject<SelectParents>;
+export type SelectParent = Awaited<ReturnType<typeof findParent>>;
+export type SelectParentSerialized = SerializeObject<NonNullable<SelectParent>>;
 export type UpdatedParent = Awaited<ReturnType<typeof updateParent>>;

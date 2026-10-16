@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
 
-const { deleteModal } = defineProps<{
+const { deleteModal, additionalItems } = defineProps<{
     deleteModal?: {
         title: string;
         description: string;
         isDisabled: boolean;
-        isLoading: boolean;
+        isLoading?: boolean;
     };
+    additionalItems?: DropdownMenuItem[];
 }>();
 
 const emit = defineEmits<{
@@ -28,6 +29,10 @@ const { canEdit } = storeToRefs(authStore);
 
 const dropDownMenuItems = computed(() => {
     const items: DropdownMenuItem[] = [];
+
+    if (additionalItems) {
+        items.push(...additionalItems);
+    }
 
     if (canEdit.value && deleteModal) {
         if (items.length > 0) {

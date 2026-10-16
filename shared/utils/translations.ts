@@ -6,6 +6,7 @@ export const translations = {
             success: 'ID',
         },
         delete: 'Elimina',
+        download_csv: 'Download CSV',
         edit: 'Modifica',
         label: 'Azioni',
         view_details: 'Vedi dettagli',
@@ -167,6 +168,9 @@ export const translations = {
                 description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Iscrizione eliminata con successo',
                 title: 'Elimina iscrizione',
+            },
+            download_csv: {
+                success: 'CSV scaricato con successo',
             },
             edit: {
                 description: 'Compila i campi per modificare le informazioni dell\'iscrizione.',

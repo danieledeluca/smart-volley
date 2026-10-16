@@ -39,5 +39,6 @@ export const InsertSeason = createInsertSchema(season, {
 
 export type InsertSeason = z.infer<typeof InsertSeason>;
 export type InsertedSeason = Awaited<ReturnType<typeof insertSeason>>;
-export type SelectSeasons = SerializeObject<Awaited<ReturnType<typeof findSeasons>>[number]>;
+export type SelectSeasons = Awaited<ReturnType<typeof findSeasons>>[number];
+export type SelectSeasonsSerialized = SerializeObject<SelectSeasons>;
 export type UpdatedSeason = Awaited<ReturnType<typeof updateSeason>>;

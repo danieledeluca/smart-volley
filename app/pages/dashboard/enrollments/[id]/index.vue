@@ -1,6 +1,13 @@
 <script setup lang="ts">
+import type { SelectEnrollmentSerialized } from '~~/lib/db/schema';
+
 const route = useRoute();
-const { data: enrollment, pending, error, refresh } = useLazyFetch(`/api/enrollments/${route.params.id}`);
+const {
+    data: enrollment,
+    pending,
+    error,
+    refresh,
+} = useLazyFetch<SelectEnrollmentSerialized>(`/api/enrollments/${route.params.id}`);
 
 const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollment.title'));
 

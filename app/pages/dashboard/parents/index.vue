@@ -8,23 +8,14 @@ useSeoMeta({
 const authStore = useAuthStore();
 const parentsStore = useParentsStore();
 const parentFormRef = useTemplateRef('parentFormRef');
-const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
 const parentTableRef = useTemplateRef('parentTableRef');
 
 const { canEdit } = storeToRefs(authStore);
 const { parents, parentsPending, parentsError } = storeToRefs(parentsStore);
 
-const deleteModalOpen = ref(false);
-
 const tableColumns = getParentsTableColumns(['id', 'name', 'phoneNumber', 'email']);
 tableColumns.unshift(getSelectTableColumn());
 tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ parentId: row.id })));
-
-function handleDeleteSuccess() {
-    deleteModalOpen.value = false;
-
-    parentTableRef.value?.toggleAllPageRowsSelected(false);
-}
 </script>
 
 <template>
@@ -56,26 +47,11 @@ function handleDeleteSuccess() {
         >
             <template #default>
                 <div class="ml-auto">
-                    <ListActions
-                        v-model:openDelete="deleteModalOpen"
-                        :deleteModal="{
-                            title: $t('form.parent.multiple_delete.title', {
-                                quantity: (parentTableRef?.selectRows()?.length || 0).toString(),
-                            }),
-                            description: $t('form.parent.multiple_delete.description'),
-                            isDisabled: parentsPending || (parentTableRef?.selectRows()?.length || 0) === 0,
-                            isLoading: Boolean(parentDeleteFormRef?.isLoading()),
-                        }"
-                        @submit="parentDeleteFormRef?.submit()"
-                    >
-                        <template #delete>
-                            <ParentMultipleDeleteForm
-                                ref="parentDeleteFormRef"
-                                :parents="parentTableRef?.selectRows()?.map((row) => row.original) || []"
-                                @success="handleDeleteSuccess"
-                            />
-                        </template>
-                    </ListActions>
+                    <ParentListActions
+                        :selectedRows="parentTableRef?.selectRows()"
+                        :isLoading="parentsPending"
+                        @deleteSuccess="parentTableRef?.toggleAllPageRowsSelected(false)"
+                    />
                 </div>
             </template>
         </ListTable>

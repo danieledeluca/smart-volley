@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { SelectParents } from '~~/lib/db/schema';
+import type { SelectParentsSerialized } from '~~/lib/db/schema';
 
 const { parents } = defineProps<{
-    parents: SelectParents[];
+    parents: SelectParentsSerialized[];
 }>();
 
 const emit = defineEmits<{

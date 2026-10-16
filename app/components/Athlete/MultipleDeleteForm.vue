@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { SelectAthletes } from '~~/lib/db/schema';
+import type { SelectAthletesSerialized } from '~~/lib/db/schema';
 
 const { athletes } = defineProps<{
-    athletes: SelectAthletes[];
+    athletes: SelectAthletesSerialized[];
 }>();
 
 const emit = defineEmits<{

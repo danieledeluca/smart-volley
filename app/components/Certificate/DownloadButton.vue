@@ -14,11 +14,9 @@ async function handleClick() {
         const { url } = await $fetch(`/api/enrollments/${enrollmentId.toString()}/certificate`);
 
         window.open(url, '_blank');
-    } catch (err) {
-        const error = err as FetchError;
-
+    } catch (error) {
         toast.add({
-            description: getApiError(error),
+            description: getApiError(error as FetchError),
             color: 'error',
             icon: 'i-lucide-circle-x',
         });

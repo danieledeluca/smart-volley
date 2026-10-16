@@ -8,13 +8,10 @@ useSeoMeta({
 const authStore = useAuthStore();
 const athletesStore = useAthletesStore();
 const athleteAddFormRef = useTemplateRef('athleteAddFormRef');
-const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 const athleteTableRef = useTemplateRef('athleteTableRef');
 
 const { canEdit } = storeToRefs(authStore);
 const { athletes, athletesPending, athletesError } = storeToRefs(athletesStore);
-
-const deleteModalOpen = ref(false);
 
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
 tableColumns.unshift(getSelectTableColumn());
@@ -27,12 +24,6 @@ function handleInteractOutside(event: Event) {
     if (target.closest('.pac-container')) {
         event.preventDefault();
     }
-}
-
-function handleDeleteSuccess() {
-    deleteModalOpen.value = false;
-
-    athleteTableRef.value?.toggleAllPageRowsSelected(false);
 }
 </script>
 
@@ -67,26 +58,11 @@ function handleDeleteSuccess() {
         >
             <template #default>
                 <div class="ml-auto">
-                    <ListActions
-                        v-model:openDelete="deleteModalOpen"
-                        :deleteModal="{
-                            title: $t('form.athlete.multiple_delete.title', {
-                                quantity: (athleteTableRef?.selectRows()?.length || 0).toString(),
-                            }),
-                            description: $t('form.athlete.multiple_delete.description'),
-                            isDisabled: athletesPending || (athleteTableRef?.selectRows()?.length || 0) === 0,
-                            isLoading: Boolean(athleteDeleteFormRef?.isLoading()),
-                        }"
-                        @submit="athleteDeleteFormRef?.submit()"
-                    >
-                        <template #delete>
-                            <AthleteMultipleDeleteForm
-                                ref="athleteDeleteFormRef"
-                                :athletes="athleteTableRef?.selectRows()?.map((row) => row.original) || []"
-                                @success="handleDeleteSuccess"
-                            />
-                        </template>
-                    </ListActions>
+                    <AthleteListActions
+                        :selectedRows="athleteTableRef?.selectRows()"
+                        :isLoading="athletesPending"
+                        @deleteSuccess="athleteTableRef?.toggleAllPageRowsSelected(false)"
+                    />
                 </div>
             </template>
         </ListTable>

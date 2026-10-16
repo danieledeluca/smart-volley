@@ -1,14 +1,14 @@
 import type { TableColumn } from '@nuxt/ui';
 import type {
-    SelectActivities,
-    SelectAthletes,
-    SelectAthleteWithRelations,
-    SelectCourses,
-    SelectEnrollmentsWithRelations,
-    SelectEnrollmentWithRelations,
-    SelectParents,
-    SelectParentWithRelations,
-    SelectSeasons,
+    SelectActivitiesSerialized,
+    SelectAthleteSerialized,
+    SelectAthletesSerialized,
+    SelectCoursesSerialized,
+    SelectEnrollmentSerialized,
+    SelectEnrollmentsSerialized,
+    SelectParentSerialized,
+    SelectParentsSerialized,
+    SelectSeasonsSerialized,
 } from '~~/lib/db/schema';
 import type { ComponentProps } from 'vue-component-type-helpers';
 
@@ -181,8 +181,8 @@ export function getSelectTableColumn<T>(): TableColumn<T> {
 }
 
 // Athletes
-export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
-    const tableColumns: TableColumns<SelectAthletes> = {
+export function getAthletesTableColumns(columns: (keyof SelectAthletesSerialized)[]) {
+    const tableColumns: TableColumns<SelectAthletesSerialized> = {
         id: getIdTableColumn(),
         name: getUserTableColumn('/dashboard/athletes/'),
         phoneNumber: getPhoneNumberTableColumn(),
@@ -193,9 +193,9 @@ export function getAthletesTableColumns(columns: (keyof SelectAthletes)[]) {
 }
 
 export function getAthleteEnrollmentsTableColumns(
-    columns: (keyof SelectAthleteWithRelations['enrollments'][number])[],
+    columns: (keyof SelectAthleteSerialized['enrollments'][number])[],
 ) {
-    const tableColumns: TableColumns<SelectAthleteWithRelations['enrollments'][number]> = {
+    const tableColumns: TableColumns<SelectAthleteSerialized['enrollments'][number]> = {
         season: getSeasonTableColumn(),
         activity: getActivityTableColumn(),
         course: getCourseTableColumn(),
@@ -205,8 +205,8 @@ export function getAthleteEnrollmentsTableColumns(
 }
 
 // Parents
-export function getParentsTableColumns(columns: (keyof SelectParents)[]) {
-    const tableColumns: TableColumns<SelectParents> = {
+export function getParentsTableColumns(columns: (keyof SelectParentsSerialized)[]) {
+    const tableColumns: TableColumns<SelectParentsSerialized> = {
         id: getIdTableColumn(),
         name: getUserTableColumn('/dashboard/parents/'),
         phoneNumber: getPhoneNumberTableColumn(),
@@ -216,8 +216,8 @@ export function getParentsTableColumns(columns: (keyof SelectParents)[]) {
     return filterColumns(columns, tableColumns);
 }
 
-export function getParentAthletesTableColumns(columns: (keyof SelectParentWithRelations['athletes'][number])[]) {
-    const tableColumns: TableColumns<SelectParentWithRelations['athletes'][number]> = {
+export function getParentAthletesTableColumns(columns: (keyof SelectParentSerialized['athletes'][number])[]) {
+    const tableColumns: TableColumns<SelectParentSerialized['athletes'][number]> = {
         name: getNameTableColumn(false),
         fiscalCode: {
             accessorKey: 'fiscalCode',
@@ -230,8 +230,8 @@ export function getParentAthletesTableColumns(columns: (keyof SelectParentWithRe
 }
 
 // Enrollments
-export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWithRelations)[]) {
-    const tableColumns: TableColumns<SelectEnrollmentsWithRelations> = {
+export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsSerialized)[]) {
+    const tableColumns: TableColumns<SelectEnrollmentsSerialized> = {
         id: getIdTableColumn(),
         athlete: {
             accessorKey: 'athlete',
@@ -279,9 +279,9 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
 }
 
 export function getEnrollmentPaymentsTableColumns(
-    columns: (keyof SelectEnrollmentWithRelations['payments'][number])[],
+    columns: (keyof SelectEnrollmentSerialized['payments'][number])[],
 ) {
-    const tableColumns: TableColumns<SelectEnrollmentWithRelations['payments'][number]> = {
+    const tableColumns: TableColumns<SelectEnrollmentSerialized['payments'][number]> = {
         name: {
             accessorKey: 'name',
             header: $t('table.column.payment_name'),
@@ -310,8 +310,8 @@ export function getEnrollmentPaymentsTableColumns(
 }
 
 // Seasons
-export function getSeasonsTableColumns(columns: (keyof SelectSeasons)[]) {
-    const tableColumns: TableColumns<SelectSeasons> = {
+export function getSeasonsTableColumns(columns: (keyof SelectSeasonsSerialized)[]) {
+    const tableColumns: TableColumns<SelectSeasonsSerialized> = {
         id: getIdTableColumn(),
         startYear: {
             accessorKey: 'startYear',
@@ -329,8 +329,8 @@ export function getSeasonsTableColumns(columns: (keyof SelectSeasons)[]) {
 }
 
 // Activities
-export function getActivitiesTableColumns(columns: (keyof SelectActivities)[]) {
-    const tableColumns: TableColumns<SelectActivities> = {
+export function getActivitiesTableColumns(columns: (keyof SelectActivitiesSerialized)[]) {
+    const tableColumns: TableColumns<SelectActivitiesSerialized> = {
         id: getIdTableColumn(),
         name: getNameTableColumn(),
         icon: {
@@ -347,8 +347,8 @@ export function getActivitiesTableColumns(columns: (keyof SelectActivities)[]) {
 }
 
 // Courses
-export function getCoursesTableColumns(columns: (keyof SelectCourses)[]) {
-    const tableColumns: TableColumns<SelectCourses> = {
+export function getCoursesTableColumns(columns: (keyof SelectCoursesSerialized)[]) {
+    const tableColumns: TableColumns<SelectCoursesSerialized> = {
         id: getIdTableColumn(),
         code: {
             accessorKey: 'code',

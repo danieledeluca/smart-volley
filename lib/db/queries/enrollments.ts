@@ -169,6 +169,29 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
     });
 }
 
+export async function findEnrollmentsForExport(ids: number[]) {
+    return await db.query.enrollment.findMany({
+        where: and(
+            inArray(enrollment.id, ids),
+            isNull(enrollment.deletedAt),
+        ),
+        with: {
+            athlete: {
+                with: {
+                    parent: true,
+                },
+            },
+            season: true,
+            course: {
+                with: {
+                    activity: true,
+                },
+            },
+        },
+        orderBy: desc(enrollment.id),
+    });
+}
+
 export async function findEnrollment(enrollmentId: number) {
     const result = await db.query.enrollment.findFirst({
         where: and(
