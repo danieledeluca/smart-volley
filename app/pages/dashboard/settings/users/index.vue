@@ -43,16 +43,6 @@ const filteredUsers = computed(() => {
                             icon="i-lucide-search"
                         />
                     </template>
-                    <div v-for="n in 3" :key="n" class="flex gap-3 border-t border-default px-4 py-3 max-sm:flex-col sm:items-center sm:justify-between sm:px-6">
-                        <div class="flex flex-1 items-center gap-3">
-                            <USkeleton class="size-8 rounded-full" />
-                            <div class="flex-1">
-                                <USkeleton class="h-4 w-full max-w-32" />
-                                <USkeleton class="mt-1 h-4 w-full max-w-24" />
-                            </div>
-                        </div>
-                        <USkeleton class="h-8 w-full sm:max-w-48" />
-                    </div>
                     <template v-if="usersPending && !users">
                         <div v-for="n in 3" :key="n" class="flex items-center justify-between gap-3 border-t border-default px-4 py-3 sm:px-6">
                             <div class="flex flex-1 items-center gap-3">
