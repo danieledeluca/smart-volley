@@ -23,7 +23,7 @@ const enrollmentsTableColumns = getAthleteEnrollmentsTableColumns(['season', 'ac
         />
         <template v-else-if="athlete">
             <PageUser :name="athlete.name" :badgeLabels="[athlete.fiscalCode]">
-                <AthleteActions
+                <AthleteDetailsActions
                     :athleteId="athlete.id"
                     @deleteComplete="navigateTo('/dashboard/athletes')"
                     @editClose="$event ? refresh() : undefined"

@@ -23,7 +23,7 @@ const athletesTableColumns = getParentAthletesTableColumns(['name', 'fiscalCode'
         />
         <template v-else-if="parent">
             <PageUser :name="parent.name" :badgeLabels="[parent.fiscalCode]">
-                <ParentActions
+                <ParentDetailsActions
                     :parentId="parent.id"
                     @deleteComplete="navigateTo('/dashboard/parents')"
                     @editClose="$event ? refresh() : undefined"

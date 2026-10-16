@@ -41,7 +41,7 @@ const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name'
                     `${enrollment.activity.name} (${enrollment.course.code})`,
                 ]"
             >
-                <EnrollmentActions
+                <EnrollmentDetailsActions
                     :enrollmentId="enrollment.id"
                     @deleteComplete="navigateTo('/dashboard/enrollments')"
                     @editClose="$event ? refresh() : undefined"
