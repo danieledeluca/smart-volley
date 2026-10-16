@@ -1,11 +1,11 @@
 import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schemas';
 
-import { and, desc, eq, inArray, isNull } from 'drizzle-orm';
+import { desc, eq, inArray } from 'drizzle-orm';
 
 import type { InsertAthlete } from '../schema';
 
 import db from '..';
-import { athlete, enrollment } from '../schema';
+import { athlete } from '../schema';
 
 function mapBirthplaceToColumns(birthplace: InsertAthlete['birthplace']) {
     return {
@@ -34,7 +34,6 @@ function mapAddressToColumns(address: InsertAthlete['address']) {
 
 export async function findAthletes() {
     return await db.query.athlete.findMany({
-        where: isNull(athlete.deletedAt),
         columns: {
             id: true,
             name: true,
@@ -48,14 +47,10 @@ export async function findAthletes() {
 
 export async function findAthlete(athleteId: number) {
     const result = await db.query.athlete.findFirst({
-        where: and(
-            eq(athlete.id, athleteId),
-            isNull(athlete.deletedAt),
-        ),
+        where: eq(athlete.id, athleteId),
         with: {
             parent: true,
             enrollments: {
-                where: isNull(enrollment.deletedAt),
                 with: {
                     season: true,
                     course: {
@@ -113,10 +108,7 @@ export async function updateAthlete(data: InsertAthlete, athleteId: number) {
             email,
             parentId,
         })
-        .where(and(
-            eq(athlete.id, athleteId),
-            isNull(athlete.deletedAt),
-        ))
+        .where(eq(athlete.id, athleteId))
         .returning();
 
     return updated;
@@ -127,24 +119,16 @@ export async function deleteAthletes(data: MultipleDeleteSchema) {
         return [];
     }
 
-    const deleted = await db.update(athlete)
-        .set({ deletedAt: new Date() })
-        .where(and(
-            inArray(athlete.id, data.ids),
-            isNull(athlete.deletedAt),
-        ))
+    const deleted = await db.delete(athlete)
+        .where(inArray(athlete.id, data.ids))
         .returning();
 
     return deleted;
 }
 
 export async function deleteAthlete(athleteId: number) {
-    const [deleted] = await db.update(athlete)
-        .set({ deletedAt: new Date() })
-        .where(and(
-            eq(athlete.id, athleteId),
-            isNull(athlete.deletedAt),
-        ))
+    const [deleted] = await db.delete(athlete)
+        .where(eq(athlete.id, athleteId))
         .returning();
 
     return deleted;

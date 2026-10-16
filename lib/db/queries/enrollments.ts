@@ -9,19 +9,11 @@ import type { InsertEnrollment } from '../schema';
 import db from '..';
 import { $t } from '../../../shared/utils/i18n';
 import { deleteFile, uploadFile } from '../../storage';
-import { athlete, course, enrollment, season } from '../schema';
+import { course, enrollment, season } from '../schema';
 import { findSeason } from './seasons';
 
 function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
-    const conditions: SQL[] = [
-        isNull(enrollment.deletedAt),
-        inArray(
-            enrollment.athleteId,
-            db.select({ id: athlete.id })
-                .from(athlete)
-                .where(isNull(athlete.deletedAt)),
-        ),
-    ];
+    const conditions: SQL[] = [];
 
     if (filters?.seasonId) {
         conditions.push(eq(enrollment.seasonId, filters.seasonId));
@@ -78,7 +70,6 @@ async function findLatestCertificate(athleteId: number, seasonId: number) {
         .where(and(
             eq(enrollment.athleteId, athleteId),
             lt(season.startYear, currentSeason.startYear),
-            isNull(enrollment.deletedAt),
             isNotNull(enrollment.certificateExpirationDate),
         ))
         .orderBy(desc(season.startYear))
@@ -171,10 +162,7 @@ export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
 
 export async function findEnrollmentsForExport(ids: number[]) {
     return await db.query.enrollment.findMany({
-        where: and(
-            inArray(enrollment.id, ids),
-            isNull(enrollment.deletedAt),
-        ),
+        where: inArray(enrollment.id, ids),
         with: {
             athlete: {
                 with: {
@@ -194,10 +182,7 @@ export async function findEnrollmentsForExport(ids: number[]) {
 
 export async function findEnrollment(enrollmentId: number) {
     const result = await db.query.enrollment.findFirst({
-        where: and(
-            eq(enrollment.id, enrollmentId),
-            isNull(enrollment.deletedAt),
-        ),
+        where: eq(enrollment.id, enrollmentId),
         with: {
             athlete: true,
             season: true,
@@ -246,10 +231,7 @@ export async function findEnrollment(enrollmentId: number) {
 
 export async function findEnrollmentCertificateStorageKey(enrollmentId: number) {
     const result = await db.query.enrollment.findFirst({
-        where: and(
-            eq(enrollment.id, enrollmentId),
-            isNull(enrollment.deletedAt),
-        ),
+        where: eq(enrollment.id, enrollmentId),
         columns: {
             certificateStorageKey: true,
         },
@@ -332,10 +314,7 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
                 certificateExpirationDate,
                 ...(certificateStorageKey !== undefined && { certificateStorageKey }),
             })
-            .where(and(
-                eq(enrollment.id, enrollmentId),
-                isNull(enrollment.deletedAt),
-            ))
+            .where(eq(enrollment.id, enrollmentId))
             .returning();
     } catch (error) {
         if (certificateStorageKey) {
@@ -357,24 +336,16 @@ export async function deleteEnrollments(data: MultipleDeleteSchema) {
         return [];
     }
 
-    const deleted = await db.update(enrollment)
-        .set({ deletedAt: new Date() })
-        .where(and(
-            inArray(enrollment.id, data.ids),
-            isNull(enrollment.deletedAt),
-        ))
+    const deleted = await db.delete(enrollment)
+        .where(inArray(enrollment.id, data.ids))
         .returning();
 
     return deleted;
 }
 
 export async function deleteEnrollment(enrollmentId: number) {
-    const [deleted] = await db.update(enrollment)
-        .set({ deletedAt: new Date() })
-        .where(and(
-            eq(enrollment.id, enrollmentId),
-            isNull(enrollment.deletedAt),
-        ))
+    const [deleted] = await db.delete(enrollment)
+        .where(eq(enrollment.id, enrollmentId))
         .returning();
 
     return deleted;

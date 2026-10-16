@@ -37,7 +37,6 @@ export const athlete = pgTable('athlete', {
     parentId: integer().references(() => parent.id, { onDelete: 'set null' }),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
-    deletedAt: timestamp(),
 }, (table) => [
     uniqueIndex().on(table.phoneNumber).where(sql`${table.phoneNumber} IS NOT NULL`),
     uniqueIndex().on(table.email).where(sql`${table.email} IS NOT NULL`),
@@ -131,7 +130,6 @@ export const InsertAthlete = createInsertSchema(athlete, {
     addressPlaceId: true,
     createdAt: true,
     updatedAt: true,
-    deletedAt: true,
 });
 
 export type InsertAthlete = z.infer<typeof InsertAthlete>;

@@ -57,6 +57,13 @@
       "when": 1791667756364,
       "tag": "0007_tired_tiger_shark",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792156130963,
+      "tag": "0008_loose_vulture",
+      "breakpoints": true
     }
   ]
 }

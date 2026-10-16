@@ -1,11 +1,11 @@
-import { desc, eq, inArray, isNull } from 'drizzle-orm';
+import { desc, eq, inArray } from 'drizzle-orm';
 
 import type { MultipleDeleteSchema } from '#imports';
 
 import type { InsertParent } from '../schema';
 
 import db from '..';
-import { athlete, parent } from '../schema';
+import { parent } from '../schema';
 
 export async function findParents() {
     return await db.query.parent.findMany({
@@ -17,9 +17,7 @@ export async function findParent(parentId: number) {
     return await db.query.parent.findFirst({
         where: eq(parent.id, parentId),
         with: {
-            athletes: {
-                where: isNull(athlete.deletedAt),
-            },
+            athletes: true,
         },
     });
 }

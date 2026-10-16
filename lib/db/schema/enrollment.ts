@@ -23,7 +23,7 @@ export const enrollmentPaymentType = pgEnum('enrollment_payment_type', ['cash', 
 
 export const enrollment = pgTable('enrollment', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    athleteId: integer().notNull().references(() => athlete.id),
+    athleteId: integer().notNull().references(() => athlete.id, { onDelete: 'cascade' }),
     seasonId: integer().notNull().references(() => season.id),
     courseId: integer().notNull().references(() => course.id),
     firstPayment: numeric({ precision: 10, scale: 2 }),
@@ -39,7 +39,6 @@ export const enrollment = pgTable('enrollment', {
     certificateStorageKey: text(),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),
-    deletedAt: timestamp(),
 }, (table) => [
     unique().on(table.athleteId, table.seasonId, table.courseId),
     index().on(table.seasonId),
@@ -92,7 +91,6 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
 }).omit({
     createdAt: true,
     updatedAt: true,
-    deletedAt: true,
 });
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;

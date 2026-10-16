@@ -1,6 +1,6 @@
 import type { SerializeObject } from 'nitropack';
 
-import { and, eq, isNull, sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import db from '..';
 import { activity, athlete, course, enrollment, season } from '../schema';
@@ -30,11 +30,10 @@ export async function findDashboardStats(seasonStartYear: number) {
         expiringCertificates: sql<number>`(count(*) FILTER (WHERE ${expiring}))::int`,
     })
         .from(enrollment)
-        .innerJoin(athlete, and(eq(enrollment.athleteId, athlete.id), isNull(athlete.deletedAt)))
+        .innerJoin(athlete, eq(enrollment.athleteId, athlete.id))
         .innerJoin(season, eq(enrollment.seasonId, season.id))
         .innerJoin(course, eq(enrollment.courseId, course.id))
         .innerJoin(activity, eq(course.activityId, activity.id))
-        .where(isNull(enrollment.deletedAt))
         .groupBy(activity.id, activity.name)
         .orderBy(activity.name);
 
