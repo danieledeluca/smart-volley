@@ -74,7 +74,7 @@ async function handleUpdate(userRole: UserRoleSchema) {
 </script>
 
 <template>
-    <div class="flex items-center justify-between gap-3 border-t border-default px-4 py-3 sm:px-6">
+    <div class="flex gap-3 border-t border-default px-4 py-3 max-sm:flex-col sm:items-center sm:justify-between sm:px-6">
         <div class="flex min-w-0 items-center gap-3">
             <UUser
                 :name="user.name"
@@ -97,7 +97,7 @@ async function handleUpdate(userRole: UserRoleSchema) {
         </div>
         <FormField
             :modelValue="user.role ?? undefined"
-            class="w-full max-w-48"
+            class="w-full sm:max-w-48"
             :field="formField"
             @update:modelValue="handleUpdate($event)"
         />
