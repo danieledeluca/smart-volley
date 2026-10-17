@@ -10,21 +10,18 @@ const model = defineModel<ParsedAddress>();
 
 const { emitFormBlur } = useFormField();
 const inputRef = useTemplateRef('inputRef');
-const { parsedAddress, hasValidSelection } = useAutocomplete(inputRef, autocompleteOptions);
 
-function handleBlur() {
-    if (!hasValidSelection.value && inputRef.value?.inputRef) {
-        inputRef.value.inputRef.value = '';
-
-        emitFormBlur();
-    }
-}
-
-watch(parsedAddress, (newParsedAddress) => {
-    model.value = newParsedAddress;
+useAutocomplete(inputRef, (address) => {
+    model.value = address;
 
     emitFormBlur();
-});
+}, autocompleteOptions);
+
+function handleBlur() {
+    if (inputRef.value?.inputRef) {
+        inputRef.value.inputRef.value = model.value?.formattedAddress || '';
+    }
+}
 </script>
 
 <template>

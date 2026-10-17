@@ -2,10 +2,9 @@ import { importLibrary } from '@googlemaps/js-api-loader';
 
 export function useAutocomplete(
     inputElement: Ref<{ inputRef: HTMLInputElement | null } | null>,
+    onSelect: (address: ParsedAddress) => void,
     autocompleteOptions?: google.maps.places.AutocompleteOptions,
 ) {
-    const parsedAddress = ref<ParsedAddress>();
-    const hasValidSelection = ref(false);
     let autocomplete: google.maps.places.Autocomplete | undefined;
 
     function parseAddressComponents(place: google.maps.places.PlaceResult) {
@@ -88,11 +87,6 @@ export function useAutocomplete(
         }
     }
 
-    function handleInput() {
-        parsedAddress.value = undefined;
-        hasValidSelection.value = false;
-    }
-
     onMounted(async () => {
         if (!inputElement.value?.inputRef) {
             return;
@@ -102,34 +96,23 @@ export function useAutocomplete(
         autocomplete = new Autocomplete(inputElement.value.inputRef, autocompleteOptions);
 
         inputElement.value.inputRef.addEventListener('keydown', handleKeydown);
-        inputElement.value.inputRef.addEventListener('input', handleInput);
 
         autocomplete.addListener('place_changed', () => {
             const place = autocomplete?.getPlace();
 
             if (!place?.place_id) {
-                parsedAddress.value = undefined;
-                hasValidSelection.value = false;
-
                 return;
             }
 
-            parsedAddress.value = parseAddressComponents(place);
-            hasValidSelection.value = true;
+            onSelect(parseAddressComponents(place));
         });
     });
 
     onUnmounted(() => {
         inputElement.value?.inputRef?.removeEventListener('keydown', handleKeydown);
-        inputElement.value?.inputRef?.removeEventListener('input', handleInput);
 
         if (autocomplete) {
             google.maps.event.clearInstanceListeners(autocomplete);
         }
     });
-
-    return {
-        parsedAddress,
-        hasValidSelection,
-    };
 }
