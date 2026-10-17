@@ -124,13 +124,6 @@ function generateDate(start: Date, end: Date) {
 }
 
 async function main() {
-    await db.delete(enrollment);
-    await db.delete(athlete);
-    await db.delete(parent);
-    await db.delete(season);
-    await db.delete(course);
-    await db.delete(activity);
-
     // Seasons
     const seasons: InsertSeason[] = [
         {
@@ -182,7 +175,7 @@ async function main() {
     const activities: InsertActivity[] = [
         {
             name: 'Volley',
-            icon: 'i-lucide-volley',
+            icon: 'i-lucide-volleyball',
         },
         {
             name: 'Ginnastica',
