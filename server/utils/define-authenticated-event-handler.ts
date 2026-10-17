@@ -16,14 +16,14 @@ export default function defineAuthenticatedEventHandler<T>(
         if (!role) {
             throw createError({
                 statusCode: 401,
-                statusMessage: $t('error.forbidden'),
+                statusMessage: $t('error.unauthorized'),
             });
         }
 
         if (options?.roles && !options.roles.includes(role)) {
             throw createError({
                 statusCode: 403,
-                statusMessage: $t('error.permission_denied'),
+                statusMessage: $t('error.forbidden'),
             });
         }
 
