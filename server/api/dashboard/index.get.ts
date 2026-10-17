@@ -18,10 +18,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
         : (await findSeasons())[0];
 
     if (!season) {
-        throw createError({
-            statusCode: 404,
-            statusMessage: $t('page.season.error'),
-        });
+        return [];
     }
 
     return await findDashboardStats(season.startYear);

@@ -65,7 +65,7 @@ const isLoading = computed(() => {
             </div>
         </template>
         <AppError v-else-if="statsError" :error="statsError" />
-        <template v-else-if="stats">
+        <template v-else-if="stats && stats.length > 0">
             <template v-for="(activityStats, index) in stats" :key="activityStats.activityId">
                 <div class="flex items-center gap-4 text-2xl">
                     <ButtonIcon :name="activityStats.activityIcon" color="success" />
