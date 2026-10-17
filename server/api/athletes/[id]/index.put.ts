@@ -7,28 +7,28 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
 
     if (!routerParamsResult.success) {
-        return sendZodError(event, routerParamsResult.error);
+        return sendZodError(routerParamsResult.error);
     }
 
     const result = await readValidatedBody(event, InsertAthlete.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     try {
-        const athlete = await updateAthlete(result.data, routerParamsResult.data.id);
+        const athlete = await updateAthlete(routerParamsResult.data.id, result.data);
 
         if (!athlete) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
                 statusMessage: $t('page.athlete.error'),
-            }));
+            });
         }
 
         return athlete;
     } catch (error) {
-        sendDbError(event, error as DrizzleError);
+        sendDbError(error as DrizzleError);
     }
 }, {
     roles: ['admin', 'manager'],

@@ -7,29 +7,29 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
 
     if (!routerParamsResult.success) {
-        return sendZodError(event, routerParamsResult.error);
+        return sendZodError(routerParamsResult.error);
     }
 
     const formData = await readFormData(event);
     const result = InsertEnrollment.safeParse(Object.fromEntries(formData.entries()));
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     try {
-        const enrollment = await updateEnrollment(result.data, routerParamsResult.data.id);
+        const enrollment = await updateEnrollment(routerParamsResult.data.id, result.data);
 
         if (!enrollment) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
                 statusMessage: $t('page.enrollment.error'),
-            }));
+            });
         }
 
         return enrollment;
     } catch (error) {
-        sendDbError(event, error as DrizzleError);
+        sendDbError(error as DrizzleError);
     }
 }, {
     roles: ['admin', 'manager'],

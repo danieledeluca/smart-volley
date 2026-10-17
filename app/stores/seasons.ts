@@ -9,12 +9,14 @@ export const useSeasonsStore = defineStore('seasons', () => {
     } = useLazyFetch('/api/seasons');
 
     const seasonsItems = computed(() => {
-        return seasons.value?.map<SelectMenuItem>((season) => {
-            return {
-                label: `${season.startYear} - ${season.endYear}`,
-                value: season.id,
-            };
-        });
+        return seasons.value
+            ?.toSorted((seasonA, seasonB) => seasonB.startYear - seasonA.startYear)
+            ?.map<SelectMenuItem>((season) => {
+                return {
+                    label: `${season.startYear} - ${season.endYear}`,
+                    value: season.id,
+                };
+            });
     });
 
     return {

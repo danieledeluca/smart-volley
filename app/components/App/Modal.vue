@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { ButtonProps } from '@nuxt/ui';
 
-const { title, description, buttonProps, cancelButtonProps, submitButtonProps, showModalBody = true } = defineProps<{
+const { title, description, buttonProps, cancelButtonProps, submitButtonProps, preventClose = false } = defineProps<{
     title: string;
     description?: string;
     buttonProps?: ButtonProps;
     cancelButtonProps?: Omit<ButtonProps, 'variant' | 'color'>;
     submitButtonProps?: ButtonProps;
-    showModalBody?: boolean;
+    preventClose?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -17,9 +17,12 @@ const emit = defineEmits<{
     interactOutside: [event: Event];
 }>();
 
-const open = defineModel<boolean>('open', {
-    default: false,
-});
+const slots = defineSlots<{
+    default?: (props?: object) => VNode[];
+    button?: (props?: object) => VNode[];
+}>();
+
+const open = defineModel<boolean>('open', { default: false });
 
 function handleCancel() {
     open.value = false;
@@ -33,18 +36,15 @@ function handleCancel() {
         v-model:open="open"
         :title
         :description
-        :content="{
-            onInteractOutside: (event) => emit('interactOutside', event),
-        }"
-        :ui="{
-            body: !showModalBody ? 'hidden' : undefined,
-        }"
+        :dismissible="!preventClose"
+        :close="{ disabled: preventClose }"
+        :content="{ onInteractOutside: (event) => emit('interactOutside', event) }"
         @after:leave="emit('close')"
     >
         <slot name="button">
             <UButton v-if="buttonProps?.label || buttonProps?.icon" v-bind="buttonProps" />
         </slot>
-        <template #body>
+        <template v-if="!!slots.default" #body>
             <slot />
         </template>
         <template #footer>
@@ -53,6 +53,7 @@ function handleCancel() {
                 variant="outline"
                 color="neutral"
                 :label="cancelButtonProps?.label || $t('form.button.cancel')"
+                :disabled="preventClose"
                 @click="handleCancel"
             />
             <UButton

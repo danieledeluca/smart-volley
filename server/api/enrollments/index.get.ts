@@ -4,7 +4,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const result = await getValidatedQuery(event, EnrollmentsFiltersSchema.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     return await findEnrollments(result.data);

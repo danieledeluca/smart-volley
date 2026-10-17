@@ -206,6 +206,7 @@ export const translations = {
                 label: 'Indirizzo',
                 placeholder: 'Inserisci l\'indirizzo',
                 required: 'L\'indirizzo è obbligatorio',
+                valid: 'Seleziona un indirizzo valido',
             },
             athlete_id: {
                 not_found: 'Atleta non trovato',
@@ -221,6 +222,7 @@ export const translations = {
                 label: 'Luogo di nascita',
                 placeholder: 'Inserisci il luogo di nascita',
                 required: 'Il luogo di nascita è obbligatorio',
+                valid: 'Seleziona un indirizzo valido',
             },
             certificate_expiration_date: {
                 help: 'Se data di scadenza e file restano vuoti, verranno usati quelli dell\'ultima iscrizione.',
@@ -343,6 +345,11 @@ export const translations = {
                 label: 'Terzo pagamento',
             },
             user_role: {
+                item: {
+                    admin: 'Admin',
+                    manager: 'Gestore',
+                    viewer: 'Osservatore',
+                },
                 placeholder: 'Seleziona un ruolo',
             },
         },

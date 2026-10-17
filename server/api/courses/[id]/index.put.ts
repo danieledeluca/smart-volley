@@ -7,28 +7,28 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
 
     if (!routerParamsResult.success) {
-        return sendZodError(event, routerParamsResult.error);
+        return sendZodError(routerParamsResult.error);
     }
 
     const result = await readValidatedBody(event, InsertCourse.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     try {
-        const course = await updateCourse(result.data, routerParamsResult.data.id);
+        const course = await updateCourse(routerParamsResult.data.id, result.data);
 
         if (!course) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
                 statusMessage: $t('page.course.error'),
-            }));
+            });
         }
 
         return course;
     } catch (error) {
-        sendDbError(event, error as DrizzleError);
+        sendDbError(error as DrizzleError);
     }
 }, {
     roles: ['admin', 'manager'],

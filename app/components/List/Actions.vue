@@ -5,23 +5,17 @@ const { deleteModal, additionalItems } = defineProps<{
     deleteModal?: {
         title: string;
         description: string;
-        isDisabled: boolean;
+        isDisabled?: boolean;
         isLoading?: boolean;
     };
     additionalItems?: DropdownMenuItem[];
 }>();
 
 const emit = defineEmits<{
-    submit: [];
+    delete: [];
 }>();
 
-const slots = defineSlots<{
-    delete?: (props?: object) => VNode[];
-}>();
-
-const openDelete = defineModel<boolean>('openDelete', {
-    default: false,
-});
+const openDelete = defineModel<boolean>('openDelete', { default: false });
 
 const authStore = useAuthStore();
 
@@ -45,11 +39,9 @@ const dropDownMenuItems = computed(() => {
             label: $t('action.delete'),
             icon: 'i-lucide-trash',
             color: 'error',
-            disabled: deleteModal.isDisabled,
+            disabled: deleteModal.isDisabled || deleteModal.isLoading,
             loading: deleteModal.isLoading,
-            onSelect() {
-                openDelete.value = true;
-            },
+            onSelect: () => openDelete.value = true,
         });
     }
 
@@ -61,7 +53,7 @@ const dropDownMenuItems = computed(() => {
     <BaseActions :dropDownMenuItems>
         <template v-if="canEdit">
             <AppModal
-                v-if="!!slots.delete && deleteModal"
+                v-if="deleteModal"
                 v-model:open="openDelete"
                 :title="deleteModal.title"
                 :description="deleteModal.description"
@@ -70,11 +62,9 @@ const dropDownMenuItems = computed(() => {
                     label: $t('form.button.delete'),
                     loading: deleteModal.isLoading,
                 }"
-                :showModalBody="false"
-                @submit="emit('submit')"
-            >
-                <slot name="delete" />
-            </AppModal>
+                :preventClose="deleteModal.isLoading"
+                @submit="emit('delete')"
+            />
         </template>
     </BaseActions>
 </template>

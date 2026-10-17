@@ -51,7 +51,7 @@ const isLoading = computed(() => {
                 <USkeleton class="size-8 h-40 w-full sm:col-span-2 md:col-span-2" />
                 <USkeleton v-for="n in 2" :key="n" class="size-8 h-40 w-full md:col-span-3" />
             </div>
-            <div>
+            <div class="py-2">
                 <USkeleton class="h-1 w-full" />
             </div>
             <div class="flex gap-4">
@@ -64,12 +64,7 @@ const isLoading = computed(() => {
                 <USkeleton v-for="n in 2" :key="n" class="size-8 h-40 w-full md:col-span-3" />
             </div>
         </template>
-        <UAlert
-            v-else-if="statsError"
-            :title="getApiError(statsError)"
-            color="error"
-            icon="i-lucide-circle-x"
-        />
+        <AppError v-else-if="statsError" :error="statsError" />
         <template v-else-if="stats">
             <template v-for="(activityStats, index) in stats" :key="activityStats.activityId">
                 <div class="flex items-center gap-4 text-2xl">

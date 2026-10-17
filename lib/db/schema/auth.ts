@@ -4,8 +4,6 @@ import { relations } from 'drizzle-orm';
 import { boolean, index, integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import z from 'zod';
 
-import type { findUsers } from '../queries/auth';
-
 export const userRole = pgEnum('user_role', ['admin', 'manager', 'viewer']);
 
 export const user = pgTable('user', {
@@ -87,11 +85,6 @@ export const accountRelations = relations(account, ({ one }) => {
 });
 
 export const UserRoleSchema = z.enum(userRole.enumValues).optional();
-export const UpdateUserRoleSchema = z.object({
-    role: UserRoleSchema,
-});
 
-export type UserRoleSchema = z.infer<typeof UserRoleSchema>;
-export type UpdateUserRoleSchema = z.infer<typeof UpdateUserRoleSchema>;
-
-export type SelectUsers = SerializeObject<Awaited<ReturnType<typeof findUsers>>[number]>;
+export type SelectUser = SerializeObject<typeof user.$inferSelect>;
+export type UserRole = z.infer<typeof UserRoleSchema>;

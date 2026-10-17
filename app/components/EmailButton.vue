@@ -5,9 +5,5 @@ const { email } = defineProps<{
 </script>
 
 <template>
-    <UButton
-        variant="ghost"
-        icon="i-lucide-mail"
-        :href="`mailto:${email}`"
-    />
+    <UButton variant="ghost" icon="i-lucide-mail" :href="`mailto:${email}`" />
 </template>

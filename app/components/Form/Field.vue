@@ -5,6 +5,7 @@ const { field, showDeleteButton = true } = defineProps<{
 }>();
 
 const slots = defineSlots();
+
 const model = defineModel<T[keyof T]>();
 
 function showField(field: FormField<T>) {

@@ -5,17 +5,15 @@ const { formAction } = defineProps<{
     formAction: FormAction;
 }>();
 
-const state = defineModel<Partial<InsertCourse>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<InsertCourse>>('state', { required: true });
 
 const { formFields } = useForm('course', formAction);
 const activityFormRef = useTemplateRef('activityFormRef');
 
-const openActivityModal = ref(false);
+const openActivity = ref(false);
 
 function handleSuccess(id?: number) {
-    openActivityModal.value = false;
+    openActivity.value = false;
     state.value.activityId = id;
 }
 </script>
@@ -35,7 +33,7 @@ function handleSuccess(id?: number) {
         >
             <template #activityId-post>
                 <AppModal
-                    v-model:open="openActivityModal"
+                    v-model:open="openActivity"
                     :title="$t('form.activity.add.title')"
                     :description="$t('form.activity.add.description')"
                     :buttonProps="{
@@ -48,6 +46,7 @@ function handleSuccess(id?: number) {
                         label: $t('form.button.add'),
                         loading: activityFormRef?.[0]?.isLoading(),
                     }"
+                    :preventClose="activityFormRef?.[0]?.isLoading()"
                     @submit="activityFormRef?.[0]?.submit"
                 >
                     <ActivityAddForm ref="activityFormRef" @success="handleSuccess" />

@@ -7,28 +7,28 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const routerParamsResult = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
 
     if (!routerParamsResult.success) {
-        return sendZodError(event, routerParamsResult.error);
+        return sendZodError(routerParamsResult.error);
     }
 
     const result = await readValidatedBody(event, InsertActivity.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     try {
-        const activity = await updateActivity(result.data, routerParamsResult.data.id);
+        const activity = await updateActivity(routerParamsResult.data.id, result.data);
 
         if (!activity) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
                 statusMessage: $t('page.activity.error'),
-            }));
+            });
         }
 
         return activity;
     } catch (error) {
-        sendDbError(event, error as DrizzleError);
+        sendDbError(error as DrizzleError);
     }
 }, {
     roles: ['admin', 'manager'],

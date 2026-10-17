@@ -7,8 +7,8 @@ const emit = defineEmits<{
     success: [];
 }>();
 
-const enrollmentsStore = useEnrollmentsStore();
 const { $csrfFetch } = useNuxtApp();
+const enrollmentsStore = useEnrollmentsStore();
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 const { initialState } = useForm('enrollment');
 
@@ -21,7 +21,7 @@ async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
     });
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     state.value = { ...initialState };
 
     enrollmentsStore.refreshEnrollments();
@@ -41,7 +41,7 @@ defineExpose({
         v-model:state="state"
         :schema="InsertEnrollment"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.enrollment.add.success')"
     >

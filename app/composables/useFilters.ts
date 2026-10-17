@@ -1,13 +1,10 @@
 import type { CheckboxGroupItem } from '@nuxt/ui';
-import type { CertificateStatusEnum } from '~~/shared/utils/zod-schemas';
 
-import { EnrollmentsFiltersSchema } from '~~/shared/utils/zod-schemas';
-
-type FiltersSchemas = {
-    enrollment: EnrollmentsFiltersSchema;
+type Filters = {
+    enrollment: EnrollmentsFilters;
 };
 
-export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
+export function useFilters<K extends keyof Filters>(formType: K) {
     const route = useRoute();
     const enrollmentsStore = useEnrollmentsStore();
     const seasonsStore = useSeasonsStore();
@@ -19,14 +16,14 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
     // Empty states
-    const enrollmentsFiltersEmptyState: EnrollmentsFiltersSchema = {
+    const enrollmentsFiltersEmptyState: EnrollmentsFilters = {
         seasonId: undefined,
         activityId: undefined,
         courseId: undefined,
         certificateStatus: undefined,
     };
 
-    const emptyStates: { [K in keyof FiltersSchemas]: FiltersSchemas[K] } = {
+    const emptyStates: { [K in keyof Filters]: Filters[K] } = {
         enrollment: enrollmentsFiltersEmptyState,
     };
 
@@ -41,14 +38,14 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     // States
     const enrollmentsFiltersState = ref({ ...enrollmentsFiltersInitialState });
 
-    const filtersStates: { [K in keyof FiltersSchemas]: Ref<FiltersSchemas[K]> } = {
+    const filtersStates: { [K in keyof Filters]: Ref<Filters[K]> } = {
         enrollment: enrollmentsFiltersState,
     };
 
     const filterState = filtersStates[formType];
 
     // Filters fields
-    const certificateStatusItems: Array<CheckboxGroupItem & { value: CertificateStatusEnum }> = [
+    const certificateStatusItems: Array<CheckboxGroupItem & { value: CertificateStatus }> = [
         {
             label: $t('form.field.certificate_status.item.valid'),
             value: 'valid',
@@ -63,7 +60,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         },
     ];
 
-    const enrollmentsFiltersFields = computed<FormFieldGroup<EnrollmentsFiltersSchema>[]>(() => {
+    const enrollmentsFiltersFields = computed<FormFieldGroup<EnrollmentsFilters>[]>(() => {
         return [
             {
                 fields: [
@@ -136,7 +133,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
         ];
     });
 
-    const filtersFields: { [K in keyof FiltersSchemas]: ComputedRef<FormFieldGroup<FiltersSchemas[K]>[]> } = {
+    const filtersFields: { [K in keyof Filters]: ComputedRef<FormFieldGroup<Filters[K]>[]> } = {
         enrollment: enrollmentsFiltersFields,
     };
 
@@ -146,7 +143,7 @@ export function useFilters<K extends keyof FiltersSchemas>(formType: K) {
     const clearFilters = () => {
         filterState.value = { ...emptyState };
 
-        const refreshLists: { [K in keyof FiltersSchemas]: () => void } = {
+        const refreshLists: { [K in keyof Filters]: () => void } = {
             enrollment: enrollmentsStore.refreshEnrollments,
         };
 

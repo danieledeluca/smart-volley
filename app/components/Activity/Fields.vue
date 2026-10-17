@@ -8,9 +8,7 @@ const { formAction } = defineProps<{
     formAction: FormAction;
 }>();
 
-const state = defineModel<Partial<InsertActivity>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<InsertActivity>>('state', { required: true });
 
 const { formFields } = useForm('activity', formAction);
 

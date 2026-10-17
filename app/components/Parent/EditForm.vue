@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { UpdatedParent } from '~~/lib/db/schema';
+import type { SelectParent } from '~~/lib/db/schema';
 
 import { InsertParent } from '~~/lib/db/schema';
 
@@ -14,16 +14,16 @@ const emit = defineEmits<{
 
 const { data: parent, pending, error } = useLazyFetch(`/api/parents/${parentId}`);
 
-const parentsStore = useParentsStore();
 const { $csrfFetch } = useNuxtApp();
+const parentsStore = useParentsStore();
 const parentFormRef = useTemplateRef('parentFormRef');
 const { initialState } = useForm('parent');
 
 const state = ref({ ...initialState });
-const updatedParent = ref<UpdatedParent>();
+const updatedParent = ref<SelectParent>();
 
 async function onSubmit(event: FormSubmitEvent<InsertParent>) {
-    const parent = await $csrfFetch<UpdatedParent>(`/api/parents/${parentId}`, {
+    const parent = await $csrfFetch<SelectParent>(`/api/parents/${parentId}`, {
         method: 'PUT',
         body: event.data,
     });
@@ -31,7 +31,7 @@ async function onSubmit(event: FormSubmitEvent<InsertParent>) {
     updatedParent.value = parent;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     parentsStore.refreshParents();
 
     emit('success', updatedParent.value?.id);
@@ -56,19 +56,14 @@ defineExpose({
 
 <template>
     <ParentFieldsLoader v-if="pending" />
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error />
     <BaseForm
         v-else-if="parent"
         ref="parentFormRef"
         v-model:state="state"
         :schema="InsertParent"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.parent.edit.success')"
     >

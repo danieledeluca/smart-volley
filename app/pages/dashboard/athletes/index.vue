@@ -14,17 +14,12 @@ const { canEdit } = storeToRefs(authStore);
 const { athletes, athletesPending, athletesError } = storeToRefs(athletesStore);
 
 const tableColumns = getAthletesTableColumns(['id', 'name', 'phoneNumber', 'email']);
-tableColumns.unshift(getSelectTableColumn());
-tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ athleteId: row.id })));
 
-function handleInteractOutside(event: Event) {
-    const target = event.target as HTMLElement;
-
-    // Inside Google Place Autocomplete
-    if (target.closest('.pac-container')) {
-        event.preventDefault();
-    }
+if (canEdit.value) {
+    tableColumns.unshift(getSelectTableColumn());
 }
+
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ athleteId: row.id })));
 </script>
 
 <template>
@@ -41,8 +36,9 @@ function handleInteractOutside(event: Event) {
                     label: $t('form.button.add'),
                     loading: athleteAddFormRef?.isLoading(),
                 }"
+                :preventClose="athleteAddFormRef?.isLoading()"
                 @submit="athleteAddFormRef?.submit"
-                @interactOutside="handleInteractOutside"
+                @interactOutside="preventClose"
             >
                 <AthleteAddForm ref="athleteAddFormRef" />
             </AppSlideover>

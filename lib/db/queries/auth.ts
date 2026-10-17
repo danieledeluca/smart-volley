@@ -1,17 +1,17 @@
-import { asc, eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
-import type { UserRoleSchema } from '../schema';
+import type { UserRole } from '../schema';
 
 import db from '..';
 import { user } from '../schema';
 
 export async function findUsers() {
     return await db.query.user.findMany({
-        orderBy: asc(user.id),
+        orderBy: desc(user.id),
     });
 }
 
-export async function updateUserRole(userId: number, userRole: UserRoleSchema) {
+export async function updateUserRole(userId: number, userRole: UserRole) {
     const [updated] = await db.update(user)
         .set({ role: userRole || null })
         .where(eq(user.id, userId))

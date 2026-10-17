@@ -1,11 +1,10 @@
 import type { NeonDbError } from '@neondatabase/serverless';
 import type { FormError } from '@nuxt/ui';
 import type { DrizzleError } from 'drizzle-orm';
-import type { H3Event } from 'h3';
 
-export default function sendDbError(event: H3Event, error: DrizzleError) {
+export default function sendDbError(error: DrizzleError) {
     if (isError(error)) {
-        return sendError(event, error);
+        throw createError(error);
     }
 
     const cause = error.cause as NeonDbError | undefined;
@@ -54,11 +53,11 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
         const formError = constrainMessages[cause.constraint || ''];
         const statusMessage = statusMessages[cause.constraint || ''];
 
-        return sendError(event, createError({
+        throw createError({
             statusCode: 409,
             statusMessage: statusMessage || $t('error.conflict'),
             data: formError ? [formError] : undefined,
-        }));
+        });
     }
 
     if (cause?.code === '23503') {
@@ -87,12 +86,12 @@ export default function sendDbError(event: H3Event, error: DrizzleError) {
 
         const formError = constraintMessages[cause.constraint || ''];
 
-        return sendError(event, createError({
+        throw createError({
             statusCode: 422,
             statusMessage: $t('error.unprocessable_content'),
             data: formError ? [formError] : undefined,
-        }));
+        });
     }
 
-    return sendError(event, createError({ statusCode: 500 }));
+    throw createError({ statusCode: 500 });
 }

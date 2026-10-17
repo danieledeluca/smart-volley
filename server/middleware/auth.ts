@@ -1,6 +1,6 @@
 import { auth } from '~~/lib/auth';
 
-const RESTRICTED_SECTIONS = ['parents', 'seasons', 'activities', 'courses'];
+const RESTRICTED_SECTIONS = ['seasons', 'activities', 'courses'];
 const ADMIN_ONLY_SECTIONS = ['settings'];
 
 export default defineEventHandler(async (event) => {

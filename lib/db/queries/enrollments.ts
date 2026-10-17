@@ -2,17 +2,20 @@ import type { SQL } from 'drizzle-orm';
 
 import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, or, sql } from 'drizzle-orm';
 
-import type { CertificateStatusEnum, EnrollmentsFiltersSchema, MultipleDeleteSchema } from '#imports';
-
+import type {
+    CertificateStatus,
+    EnrollmentsFilters,
+    MultipleDelete,
+} from '../../../shared/utils/zod-schemas';
 import type { InsertEnrollment } from '../schema';
 
 import db from '..';
-import { $t } from '../../../shared/utils/i18n';
-import { deleteFile, uploadFile } from '../../storage';
+import { deleteFile } from '../../storage';
+import { getCertificateStorageKey } from '../../utils/queries';
 import { course, enrollment, season } from '../schema';
 import { findSeason } from './seasons';
 
-function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
+function buildEnrollmentFilters(filters?: EnrollmentsFilters) {
     const conditions: SQL[] = [];
 
     if (filters?.seasonId) {
@@ -33,7 +36,7 @@ function buildEnrollmentFilters(filters?: EnrollmentsFiltersSchema) {
     }
 
     if (filters?.certificateStatus && filters.certificateStatus.length > 0) {
-        const certificateStatusConditions: Record<CertificateStatusEnum, SQL> = {
+        const certificateStatusConditions: Record<CertificateStatus, SQL> = {
             missing: isNull(enrollment.certificateExpirationDate),
             expired: lte(enrollment.certificateExpirationDate, sql`CURRENT_DATE`),
             valid: gt(enrollment.certificateExpirationDate, sql`CURRENT_DATE`),
@@ -78,29 +81,6 @@ async function findLatestCertificate(athleteId: number, seasonId: number) {
     return row;
 }
 
-async function getCertificateStorageKey(data: InsertEnrollment) {
-    if (!data.certificateStorageKey) {
-        return null;
-    }
-
-    if (data.certificateStorageKey.size === 0) {
-        return undefined;
-    }
-
-    try {
-        const certificateStorageKey = `certificates/${data.seasonId}/${data.athleteId}/${Date.now()}.pdf`;
-
-        await uploadFile(certificateStorageKey, data.certificateStorageKey);
-
-        return certificateStorageKey;
-    } catch {
-        throw createError({
-            statusCode: 422,
-            statusMessage: $t('form.field.certificate_storage_key.error.upload'),
-        });
-    }
-}
-
 async function deleteCertificate(storageKey: string, excludeEnrollmentId?: number) {
     const [reference] = await db.select({ id: enrollment.id })
         .from(enrollment)
@@ -115,7 +95,7 @@ async function deleteCertificate(storageKey: string, excludeEnrollmentId?: numbe
     }
 }
 
-export async function findEnrollments(filters?: EnrollmentsFiltersSchema) {
+export async function findEnrollments(filters?: EnrollmentsFilters) {
     const result = await db.query.enrollment.findMany({
         with: {
             athlete: {
@@ -278,7 +258,7 @@ export async function insertEnrollment(data: InsertEnrollment) {
     }
 }
 
-export async function updateEnrollment(data: InsertEnrollment, enrollmentId: number) {
+export async function updateEnrollment(enrollmentId: number, data: InsertEnrollment) {
     const previousKey = await findEnrollmentCertificateStorageKey(enrollmentId);
     const certificateStorageKey = await getCertificateStorageKey(data);
     const {
@@ -296,7 +276,7 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
         ...rest
     } = data;
 
-    let updated;
+    let updated: typeof enrollment.$inferSelect | undefined;
 
     try {
         [updated] = await db.update(enrollment)
@@ -331,7 +311,7 @@ export async function updateEnrollment(data: InsertEnrollment, enrollmentId: num
     return updated;
 }
 
-export async function deleteEnrollments(data: MultipleDeleteSchema) {
+export async function deleteEnrollments(data: MultipleDelete) {
     if (!data.ids.length) {
         return [];
     }

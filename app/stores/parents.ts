@@ -9,16 +9,16 @@ export const useParentsStore = defineStore('parents', () => {
     } = useLazyFetch('/api/parents');
 
     const parentsItems = computed(() => {
-        const sortedParents = parents.value?.toSorted((parentA, parentB) => {
-            return parentA.name.localeCompare(parentB.name);
-        });
-
-        return sortedParents?.map<SelectMenuItem>((parent) => {
-            return {
-                label: parent.name,
-                value: parent.id,
-            };
-        });
+        return parents.value
+            ?.toSorted((parentA, parentB) => {
+                return parentA.name.localeCompare(parentB.name);
+            })
+            ?.map<SelectMenuItem>((parent) => {
+                return {
+                    label: parent.name,
+                    value: parent.id,
+                };
+            });
     });
 
     return {

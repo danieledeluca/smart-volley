@@ -1,46 +1,14 @@
-import type { MultipleDeleteSchema } from '~~/shared/utils/zod-schemas';
-
 import { desc, eq, inArray } from 'drizzle-orm';
 
+import type { MultipleDelete } from '../../../shared/utils/zod-schemas';
 import type { InsertAthlete } from '../schema';
 
 import db from '..';
+import { mapAddressToColumns, mapBirthplaceToColumns } from '../../utils/queries';
 import { athlete } from '../schema';
-
-function mapBirthplaceToColumns(birthplace: InsertAthlete['birthplace']) {
-    return {
-        birthplacePostalCode: birthplace.postalCode || null,
-        birthplaceCity: birthplace.city || null,
-        birthplaceProvince: birthplace.province || null,
-        birthplaceRegion: birthplace.region || null,
-        birthplaceCountry: birthplace.country,
-        birthplaceFormattedAddress: birthplace.formattedAddress,
-        birthplacePlaceId: birthplace.placeId,
-    };
-}
-
-function mapAddressToColumns(address: InsertAthlete['address']) {
-    return {
-        addressStreet: address.street,
-        addressPostalCode: address.postalCode,
-        addressCity: address.city,
-        addressProvince: address.province,
-        addressRegion: address.region,
-        addressCountry: address.country,
-        addressFormattedAddress: address.formattedAddress,
-        addressPlaceId: address.placeId,
-    };
-}
 
 export async function findAthletes() {
     return await db.query.athlete.findMany({
-        columns: {
-            id: true,
-            name: true,
-            fiscalCode: true,
-            phoneNumber: true,
-            email: true,
-        },
         orderBy: desc(athlete.id),
     });
 }
@@ -96,7 +64,7 @@ export async function insertAthlete(data: InsertAthlete) {
     return created;
 }
 
-export async function updateAthlete(data: InsertAthlete, athleteId: number) {
+export async function updateAthlete(athleteId: number, data: InsertAthlete) {
     const { birthplace, address, phoneNumber = null, email = null, parentId = null, ...rest } = data;
 
     const [updated] = await db.update(athlete)
@@ -114,7 +82,7 @@ export async function updateAthlete(data: InsertAthlete, athleteId: number) {
     return updated;
 }
 
-export async function deleteAthletes(data: MultipleDeleteSchema) {
+export async function deleteAthletes(data: MultipleDelete) {
     if (!data.ids.length) {
         return [];
     }

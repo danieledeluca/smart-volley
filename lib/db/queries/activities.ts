@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 import type { InsertActivity } from '../schema';
 
@@ -7,7 +7,7 @@ import { activity } from '../schema';
 
 export async function findActivities() {
     return await db.query.activity.findMany({
-        orderBy: asc(activity.name),
+        orderBy: desc(activity.id),
     });
 }
 
@@ -25,7 +25,7 @@ export async function insertActivity(data: InsertActivity) {
     return created;
 }
 
-export async function updateActivity(data: InsertActivity, activityId: number) {
+export async function updateActivity(activityId: number, data: InsertActivity) {
     const [updated] = await db.update(activity)
         .set(data)
         .where(eq(activity.id, activityId))

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import DetailsActions from '~/components/Details/Actions.vue';
+import Actions from '~/components/Details/Actions.vue';
 
 const { courseId } = defineProps<{
     courseId: number;
 }>();
 
 const emit = defineEmits<{
-    editComplete: [id?: number];
-    editClose: [id?: number];
+    editSuccess: [id?: number];
 }>();
 
 const courseEditFormRef = useTemplateRef('courseEditFormRef');
@@ -19,24 +18,23 @@ function handleEditSuccess(id?: number) {
     openEdit.value = false;
     updatedCourseId.value = id;
 
-    emit('editComplete', id);
+    emit('editSuccess', id);
 }
 </script>
 
 <template>
-    <DetailsActions
+    <Actions
         v-model:openEdit="openEdit"
         :pageId="courseId"
         :editModal="{
             title: $t('form.course.edit.title'),
             description: $t('form.course.edit.description'),
-            isLoading: Boolean(courseEditFormRef?.isLoading()),
+            isLoading: courseEditFormRef?.isLoading(),
         }"
         @edit="courseEditFormRef?.submit"
-        @editClose="emit('editClose', updatedCourseId)"
     >
         <template #edit>
             <CourseEditForm ref="courseEditFormRef" :courseId @success="handleEditSuccess" />
         </template>
-    </DetailsActions>
+    </Actions>
 </template>

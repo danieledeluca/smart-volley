@@ -7,7 +7,7 @@ import { season } from '../schema';
 
 export async function findSeasons() {
     return await db.query.season.findMany({
-        orderBy: desc(season.startYear),
+        orderBy: desc(season.id),
     });
 }
 
@@ -25,7 +25,7 @@ export async function insertSeason(data: InsertSeason) {
     return created;
 }
 
-export async function updateSeason(data: InsertSeason, seasonId: number) {
+export async function updateSeason(seasonId: number, data: InsertSeason) {
     const [updated] = await db.update(season)
         .set(data)
         .where(eq(season.id, seasonId))

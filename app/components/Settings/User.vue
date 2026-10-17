@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { SelectItem } from '@nuxt/ui';
-import type { SelectUsers, UserRoleSchema } from '~~/lib/db/schema';
+import type { SelectUser, UserRole } from '~~/lib/db/schema';
 import type { FetchError } from 'ofetch';
 
 import { userRole } from '~~/lib/db/schema';
 
 const { user } = defineProps<{
-    user: SelectUsers;
+    user: SelectUser;
 }>();
 
 const toast = useToast();
@@ -15,7 +15,7 @@ const usersStore = useUsersStore();
 
 const isLoading = ref(false);
 
-const formField = computed<FormField<{ role?: UserRoleSchema }>>(() => {
+const formField = computed<FormField<{ role?: UserRole }>>(() => {
     return {
         renderAs: 'select',
         formFieldProps: {
@@ -26,25 +26,21 @@ const formField = computed<FormField<{ role?: UserRoleSchema }>>(() => {
             items: [
                 ...userRole.enumValues.map<SelectItem>((role) => {
                     return {
-                        label: role,
+                        label: $t(`form.field.user_role.item.${role}`),
                         value: role,
                         disabled: user.role === role,
                     };
                 }),
             ],
             loading: isLoading.value,
-            ui: {
-                value: 'capitalize',
-                item: 'capitalize',
-            },
         },
     };
 });
 
-async function handleUpdate(userRole: UserRoleSchema) {
-    isLoading.value = true;
-
+async function handleUpdate(userRole: UserRole) {
     try {
+        isLoading.value = true;
+
         await $csrfFetch(`/api/users/${user.id}`, {
             method: 'PATCH',
             body: {
@@ -52,18 +48,16 @@ async function handleUpdate(userRole: UserRoleSchema) {
             },
         });
 
-        await usersStore.refreshUsers();
-
         toast.add({
             description: $t('form.user_role.edit.success'),
             color: 'success',
             icon: 'i-lucide-circle-check',
         });
-    } catch (err) {
-        const error = err as FetchError;
 
+        usersStore.refreshUsers();
+    } catch (error) {
         toast.add({
-            description: getApiError(error),
+            description: getFetchErrorMessage(error as FetchError),
             color: 'error',
             icon: 'i-lucide-circle-x',
         });

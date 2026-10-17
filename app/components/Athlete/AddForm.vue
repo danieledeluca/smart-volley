@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { InsertedAthlete } from '~~/lib/db/schema';
+import type { SelectAthlete } from '~~/lib/db/schema';
 
 import { InsertAthlete } from '~~/lib/db/schema';
 
@@ -8,16 +8,16 @@ const emit = defineEmits<{
     success: [id?: number];
 }>();
 
-const athletesStore = useAthletesStore();
 const { $csrfFetch } = useNuxtApp();
+const athletesStore = useAthletesStore();
 const athleteFormRef = useTemplateRef('athleteFormRef');
 const { initialState } = useForm('athlete');
 
 const state = ref({ ...initialState });
-const insertedAthlete = ref<InsertedAthlete>();
+const insertedAthlete = ref<SelectAthlete>();
 
 async function onSubmit(event: FormSubmitEvent<InsertAthlete>) {
-    const athlete = await $csrfFetch('/api/athletes', {
+    const athlete = await $csrfFetch<SelectAthlete>('/api/athletes', {
         method: 'POST',
         body: event.data,
     });
@@ -25,7 +25,7 @@ async function onSubmit(event: FormSubmitEvent<InsertAthlete>) {
     insertedAthlete.value = athlete;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     state.value = { ...initialState };
 
     athletesStore.refreshAthletes();
@@ -45,7 +45,7 @@ defineExpose({
         v-model:state="state"
         :schema="InsertAthlete"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.athlete.add.success')"
     >

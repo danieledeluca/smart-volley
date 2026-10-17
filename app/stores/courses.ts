@@ -9,13 +9,17 @@ export const useCoursesStore = defineStore('courses', () => {
     } = useLazyFetch('/api/courses');
 
     const coursesItems = computed(() => {
-        return courses.value?.map<SelectMenuItem>((course) => {
-            return {
-                label: `${course.code} - ${course.name}`,
-                description: course.activity.name,
-                value: course.id,
-            };
-        });
+        return courses.value
+            ?.toSorted((courseA, courseB) => {
+                return courseA.code.localeCompare(courseB.code);
+            })
+            ?.map<SelectMenuItem>((course) => {
+                return {
+                    label: `${course.code} - ${course.name}`,
+                    description: course.activity.name,
+                    value: course.id,
+                };
+            });
     });
 
     return {

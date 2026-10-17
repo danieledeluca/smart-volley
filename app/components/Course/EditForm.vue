@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { UpdatedCourse } from '~~/lib/db/schema';
+import type { SelectCourse } from '~~/lib/db/schema';
 
 import { InsertCourse } from '~~/lib/db/schema';
 
@@ -14,16 +14,16 @@ const emit = defineEmits<{
 
 const { data: course, pending, error } = useLazyFetch(`/api/courses/${courseId}`);
 
-const coursesStore = useCoursesStore();
 const { $csrfFetch } = useNuxtApp();
+const coursesStore = useCoursesStore();
 const courseFormRef = useTemplateRef('courseFormRef');
 const { initialState } = useForm('course');
 
 const state = ref({ ...initialState });
-const updatedCourse = ref<UpdatedCourse>();
+const updatedCourse = ref<SelectCourse>();
 
 async function onSubmit(event: FormSubmitEvent<InsertCourse>) {
-    const course = await $csrfFetch<UpdatedCourse>(`/api/courses/${courseId}`, {
+    const course = await $csrfFetch<SelectCourse>(`/api/courses/${courseId}`, {
         method: 'PUT',
         body: event.data,
     });
@@ -31,7 +31,7 @@ async function onSubmit(event: FormSubmitEvent<InsertCourse>) {
     updatedCourse.value = course;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     coursesStore.refreshCourses();
 
     emit('success', updatedCourse.value?.id);
@@ -55,19 +55,14 @@ defineExpose({
 
 <template>
     <CourseFieldsLoader v-if="pending" />
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error />
     <BaseForm
         v-else-if="course"
         ref="courseFormRef"
         v-model:state="state"
         :schema="InsertCourse"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.course.edit.success')"
     >

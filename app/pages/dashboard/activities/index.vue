@@ -13,10 +13,7 @@ const { canEdit } = storeToRefs(authStore);
 const { activities, activitiesPending, activitiesError } = storeToRefs(activitiesStore);
 
 const tableColumns = getActivitiesTableColumns(['id', 'name', 'icon']);
-
-if (canEdit.value) {
-    tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ activityId: row.id })));
-}
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ activityId: row.id })));
 </script>
 
 <template>
@@ -33,6 +30,7 @@ if (canEdit.value) {
                     label: $t('form.button.add'),
                     loading: activityFormRef?.isLoading(),
                 }"
+                :preventClose="activityFormRef?.isLoading()"
                 @submit="activityFormRef?.submit"
             >
                 <ActivityAddForm ref="activityFormRef" />

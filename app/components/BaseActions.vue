@@ -21,17 +21,8 @@ const dropDownMenuItems = computed(() => {
 
 <template>
     <template v-if="dropDownMenuItems.length > 1">
-        <UDropdownMenu
-            :items="dropDownMenuItems"
-            :content="{
-                align: 'end',
-            }"
-        >
-            <UButton
-                icon="i-lucide-ellipsis-vertical"
-                color="neutral"
-                variant="ghost"
-            />
+        <UDropdownMenu :items="dropDownMenuItems" :content="{ align: 'end' }">
+            <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
         </UDropdownMenu>
         <slot />
     </template>

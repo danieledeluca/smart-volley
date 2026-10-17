@@ -23,24 +23,16 @@
             <UColorModeButton />
 
             <AuthButton
-                :dropdownMenuProps="{
-                    content: {
-                        align: collapsed ? 'start' : 'end',
-                    },
-                }"
+                :dropdownMenuProps="{ content: { align: collapsed ? 'start' : 'end' } }"
                 :buttonProps="{
                     variant: 'ghost',
                     color: 'neutral',
                     trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
                     block: true,
                     square: collapsed,
-                    ui: {
-                        trailingIcon: 'text-dimmed',
-                    },
+                    ui: { trailingIcon: 'text-dimmed' },
                 }"
-                :userProps="{
-                    size: collapsed ? '2xs' : undefined,
-                }"
+                :userProps="{ size: collapsed ? '2xs' : undefined }"
             />
         </template>
     </UDashboardSidebar>

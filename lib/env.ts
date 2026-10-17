@@ -17,7 +17,7 @@ const EnvSchema = z.object({
     R2_BUCKET_NAME: z.string(),
 });
 
-export type EnvSchema = z.infer<typeof EnvSchema>;
+export type Env = z.infer<typeof EnvSchema>;
 
 tryParseEnv(EnvSchema);
 

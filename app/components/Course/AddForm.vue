@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { InsertedCourse } from '~~/lib/db/schema';
+import type { SelectCourse } from '~~/lib/db/schema';
 
 import { InsertCourse } from '~~/lib/db/schema';
 
@@ -8,16 +8,16 @@ const emit = defineEmits<{
     success: [id?: number];
 }>();
 
-const coursesStore = useCoursesStore();
 const { $csrfFetch } = useNuxtApp();
+const coursesStore = useCoursesStore();
 const courseFormRef = useTemplateRef('courseFormRef');
 const { initialState } = useForm('course');
 
 const state = ref({ ...initialState });
-const insertedCourse = ref<InsertedCourse>();
+const insertedCourse = ref<SelectCourse>();
 
 async function onSubmit(event: FormSubmitEvent<InsertCourse>) {
-    const course = await $csrfFetch<InsertedCourse>('/api/courses', {
+    const course = await $csrfFetch<SelectCourse>('/api/courses', {
         method: 'POST',
         body: event.data,
     });
@@ -25,7 +25,7 @@ async function onSubmit(event: FormSubmitEvent<InsertCourse>) {
     insertedCourse.value = course;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     state.value = { ...initialState };
 
     coursesStore.refreshCourses();
@@ -45,7 +45,7 @@ defineExpose({
         v-model:state="state"
         :schema="InsertCourse"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.course.add.success')"
     >

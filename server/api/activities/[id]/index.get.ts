@@ -4,7 +4,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const result = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const activity = await findActivity(result.data.id);

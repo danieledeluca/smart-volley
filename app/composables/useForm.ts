@@ -18,7 +18,7 @@ import {
 } from '~~/lib/utils/constants';
 import { formatFileSize } from '~~/lib/utils/formatters';
 
-type FormSchemas = {
+type FormTypes = {
     athlete: InsertAthlete;
     parent: InsertParent;
     enrollment: InsertEnrollment;
@@ -27,7 +27,7 @@ type FormSchemas = {
     course: InsertCourse;
 };
 
-export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: FormAction) {
+export function useForm<K extends keyof FormTypes>(formType: K, formAction?: FormAction) {
     const athletesStore = useAthletesStore();
     const parentsStore = useParentsStore();
     const seasonsStore = useSeasonsStore();
@@ -92,7 +92,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
         activityId: undefined,
     };
 
-    const initialStates: { [K in keyof FormSchemas]: Partial<FormSchemas[K]> } = {
+    const initialStates: { [K in keyof FormTypes]: Partial<FormTypes[K]> } = {
         athlete: athleteInitialState,
         parent: parentInitialState,
         enrollment: enrollmentInitialState,
@@ -610,7 +610,7 @@ export function useForm<K extends keyof FormSchemas>(formType: K, formAction?: F
     });
 
     function defineFormFields<T extends {
-        [K in keyof FormSchemas]: ComputedRef<FormField<FormSchemas[K]>[] | FormFieldGroup<FormSchemas[K]>[]>
+        [K in keyof FormTypes]: ComputedRef<FormField<FormTypes[K]>[] | FormFieldGroup<FormTypes[K]>[]>
     }>(fields: T) {
         return fields;
     }

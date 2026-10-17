@@ -73,12 +73,7 @@ onMounted(() => {
         </div>
         <USkeleton class="h-full" />
     </template>
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error="error" />
     <template v-else-if="tableData">
         <div v-if="showFilter || !!slots.default" class="flex items-center gap-4 max-md:flex-wrap sm:gap-6">
             <UInput

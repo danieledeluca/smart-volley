@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { UpdatedEnrollment } from '~~/lib/db/schema';
+import type { SelectEnrollment } from '~~/lib/db/schema';
 
 import { InsertEnrollment } from '~~/lib/db/schema';
 import { FILE_ACCEPTED_TYPES } from '~~/lib/utils/constants';
@@ -15,16 +15,16 @@ const emit = defineEmits<{
 
 const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${enrollmentId}`);
 
-const enrollmentsStore = useEnrollmentsStore();
 const { $csrfFetch } = useNuxtApp();
+const enrollmentsStore = useEnrollmentsStore();
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 const { initialState } = useForm('enrollment');
 
 const state = ref({ ...initialState });
-const updatedEnrollment = ref<UpdatedEnrollment>();
+const updatedEnrollment = ref<SelectEnrollment>();
 
 async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
-    const enrollment = await $csrfFetch<UpdatedEnrollment>(`/api/enrollments/${enrollmentId}`, {
+    const enrollment = await $csrfFetch<SelectEnrollment>(`/api/enrollments/${enrollmentId}`, {
         method: 'PUT',
         body: toFormData(event.data),
     });
@@ -32,7 +32,7 @@ async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
     updatedEnrollment.value = enrollment;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     enrollmentsStore.refreshEnrollments();
 
     emit('success', updatedEnrollment.value?.id);
@@ -69,19 +69,14 @@ defineExpose({
 
 <template>
     <EnrollmentFieldsLoader v-if="pending" />
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error />
     <BaseForm
         v-else-if="enrollment"
         ref="enrollmentFormRef"
         v-model:state="state"
         :schema="InsertEnrollment"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.enrollment.edit.success')"
     >

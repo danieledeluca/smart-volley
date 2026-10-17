@@ -5,17 +5,15 @@ const { formAction } = defineProps<{
     formAction: FormAction;
 }>();
 
-const state = defineModel<Partial<InsertAthlete>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<InsertAthlete>>('state', { required: true });
 
 const { formFields } = useForm('athlete', formAction);
 const parentFormRef = useTemplateRef('parentFormRef');
 
-const openParentModal = ref(false);
+const openParent = ref(false);
 
 function handleSuccess(id?: number) {
-    openParentModal.value = false;
+    openParent.value = false;
     state.value.parentId = id;
 }
 </script>
@@ -35,7 +33,7 @@ function handleSuccess(id?: number) {
         >
             <template #parentId-post>
                 <AppModal
-                    v-model:open="openParentModal"
+                    v-model:open="openParent"
                     :title="$t('form.parent.add.title')"
                     :description="$t('form.parent.add.description')"
                     :buttonProps="{
@@ -48,6 +46,7 @@ function handleSuccess(id?: number) {
                         label: $t('form.button.add'),
                         loading: parentFormRef?.[0]?.isLoading(),
                     }"
+                    :preventClose="parentFormRef?.[0]?.isLoading()"
                     @submit="parentFormRef?.[0]?.submit()"
                 >
                     <ParentAddForm ref="parentFormRef" @success="handleSuccess" />

@@ -6,8 +6,8 @@ const { label, value } = defineProps<{
     value: string;
 }>();
 
-const { copy, copied } = useClipboard();
 const toast = useToast();
+const { copy, copied } = useClipboard();
 
 async function handleClick() {
     await copy(value);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { UpdatedActivity } from '~~/lib/db/schema';
+import type { SelectActivity } from '~~/lib/db/schema';
 
 import { InsertActivity } from '~~/lib/db/schema';
 import { ACTIVITY_ICON_PREFIX } from '~~/lib/utils/constants';
@@ -15,17 +15,17 @@ const emit = defineEmits<{
 
 const { data: activity, pending, error } = useLazyFetch(`/api/activities/${activityId}`);
 
+const { $csrfFetch } = useNuxtApp();
 const activitiesStore = useActivitiesStore();
 const dashboardStore = useDashboardStore();
-const { $csrfFetch } = useNuxtApp();
 const activityFormRef = useTemplateRef('activityFormRef');
 const { initialState } = useForm('activity');
 
 const state = ref({ ...initialState });
-const updatedActivity = ref<UpdatedActivity>();
+const updatedActivity = ref<SelectActivity>();
 
 async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
-    const activity = await $csrfFetch<UpdatedActivity>(`/api/activities/${activityId}`, {
+    const activity = await $csrfFetch<SelectActivity>(`/api/activities/${activityId}`, {
         method: 'PUT',
         body: event.data,
     });
@@ -33,7 +33,7 @@ async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
     updatedActivity.value = activity;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     activitiesStore.refreshActivities();
     dashboardStore.refreshStats();
 
@@ -57,19 +57,14 @@ defineExpose({
 
 <template>
     <ActivityFieldsLoader v-if="pending" />
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error="error" />
     <BaseForm
         v-else-if="activity"
         ref="activityFormRef"
         v-model:state="state"
         :schema="InsertActivity"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.activity.edit.success')"
     >

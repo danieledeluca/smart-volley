@@ -26,6 +26,12 @@ const navigationMenuItems = computed(() => {
                 active: route.path.startsWith('/dashboard/athletes'),
             },
             {
+                label: $t('menu.parents'),
+                to: '/dashboard/parents',
+                icon: 'i-lucide-users',
+                active: route.path.startsWith('/dashboard/parents'),
+            },
+            {
                 label: $t('menu.enrollments'),
                 to: '/dashboard/enrollments',
                 icon: 'i-lucide-list',
@@ -52,12 +58,6 @@ const navigationMenuItems = computed(() => {
     if (canEdit.value) {
         items.push(
             [
-                {
-                    label: $t('menu.parents'),
-                    to: '/dashboard/parents',
-                    icon: 'i-lucide-users',
-                    active: route.path.startsWith('/dashboard/parents'),
-                },
                 {
                     label: $t('menu.seasons'),
                     to: '/dashboard/seasons',

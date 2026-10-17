@@ -8,7 +8,7 @@ const { error } = defineProps<{
 }>();
 
 useHead({
-    title: getApiError(error),
+    title: getFetchErrorMessage(error),
     htmlAttrs: {
         lang: 'it',
     },

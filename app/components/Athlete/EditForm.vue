@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { UpdatedAthlete } from '~~/lib/db/schema';
+import type { SelectAthlete } from '~~/lib/db/schema';
 
 import { InsertAthlete } from '~~/lib/db/schema';
 
@@ -14,16 +14,16 @@ const emit = defineEmits<{
 
 const { data: athlete, pending, error } = useLazyFetch(`/api/athletes/${athleteId}`);
 
-const athletesStore = useAthletesStore();
 const { $csrfFetch } = useNuxtApp();
+const athletesStore = useAthletesStore();
 const athleteFormRef = useTemplateRef('athleteFormRef');
 const { initialState } = useForm('athlete');
 
 const state = ref({ ...initialState });
-const updatedAthlete = ref<UpdatedAthlete>();
+const updatedAthlete = ref<SelectAthlete>();
 
 async function onSubmit(event: FormSubmitEvent<InsertAthlete>) {
-    const athlete = await $csrfFetch<UpdatedAthlete>(`/api/athletes/${athleteId}`, {
+    const athlete = await $csrfFetch<SelectAthlete>(`/api/athletes/${athleteId}`, {
         method: 'PUT',
         body: event.data,
     });
@@ -31,7 +31,7 @@ async function onSubmit(event: FormSubmitEvent<InsertAthlete>) {
     updatedAthlete.value = athlete;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     athletesStore.refreshAthletes();
 
     emit('success', updatedAthlete.value?.id);
@@ -77,19 +77,14 @@ defineExpose({
 
 <template>
     <AthleteFieldsLoader v-if="pending" />
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error />
     <BaseForm
         v-else-if="athlete"
         ref="athleteFormRef"
         v-model:state="state"
         :schema="InsertAthlete"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.athlete.edit.success')"
     >

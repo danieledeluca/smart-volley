@@ -5,7 +5,7 @@ import { relations, sql } from 'drizzle-orm';
 import { char, integer, pgTable, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 
-import type { findParent, findParents, insertParent, updateParent } from '../queries/parents';
+import type { findParent } from '../queries/parents';
 
 import { EmailSchema, FiscalCodeSchema, NameSchema, PhoneNumberSchema } from '../../utils/zod-schemas';
 import { athlete } from './athlete';
@@ -40,9 +40,5 @@ export const InsertParent = createInsertSchema(parent, {
 });
 
 export type InsertParent = z.infer<typeof InsertParent>;
-export type InsertedParent = Awaited<ReturnType<typeof insertParent>>;
-export type SelectParents = Awaited<ReturnType<typeof findParents>>[number];
-export type SelectParentsSerialized = SerializeObject<SelectParents>;
-export type SelectParent = Awaited<ReturnType<typeof findParent>>;
-export type SelectParentSerialized = SerializeObject<NonNullable<SelectParent>>;
-export type UpdatedParent = Awaited<ReturnType<typeof updateParent>>;
+export type SelectParent = SerializeObject<typeof parent.$inferSelect>;
+export type SelectParentWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findParent>>>>;

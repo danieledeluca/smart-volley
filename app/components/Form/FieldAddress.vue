@@ -33,7 +33,6 @@ watch(parsedAddress, (newParsedAddress) => {
         :modelValue="model?.formattedAddress"
         v-bind="inputProps"
         class="w-full"
-        role="presentation"
         @blur="handleBlur"
     />
 </template>

@@ -14,7 +14,11 @@ const { canEdit } = storeToRefs(authStore);
 const { parents, parentsPending, parentsError } = storeToRefs(parentsStore);
 
 const tableColumns = getParentsTableColumns(['id', 'name', 'phoneNumber', 'email']);
-tableColumns.unshift(getSelectTableColumn());
+
+if (canEdit.value) {
+    tableColumns.unshift(getSelectTableColumn());
+}
+
 tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ parentId: row.id })));
 </script>
 
@@ -32,6 +36,7 @@ tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ parentId: ro
                     label: $t('form.button.add'),
                     loading: parentFormRef?.isLoading(),
                 }"
+                :preventClose="parentFormRef?.isLoading()"
                 @submit="parentFormRef?.submit"
             >
                 <ParentAddForm ref="parentFormRef" />

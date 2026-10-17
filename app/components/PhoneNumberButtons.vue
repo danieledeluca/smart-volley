@@ -6,11 +6,7 @@ const { phoneNumber } = defineProps<{
 
 <template>
     <div class="flex gap-2">
-        <UButton
-            variant="ghost"
-            icon="i-lucide-phone"
-            :href="`tel:${formatPhoneNumber(phoneNumber)}`"
-        />
+        <UButton variant="ghost" icon="i-lucide-phone" :href="`tel:${formatPhoneNumber(phoneNumber)}`" />
         <UButton
             variant="ghost"
             icon="i-simple-icons-whatsapp"

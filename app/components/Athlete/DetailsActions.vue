@@ -1,51 +1,70 @@
 <script setup lang="ts">
-import DetailsActions from '~/components/Details/Actions.vue';
+import type { FetchError } from 'ofetch';
+
+import Actions from '~/components/Details/Actions.vue';
 
 const { athleteId } = defineProps<{
     athleteId: number;
 }>();
 
 const emit = defineEmits<{
-    deleteComplete: [];
-    deleteClose: [];
-    editComplete: [id?: number];
-    editClose: [id?: number];
+    deleteSuccess: [];
+    editSuccess: [id?: number];
 }>();
 
 const route = useRoute();
-
+const toast = useToast();
+const { $csrfFetch } = useNuxtApp();
+const athletesStore = useAthletesStore();
+const enrollmentsStore = useEnrollmentsStore();
 const athleteEditFormRef = useTemplateRef('athleteEditFormRef');
-const athleteDeleteFormRef = useTemplateRef('athleteDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
+const isDeleting = ref(false);
 const updatedAthleteId = ref<number>();
 
-function handleInteractOutside(event: Event) {
-    const target = event.target as HTMLElement;
+async function handleDelete() {
+    try {
+        isDeleting.value = true;
 
-    // Inside Google Place Autocomplete
-    if (target.closest('.pac-container')) {
-        event.preventDefault();
+        await $csrfFetch(`/api/athletes/${athleteId}`, {
+            method: 'DELETE',
+        });
+
+        toast.add({
+            description: $t('form.athlete.delete.success'),
+            color: 'success',
+            icon: 'i-lucide-circle-check',
+        });
+
+        athletesStore.refreshAthletes();
+        enrollmentsStore.refreshEnrollments();
+
+        openDelete.value = false;
+
+        emit('deleteSuccess');
+    } catch (error) {
+        toast.add({
+            description: getFetchErrorMessage(error as FetchError),
+            color: 'error',
+            icon: 'i-lucide-circle-x',
+        });
+    } finally {
+        isDeleting.value = false;
     }
-}
-
-function handleDeleteSuccess() {
-    openDelete.value = false;
-
-    emit('deleteComplete');
 }
 
 function handleEditSuccess(id?: number) {
     openEdit.value = false;
     updatedAthleteId.value = id;
 
-    emit('editComplete', id);
+    emit('editSuccess', id);
 }
 </script>
 
 <template>
-    <DetailsActions
+    <Actions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
         :pageId="athleteId"
@@ -53,24 +72,19 @@ function handleEditSuccess(id?: number) {
         :editModal="{
             title: $t('form.athlete.edit.title'),
             description: $t('form.athlete.edit.description'),
-            isLoading: Boolean(athleteEditFormRef?.isLoading()),
+            isLoading: athleteEditFormRef?.isLoading(),
         }"
         :deleteModal="{
             title: $t('form.athlete.delete.title'),
             description: $t('form.athlete.delete.description'),
-            isLoading: Boolean(athleteDeleteFormRef?.isLoading()),
+            isLoading: isDeleting,
         }"
-        @delete="athleteDeleteFormRef?.submit"
-        @deleteClose="emit('deleteClose')"
+        @delete="handleDelete"
         @edit="athleteEditFormRef?.submit"
-        @editClose="emit('editClose', updatedAthleteId)"
-        @interactOutside="handleInteractOutside"
+        @interactOutside="preventClose"
     >
-        <template #delete>
-            <AthleteDeleteForm ref="athleteDeleteFormRef" :athleteId @success="handleDeleteSuccess" />
-        </template>
         <template #edit>
             <AthleteEditForm ref="athleteEditFormRef" :athleteId @success="handleEditSuccess" />
         </template>
-    </DetailsActions>
+    </Actions>
 </template>

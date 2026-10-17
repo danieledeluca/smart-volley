@@ -8,10 +8,10 @@ const { title, icon } = defineProps<{
 <template>
     <UCard variant="subtle" class="@container has-[table]:**:data-[slot=body]:p-0 has-[table]:**:data-[slot=body]:*:grid-cols-1 has-[table]:**:data-[slot=root]:rounded-t-none">
         <template #header>
-            <h2 class="flex items-center gap-4 text-xl">
+            <div class="flex items-center gap-4 text-xl">
                 <ButtonIcon :name="icon" color="success" />
                 <span>{{ title }}</span>
-            </h2>
+            </div>
         </template>
         <div class="grid gap-4 *:min-w-0 sm:gap-6 @2xl:grid-cols-2">
             <slot />

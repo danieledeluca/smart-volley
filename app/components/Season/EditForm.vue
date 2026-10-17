@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { UpdatedSeason } from '~~/lib/db/schema';
+import type { SelectSeason } from '~~/lib/db/schema';
 
 import { InsertSeason } from '~~/lib/db/schema';
 
@@ -14,16 +14,16 @@ const emit = defineEmits<{
 
 const { data: season, pending, error } = useLazyFetch(`/api/seasons/${seasonId}`);
 
-const seasonsStore = useSeasonsStore();
 const { $csrfFetch } = useNuxtApp();
+const seasonsStore = useSeasonsStore();
 const seasonFormRef = useTemplateRef('seasonFormRef');
 const { initialState } = useForm('season');
 
 const state = ref({ ...initialState });
-const updatedSeason = ref<UpdatedSeason>();
+const updatedSeason = ref<SelectSeason>();
 
 async function onSubmit(event: FormSubmitEvent<InsertSeason>) {
-    const season = await $csrfFetch<UpdatedSeason>(`/api/seasons/${seasonId}`, {
+    const season = await $csrfFetch<SelectSeason>(`/api/seasons/${seasonId}`, {
         method: 'PUT',
         body: event.data,
     });
@@ -31,7 +31,7 @@ async function onSubmit(event: FormSubmitEvent<InsertSeason>) {
     updatedSeason.value = season;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     seasonsStore.refreshSeasons();
 
     emit('success', updatedSeason.value?.id);
@@ -54,19 +54,14 @@ defineExpose({
 
 <template>
     <SeasonFieldsLoader v-if="pending" />
-    <UAlert
-        v-else-if="error"
-        :title="getApiError(error)"
-        color="error"
-        icon="i-lucide-circle-x"
-    />
+    <AppError v-else-if="error" :error />
     <BaseForm
         v-else-if="season"
         ref="seasonFormRef"
         v-model:state="state"
         :schema="InsertSeason"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.edit')"
         :successMessage="$t('form.season.edit.success')"
     >

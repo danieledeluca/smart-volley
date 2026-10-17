@@ -15,18 +15,13 @@ const enrollmentsTableColumns = getAthleteEnrollmentsTableColumns(['season', 'ac
             <UButton icon="i-lucide-arrow-left" to="/dashboard/athletes" :label="$t('page.athlete.button.back')" />
         </template>
         <AthleteDetailsLoader v-if="pending && !athlete" />
-        <UAlert
-            v-else-if="error"
-            :title="getApiError(error)"
-            color="error"
-            icon="i-lucide-circle-x"
-        />
+        <AppError v-else-if="error" :error />
         <template v-else-if="athlete">
             <PageUser :name="athlete.name" :badgeLabels="[athlete.fiscalCode]">
                 <AthleteDetailsActions
                     :athleteId="athlete.id"
-                    @deleteComplete="navigateTo('/dashboard/athletes')"
-                    @editClose="$event ? refresh() : undefined"
+                    @deleteSuccess="navigateTo('/dashboard/athletes')"
+                    @editSuccess="$event ? refresh() : undefined"
                 />
             </PageUser>
             <div class="details-grid">

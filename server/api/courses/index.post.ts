@@ -7,13 +7,13 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const result = await readValidatedBody(event, InsertCourse.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     try {
         return await insertCourse(result.data);
     } catch (error) {
-        sendDbError(event, error as DrizzleError);
+        sendDbError(error as DrizzleError);
     }
 }, {
     roles: ['admin', 'manager'],

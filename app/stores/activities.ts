@@ -9,12 +9,16 @@ export const useActivitiesStore = defineStore('activities', () => {
     } = useLazyFetch('/api/activities');
 
     const activitiesItems = computed(() => {
-        return activities.value?.map<RadioGroupItem>((activity) => {
-            return {
-                label: activity.name,
-                value: activity.id,
-            };
-        });
+        return activities.value
+            ?.toSorted((activityA, activityB) => {
+                return activityA.name.localeCompare(activityB.name);
+            })
+            ?.map<RadioGroupItem>((activity) => {
+                return {
+                    label: activity.name,
+                    value: activity.id,
+                };
+            });
     });
 
     return {

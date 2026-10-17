@@ -1,7 +1,5 @@
 import type { BadgeProps } from '@nuxt/ui';
 
-import type { CertificateStatusEnum } from '#imports';
-
 export function getCertificateDateColumnSortingFn(dateA: string | null, dateB: string | null) {
     if (!dateA && !dateB) {
         return 0;
@@ -18,7 +16,7 @@ export function getCertificateDateColumnSortingFn(dateA: string | null, dateB: s
     return new Date(dateA).getTime() - new Date(dateB).getTime();
 }
 
-export function getCertificateDateStatus(date: string | null): CertificateStatusEnum {
+export function getCertificateDateStatus(date: string | null): CertificateStatus {
     if (!date) {
         return 'missing';
     }
@@ -36,13 +34,13 @@ export function getCertificateDateStatus(date: string | null): CertificateStatus
 export function getCertificateBadgeProps(date: string | null): Pick<BadgeProps, 'color' | 'label'> {
     const status = getCertificateDateStatus(date);
 
-    const badgeColorMap: Record<CertificateStatusEnum, BadgeProps['color']> = {
+    const badgeColorMap: Record<CertificateStatus, BadgeProps['color']> = {
         valid: 'success',
         missing: 'warning',
         expired: 'error',
     };
 
-    const badgeLabelMap: Record<CertificateStatusEnum, string> = {
+    const badgeLabelMap: Record<CertificateStatus, string> = {
         valid: $t('form.field.certificate_status.item.valid'),
         missing: $t('form.field.certificate_status.item.missing'),
         expired: $t('form.field.certificate_status.item.expired'),
@@ -57,7 +55,7 @@ export function getCertificateBadgeProps(date: string | null): Pick<BadgeProps, 
 export function getCertificateTextColor(date: string | null) {
     const status = getCertificateDateStatus(date);
 
-    const textColorMap: Record<CertificateStatusEnum, string> = {
+    const textColorMap: Record<CertificateStatus, string> = {
         valid: 'text-success',
         missing: 'text-warning',
         expired: 'text-error',

@@ -42,7 +42,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
 </script>
 
 <template>
-    <UDropdownMenu :content="{ align: 'start' }" :items="dropdownMenuItems">
+    <UDropdownMenu :items="dropdownMenuItems" :content="{ align: 'start' }">
         <UButton
             variant="ghost"
             color="neutral"

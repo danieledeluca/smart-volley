@@ -5,12 +5,7 @@ import { date, index, integer, numeric, pgEnum, pgTable, text, timestamp, unique
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type {
-    findEnrollment,
-    findEnrollments,
-    findEnrollmentsForExport,
-    updateEnrollment,
-} from '../queries/enrollments';
+import type { findEnrollment, findEnrollments, findEnrollmentsForExport } from '../queries/enrollments';
 
 import { $t } from '../../../shared/utils/i18n';
 import { FILE_ACCEPTED_TYPES, FILE_MAX_SIZE } from '../../utils/constants';
@@ -94,9 +89,7 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
 });
 
 export type InsertEnrollment = z.infer<typeof InsertEnrollment>;
-export type SelectEnrollments = Awaited<ReturnType<typeof findEnrollments>>[number];
-export type SelectEnrollmentsSerialized = SerializeObject<SelectEnrollments>;
+export type SelectEnrollment = SerializeObject<typeof enrollment.$inferSelect>;
+export type SelectEnrollmentWithRelations = SerializeObject<NonNullable<Awaited<ReturnType<typeof findEnrollment>>>>;
+export type SelectEnrollmentsWithRelations = SerializeObject<Awaited<ReturnType<typeof findEnrollments>>[number]>;
 export type SelectEnrollmentsForExport = Awaited<ReturnType<typeof findEnrollmentsForExport>>[number];
-export type SelectEnrollment = Awaited<ReturnType<typeof findEnrollment>>;
-export type SelectEnrollmentSerialized = SerializeObject<NonNullable<SelectEnrollment>>;
-export type UpdatedEnrollment = Awaited<ReturnType<typeof updateEnrollment>>;

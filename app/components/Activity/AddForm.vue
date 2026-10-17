@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { InsertedActivity } from '~~/lib/db/schema';
+import type { SelectActivity } from '~~/lib/db/schema';
 
 import { InsertActivity } from '~~/lib/db/schema';
 
@@ -8,16 +8,16 @@ const emit = defineEmits<{
     success: [id?: number];
 }>();
 
-const activitiesStore = useActivitiesStore();
 const { $csrfFetch } = useNuxtApp();
+const activitiesStore = useActivitiesStore();
 const activityFormRef = useTemplateRef('activityFormRef');
 const { initialState } = useForm('activity');
 
 const state = ref({ ...initialState });
-const insertedActivity = ref<InsertedActivity>();
+const insertedActivity = ref<SelectActivity>();
 
 async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
-    const activity = await $csrfFetch<InsertedActivity>('/api/activities', {
+    const activity = await $csrfFetch<SelectActivity>('/api/activities', {
         method: 'POST',
         body: event.data,
     });
@@ -25,7 +25,7 @@ async function onSubmit(event: FormSubmitEvent<InsertActivity>) {
     insertedActivity.value = activity;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     state.value = { ...initialState };
 
     activitiesStore.refreshActivities();
@@ -45,7 +45,7 @@ defineExpose({
         v-model:state="state"
         :schema="InsertActivity"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.activity.add.success')"
     >

@@ -15,18 +15,13 @@ const athletesTableColumns = getParentAthletesTableColumns(['name', 'fiscalCode'
             <UButton icon="i-lucide-arrow-left" to="/dashboard/parents" :label="$t('page.parent.button.back')" />
         </template>
         <ParentDetailsLoader v-if="pending && !parent" />
-        <UAlert
-            v-else-if="error"
-            :title="getApiError(error)"
-            color="error"
-            icon="i-lucide-circle-x"
-        />
+        <AppError v-else-if="error" :error />
         <template v-else-if="parent">
             <PageUser :name="parent.name" :badgeLabels="[parent.fiscalCode]">
                 <ParentDetailsActions
                     :parentId="parent.id"
-                    @deleteComplete="navigateTo('/dashboard/parents')"
-                    @editClose="$event ? refresh() : undefined"
+                    @deleteSuccess="navigateTo('/dashboard/parents')"
+                    @editSuccess="$event ? refresh() : undefined"
                 />
             </PageUser>
             <div class="details-grid">

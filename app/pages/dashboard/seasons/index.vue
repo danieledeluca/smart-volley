@@ -13,10 +13,7 @@ const { canEdit } = storeToRefs(authStore);
 const { seasons, seasonsPending, seasonsError } = storeToRefs(seasonsStore);
 
 const tableColumns = getSeasonsTableColumns(['id', 'startYear', 'endYear']);
-
-if (canEdit.value) {
-    tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ seasonId: row.id })));
-}
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ seasonId: row.id })));
 </script>
 
 <template>
@@ -33,6 +30,7 @@ if (canEdit.value) {
                     label: $t('form.button.add'),
                     loading: seasonFormRef?.isLoading(),
                 }"
+                :preventClose="seasonFormRef?.isLoading()"
                 @submit="seasonFormRef?.submit"
             >
                 <SeasonAddForm ref="seasonFormRef" />

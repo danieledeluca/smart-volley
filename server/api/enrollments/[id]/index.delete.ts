@@ -4,12 +4,12 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const result = await getValidatedRouterParams(event, DetailPageRouterParamsSchema.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
-    const deleted = await deleteEnrollment(result.data.id);
+    const enrollment = await deleteEnrollment(result.data.id);
 
-    if (!deleted) {
+    if (!enrollment) {
         throw createError({
             statusCode: 404,
             statusMessage: $t('page.enrollment.error'),

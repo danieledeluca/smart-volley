@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 import type { InsertCourse } from '../schema';
 
@@ -10,7 +10,7 @@ export async function findCourses() {
         with: {
             activity: true,
         },
-        orderBy: asc(course.name),
+        orderBy: desc(course.id),
     });
 }
 
@@ -28,7 +28,7 @@ export async function insertCourse(data: InsertCourse) {
     return created;
 }
 
-export async function updateCourse(data: InsertCourse, courseId: number) {
+export async function updateCourse(courseId: number, data: InsertCourse) {
     const [updated] = await db.update(course)
         .set(data)
         .where(eq(course.id, courseId))

@@ -5,14 +5,13 @@ const { fields: fieldGroups } = defineProps<{
 
 const emit = defineEmits<{
     update: [];
-    clear: [];
+    cancel: [];
 }>();
 
-const state = defineModel<Partial<T>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<T>>('state', { required: true });
 
 const activeFiltersRef = useTemplateRef('activeFiltersRef');
+
 const openFilters = ref(false);
 
 const fields = computed(() => fieldGroups.map((group) => group.fields).flat());
@@ -25,7 +24,7 @@ function handleUpdate(key: string, value?: Partial<T>[keyof T]) {
 function handleCancel() {
     if ((activeFiltersRef.value?.activeFilters().length || 0) > 0) {
         clearQuery();
-        emit('clear');
+        emit('cancel');
     }
 }
 

@@ -17,9 +17,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
             label: $t('auth.sign_out'),
             icon: 'i-lucide-log-out',
             color: 'error',
-            async onSelect() {
-                await authStore.signOut();
-            },
+            onSelect: () => authStore.signOut(),
         },
     ];
 });
@@ -65,6 +63,7 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
         :label="$t('auth.sign_in.google')"
         icon="i-logos-google-icon"
         :loading="isLoading"
+        class="min-w-0"
         @click="authStore.signIn"
     />
 </template>

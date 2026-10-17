@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { Row } from '@tanstack/vue-table';
-import type { SelectEnrollmentsSerialized } from '~~/lib/db/schema';
+import type { SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
 import type { FetchError } from 'ofetch';
 
-import ListActions from '~/components/List/Actions.vue';
+import Actions from '~/components/List/Actions.vue';
 
 const { selectedRows, isLoading } = defineProps<{
-    selectedRows?: Row<SelectEnrollmentsSerialized>[];
+    selectedRows?: Row<SelectEnrollmentsWithRelations>[];
     isLoading: boolean;
 }>();
 
@@ -15,12 +15,47 @@ const emit = defineEmits<{
 }>();
 
 const toast = useToast();
-const enrollmentDeleteFormRef = useTemplateRef('enrollmentDeleteFormRef');
+const { $csrfFetch } = useNuxtApp();
+const enrollmentsStore = useEnrollmentsStore();
 
-const openDeleteModal = ref(false);
+const openDelete = ref(false);
+const isDeleting = ref(false);
 const isDownloading = ref(false);
 
 const selectedRowsQuantity = computed(() => selectedRows?.length || 0);
+
+async function handleDelete() {
+    try {
+        isDeleting.value = true;
+
+        await $csrfFetch('/api/enrollments', {
+            method: 'DELETE',
+            body: {
+                ids: selectedRows?.map((row) => row.original.id),
+            },
+        });
+
+        toast.add({
+            description: $t('form.enrollment.multiple_delete.success'),
+            color: 'success',
+            icon: 'i-lucide-circle-check',
+        });
+
+        enrollmentsStore.refreshEnrollments();
+
+        openDelete.value = false;
+
+        emit('deleteSuccess');
+    } catch (error) {
+        toast.add({
+            description: getFetchErrorMessage(error as FetchError),
+            color: 'error',
+            icon: 'i-lucide-circle-x',
+        });
+    } finally {
+        isDeleting.value = false;
+    }
+}
 
 async function handleCsvDownload() {
     isDownloading.value = true;
@@ -35,7 +70,7 @@ async function handleCsvDownload() {
         });
     } catch (error) {
         toast.add({
-            description: getApiError(error as FetchError),
+            description: getFetchErrorMessage(error as FetchError),
             color: 'error',
             icon: 'i-lucide-circle-x',
         });
@@ -43,41 +78,28 @@ async function handleCsvDownload() {
         isDownloading.value = false;
     }
 }
-
-function handleDeleteSuccess() {
-    openDeleteModal.value = false;
-
-    emit('deleteSuccess');
-}
 </script>
 
 <template>
-    <ListActions
-        v-model:openDelete="openDeleteModal"
+    <Actions
+        v-model:openDelete="openDelete"
         :deleteModal="{
             title: $t('form.enrollment.multiple_delete.title', {
                 quantity: selectedRowsQuantity.toString(),
             }),
             description: $t('form.enrollment.multiple_delete.description'),
-            isDisabled: isLoading || selectedRowsQuantity === 0,
+            isDisabled: selectedRowsQuantity === 0,
+            isLoading: isLoading || isDeleting,
         }"
         :additionalItems="[
             {
                 label: $t('action.download_csv'),
                 icon: 'i-lucide-file-spreadsheet',
                 disabled: isLoading || isDownloading || selectedRowsQuantity === 0,
-                loading: isDownloading,
+                loading: isLoading || isDownloading,
                 onSelect: handleCsvDownload,
             },
         ]"
-        @submit="enrollmentDeleteFormRef?.submit()"
-    >
-        <template #delete>
-            <EnrollmentMultipleDeleteForm
-                ref="enrollmentDeleteFormRef"
-                :enrollments="selectedRows?.map((row) => row.original) || []"
-                @success="handleDeleteSuccess"
-            />
-        </template>
-    </ListActions>
+        @delete="handleDelete"
+    />
 </template>

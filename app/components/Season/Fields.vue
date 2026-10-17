@@ -5,9 +5,7 @@ const { formAction } = defineProps<{
     formAction: FormAction;
 }>();
 
-const state = defineModel<Partial<InsertSeason>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<InsertSeason>>('state', { required: true });
 
 const { formFields } = useForm('season', formAction);
 </script>

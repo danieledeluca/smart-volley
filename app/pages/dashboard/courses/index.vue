@@ -13,10 +13,7 @@ const { canEdit } = storeToRefs(authStore);
 const { courses, coursesPending, coursesError } = storeToRefs(coursesStore);
 
 const tableColumns = getCoursesTableColumns(['id', 'code', 'name', 'activity']);
-
-if (canEdit.value) {
-    tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ courseId: row.id })));
-}
+tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ courseId: row.id })));
 </script>
 
 <template>
@@ -33,6 +30,7 @@ if (canEdit.value) {
                     label: $t('form.button.add'),
                     loading: courseFormRef?.isLoading(),
                 }"
+                :preventClose="courseFormRef?.isLoading()"
                 @submit="courseFormRef?.submit"
             >
                 <CourseAddForm ref="courseFormRef" />

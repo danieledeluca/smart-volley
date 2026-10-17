@@ -7,10 +7,10 @@ const usersStore = useUsersStore();
 
 const { users, usersPending, usersError } = storeToRefs(usersStore);
 
-const q = ref('');
+const userSearch = ref('');
 
 const filteredUsers = computed(() => {
-    return users.value?.filter((user) => user.name.toLowerCase().includes(q.value.toLowerCase()));
+    return users.value?.filter((user) => user.name.toLowerCase().includes(userSearch.value.toLowerCase()));
 });
 </script>
 
@@ -37,7 +37,7 @@ const filteredUsers = computed(() => {
                 >
                     <template #header>
                         <UInput
-                            v-model="q"
+                            v-model="userSearch"
                             class="w-full"
                             :placeholder="$t('page.settings.users.filter.placeholder')"
                             icon="i-lucide-search"
@@ -60,15 +60,10 @@ const filteredUsers = computed(() => {
                     </div>
                 </UPageCard>
                 <div v-if="!usersPending" class="mt-4">
-                    <UAlert
-                        v-if="usersError"
-                        :title="getApiError(usersError)"
-                        color="error"
-                        icon="i-lucide-circle-x"
-                    />
+                    <AppError v-if="usersError" :error="usersError" />
                     <UAlert
                         v-if="filteredUsers && filteredUsers.length === 0"
-                        :title="$t('page.settings.users.no_data', { name: q })"
+                        :title="$t('page.settings.users.no_data', { name: userSearch })"
                         color="warning"
                         icon="i-lucide-triangle-alert"
                     />

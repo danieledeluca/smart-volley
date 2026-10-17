@@ -182,9 +182,11 @@ async function main() {
     const activities: InsertActivity[] = [
         {
             name: 'Volley',
+            icon: 'i-lucide-volley',
         },
         {
             name: 'Ginnastica',
+            icon: 'i-lucide-dumbbell',
         },
     ];
 

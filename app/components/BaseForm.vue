@@ -6,10 +6,10 @@ import type z from 'zod';
 type FormDataInput = InferInput<T>;
 type FormDataOutput = InferOutput<T>;
 
-const { schema, onSubmit, onSubmitComplete, submitButtonLabel, successMessage } = defineProps<{
+const { schema, onSubmit, onSubmitSuccess, submitButtonLabel, successMessage } = defineProps<{
     schema?: T;
     onSubmit: (event: FormSubmitEvent<FormDataOutput>) => Promise<any>;
-    onSubmitComplete?: () => void;
+    onSubmitSuccess?: () => void;
     submitButtonLabel: string;
     successMessage: string;
 }>();
@@ -34,7 +34,7 @@ async function handleSubmit(event: FormSubmitEvent<FormDataOutput>) {
             icon: 'i-lucide-circle-check',
         });
 
-        onSubmitComplete?.();
+        onSubmitSuccess?.();
     } catch (err) {
         const error = err as FetchError;
 
@@ -42,7 +42,7 @@ async function handleSubmit(event: FormSubmitEvent<FormDataOutput>) {
             formErrors.value = error.data?.data;
         } else {
             toast.add({
-                description: getApiError(error),
+                description: getFetchErrorMessage(error),
                 color: 'error',
                 icon: 'i-lucide-circle-x',
             });

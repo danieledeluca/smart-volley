@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { SelectEnrollments } from '~~/lib/db/schema';
+import type { SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
 
 import DetailsActions from '~/components/Enrollment/DetailsActions.vue';
 
 const { title, tableColumns: _tableColumns } = defineProps<{
     title: string;
-    tableColumns: (keyof SelectEnrollments)[];
+    tableColumns: (keyof SelectEnrollmentsWithRelations)[];
 }>();
 
 const authStore = useAuthStore();
@@ -26,13 +26,9 @@ const tableColumns = getEnrollmentsTableColumns(_tableColumns);
 tableColumns.unshift(getSelectTableColumn());
 tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ enrollmentId: row.id })));
 
-async function handleFiltersUpdate() {
-    await enrollmentsStore.refreshEnrollments();
+function handleFiltersUpdate() {
+    enrollmentsStore.refreshEnrollments();
 
-    enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
-}
-
-function handleDeleteSuccess() {
     enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
 }
 </script>
@@ -51,6 +47,7 @@ function handleDeleteSuccess() {
                     label: $t('form.button.add'),
                     loading: enrollmentFormRef?.isLoading(),
                 }"
+                :preventClose="enrollmentFormRef?.isLoading()"
                 @submit="enrollmentFormRef?.submit"
             >
                 <EnrollmentAddForm ref="enrollmentFormRef" />
@@ -70,12 +67,12 @@ function handleDeleteSuccess() {
                     v-model:state="filterState"
                     :fields="filterFields"
                     @update="handleFiltersUpdate"
-                    @clear="enrollmentsStore.clearFilters"
+                    @cancel="enrollmentsStore.clearFilters"
                 >
                     <EnrollmentListActions
                         :selectedRows="enrollmentTableRef?.selectRows()"
                         :isLoading="enrollmentsPending"
-                        @deleteSuccess="handleDeleteSuccess"
+                        @deleteSuccess="enrollmentTableRef?.toggleAllPageRowsSelected(false)"
                     />
                 </ListFilters>
             </template>

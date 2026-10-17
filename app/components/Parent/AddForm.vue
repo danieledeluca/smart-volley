@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { InsertedParent } from '~~/lib/db/schema';
+import type { SelectParent } from '~~/lib/db/schema';
 
 import { InsertParent } from '~~/lib/db/schema';
 
@@ -8,16 +8,16 @@ const emit = defineEmits<{
     success: [id?: number];
 }>();
 
-const parentsStore = useParentsStore();
 const { $csrfFetch } = useNuxtApp();
+const parentsStore = useParentsStore();
 const parentFormRef = useTemplateRef('parentFormRef');
 const { initialState } = useForm('parent');
 
 const state = ref({ ...initialState });
-const insertedParent = ref<InsertedParent>();
+const insertedParent = ref<SelectParent>();
 
 async function onSubmit(event: FormSubmitEvent<InsertParent>) {
-    const parent = await $csrfFetch<InsertedParent>('/api/parents', {
+    const parent = await $csrfFetch<SelectParent>('/api/parents', {
         method: 'POST',
         body: event.data,
     });
@@ -25,7 +25,7 @@ async function onSubmit(event: FormSubmitEvent<InsertParent>) {
     insertedParent.value = parent;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     state.value = { ...initialState };
 
     parentsStore.refreshParents();
@@ -45,7 +45,7 @@ defineExpose({
         v-model:state="state"
         :schema="InsertParent"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.parent.add.success')"
     >

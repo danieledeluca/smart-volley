@@ -4,6 +4,11 @@ const { label, value } = defineProps<{
     value?: string | null;
 }>();
 
+const slots = defineSlots<{
+    default?: (props?: object) => VNode[];
+    actions?: (props?: object) => VNode[];
+}>();
+
 const actionsRef = useTemplateRef('actionsRef');
 </script>
 
@@ -16,7 +21,8 @@ const actionsRef = useTemplateRef('actionsRef');
             <slot>
                 <div
                     class="truncate"
-                    :style="{ 'max-width': `calc(100% - (var(--spacing) * 2) - ${actionsRef?.clientWidth || 0}px)` }"
+                    :class="!!slots.actions ? 'max-w-[calc(100%-(var(--spacing)*2)-var(--action-width))]' : undefined"
+                    :style="{ '--action-width': !!slots.actions ? `${actionsRef?.clientWidth || 0}px` : undefined }"
                 >
                     {{ value ?? EMPTY_VALUE }}
                 </div>

@@ -8,13 +8,13 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const result = InsertEnrollment.safeParse(Object.fromEntries(formData.entries()));
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     try {
         return await insertEnrollment(result.data);
     } catch (error) {
-        sendDbError(event, error as DrizzleError);
+        sendDbError(error as DrizzleError);
     }
 }, {
     roles: ['admin', 'manager'],

@@ -1,11 +1,11 @@
-import type { UserRoleSchema } from '~~/lib/db/schema';
+import type { UserRole } from '~~/lib/db/schema';
 import type { H3Event } from 'h3';
 
 import { auth } from '~~/lib/auth';
 
 export default function defineAuthenticatedEventHandler<T>(
     handler: (event: H3Event) => T,
-    options?: { roles?: UserRoleSchema[] },
+    options?: { roles?: UserRole[] },
 ) {
     return defineEventHandler(async (event) => {
         const session = await auth.api.getSession({

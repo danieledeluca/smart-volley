@@ -12,14 +12,7 @@ const slots = defineSlots<{
 
 <template>
     <div class="flex items-start gap-4">
-        <AppUser
-            :avatarSize="96"
-            :userProps="{
-                name,
-                to: link,
-                size: '3xl',
-            }"
-        >
+        <AppUser :avatarSize="96" :userProps="{ name, to: link, size: '3xl' }">
             <template #description>
                 <span class="mt-1 flex flex-wrap gap-2">
                     <template

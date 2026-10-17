@@ -3,15 +3,13 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 
 const route = useRoute();
 
-const navigationMenuItems: NavigationMenuItem[][] = [
-    [
-        {
-            label: $t('menu.settings.users'),
-            icon: 'i-lucide-users',
-            to: '/dashboard/settings/users',
-            active: route.path === '/dashboard/settings/users',
-        },
-    ],
+const navigationMenuItems: NavigationMenuItem[] = [
+    {
+        label: $t('menu.settings.users'),
+        icon: 'i-lucide-users',
+        to: '/dashboard/settings/users',
+        active: route.path === '/dashboard/settings/users',
+    },
 ];
 </script>
 

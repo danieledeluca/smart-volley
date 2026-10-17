@@ -9,7 +9,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const result = await getValidatedQuery(event, QuerySchema.safeParse);
 
     if (!result.success) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const enrollments = await findEnrollmentsForExport(result.data.ids);

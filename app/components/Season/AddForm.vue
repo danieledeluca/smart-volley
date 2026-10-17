@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { InsertedSeason } from '~~/lib/db/schema';
+import type { SelectSeason } from '~~/lib/db/schema';
 
 import { InsertSeason } from '~~/lib/db/schema';
 
@@ -8,16 +8,16 @@ const emit = defineEmits<{
     success: [id?: number];
 }>();
 
-const seasonsStore = useSeasonsStore();
 const { $csrfFetch } = useNuxtApp();
+const seasonsStore = useSeasonsStore();
 const seasonFormRef = useTemplateRef('seasonFormRef');
 const { initialState } = useForm('season');
 
 const state = ref({ ...initialState });
-const insertedSeason = ref<InsertedSeason>();
+const insertedSeason = ref<SelectSeason>();
 
 async function onSubmit(event: FormSubmitEvent<InsertSeason>) {
-    const season = await $csrfFetch<InsertedSeason>('/api/seasons', {
+    const season = await $csrfFetch<SelectSeason>('/api/seasons', {
         method: 'POST',
         body: event.data,
     });
@@ -25,7 +25,7 @@ async function onSubmit(event: FormSubmitEvent<InsertSeason>) {
     insertedSeason.value = season;
 }
 
-function onSubmitComplete() {
+function onSubmitSuccess() {
     state.value = { ...initialState };
 
     seasonsStore.refreshSeasons();
@@ -45,7 +45,7 @@ defineExpose({
         v-model:state="state"
         :schema="InsertSeason"
         :onSubmit
-        :onSubmitComplete
+        :onSubmitSuccess
         :submitButtonLabel="$t('form.button.add')"
         :successMessage="$t('form.season.add.success')"
     >

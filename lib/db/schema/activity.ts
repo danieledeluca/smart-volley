@@ -5,8 +5,6 @@ import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { findActivities, insertActivity, updateActivity } from '../queries/activities';
-
 import { $t } from '../../../shared/utils/i18n';
 import { DEFAULT_ACTIVITY_ICON } from '../../utils/constants';
 import { isValidActivityIcon, normalizeActivityIcon } from '../../utils/icons';
@@ -39,7 +37,4 @@ export const InsertActivity = createInsertSchema(activity, {
 });
 
 export type InsertActivity = z.infer<typeof InsertActivity>;
-export type InsertedActivity = Awaited<ReturnType<typeof insertActivity>>;
-export type SelectActivities = Awaited<ReturnType<typeof findActivities>>[number];
-export type SelectActivitiesSerialized = SerializeObject<SelectActivities>;
-export type UpdatedActivity = Awaited<ReturnType<typeof updateActivity>>;
+export type SelectActivity = SerializeObject<typeof activity.$inferSelect>;

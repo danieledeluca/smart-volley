@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { ButtonProps } from '@nuxt/ui';
 
-const { title, description, buttonProps, cancelButtonProps, submitButtonProps } = defineProps<{
+const { title, description, buttonProps, cancelButtonProps, submitButtonProps, preventClose = false } = defineProps<{
     title: string;
     description?: string;
     buttonProps?: ButtonProps;
     cancelButtonProps?: Omit<ButtonProps, 'variant' | 'color'>;
     submitButtonProps?: ButtonProps;
+    preventClose?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -16,9 +17,7 @@ const emit = defineEmits<{
     interactOutside: [event: Event];
 }>();
 
-const open = defineModel<boolean>('open', {
-    default: false,
-});
+const open = defineModel<boolean>('open', { default: false });
 
 function handleCancel() {
     open.value = false;
@@ -32,9 +31,9 @@ function handleCancel() {
         v-model:open="open"
         :title
         :description
-        :content="{
-            onInteractOutside: (event) => emit('interactOutside', event),
-        }"
+        :dismissible="!preventClose"
+        :close="{ disabled: preventClose }"
+        :content="{ onInteractOutside: (event) => emit('interactOutside', event) }"
         @after:leave="emit('close')"
     >
         <slot name="button">
@@ -49,6 +48,7 @@ function handleCancel() {
                 variant="outline"
                 color="neutral"
                 :label="cancelButtonProps?.label || $t('form.button.cancel')"
+                :disabled="preventClose"
                 @click="handleCancel"
             />
             <UButton

@@ -17,7 +17,7 @@ export async function findDashboardStats(seasonStartYear: number) {
         AND ${enrollment.certificateExpirationDate} > current_date
         AND ${enrollment.certificateExpirationDate} <= current_date + 30`;
 
-    const result = await db.select({
+    return await db.select({
         activityId: activity.id,
         activityName: activity.name,
         activityIcon: activity.icon,
@@ -36,8 +36,6 @@ export async function findDashboardStats(seasonStartYear: number) {
         .innerJoin(activity, eq(course.activityId, activity.id))
         .groupBy(activity.id, activity.name)
         .orderBy(activity.name);
-
-    return result;
 }
 
-export type DashboardStats = SerializeObject<Awaited<ReturnType<typeof findDashboardStats>>[number]>;
+export type SelectDashboardStats = SerializeObject<Awaited<ReturnType<typeof findDashboardStats>>[number]>;

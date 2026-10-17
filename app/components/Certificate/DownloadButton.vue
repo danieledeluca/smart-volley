@@ -11,12 +11,12 @@ const toast = useToast();
 
 async function handleClick() {
     try {
-        const { url } = await $fetch(`/api/enrollments/${enrollmentId.toString()}/certificate`);
+        const url = await $fetch(`/api/enrollments/${enrollmentId.toString()}/certificate`);
 
         window.open(url, '_blank');
     } catch (error) {
         toast.add({
-            description: getApiError(error as FetchError),
+            description: getFetchErrorMessage(error as FetchError),
             color: 'error',
             icon: 'i-lucide-circle-x',
         });

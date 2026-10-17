@@ -9,39 +9,30 @@ const { pageId, detailsPath, editModal, deleteModal, additionalItems } = defineP
     editModal?: {
         title: string;
         description: string;
-        isLoading: boolean;
+        isDisabled?: boolean;
+        isLoading?: boolean;
     };
     deleteModal?: {
         title: string;
         description: string;
-        isLoading: boolean;
+        isDisabled?: boolean;
+        isLoading?: boolean;
     };
     additionalItems?: DropdownMenuItem[];
 }>();
 
 const emit = defineEmits<{
     delete: [];
-    deleteClose: [];
     edit: [];
-    editClose: [];
     interactOutside: [event: Event];
 }>();
 
-const slots = defineSlots<{
-    delete?: (props?: object) => VNode[];
-    edit?: (props?: object) => VNode[];
-}>();
+const openDelete = defineModel<boolean>('openDelete', { default: false });
+const openEdit = defineModel<boolean>('openEdit', { default: false });
 
-const openDelete = defineModel<boolean>('openDelete', {
-    default: false,
-});
-const openEdit = defineModel<boolean>('openEdit', {
-    default: false,
-});
-
-const authStore = useAuthStore();
 const toast = useToast();
 const { copy } = useClipboard();
+const authStore = useAuthStore();
 
 const { canEdit } = storeToRefs(authStore);
 
@@ -52,16 +43,7 @@ const dropDownMenuItems = computed(() => {
         items.push({
             label: $t('action.copy_id.label'),
             icon: 'i-lucide-copy',
-            async onSelect() {
-                await copy(pageId.toString());
-
-                toast.add({
-                    id: pageId,
-                    title: $t('toast.copy', { name: $t('action.copy_id.success') }),
-                    color: 'success',
-                    icon: 'i-lucide-circle-check',
-                });
-            },
+            onSelect: handleCopyId,
         });
     }
 
@@ -89,9 +71,8 @@ const dropDownMenuItems = computed(() => {
                 label: $t('action.edit'),
                 icon: 'i-lucide-edit',
                 color: 'warning',
-                onSelect() {
-                    openEdit.value = true;
-                },
+                disabled: editModal.isDisabled || editModal.isLoading,
+                onSelect: () => openEdit.value = true,
             });
         }
 
@@ -100,22 +81,36 @@ const dropDownMenuItems = computed(() => {
                 label: $t('action.delete'),
                 icon: 'i-lucide-trash',
                 color: 'error',
-                onSelect() {
-                    openDelete.value = true;
-                },
+                disabled: deleteModal.isDisabled || deleteModal.isLoading,
+                onSelect: () => openDelete.value = true,
             });
         }
     }
 
     return items;
 });
+
+async function handleCopyId() {
+    if (!pageId) {
+        return;
+    }
+
+    await copy(pageId.toString());
+
+    toast.add({
+        id: pageId,
+        title: $t('toast.copy', { name: $t('action.copy_id.success') }),
+        color: 'success',
+        icon: 'i-lucide-circle-check',
+    });
+}
 </script>
 
 <template>
     <BaseActions :dropDownMenuItems>
         <template v-if="canEdit">
             <AppModal
-                v-if="!!slots.delete && deleteModal"
+                v-if="deleteModal"
                 v-model:open="openDelete"
                 :title="deleteModal.title"
                 :description="deleteModal.description"
@@ -124,14 +119,12 @@ const dropDownMenuItems = computed(() => {
                     label: $t('form.button.delete'),
                     loading: deleteModal.isLoading,
                 }"
-                :showModalBody="false"
+                :preventClose="deleteModal.isLoading"
                 @submit="emit('delete')"
-                @close="emit('deleteClose')"
-            >
-                <slot name="delete" />
-            </AppModal>
+            />
+            <slot name="delete" />
             <AppSlideover
-                v-if="!!slots.edit && editModal"
+                v-if="editModal"
                 v-model:open="openEdit"
                 :title="editModal.title"
                 :description="editModal.description"
@@ -139,8 +132,8 @@ const dropDownMenuItems = computed(() => {
                     label: $t('form.button.edit'),
                     loading: editModal.isLoading,
                 }"
+                :preventClose="editModal.isLoading"
                 @submit="emit('edit')"
-                @close="emit('editClose')"
                 @interactOutside="emit('interactOutside', $event)"
             >
                 <slot name="edit" />

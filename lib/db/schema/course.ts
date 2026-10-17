@@ -5,7 +5,7 @@ import { index, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod';
 
-import type { findCourses, insertCourse, updateCourse } from '../queries/courses';
+import type { findCourses } from '../queries/courses';
 
 import { $t } from '../../../shared/utils/i18n';
 import { activity } from './activity';
@@ -42,7 +42,5 @@ export const InsertCourse = createInsertSchema(course, {
 });
 
 export type InsertCourse = z.infer<typeof InsertCourse>;
-export type InsertedCourse = Awaited<ReturnType<typeof insertCourse>>;
-export type SelectCourses = Awaited<ReturnType<typeof findCourses>>[number];
-export type SelectCoursesSerialized = SerializeObject<SelectCourses>;
-export type UpdatedCourse = Awaited<ReturnType<typeof updateCourse>>;
+export type SelectCourse = SerializeObject<typeof course.$inferSelect>;
+export type SelectCourseWithRelations = SerializeObject<Awaited<ReturnType<typeof findCourses>>[number]>;

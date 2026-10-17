@@ -1,42 +1,68 @@
 <script setup lang="ts">
-import DetailsActions from '~/components/Details/Actions.vue';
+import type { FetchError } from 'ofetch';
+
+import Actions from '~/components/Details/Actions.vue';
 
 const { parentId } = defineProps<{
     parentId: number;
 }>();
 
 const emit = defineEmits<{
-    deleteComplete: [];
-    deleteClose: [];
-    editComplete: [id?: number];
-    editClose: [id?: number];
+    deleteSuccess: [];
+    editSuccess: [id?: number];
 }>();
 
 const route = useRoute();
-
+const toast = useToast();
+const { $csrfFetch } = useNuxtApp();
+const parentsStore = useParentsStore();
 const parentEditFormRef = useTemplateRef('parentEditFormRef');
-const parentDeleteFormRef = useTemplateRef('parentDeleteFormRef');
 
 const openDelete = ref(false);
 const openEdit = ref(false);
+const isDeleting = ref(false);
 const updatedParentId = ref<number>();
 
-function handleDeleteSuccess() {
-    openDelete.value = false;
+async function handleDelete() {
+    try {
+        isDeleting.value = true;
 
-    emit('deleteComplete');
+        await $csrfFetch(`/api/parents/${parentId}`, {
+            method: 'DELETE',
+        });
+
+        toast.add({
+            description: $t('form.athlete.delete.success'),
+            color: 'success',
+            icon: 'i-lucide-circle-check',
+        });
+
+        parentsStore.refreshParents();
+
+        openDelete.value = false;
+
+        emit('deleteSuccess');
+    } catch (error) {
+        toast.add({
+            description: getFetchErrorMessage(error as FetchError),
+            color: 'error',
+            icon: 'i-lucide-circle-x',
+        });
+    } finally {
+        isDeleting.value = false;
+    }
 }
 
 function handleEditSuccess(id?: number) {
     openEdit.value = false;
     updatedParentId.value = id;
 
-    emit('editComplete', id);
+    emit('editSuccess', id);
 }
 </script>
 
 <template>
-    <DetailsActions
+    <Actions
         v-model:openDelete="openDelete"
         v-model:openEdit="openEdit"
         :pageId="parentId"
@@ -44,23 +70,18 @@ function handleEditSuccess(id?: number) {
         :editModal="{
             title: $t('form.parent.edit.title'),
             description: $t('form.parent.edit.description'),
-            isLoading: Boolean(parentEditFormRef?.isLoading()),
+            isLoading: parentEditFormRef?.isLoading(),
         }"
         :deleteModal="{
             title: $t('form.parent.delete.title'),
             description: $t('form.parent.delete.description'),
-            isLoading: Boolean(parentDeleteFormRef?.isLoading()),
+            isLoading: isDeleting,
         }"
-        @delete="parentDeleteFormRef?.submit"
-        @deleteClose="emit('deleteClose')"
+        @delete="handleDelete"
         @edit="parentEditFormRef?.submit"
-        @editClose="emit('editClose', updatedParentId)"
     >
-        <template #delete>
-            <ParentDeleteForm ref="parentDeleteFormRef" :parentId @success="handleDeleteSuccess" />
-        </template>
         <template #edit>
             <ParentEditForm ref="parentEditFormRef" :parentId @success="handleEditSuccess" />
         </template>
-    </DetailsActions>
+    </Actions>
 </template>

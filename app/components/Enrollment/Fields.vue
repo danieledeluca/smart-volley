@@ -5,9 +5,7 @@ const { formAction } = defineProps<{
     formAction: FormAction;
 }>();
 
-const state = defineModel<Partial<InsertEnrollment>>('state', {
-    required: true,
-});
+const state = defineModel<Partial<InsertEnrollment>>('state', { required: true });
 
 const { formFields } = useForm('enrollment', formAction);
 
@@ -15,23 +13,14 @@ const athleteFormRef = useTemplateRef('athleteFormRef');
 const seasonFormRef = useTemplateRef('seasonFormRef');
 const courseFormRef = useTemplateRef('courseFormRef');
 
-const openModal = reactive<Partial<Record<keyof InsertEnrollment, boolean>>>({
+const open = reactive<Partial<Record<keyof InsertEnrollment, boolean>>>({
     athleteId: false,
     seasonId: false,
     courseId: false,
 });
 
-function handleInteractOutside(event: Event) {
-    const target = event.target as HTMLElement;
-
-    // Inside Google Place Autocomplete
-    if (target.closest('.pac-container')) {
-        event.preventDefault();
-    }
-}
-
 function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnrollment[K]) {
-    openModal[key] = false;
+    open[key] = false;
     state.value[key] = id;
 }
 </script>
@@ -51,7 +40,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
         >
             <template #athleteId-post>
                 <AppModal
-                    v-model:open="openModal.athleteId"
+                    v-model:open="open.athleteId"
                     :title="$t('form.athlete.add.title')"
                     :description="$t('form.athlete.add.description')"
                     :buttonProps="{
@@ -64,15 +53,16 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         label: $t('form.button.add'),
                         loading: athleteFormRef?.[0]?.isLoading(),
                     }"
+                    :preventClose="athleteFormRef?.[0]?.isLoading()"
                     @submit="athleteFormRef?.[0]?.submit()"
-                    @interactOutside="handleInteractOutside"
+                    @interactOutside="preventClose"
                 >
                     <AthleteAddForm ref="athleteFormRef" @success="handleSuccess('athleteId', $event)" />
                 </AppModal>
             </template>
             <template #seasonId-post>
                 <AppModal
-                    v-model:open="openModal.seasonId"
+                    v-model:open="open.seasonId"
                     :title="$t('form.season.add.title')"
                     :description="$t('form.season.add.description')"
                     :buttonProps="{
@@ -85,6 +75,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         label: $t('form.button.add'),
                         loading: seasonFormRef?.[0]?.isLoading(),
                     }"
+                    :preventClose="seasonFormRef?.[0]?.isLoading()"
                     @submit="seasonFormRef?.[0]?.submit()"
                 >
                     <SeasonAddForm ref="seasonFormRef" @success="handleSuccess('seasonId', $event)" />
@@ -92,7 +83,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
             </template>
             <template #courseId-post>
                 <AppModal
-                    v-model:open="openModal.courseId"
+                    v-model:open="open.courseId"
                     :title="$t('form.course.add.title')"
                     :description="$t('form.course.add.description')"
                     :buttonProps="{
@@ -105,6 +96,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         label: $t('form.button.add'),
                         loading: courseFormRef?.[0]?.isLoading(),
                     }"
+                    :preventClose="seasonFormRef?.[0]?.isLoading()"
                     @submit="courseFormRef?.[0]?.submit()"
                 >
                     <CourseAddForm ref="courseFormRef" @success="handleSuccess('courseId', $event)" />

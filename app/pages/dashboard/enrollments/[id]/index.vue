@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SelectEnrollmentSerialized } from '~~/lib/db/schema';
+import type { SelectEnrollmentWithRelations } from '~~/lib/db/schema';
 
 const route = useRoute();
 const {
@@ -7,7 +7,7 @@ const {
     pending,
     error,
     refresh,
-} = useLazyFetch<SelectEnrollmentSerialized>(`/api/enrollments/${route.params.id}`);
+} = useLazyFetch<SelectEnrollmentWithRelations>(`/api/enrollments/${route.params.id}`);
 
 const title = computed(() => enrollment.value?.athlete.name || $t('page.enrollment.title'));
 
@@ -26,12 +26,7 @@ const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name'
             />
         </template>
         <EnrollmentDetailsLoader v-if="pending && !enrollment" />
-        <UAlert
-            v-else-if="error"
-            :title="getApiError(error)"
-            color="error"
-            icon="i-lucide-circle-x"
-        />
+        <AppError v-else-if="error" :error />
         <template v-else-if="enrollment">
             <PageUser
                 :name="enrollment.athlete.name"
@@ -43,8 +38,8 @@ const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name'
             >
                 <EnrollmentDetailsActions
                     :enrollmentId="enrollment.id"
-                    @deleteComplete="navigateTo('/dashboard/enrollments')"
-                    @editClose="$event ? refresh() : undefined"
+                    @deleteSuccess="navigateTo('/dashboard/enrollments')"
+                    @editSuccess="$event ? refresh() : undefined"
                 />
             </PageUser>
             <div class="details-grid">
