@@ -96,7 +96,7 @@ function handleSuccess<K extends keyof InsertEnrollment>(key: K, id?: InsertEnro
                         label: $t('form.button.add'),
                         loading: courseFormRef?.[0]?.isLoading(),
                     }"
-                    :preventClose="seasonFormRef?.[0]?.isLoading()"
+                    :preventClose="courseFormRef?.[0]?.isLoading()"
                     @submit="courseFormRef?.[0]?.submit()"
                 >
                     <CourseAddForm ref="courseFormRef" @success="handleSuccess('courseId', $event)" />
