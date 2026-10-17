@@ -185,7 +185,7 @@ export const translations = {
         },
         field: {
             activity_icon: {
-                error: 'L\'icona non è esiste nella libreria Lucide',
+                error: 'L\'icona non esiste nella libreria Lucide',
                 help: 'Scegli un\'icona dalla libreria Lucide. A destra vedi l\'anteprima.',
                 label: 'Icona',
                 placeholder: 'volleyball',
