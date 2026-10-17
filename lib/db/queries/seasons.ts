@@ -7,7 +7,7 @@ import { season } from '../schema';
 
 export async function findSeasons() {
     return await db.query.season.findMany({
-        orderBy: desc(season.id),
+        orderBy: desc(season.startYear),
     });
 }
 
