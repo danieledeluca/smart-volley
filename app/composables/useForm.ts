@@ -543,7 +543,7 @@ export function useForm<K extends keyof FormTypes>(formType: K, formAction?: For
                 formFieldProps: {
                     label: $t('form.field.activity_icon.label'),
                     name: 'icon',
-                    require: true,
+                    required: true,
                 },
                 inputProps: {
                     placeholder: $t('form.field.activity_icon.placeholder'),
