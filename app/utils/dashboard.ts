@@ -67,7 +67,7 @@ function getCurrentSeasonExpiringCertificateCard(stats: SelectDashboardStats): D
         iconColor: 'error',
         title: $t('card.dashboard.expiring_certificates'),
         description: stats.expiringCertificates.toString(),
-        badgeLabel: formatDate(thirtyDaysFromNow.toString(), {
+        badgeLabel: formatDate(thirtyDaysFromNow.toISOString(), {
             dateStyle: 'medium',
         }),
     };
