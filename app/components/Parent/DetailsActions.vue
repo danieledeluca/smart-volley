@@ -32,7 +32,7 @@ async function handleDelete() {
         });
 
         toast.add({
-            description: $t('form.athlete.delete.success'),
+            description: $t('form.parent.delete.success'),
             color: 'success',
             icon: 'i-lucide-circle-check',
         });
