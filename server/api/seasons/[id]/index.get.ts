@@ -12,7 +12,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     if (!season) {
         throw createError({
             statusCode: 404,
-            statusMessage: $t('page.season.error'),
+            message: $t('page.season.error'),
         });
     }
 

@@ -63,7 +63,7 @@ export async function uploadEnrollmentCertificate(data: InsertEnrollment) {
     } catch {
         throw createError({
             statusCode: 422,
-            statusMessage: $t('form.field.certificate_storage_key.error.upload'),
+            message: $t('form.field.certificate_storage_key.error.upload'),
         });
     }
 }

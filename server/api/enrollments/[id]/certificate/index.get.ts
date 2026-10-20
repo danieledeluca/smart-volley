@@ -13,7 +13,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     if (!certificateStorageKey) {
         throw createError({
             statusCode: 404,
-            statusMessage: $t('form.field.certificate_storage_key.error.not_found'),
+            message: $t('form.field.certificate_storage_key.error.not_found'),
         });
     }
 

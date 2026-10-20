@@ -12,7 +12,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     if (!enrollment) {
         throw createError({
             statusCode: 404,
-            statusMessage: $t('page.enrollment.error'),
+            message: $t('page.enrollment.error'),
         });
     }
 

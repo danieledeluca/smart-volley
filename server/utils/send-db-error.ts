@@ -45,17 +45,17 @@ export default function sendDbError(error: DrizzleError) {
             },
         };
 
-        const statusMessages: Record<string, string> = {
+        const messages: Record<string, string> = {
             enrollment_athleteId_seasonId_courseId_unique: $t('form.field.enrollment.duplicate'),
             season_startYear_endYear_unique: $t('form.field.season.duplicate'),
         };
 
         const formError = constrainMessages[cause.constraint || ''];
-        const statusMessage = statusMessages[cause.constraint || ''];
+        const message = messages[cause.constraint || ''];
 
         throw createError({
             statusCode: 409,
-            statusMessage: statusMessage || $t('error.conflict'),
+            message: message || $t('error.conflict'),
             data: formError ? [formError] : undefined,
         });
     }
@@ -88,7 +88,7 @@ export default function sendDbError(error: DrizzleError) {
 
         throw createError({
             statusCode: 422,
-            statusMessage: $t('error.unprocessable_content'),
+            message: $t('error.unprocessable_content'),
             data: formError ? [formError] : undefined,
         });
     }
