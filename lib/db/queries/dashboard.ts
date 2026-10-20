@@ -3,7 +3,7 @@ import type { SerializeObject } from 'nitropack';
 import { eq, sql } from 'drizzle-orm';
 
 import db from '..';
-import { activity, athlete, course, enrollment, season } from '../schema';
+import { activity, course, enrollment, season } from '../schema';
 
 export async function findDashboardStats(seasonStartYear: number) {
     const payments = sql`(
@@ -30,7 +30,6 @@ export async function findDashboardStats(seasonStartYear: number) {
         expiringCertificates: sql<number>`(count(*) FILTER (WHERE ${expiring}))::int`,
     })
         .from(enrollment)
-        .innerJoin(athlete, eq(enrollment.athleteId, athlete.id))
         .innerJoin(season, eq(enrollment.seasonId, season.id))
         .innerJoin(course, eq(enrollment.courseId, course.id))
         .innerJoin(activity, eq(course.activityId, activity.id))
