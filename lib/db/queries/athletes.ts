@@ -4,8 +4,33 @@ import type { MultipleDelete } from '../../../shared/utils/zod-schemas';
 import type { InsertAthlete } from '../schema';
 
 import db from '..';
-import { mapAddressToColumns, mapBirthplaceToColumns } from '../../utils/queries';
 import { athlete } from '../schema';
+import { deleteEnrollmentCertificates, findAthletesCertificateStorageKeys } from './certificates';
+
+function mapBirthplaceToColumns(birthplace: InsertAthlete['birthplace']) {
+    return {
+        birthplacePostalCode: birthplace.postalCode || null,
+        birthplaceCity: birthplace.city || null,
+        birthplaceProvince: birthplace.province || null,
+        birthplaceRegion: birthplace.region || null,
+        birthplaceCountry: birthplace.country,
+        birthplaceFormattedAddress: birthplace.formattedAddress,
+        birthplacePlaceId: birthplace.placeId,
+    };
+}
+
+function mapAddressToColumns(address: InsertAthlete['address']) {
+    return {
+        addressStreet: address.street,
+        addressPostalCode: address.postalCode,
+        addressCity: address.city,
+        addressProvince: address.province,
+        addressRegion: address.region,
+        addressCountry: address.country,
+        addressFormattedAddress: address.formattedAddress,
+        addressPlaceId: address.placeId,
+    };
+}
 
 export async function findAthletes() {
     return await db.query.athlete.findMany({
@@ -87,17 +112,25 @@ export async function deleteAthletes(data: MultipleDelete) {
         return [];
     }
 
+    const keys = await findAthletesCertificateStorageKeys(data.ids);
+
     const deleted = await db.delete(athlete)
         .where(inArray(athlete.id, data.ids))
         .returning();
+
+    await deleteEnrollmentCertificates(keys);
 
     return deleted;
 }
 
 export async function deleteAthlete(athleteId: number) {
+    const keys = await findAthletesCertificateStorageKeys([athleteId]);
+
     const [deleted] = await db.delete(athlete)
         .where(eq(athlete.id, athleteId))
         .returning();
+
+    await deleteEnrollmentCertificates(keys);
 
     return deleted;
 }

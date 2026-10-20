@@ -1,4 +1,4 @@
-import { findEnrollmentCertificateStorageKey } from '~~/lib/db/queries/enrollments';
+import { findEnrollmentCertificateStorageKey } from '~~/lib/db/queries/certificates';
 import { getSignedFileUrl } from '~~/lib/storage';
 
 export default defineAuthenticatedEventHandler(async (event) => {

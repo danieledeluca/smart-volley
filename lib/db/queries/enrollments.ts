@@ -1,19 +1,19 @@
 import type { SQL } from 'drizzle-orm';
 
-import { and, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNull, lte, or, sql } from 'drizzle-orm';
 
-import type {
-    CertificateStatus,
-    EnrollmentsFilters,
-    MultipleDelete,
-} from '../../../shared/utils/zod-schemas';
+import type { CertificateStatus, EnrollmentsFilters, MultipleDelete } from '../../../shared/utils/zod-schemas';
 import type { InsertEnrollment } from '../schema';
 
 import db from '..';
 import { deleteFile } from '../../storage';
-import { getCertificateStorageKey } from '../../utils/queries';
-import { course, enrollment, season } from '../schema';
-import { findSeason } from './seasons';
+import { course, enrollment } from '../schema';
+import {
+    deleteEnrollmentCertificates,
+    findEnrollmentCertificateStorageKey,
+    findEnrollmentLatestCertificate,
+    uploadEnrollmentCertificate,
+} from './certificates';
 
 function buildEnrollmentFilters(filters?: EnrollmentsFilters) {
     const conditions: SQL[] = [];
@@ -54,45 +54,6 @@ function buildEnrollmentFilters(filters?: EnrollmentsFilters) {
     }
 
     return and(...conditions);
-}
-
-async function findLatestCertificate(athleteId: number, seasonId: number) {
-    const currentSeason = await findSeason(seasonId);
-
-    if (!currentSeason) {
-        return undefined;
-    }
-
-    const [row] = await db
-        .select({
-            certificateExpirationDate: enrollment.certificateExpirationDate,
-            certificateStorageKey: enrollment.certificateStorageKey,
-        })
-        .from(enrollment)
-        .innerJoin(season, eq(season.id, enrollment.seasonId))
-        .where(and(
-            eq(enrollment.athleteId, athleteId),
-            lt(season.startYear, currentSeason.startYear),
-            isNotNull(enrollment.certificateExpirationDate),
-        ))
-        .orderBy(desc(season.startYear))
-        .limit(1);
-
-    return row;
-}
-
-async function deleteCertificate(storageKey: string, excludeEnrollmentId?: number) {
-    const [reference] = await db.select({ id: enrollment.id })
-        .from(enrollment)
-        .where(and(
-            eq(enrollment.certificateStorageKey, storageKey),
-            excludeEnrollmentId ? ne(enrollment.id, excludeEnrollmentId) : undefined,
-        ))
-        .limit(1);
-
-    if (!reference) {
-        await deleteFile(storageKey);
-    }
 }
 
 export async function findEnrollments(filters?: EnrollmentsFilters) {
@@ -209,35 +170,25 @@ export async function findEnrollment(enrollmentId: number) {
     };
 }
 
-export async function findEnrollmentCertificateStorageKey(enrollmentId: number) {
-    const result = await db.query.enrollment.findFirst({
-        where: eq(enrollment.id, enrollmentId),
-        columns: {
-            certificateStorageKey: true,
-        },
-    });
-
-    return result?.certificateStorageKey;
-}
-
 export async function insertEnrollment(data: InsertEnrollment) {
     const missingCertificate = !data.certificateExpirationDate && !data.certificateStorageKey;
-    const inherited = missingCertificate
-        ? await findLatestCertificate(data.athleteId, data.seasonId)
+
+    const latestCertificate = missingCertificate
+        ? await findEnrollmentLatestCertificate(data.athleteId, data.seasonId)
         : undefined;
 
-    if (inherited) {
+    if (latestCertificate) {
         const [created] = await db.insert(enrollment)
             .values({
                 ...data,
-                ...inherited,
+                ...latestCertificate,
             })
             .returning();
 
         return created;
     }
 
-    const certificateStorageKey = await getCertificateStorageKey(data);
+    const certificateStorageKey = await uploadEnrollmentCertificate(data);
     const { certificateStorageKey: _, ...rest } = data;
 
     try {
@@ -260,7 +211,7 @@ export async function insertEnrollment(data: InsertEnrollment) {
 
 export async function updateEnrollment(enrollmentId: number, data: InsertEnrollment) {
     const previousKey = await findEnrollmentCertificateStorageKey(enrollmentId);
-    const certificateStorageKey = await getCertificateStorageKey(data);
+    const certificateStorageKey = await uploadEnrollmentCertificate(data);
     const {
         firstPayment = null,
         firstPaymentDate = null,
@@ -304,8 +255,12 @@ export async function updateEnrollment(enrollmentId: number, data: InsertEnrollm
         throw error;
     }
 
-    if (updated && previousKey && certificateStorageKey !== undefined && certificateStorageKey !== previousKey) {
-        await deleteCertificate(previousKey, enrollmentId);
+    if (updated && certificateStorageKey !== undefined && certificateStorageKey !== previousKey) {
+        await deleteEnrollmentCertificates([previousKey || null]);
+    }
+
+    if (!updated && certificateStorageKey) {
+        await deleteFile(certificateStorageKey);
     }
 
     return updated;
@@ -320,6 +275,8 @@ export async function deleteEnrollments(data: MultipleDelete) {
         .where(inArray(enrollment.id, data.ids))
         .returning();
 
+    await deleteEnrollmentCertificates(deleted.map((row) => row.certificateStorageKey));
+
     return deleted;
 }
 
@@ -327,6 +284,8 @@ export async function deleteEnrollment(enrollmentId: number) {
     const [deleted] = await db.delete(enrollment)
         .where(eq(enrollment.id, enrollmentId))
         .returning();
+
+    await deleteEnrollmentCertificates([deleted?.certificateStorageKey || null]);
 
     return deleted;
 }
