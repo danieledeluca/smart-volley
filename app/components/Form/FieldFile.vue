@@ -10,10 +10,6 @@ const model = defineModel<File>();
 
 const { emitFormBlur } = useFormField();
 
-const showButton = computed(() => {
-    return JSON.stringify(fileUploadProps?.interactive) ? !fileUploadProps?.interactive : false;
-});
-
 watch(model, () => emitFormBlur());
 </script>
 
@@ -24,7 +20,7 @@ watch(model, () => emitFormBlur());
         :label="fileUploadProps?.label || $t('form.field.file_upload.label')"
         :icon="fileUploadProps?.icon || 'i-lucide-image'"
     >
-        <template v-if="showButton" #actions="{ open }">
+        <template v-if="fileUploadProps?.interactive === false" #actions="{ open }">
             <UButton
                 v-bind="buttonProps"
                 :label="buttonProps?.label || $t('form.field.file_upload.button.label')"
