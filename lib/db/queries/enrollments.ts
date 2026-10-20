@@ -2,7 +2,7 @@ import type { SQL } from 'drizzle-orm';
 
 import { and, desc, eq, gt, inArray, isNull, lte, or, sql } from 'drizzle-orm';
 
-import type { CertificateStatus, EnrollmentsFilters, MultipleDelete } from '../../../shared/utils/zod-schemas';
+import type { CertificateStatus, EnrollmentsFilters } from '../../../shared/utils/zod-schemas';
 import type { InsertEnrollment } from '../schema';
 
 import db from '..';
@@ -266,13 +266,13 @@ export async function updateEnrollment(enrollmentId: number, data: InsertEnrollm
     return updated;
 }
 
-export async function deleteEnrollments(data: MultipleDelete) {
-    if (!data.ids.length) {
+export async function deleteEnrollments(enrollmentIds: number[]) {
+    if (!enrollmentIds.length) {
         return [];
     }
 
     const deleted = await db.delete(enrollment)
-        .where(inArray(enrollment.id, data.ids))
+        .where(inArray(enrollment.id, enrollmentIds))
         .returning();
 
     await deleteEnrollmentCertificates(deleted.map((row) => row.certificateStorageKey));

@@ -2,7 +2,9 @@ import { findEnrollmentsForExport } from '~~/lib/db/queries/enrollments';
 import z from 'zod';
 
 const QuerySchema = z.object({
-    ids: z.string().transform((value) => [...new Set(value.split(',').map(Number))]),
+    ids: z.string()
+        .transform((value) => [...new Set(value.split(',').map(Number))])
+        .pipe(z.array(z.number().int().positive())),
 });
 
 export default defineAuthenticatedEventHandler(async (event) => {

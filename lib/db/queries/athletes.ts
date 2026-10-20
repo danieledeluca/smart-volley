@@ -1,6 +1,5 @@
 import { desc, eq, inArray } from 'drizzle-orm';
 
-import type { MultipleDelete } from '../../../shared/utils/zod-schemas';
 import type { InsertAthlete } from '../schema';
 
 import db from '..';
@@ -107,15 +106,15 @@ export async function updateAthlete(athleteId: number, data: InsertAthlete) {
     return updated;
 }
 
-export async function deleteAthletes(data: MultipleDelete) {
-    if (!data.ids.length) {
+export async function deleteAthletes(athleteIds: number[]) {
+    if (!athleteIds.length) {
         return [];
     }
 
-    const keys = await findAthletesCertificateStorageKeys(data.ids);
+    const keys = await findAthletesCertificateStorageKeys(athleteIds);
 
     const deleted = await db.delete(athlete)
-        .where(inArray(athlete.id, data.ids))
+        .where(inArray(athlete.id, athleteIds))
         .returning();
 
     await deleteEnrollmentCertificates(keys);

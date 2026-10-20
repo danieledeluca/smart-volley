@@ -10,7 +10,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        await deleteAthletes(result.data);
+        await deleteAthletes(result.data.ids);
 
         setResponseStatus(event, 204);
     } catch (error) {

@@ -10,7 +10,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        await deleteEnrollments(result.data);
+        await deleteEnrollments(result.data.ids);
 
         setResponseStatus(event, 204);
     } catch (error) {

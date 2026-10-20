@@ -10,7 +10,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     try {
-        await deleteParents(result.data);
+        await deleteParents(result.data.ids);
 
         setResponseStatus(event, 204);
     } catch (error) {

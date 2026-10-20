@@ -14,12 +14,7 @@ export const EnrollmentsFiltersSchema = z.object({
     ),
 });
 
-export const MultipleDeleteSchema = z.object({
-    ids: z.array(z.coerce.number()),
-});
-
 // Schema types
 export type CertificateStatus = z.infer<typeof CertificateStatusSchema>;
 
 export type EnrollmentsFilters = z.infer<typeof EnrollmentsFiltersSchema>;
-export type MultipleDelete = z.infer<typeof MultipleDeleteSchema>;

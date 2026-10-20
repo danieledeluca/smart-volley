@@ -1,6 +1,5 @@
 import { desc, eq, inArray } from 'drizzle-orm';
 
-import type { MultipleDelete } from '../../../shared/utils/zod-schemas';
 import type { InsertParent } from '../schema';
 
 import db from '..';
@@ -44,13 +43,13 @@ export async function updateParent(parentId: number, data: InsertParent) {
     return updated;
 }
 
-export async function deleteParents(data: MultipleDelete) {
-    if (!data.ids.length) {
+export async function deleteParents(parentIds: number[]) {
+    if (!parentIds.length) {
         return [];
     }
 
     const deleted = await db.delete(parent)
-        .where(inArray(parent.id, data.ids))
+        .where(inArray(parent.id, parentIds))
         .returning();
 
     return deleted;
