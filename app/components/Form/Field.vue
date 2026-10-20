@@ -31,7 +31,7 @@ function showField(field: FormField<T>) {
 
 <template>
     <div>
-        <div class="flex items-end gap-2">
+        <div class="flex items-start gap-2">
             <UFormField v-bind="field.formFieldProps" class="min-w-0 flex-1">
                 <UInput
                     v-if="field.renderAs === 'input'"
@@ -50,29 +50,29 @@ function showField(field: FormField<T>) {
                     </template>
                 </UInput>
                 <FormFieldNumber
-                    v-if="field.renderAs === 'input-number'"
+                    v-else-if="field.renderAs === 'input-number'"
                     v-model="model"
                     :inputProps="field.inputProps"
                 />
                 <FormFieldDate
-                    v-if="field.renderAs === 'input-date'"
+                    v-else-if="field.renderAs === 'input-date'"
                     v-model="model"
                     :inputProps="field.inputProps"
                     :calendarProps="field.calendarProps"
                 />
                 <FormFieldFile
-                    v-if="field.renderAs === 'input-file'"
+                    v-else-if="field.renderAs === 'input-file'"
                     v-model="model"
                     :fileUploadProps="field.fileUploadProps"
                     :buttonProps="field.buttonProps"
                 />
                 <FormFieldAddress
-                    v-if="field.renderAs === 'input-address'"
+                    v-else-if="field.renderAs === 'input-address'"
                     v-model="model"
                     :inputProps="field.inputProps"
                     :autocompleteOptions="field.autocompleteOptions"
                 />
-                <template v-if="field.renderAs === 'checkbox-group'">
+                <template v-else-if="field.renderAs === 'checkbox-group'">
                     <UCheckboxGroup
                         v-if="showField(field)"
                         v-model="model"
@@ -86,7 +86,7 @@ function showField(field: FormField<T>) {
                         icon="i-lucide-triangle-alert"
                     />
                 </template>
-                <template v-if="field.renderAs === 'radio-group'">
+                <template v-else-if="field.renderAs === 'radio-group'">
                     <URadioGroup
                         v-if="showField(field)"
                         v-model="model"
@@ -100,7 +100,7 @@ function showField(field: FormField<T>) {
                         icon="i-lucide-triangle-alert"
                     />
                 </template>
-                <template v-if="field.renderAs === 'select'">
+                <template v-else-if="field.renderAs === 'select'">
                     <USelect
                         v-if="showField(field)"
                         v-model="model"
@@ -116,7 +116,7 @@ function showField(field: FormField<T>) {
                     />
                 </template>
                 <USelectMenu
-                    v-if="field.renderAs === 'select-menu'"
+                    v-else-if="field.renderAs === 'select-menu'"
                     v-model="model"
                     v-bind="field.selectProps"
                     class="w-full"
