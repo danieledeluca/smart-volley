@@ -3,7 +3,14 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
     const { seasons, seasonsItems, seasonsPending } = storeToRefs(seasonsStore);
 
-    const seasonId = ref<number>();
+    const selectedSeasonId = ref<number>();
+
+    const seasonId = computed({
+        get: () => selectedSeasonId.value || seasons.value?.[0]?.id,
+        set: (value) => {
+            selectedSeasonId.value = value;
+        },
+    });
 
     const {
         data: stats,
@@ -12,14 +19,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
         refresh: refreshStats,
     } = useLazyFetch('/api/dashboard', {
         query: {
-            seasonId,
+            seasonId: selectedSeasonId,
         },
-    });
-
-    watchEffect(() => {
-        seasonId.value = seasons.value?.[0]?.id;
-    }, {
-        flush: 'post',
     });
 
     return {

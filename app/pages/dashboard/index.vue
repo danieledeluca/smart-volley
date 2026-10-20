@@ -25,14 +25,9 @@ const formField = computed<FormField<{ seasonId?: number }>>(() => {
             placeholder: $t('form.field.season_id.placeholder'),
             icon: 'i-lucide-calendar',
             items: seasonsItems.value,
-            loading: seasonsPending.value || !seasonId.value,
-            disabled: !seasonId.value,
+            loading: seasonsPending.value,
         },
     };
-});
-
-const isLoading = computed(() => {
-    return statsPending.value || (seasonsItems.value && seasonsItems.value.length > 0 && !seasonId.value);
 });
 </script>
 
@@ -41,7 +36,7 @@ const isLoading = computed(() => {
         <template #right>
             <FormField v-model="seasonId" :field="formField" :showDeleteButton="false" />
         </template>
-        <template v-if="isLoading">
+        <template v-if="statsPending">
             <div class="flex gap-4">
                 <USkeleton class="size-8" />
                 <USkeleton class="h-8 w-full max-w-24" />
