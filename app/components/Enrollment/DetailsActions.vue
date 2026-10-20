@@ -16,6 +16,7 @@ const route = useRoute();
 const toast = useToast();
 const { $csrfFetch } = useNuxtApp();
 const enrollmentsStore = useEnrollmentsStore();
+const dashboardStore = useDashboardStore();
 const enrollmentEditFormRef = useTemplateRef('enrollmentEditFormRef');
 
 const openDelete = ref(false);
@@ -39,6 +40,7 @@ async function handleDelete() {
         });
 
         enrollmentsStore.refreshEnrollments();
+        dashboardStore.refreshStats();
 
         openDelete.value = false;
 

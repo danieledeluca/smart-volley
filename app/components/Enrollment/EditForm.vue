@@ -17,6 +17,7 @@ const { data: enrollment, pending, error } = useLazyFetch(`/api/enrollments/${en
 
 const { $csrfFetch } = useNuxtApp();
 const enrollmentsStore = useEnrollmentsStore();
+const dashboardStore = useDashboardStore();
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 const { initialState } = useForm('enrollment');
 
@@ -34,6 +35,7 @@ async function onSubmit(event: FormSubmitEvent<InsertEnrollment>) {
 
 function onSubmitSuccess() {
     enrollmentsStore.refreshEnrollments();
+    dashboardStore.refreshStats();
 
     emit('success', updatedEnrollment.value?.id);
 }

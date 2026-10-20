@@ -17,6 +17,7 @@ const toast = useToast();
 const { $csrfFetch } = useNuxtApp();
 const athletesStore = useAthletesStore();
 const enrollmentsStore = useEnrollmentsStore();
+const dashboardStore = useDashboardStore();
 const athleteEditFormRef = useTemplateRef('athleteEditFormRef');
 
 const openDelete = ref(false);
@@ -40,6 +41,7 @@ async function handleDelete() {
 
         athletesStore.refreshAthletes();
         enrollmentsStore.refreshEnrollments();
+        dashboardStore.refreshStats();
 
         openDelete.value = false;
 

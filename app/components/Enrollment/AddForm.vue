@@ -9,6 +9,7 @@ const emit = defineEmits<{
 
 const { $csrfFetch } = useNuxtApp();
 const enrollmentsStore = useEnrollmentsStore();
+const dashboardStore = useDashboardStore();
 const enrollmentFormRef = useTemplateRef('enrollmentFormRef');
 const { initialState } = useForm('enrollment');
 
@@ -25,6 +26,7 @@ function onSubmitSuccess() {
     state.value = { ...initialState };
 
     enrollmentsStore.refreshEnrollments();
+    dashboardStore.refreshStats();
 
     emit('success');
 }

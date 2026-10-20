@@ -10,6 +10,7 @@ const emit = defineEmits<{
 
 const { $csrfFetch } = useNuxtApp();
 const seasonsStore = useSeasonsStore();
+const dashboardStore = useDashboardStore();
 const seasonFormRef = useTemplateRef('seasonFormRef');
 const { initialState } = useForm('season');
 
@@ -29,6 +30,7 @@ function onSubmitSuccess() {
     state.value = { ...initialState };
 
     seasonsStore.refreshSeasons();
+    dashboardStore.refreshStats();
 
     emit('success', insertedSeason.value?.id);
 }
