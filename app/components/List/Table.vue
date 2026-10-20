@@ -3,6 +3,7 @@ import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { PaginationState, TableMeta } from '@tanstack/vue-table';
 
 import { getPaginationRowModel } from '@tanstack/vue-table';
+import { refDebounced } from '@vueuse/core';
 
 import type { NuxtError } from '#app';
 
@@ -35,6 +36,7 @@ const slots = defineSlots<{
 const tableRef = useTemplateRef('tableRef');
 
 const globalFilter = ref('');
+const globalFilterDebounced = refDebounced(globalFilter, 300);
 const pagination = ref<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
@@ -88,7 +90,7 @@ onMounted(() => {
         </div>
         <UTable
             ref="tableRef"
-            v-model:globalFilter="globalFilter"
+            v-model:globalFilter="globalFilterDebounced"
             v-model:pagination="pagination"
             :data="tableData"
             :columns="tableColumns"
