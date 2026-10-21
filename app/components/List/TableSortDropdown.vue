@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
-import type { Column } from '@tanstack/vue-table';
+import type { Column, SortDirection } from '@tanstack/vue-table';
 
-const { column, label } = defineProps<{
+const { column, label, defaultSort } = defineProps<{
     column: Column<any>;
     label: string;
+    defaultSort?: SortDirection;
 }>();
 
 const isSorted = computed(() => column.getIsSorted());
@@ -39,6 +40,10 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
         },
     ];
 });
+
+if (defaultSort) {
+    column.toggleSorting(defaultSort !== 'asc');
+}
 </script>
 
 <template>

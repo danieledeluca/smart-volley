@@ -1,4 +1,5 @@
 import type { TableColumn } from '@nuxt/ui';
+import type { SortDirection } from '@tanstack/vue-table';
 import type {
     SelectActivity,
     SelectAthlete,
@@ -29,10 +30,10 @@ function filterColumns<T>(columns: (keyof T)[], tableColumns: TableColumns<T>) {
 }
 
 // Common columns
-function getIdTableColumn<T extends { id: number }>(): TableColumn<T> {
+function getIdTableColumn<T extends { id: number }>(defaultSort?: SortDirection): TableColumn<T> {
     return {
         accessorKey: 'id',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.id') }),
+        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.id'), defaultSort }),
         cell: ({ row }) => `#${row.original.id}`,
     };
 }
@@ -183,7 +184,7 @@ export function getSelectTableColumn<T>(): TableColumn<T> {
 // Athletes
 export function getAthletesTableColumns(columns: (keyof SelectAthlete)[]) {
     const tableColumns: TableColumns<SelectAthlete> = {
-        id: getIdTableColumn(),
+        id: getIdTableColumn('desc'),
         name: getUserTableColumn('/dashboard/athletes/'),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
@@ -207,7 +208,7 @@ export function getAthleteEnrollmentsTableColumns(
 // Parents
 export function getParentsTableColumns(columns: (keyof SelectParent)[]) {
     const tableColumns: TableColumns<SelectParent> = {
-        id: getIdTableColumn(),
+        id: getIdTableColumn('desc'),
         name: getUserTableColumn('/dashboard/parents/'),
         phoneNumber: getPhoneNumberTableColumn(),
         email: getEmailTableColumn(),
@@ -232,7 +233,7 @@ export function getParentAthletesTableColumns(columns: (keyof SelectParentWithRe
 // Enrollments
 export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWithRelations)[]) {
     const tableColumns: TableColumns<SelectEnrollmentsWithRelations> = {
-        id: getIdTableColumn(),
+        id: getIdTableColumn('desc'),
         athlete: {
             accessorKey: 'athlete',
             accessorFn: (row) => `${row.athlete.name} ${row.athlete.fiscalCode}`,
@@ -315,7 +316,11 @@ export function getSeasonsTableColumns(columns: (keyof SelectSeason)[]) {
         id: getIdTableColumn(),
         startYear: {
             accessorKey: 'startYear',
-            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.start_year') }),
+            header: ({ column }) => h(TableSortDropdown, {
+                column,
+                label: $t('table.column.start_year'),
+                defaultSort: 'desc',
+            }),
             cell: ({ row }) => row.original.startYear,
         },
         endYear: {
@@ -331,7 +336,7 @@ export function getSeasonsTableColumns(columns: (keyof SelectSeason)[]) {
 // Activities
 export function getActivitiesTableColumns(columns: (keyof SelectActivity)[]) {
     const tableColumns: TableColumns<SelectActivity> = {
-        id: getIdTableColumn(),
+        id: getIdTableColumn('desc'),
         name: getNameTableColumn(),
         icon: {
             accessorKey: 'icon',
@@ -349,7 +354,7 @@ export function getActivitiesTableColumns(columns: (keyof SelectActivity)[]) {
 // Courses
 export function getCoursesTableColumns(columns: (keyof SelectCourseWithRelations)[]) {
     const tableColumns: TableColumns<SelectCourseWithRelations> = {
-        id: getIdTableColumn(),
+        id: getIdTableColumn('desc'),
         code: {
             accessorKey: 'code',
             header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.code') }),
