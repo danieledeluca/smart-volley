@@ -135,6 +135,13 @@ function getPriceTableColum<T>(accessorKey: keyof T, header: string): TableColum
     return {
         accessorKey,
         header,
+        footer: ({ column }) => {
+            const total = column.getFacetedRowModel().rows.reduce((acc, row) => {
+                return acc + Number.parseFloat(row.getValue(accessorKey.toString()) || '0');
+            }, 0);
+
+            return formatPrice(total.toString());
+        },
         cell: ({ row }) => {
             const value = row.original[accessorKey] as string | undefined;
             return value ? formatPrice(value) : EMPTY_VALUE;
