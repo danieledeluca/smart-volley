@@ -50,6 +50,14 @@ export const translations = {
             total_enrollments: 'Totale iscrizioni',
             total_payments: 'Totale pagamenti',
         },
+        enrollment_details: {
+            record: {
+                activity: 'Attività',
+                course: 'Corso',
+                season: 'Stagione',
+            },
+            title: 'Dettagli iscrizione',
+        },
         enrollments: {
             title: 'Iscrizioni',
         },
@@ -73,14 +81,6 @@ export const translations = {
                 name: 'Cognome e nome',
             },
             title: 'Informazioni personali',
-        },
-        sport: {
-            record: {
-                activity: 'Attività',
-                course: 'Corso',
-                season: 'Stagione',
-            },
-            title: 'Sport',
         },
     },
     error: {

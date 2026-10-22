@@ -65,17 +65,17 @@ const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name'
                     </ItemCard>
                 </div>
                 <div class="details-col details-col-aside">
-                    <ItemCard :title="$t('card.sport.title')" icon="i-lucide-zap">
+                    <ItemCard :title="$t('card.enrollment_details.title')" icon="i-lucide-list">
                         <ItemCardRecord
-                            :label="$t('card.sport.record.season')"
+                            :label="$t('card.enrollment_details.record.season')"
                             :value="`${enrollment.season.startYear} - ${enrollment.season.endYear}`"
                         />
                         <ItemCardRecord
-                            :label="$t('card.sport.record.activity')"
+                            :label="$t('card.enrollment_details.record.activity')"
                             :value="enrollment.activity.name"
                         />
                         <ItemCardRecord
-                            :label="$t('card.sport.record.course')"
+                            :label="$t('card.enrollment_details.record.course')"
                             :value="`${enrollment.course.code} - ${enrollment.course.name}`"
                         />
                     </ItemCard>
