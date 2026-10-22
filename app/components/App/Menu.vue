@@ -10,6 +10,12 @@ const authStore = useAuthStore();
 
 const { isAdmin, canEdit } = storeToRefs(authStore);
 
+const isEnrollmentRoute = computed(() => {
+    const enrollmentRoutes = ['dashboard-enrollments', 'dashboard-payment', 'dashboard-certificates'];
+
+    return enrollmentRoutes.some((enrollmentRoute) => route.name?.toString()?.startsWith(enrollmentRoute));
+});
+
 const navigationMenuItems = computed(() => {
     const items: NavigationMenuItem[][] = [
         [
@@ -17,7 +23,6 @@ const navigationMenuItems = computed(() => {
                 label: $t('menu.dashboard'),
                 to: '/dashboard',
                 icon: 'i-lucide-layout-dashboard',
-                active: route.path === '/dashboard',
             },
             {
                 label: $t('menu.athletes'),
@@ -33,22 +38,29 @@ const navigationMenuItems = computed(() => {
             },
             {
                 label: $t('menu.enrollments'),
-                to: '/dashboard/enrollments',
+                to: {
+                    path: '/dashboard/enrollments',
+                    query: isEnrollmentRoute.value ? { ...route.query } : undefined,
+                },
                 icon: 'i-lucide-list',
                 active: route.path.startsWith('/dashboard/enrollments'),
                 open: true,
                 children: [
                     {
                         label: $t('menu.payments'),
-                        to: '/dashboard/payments',
+                        to: {
+                            path: '/dashboard/payments',
+                            query: isEnrollmentRoute.value ? { ...route.query } : undefined,
+                        },
                         icon: 'i-lucide-badge-euro',
-                        active: route.path === '/dashboard/payments',
                     },
                     {
                         label: $t('menu.certificates'),
-                        to: '/dashboard/certificates',
+                        to: {
+                            path: '/dashboard/certificates',
+                            query: isEnrollmentRoute.value ? { ...route.query } : undefined,
+                        },
                         icon: 'i-lucide-briefcase-medical',
-                        active: route.path === '/dashboard/certificates',
                     },
                 ],
             },
@@ -62,19 +74,16 @@ const navigationMenuItems = computed(() => {
                     label: $t('menu.seasons'),
                     to: '/dashboard/seasons',
                     icon: 'i-lucide-calendar',
-                    active: route.path === '/dashboard/seasons',
                 },
                 {
                     label: $t('menu.activities'),
                     to: '/dashboard/activities',
                     icon: 'i-lucide-zap',
-                    active: route.path === '/dashboard/activities',
                 },
                 {
                     label: $t('menu.courses'),
                     to: '/dashboard/courses',
                     icon: 'i-lucide-dumbbell',
-                    active: route.path === '/dashboard/courses',
                 },
             ],
         );

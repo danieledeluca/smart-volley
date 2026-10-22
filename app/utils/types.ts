@@ -12,6 +12,7 @@ import type {
     SelectMenuProps,
     SelectProps,
 } from '@nuxt/ui';
+import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from 'vue-router';
 
 type InputField = {
     renderAs: 'input';
@@ -87,6 +88,7 @@ export type DashboardCard = {
     description: string;
     badgeLabel?: string;
     badgeColor?: BadgeProps['color'];
+    link?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric;
 };
 
 export type ParsedAddress = {

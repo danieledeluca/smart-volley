@@ -36,7 +36,7 @@ const formField = computed<FormField<{ seasonId?: number }>>(() => {
         <template #right>
             <FormField v-model="seasonId" :field="formField" :showDeleteButton="false" />
         </template>
-        <template v-if="statsPending">
+        <template v-if="statsPending && !stats">
             <div class="flex gap-4">
                 <USkeleton class="size-8" />
                 <USkeleton class="h-8 w-full max-w-24" />
@@ -68,7 +68,7 @@ const formField = computed<FormField<{ seasonId?: number }>>(() => {
                 </div>
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-6">
                     <DashboardCard
-                        v-for="(card, cardIndex) in getDashboardCards(activityStats)"
+                        v-for="(card, cardIndex) in getDashboardCards(activityStats, seasonId)"
                         :key="cardIndex"
                         v-bind="card"
                         :badgeLabel="card.badgeLabel || `${seasons?.at(-1)?.startYear}/${seasons?.[0]?.endYear}`"

@@ -33,9 +33,10 @@ const slots = defineSlots<{
     default?: (props?: object) => VNode[];
 }>();
 
+const { getQueryValue, setQueryValue } = useQuery();
 const tableRef = useTemplateRef('tableRef');
 
-const globalFilter = ref('');
+const globalFilter = ref();
 const globalFilterDebounced = refDebounced(globalFilter, 300);
 const pagination = ref<PaginationState>({
     pageIndex: 0,
@@ -44,7 +45,7 @@ const pagination = ref<PaginationState>({
 
 const currentPage = computed(() => {
     return {
-        start: (tableData?.length || 0) > 0 ? pagination.value.pageIndex * pagination.value.pageSize + 1 : 0,
+        start: tableData && tableData.length > 0 ? pagination.value.pageIndex * pagination.value.pageSize + 1 : 0,
         end: Math.min(
             pagination.value.pageIndex * pagination.value.pageSize + pagination.value.pageSize,
             tableData?.length || 0,

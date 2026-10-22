@@ -6,7 +6,6 @@ type Filters = {
 
 export function useFilters<K extends keyof Filters>(formType: K) {
     const route = useRoute();
-    const enrollmentsStore = useEnrollmentsStore();
     const seasonsStore = useSeasonsStore();
     const activitiesStore = useActivitiesStore();
     const coursesStore = useCoursesStore();
@@ -15,30 +14,28 @@ export function useFilters<K extends keyof Filters>(formType: K) {
     const { activitiesItems } = storeToRefs(activitiesStore);
     const { coursesItems, coursesPending } = storeToRefs(coursesStore);
 
-    // Empty states
-    const enrollmentsFiltersEmptyState: EnrollmentsFilters = {
+    // Initial states
+    const enrollmentsFiltersInitialState: EnrollmentsFilters = {
         seasonId: undefined,
         activityId: undefined,
         courseId: undefined,
         certificateStatus: undefined,
     };
 
-    const emptyStates: { [K in keyof Filters]: Filters[K] } = {
-        enrollment: enrollmentsFiltersEmptyState,
+    const initialStates: { [K in keyof Filters]: Filters[K] } = {
+        enrollment: enrollmentsFiltersInitialState,
     };
 
-    const emptyState = emptyStates[formType];
-
-    // Initial states
-    const enrollmentsResult = EnrollmentsFiltersSchema.safeParse(route.query);
-    const enrollmentsFiltersInitialState = enrollmentsResult.success
-        ? { ...enrollmentsResult.data }
-        : enrollmentsFiltersEmptyState;
+    const initialState = initialStates[formType];
 
     // States
-    const enrollmentsFiltersState = ref({ ...enrollmentsFiltersInitialState });
+    const enrollmentsFiltersState = computed<EnrollmentsFilters>(() => {
+        const result = EnrollmentsFiltersSchema.safeParse(route.query);
 
-    const filtersStates: { [K in keyof Filters]: Ref<Filters[K]> } = {
+        return result.success ? result.data : { ...initialState };
+    });
+
+    const filtersStates: { [K in keyof Filters]: ComputedRef<Filters[K]> } = {
         enrollment: enrollmentsFiltersState,
     };
 
@@ -139,22 +136,8 @@ export function useFilters<K extends keyof Filters>(formType: K) {
 
     const filterFields = filtersFields[formType];
 
-    // Clear filters
-    const clearFilters = () => {
-        filterState.value = { ...emptyState };
-
-        const refreshLists: { [K in keyof Filters]: () => void } = {
-            enrollment: enrollmentsStore.refreshEnrollments,
-        };
-
-        const refreshList = refreshLists[formType];
-
-        refreshList?.();
-    };
-
     return {
         filterState,
         filterFields,
-        clearFilters,
     };
 }

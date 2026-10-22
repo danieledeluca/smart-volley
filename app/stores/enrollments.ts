@@ -1,5 +1,5 @@
 export const useEnrollmentsStore = defineStore('enrollments', () => {
-    const { filterState, filterFields, clearFilters } = useFilters('enrollment');
+    const { filterState, filterFields } = useFilters('enrollment');
 
     const {
         data: enrollments,
@@ -8,7 +8,6 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         refresh: refreshEnrollments,
     } = useLazyFetch('/api/enrollments', {
         query: filterState,
-        watch: false,
     });
 
     return {
@@ -18,6 +17,5 @@ export const useEnrollmentsStore = defineStore('enrollments', () => {
         filterState,
         filterFields,
         refreshEnrollments,
-        clearFilters,
     };
 });

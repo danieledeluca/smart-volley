@@ -5,11 +5,11 @@ const { fields: fieldGroups } = defineProps<{
 
 const emit = defineEmits<{
     update: [];
-    cancel: [];
 }>();
 
 const state = defineModel<Partial<T>>('state', { required: true });
 
+const { setQueryValue, clearQuery } = useQuery();
 const activeFiltersRef = useTemplateRef('activeFiltersRef');
 
 const openFilters = ref(false);
@@ -24,7 +24,6 @@ function handleUpdate(key: string, value?: Partial<T>[keyof T]) {
 function handleCancel() {
     if ((activeFiltersRef.value?.activeFilters().length || 0) > 0) {
         clearQuery();
-        emit('cancel');
     }
 }
 
@@ -33,16 +32,6 @@ function handleRemove(filterName: keyof T) {
 
     handleUpdate(filterName.toString(), undefined);
 }
-
-onMounted(() => {
-    const values = Object.fromEntries(fields.value.map((field) => {
-        const value = state.value[field.formFieldProps.name];
-
-        return [field.formFieldProps.name, value ? String(value) : undefined];
-    }));
-
-    setQueryValues(values);
-});
 </script>
 
 <template>
@@ -89,7 +78,7 @@ onMounted(() => {
                     <FormField
                         v-for="(field, fieldIndex) in group.fields"
                         :key="fieldIndex"
-                        v-model="state[field.formFieldProps.name]"
+                        :modelValue="state[field.formFieldProps.name]"
                         :field
                         @update:modelValue="handleUpdate(field.formFieldProps.name, $event)"
                     />

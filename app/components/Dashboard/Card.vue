@@ -6,6 +6,7 @@ const {
     description,
     badgeLabel,
     badgeColor = 'neutral',
+    link,
 } = defineProps<DashboardCard>();
 </script>
 
@@ -19,6 +20,7 @@ const {
             title: 'text-sm text-muted uppercase',
             description: 'text-3xl font-semibold text-highlighted',
         }"
+        :to="link"
     >
         <template #leading>
             <ButtonIcon :name="icon" :color="iconColor" />

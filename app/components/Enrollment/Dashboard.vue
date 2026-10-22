@@ -25,12 +25,6 @@ const {
 const tableColumns = getEnrollmentsTableColumns(_tableColumns);
 tableColumns.unshift(getSelectTableColumn());
 tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ enrollmentId: row.id })));
-
-function handleFiltersUpdate() {
-    enrollmentsStore.refreshEnrollments();
-
-    enrollmentTableRef.value?.toggleAllPageRowsSelected(false);
-}
 </script>
 
 <template>
@@ -66,8 +60,7 @@ function handleFiltersUpdate() {
                 <ListFilters
                     v-model:state="filterState"
                     :fields="filterFields"
-                    @update="handleFiltersUpdate"
-                    @cancel="enrollmentsStore.clearFilters"
+                    @update="enrollmentTableRef?.toggleAllPageRowsSelected(false)"
                 >
                     <EnrollmentListActions
                         :selectedRows="enrollmentTableRef?.selectRows()"

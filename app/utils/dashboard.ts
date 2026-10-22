@@ -20,6 +20,12 @@ function getTotalEnrollmentsCard(stats: SelectDashboardStats): DashboardCard {
         icon: 'i-lucide-list',
         title: $t('card.dashboard.total_enrollments'),
         description: stats.totalEnrollments.toString(),
+        link: {
+            path: '/dashboard/enrollments',
+            query: {
+                activityId: stats.activityId,
+            } satisfies EnrollmentsFilters,
+        },
     };
 }
 
@@ -29,10 +35,16 @@ function getTotalPaymentsCard(stats: SelectDashboardStats): DashboardCard {
         iconColor: 'success',
         title: $t('card.dashboard.total_payments'),
         description: formatPrice(stats.totalPayments),
+        link: {
+            path: '/dashboard/payments',
+            query: {
+                activityId: stats.activityId,
+            } satisfies EnrollmentsFilters,
+        },
     };
 }
 
-function getCurrentSeasonEnrollmentsCard(stats: SelectDashboardStats): DashboardCard {
+function getCurrentSeasonEnrollmentsCard(stats: SelectDashboardStats, seasonId?: number): DashboardCard {
     const badgeLabel = getPercentageLabel(stats.currentEnrollments, stats.previousEnrollments);
     const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
 
@@ -42,10 +54,17 @@ function getCurrentSeasonEnrollmentsCard(stats: SelectDashboardStats): Dashboard
         description: stats.currentEnrollments.toString(),
         badgeLabel,
         badgeColor: badgeColorValue > 0 ? 'success' : 'error',
+        link: {
+            path: '/dashboard/enrollments',
+            query: {
+                seasonId,
+                activityId: stats.activityId,
+            } satisfies EnrollmentsFilters,
+        },
     };
 }
 
-function getCurrentSeasonPaymentsCard(stats: SelectDashboardStats): DashboardCard {
+function getCurrentSeasonPaymentsCard(stats: SelectDashboardStats, seasonId?: number): DashboardCard {
     const badgeLabel = getPercentageLabel(Number(stats.currentPayments), Number(stats.previousPayments));
     const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
 
@@ -56,10 +75,17 @@ function getCurrentSeasonPaymentsCard(stats: SelectDashboardStats): DashboardCar
         description: formatPrice(stats.currentPayments),
         badgeLabel,
         badgeColor: badgeColorValue > 0 ? 'success' : 'error',
+        link: {
+            path: '/dashboard/payments',
+            query: {
+                seasonId,
+                activityId: stats.activityId,
+            } satisfies EnrollmentsFilters,
+        },
     };
 }
 
-function getCurrentSeasonExpiringCertificateCard(stats: SelectDashboardStats): DashboardCard {
+function getCurrentSeasonExpiringCertificateCard(stats: SelectDashboardStats, seasonId?: number): DashboardCard {
     const thirtyDaysFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     return {
@@ -70,14 +96,22 @@ function getCurrentSeasonExpiringCertificateCard(stats: SelectDashboardStats): D
         badgeLabel: formatDate(thirtyDaysFromNow.toISOString(), {
             dateStyle: 'medium',
         }),
+        link: {
+            path: '/dashboard/certificates',
+            query: {
+                seasonId,
+                activityId: stats.activityId,
+                certificateStatus: ['valid'],
+            } satisfies EnrollmentsFilters,
+        },
     };
 }
 
-export function getDashboardCards(stats: SelectDashboardStats) {
+export function getDashboardCards(stats: SelectDashboardStats, seasonId?: number) {
     return [
-        getCurrentSeasonEnrollmentsCard(stats),
-        getCurrentSeasonPaymentsCard(stats),
-        getCurrentSeasonExpiringCertificateCard(stats),
+        getCurrentSeasonEnrollmentsCard(stats, seasonId),
+        getCurrentSeasonPaymentsCard(stats, seasonId),
+        getCurrentSeasonExpiringCertificateCard(stats, seasonId),
         getTotalEnrollmentsCard(stats),
         getTotalPaymentsCard(stats),
     ];
