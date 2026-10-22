@@ -7,6 +7,7 @@ const { deleteModal, additionalItems } = defineProps<{
         description: string;
         isDisabled?: boolean;
         isLoading?: boolean;
+        preventSelect?: boolean;
     };
     additionalItems?: DropdownMenuItem[];
 }>();
@@ -17,6 +18,7 @@ const emit = defineEmits<{
 
 const openDelete = defineModel<boolean>('openDelete', { default: false });
 
+const toast = useToast();
 const authStore = useAuthStore();
 
 const { canEdit } = storeToRefs(authStore);
@@ -41,7 +43,20 @@ const dropDownMenuItems = computed(() => {
             color: 'error',
             disabled: deleteModal.isDisabled || deleteModal.isLoading,
             loading: deleteModal.isLoading,
-            onSelect: () => openDelete.value = true,
+            onSelect: () => {
+                if (deleteModal.preventSelect) {
+                    toast.add({
+                        description: $t('action.prevent_select'),
+                        color: 'warning',
+                        icon: 'i-lucide-triangle-alert',
+                        id: 'delete',
+                    });
+
+                    return;
+                }
+
+                openDelete.value = true;
+            },
         });
     }
 

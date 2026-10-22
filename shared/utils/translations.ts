@@ -9,6 +9,7 @@ export const translations = {
         download_csv: 'Download CSV',
         edit: 'Modifica',
         label: 'Azioni',
+        prevent_select: 'Seleziona almeno una riga',
         view_details: 'Vedi dettagli',
     },
     auth: {
@@ -126,7 +127,7 @@ export const translations = {
             multiple_delete: {
                 description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Atleti eliminati con successo',
-                title: 'Elimina {quantity} atleti',
+                title: 'Elimina {quantity} atleta/i',
             },
         },
         button: {
@@ -180,7 +181,7 @@ export const translations = {
             multiple_delete: {
                 description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Iscrizioni eliminate con successo',
-                title: 'Elimina {quantity} iscrizioni',
+                title: 'Elimina {quantity} iscrizione/i',
             },
         },
         field: {
@@ -388,7 +389,7 @@ export const translations = {
             multiple_delete: {
                 description: 'Sei sicuro? Questa azione è irreversibile.',
                 success: 'Genitori eliminati con successo',
-                title: 'Elimina {quantity} genitori',
+                title: 'Elimina {quantity} genitore/i',
             },
         },
         season: {

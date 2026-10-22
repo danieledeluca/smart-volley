@@ -60,9 +60,20 @@ async function handleDelete() {
 }
 
 async function handleCsvDownload() {
-    isDownloading.value = true;
+    if (selectedRowsQuantity.value === 0) {
+        toast.add({
+            description: $t('action.prevent_select'),
+            color: 'warning',
+            icon: 'i-lucide-triangle-alert',
+            id: 'csv',
+        });
+
+        return;
+    }
 
     try {
+        isDownloading.value = true;
+
         await downloadCsv(selectedRows?.map((row) => row.original.id));
 
         toast.add({
@@ -90,14 +101,14 @@ async function handleCsvDownload() {
                 quantity: selectedRowsQuantity.toString(),
             }),
             description: $t('form.enrollment.multiple_delete.description'),
-            isDisabled: selectedRowsQuantity === 0,
             isLoading: isLoading || isDeleting,
+            preventSelect: selectedRowsQuantity === 0,
         }"
         :additionalItems="[
             {
                 label: $t('action.download_csv'),
                 icon: 'i-lucide-file-spreadsheet',
-                disabled: isLoading || isDownloading || selectedRowsQuantity === 0,
+                disabled: isLoading || isDownloading,
                 loading: isLoading || isDownloading,
                 onSelect: handleCsvDownload,
             },
