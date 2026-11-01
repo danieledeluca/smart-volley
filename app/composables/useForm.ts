@@ -108,8 +108,8 @@ export function useForm<K extends keyof FormTypes>(formType: K, formAction?: For
     const maxDate = new CalendarDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
 
     const paymentAmountInputProps: InputNumberProps = {
-        step: 5,
-        min: 5,
+        step: 0.1,
+        min: 0.1,
         formatOptions: {
             style: 'currency',
             currency: 'EUR',
