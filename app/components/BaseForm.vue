@@ -1,9 +1,9 @@
 <script setup lang="ts" generic="T extends z.ZodType">
-import type { FormError, FormSubmitEvent, InferInput, InferOutput } from '@nuxt/ui';
+import type { FormError, FormProps, FormSubmitEvent, InferOutput } from '@nuxt/ui';
 import type { FetchError } from 'ofetch';
 import type z from 'zod';
 
-type FormDataInput = InferInput<T>;
+type FormState = NonNullable<FormProps<T>['state']>;
 type FormDataOutput = InferOutput<T>;
 
 const { schema, onSubmit, onSubmitSuccess, submitButtonLabel, successMessage } = defineProps<{
@@ -14,7 +14,7 @@ const { schema, onSubmit, onSubmitSuccess, submitButtonLabel, successMessage } =
     successMessage: string;
 }>();
 
-const state = defineModel<Partial<FormDataInput>>('state');
+const state = defineModel<FormState>('state');
 
 const toast = useToast();
 const formRef = useTemplateRef('formRef');
