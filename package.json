@@ -46,7 +46,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^9.3.0",
+    "@antfu/eslint-config": "^10.0.0",
     "@faker-js/faker": "^10.6.0",
     "@iconify-json/simple-icons": "^1.2.93",
     "@types/google.maps": "^3.65.5",
