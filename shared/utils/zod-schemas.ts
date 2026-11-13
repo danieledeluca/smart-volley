@@ -9,7 +9,9 @@ export const EnrollmentsFiltersSchema = z.object({
     activityId: z.coerce.number().optional(),
     courseId: z.coerce.number().optional(),
     certificateStatus: z.preprocess(
-        (value) => typeof value === 'string' ? value.split(',') : value,
+        (value) => typeof value === 'string'
+            ? value.split(',')
+            : value,
         z.array(CertificateStatusSchema).optional(),
     ),
 });

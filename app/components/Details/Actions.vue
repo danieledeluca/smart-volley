@@ -99,7 +99,9 @@ async function handleCopyId() {
 
     toast.add({
         id: pageId,
-        title: $t('toast.copy', { name: $t('action.copy_id.success') }),
+        title: $t('toast.copy', {
+            name: $t('action.copy_id.success'),
+        }),
         color: 'success',
         icon: 'i-lucide-circle-check',
     });

@@ -10,7 +10,9 @@ const model = defineModel<string | number>();
 const { emitFormBlur } = useFormField();
 
 const numberModel = computed({
-    get: () => model.value ? Number(model.value) : undefined,
+    get: () => model.value
+        ? Number(model.value)
+        : undefined,
     set: (value) => {
         model.value = value?.toString();
 

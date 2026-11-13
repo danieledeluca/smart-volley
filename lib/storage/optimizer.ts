@@ -24,8 +24,12 @@ export async function optimizeAndConvertToPdf(file: File) {
     });
     const isLandscape = rotated.info.width > rotated.info.height;
 
-    const [pageWidth, pageHeight] = isLandscape ? [PageSizes.A4[1], PageSizes.A4[0]] : PageSizes.A4;
-    const [maxWidth, maxHeight] = isLandscape ? [A4_HEIGHT, A4_WIDTH] : [A4_WIDTH, A4_HEIGHT];
+    const [pageWidth, pageHeight] = isLandscape
+        ? [PageSizes.A4[1], PageSizes.A4[0]]
+        : PageSizes.A4;
+    const [maxWidth, maxHeight] = isLandscape
+        ? [A4_HEIGHT, A4_WIDTH]
+        : [A4_WIDTH, A4_HEIGHT];
 
     const { data, info } = await sharp(rotated.data)
         .flatten({

@@ -33,7 +33,11 @@ function filterColumns<T>(columns: (keyof T)[], tableColumns: TableColumns<T>) {
 function getIdTableColumn<T extends { id: number }>(defaultSort?: SortDirection): TableColumn<T> {
     return {
         accessorKey: 'id',
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.id'), defaultSort }),
+        header: ({ column }) => h(TableSortDropdown, {
+            column,
+            label: $t('table.column.id'),
+            defaultSort,
+        }),
         cell: ({ row }) => `#${row.original.id}`,
     };
 }
@@ -42,7 +46,10 @@ function getNameTableColumn<T extends { name: string | null }>(useSort = true): 
     return {
         accessorKey: 'name',
         header: useSort
-            ? ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') })
+            ? ({ column }) => h(TableSortDropdown, {
+                    column,
+                    label: $t('table.column.name'),
+                })
             : $t('table.column.name'),
         cell: ({ row }) => row.original.name,
     };
@@ -54,12 +61,17 @@ function getUserTableColumn<T extends { id: number; name: string; fiscalCode: st
     return {
         accessorKey: 'name',
         accessorFn: (row) => `${row.name} ${row.fiscalCode}`,
-        header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.name') }),
+        header: ({ column }) => h(TableSortDropdown, {
+            column,
+            label: $t('table.column.name'),
+        }),
         cell: ({ row }) => h(User, {
             userProps: {
                 name: row.original.name,
                 description: row.original.fiscalCode,
-                to: detailPagePath ? detailPagePath + row.original.id.toString() : undefined,
+                to: detailPagePath
+                    ? detailPagePath + row.original.id.toString()
+                    : undefined,
             },
             avatarSize: 64,
         }),
@@ -144,7 +156,9 @@ function getPriceTableColum<T>(accessorKey: keyof T, header: string): TableColum
         },
         cell: ({ row }) => {
             const value = row.original[accessorKey] as string | undefined;
-            return value ? formatPrice(value) : EMPTY_VALUE;
+            return value
+                ? formatPrice(value)
+                : EMPTY_VALUE;
         },
         meta: {
             class: {
@@ -244,7 +258,10 @@ export function getEnrollmentsTableColumns(columns: (keyof SelectEnrollmentsWith
         athlete: {
             accessorKey: 'athlete',
             accessorFn: (row) => `${row.athlete.name} ${row.athlete.fiscalCode}`,
-            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.athlete') }),
+            header: ({ column }) => h(TableSortDropdown, {
+                column,
+                label: $t('table.column.athlete'),
+            }),
             cell: ({ row }) => h(User, {
                 userProps: {
                     name: row.original.athlete.name,
@@ -298,12 +315,16 @@ export function getEnrollmentPaymentsTableColumns(
         amount: {
             accessorKey: 'amount',
             header: $t('table.column.payment_amount'),
-            cell: ({ row }) => row.original.amount ? formatPrice(row.original.amount) : EMPTY_VALUE,
+            cell: ({ row }) => row.original.amount
+                ? formatPrice(row.original.amount)
+                : EMPTY_VALUE,
         },
         date: {
             accessorKey: 'date',
             header: $t('table.column.payment_date'),
-            cell: ({ row }) => row.original.date ? formatDate(row.original.date) : EMPTY_VALUE,
+            cell: ({ row }) => row.original.date
+                ? formatDate(row.original.date)
+                : EMPTY_VALUE,
         },
         type: {
             accessorKey: 'type',
@@ -332,7 +353,10 @@ export function getSeasonsTableColumns(columns: (keyof SelectSeason)[]) {
         },
         endYear: {
             accessorKey: 'endYear',
-            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.end_year') }),
+            header: ({ column }) => h(TableSortDropdown, {
+                column,
+                label: $t('table.column.end_year'),
+            }),
             cell: ({ row }) => row.original.endYear,
         },
     };
@@ -364,7 +388,10 @@ export function getCoursesTableColumns(columns: (keyof SelectCourseWithRelations
         id: getIdTableColumn('desc'),
         code: {
             accessorKey: 'code',
-            header: ({ column }) => h(TableSortDropdown, { column, label: $t('table.column.code') }),
+            header: ({ column }) => h(TableSortDropdown, {
+                column,
+                label: $t('table.column.code'),
+            }),
             cell: ({ row }) => row.original.code,
         },
         name: getNameTableColumn(),

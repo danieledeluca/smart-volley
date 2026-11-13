@@ -14,7 +14,9 @@ export async function downloadCsv(enrollmentIds?: number[]) {
     const link = document.createElement('a');
 
     link.href = url;
-    link.download = enrollmentIds.length > 1 ? 'iscrizioni.csv' : `iscrizione-${enrollmentIds[0]}.csv`;
+    link.download = enrollmentIds.length > 1
+        ? 'iscrizioni.csv'
+        : `iscrizione-${enrollmentIds[0]}.csv`;
 
     document.body.appendChild(link);
 

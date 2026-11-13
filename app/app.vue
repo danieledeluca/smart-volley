@@ -3,7 +3,9 @@ import { it } from '@nuxt/ui/locale';
 
 useHead({
     titleTemplate: (titleChunk) => {
-        return titleChunk ? `${titleChunk} | Smart Volley` : 'Smart Volley';
+        return titleChunk
+            ? `${titleChunk} | Smart Volley`
+            : 'Smart Volley';
     },
     htmlAttrs: {
         lang: 'it',

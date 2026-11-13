@@ -17,7 +17,9 @@ const openFilters = ref(false);
 const fields = computed(() => fieldGroups.map((group) => group.fields).flat());
 
 function handleUpdate(key: string, value?: Partial<T>[keyof T]) {
-    setQueryValue(key, value ? String(value) : undefined);
+    setQueryValue(key, value
+        ? String(value)
+        : undefined);
     emit('update');
 }
 

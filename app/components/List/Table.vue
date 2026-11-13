@@ -45,7 +45,9 @@ const pagination = ref<PaginationState>({
 
 const currentPage = computed(() => {
     return {
-        start: tableData && tableData.length > 0 ? pagination.value.pageIndex * pagination.value.pageSize + 1 : 0,
+        start: tableData && tableData.length > 0
+            ? pagination.value.pageIndex * pagination.value.pageSize + 1
+            : 0,
         end: Math.min(
             pagination.value.pageIndex * pagination.value.pageSize + pagination.value.pageSize,
             tableData?.length || 0,
@@ -56,7 +58,9 @@ const currentPage = computed(() => {
 const hasSelectColumn = computed(() => Boolean(tableColumns?.find((column) => column.id === 'select')));
 
 function handleSelect(_event: Event, row: TableRow<T>) {
-    hasSelectColumn.value ? row.toggleSelected(!row.getIsSelected()) : emit('select', _event, row);
+    hasSelectColumn.value
+        ? row.toggleSelected(!row.getIsSelected())
+        : emit('select', _event, row);
 }
 
 defineExpose({

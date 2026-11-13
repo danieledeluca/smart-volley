@@ -69,7 +69,9 @@ export async function uploadEnrollmentCertificate(data: InsertEnrollment) {
 }
 
 export async function deleteEnrollmentCertificates(keys: (string | null)[]) {
-    const candidates = [...new Set(keys.filter((key): key is string => Boolean(key)))];
+    const candidates = [
+        ...new Set(keys.filter((key): key is string => Boolean(key))),
+    ];
 
     if (candidates.length === 0) {
         return;

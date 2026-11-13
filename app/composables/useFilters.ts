@@ -32,7 +32,9 @@ export function useFilters<K extends keyof Filters>(formType: K) {
     const enrollmentsFiltersState = computed<EnrollmentsFilters>(() => {
         const result = EnrollmentsFiltersSchema.safeParse(route.query);
 
-        return result.success ? result.data : { ...initialState };
+        return result.success
+            ? result.data
+            : { ...initialState };
     });
 
     const filtersStates: { [K in keyof Filters]: ComputedRef<Filters[K]> } = {

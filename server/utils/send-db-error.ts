@@ -56,7 +56,9 @@ export default function sendDbError(error: DrizzleError) {
         throw createError({
             statusCode: 409,
             message: message || $t('error.conflict'),
-            data: formError ? [formError] : undefined,
+            data: formError
+                ? [formError]
+                : undefined,
         });
     }
 
@@ -89,7 +91,9 @@ export default function sendDbError(error: DrizzleError) {
         throw createError({
             statusCode: 422,
             message: $t('error.unprocessable_content'),
-            data: formError ? [formError] : undefined,
+            data: formError
+                ? [formError]
+                : undefined,
         });
     }
 

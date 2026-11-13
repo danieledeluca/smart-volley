@@ -40,7 +40,9 @@ const navigationMenuItems = computed(() => {
                 label: $t('menu.enrollments'),
                 to: {
                     path: '/dashboard/enrollments',
-                    query: isEnrollmentRoute.value ? { ...route.query } : undefined,
+                    query: isEnrollmentRoute.value
+                        ? { ...route.query }
+                        : undefined,
                 },
                 icon: 'i-lucide-list',
                 active: route.path.startsWith('/dashboard/enrollments'),
@@ -50,7 +52,9 @@ const navigationMenuItems = computed(() => {
                         label: $t('menu.payments'),
                         to: {
                             path: '/dashboard/payments',
-                            query: isEnrollmentRoute.value ? { ...route.query } : undefined,
+                            query: isEnrollmentRoute.value
+                                ? { ...route.query }
+                                : undefined,
                         },
                         icon: 'i-lucide-badge-euro',
                     },
@@ -58,7 +62,9 @@ const navigationMenuItems = computed(() => {
                         label: $t('menu.certificates'),
                         to: {
                             path: '/dashboard/certificates',
-                            query: isEnrollmentRoute.value ? { ...route.query } : undefined,
+                            query: isEnrollmentRoute.value
+                                ? { ...route.query }
+                                : undefined,
                         },
                         icon: 'i-lucide-briefcase-medical',
                     },

@@ -57,7 +57,9 @@ export const enrollmentRelations = relations(enrollment, ({ one }) => {
     };
 });
 
-const PaymentAmountSchema = z.string().transform((value) => !Number(value) ? undefined : value).optional();
+const PaymentAmountSchema = z.string().transform((value) => !Number(value)
+    ? undefined
+    : value).optional();
 const PaymentDateSchema = z.string().optional();
 const PaymentTypeSchema = z.enum(enrollmentPaymentType.enumValues).optional();
 
@@ -77,7 +79,9 @@ export const InsertEnrollment = createInsertSchema(enrollment, {
     certificateExpirationDate: z.string().optional(),
     certificateStorageKey: z.instanceof(File)
         .refine((file) => file.size <= FILE_MAX_SIZE, {
-            message: $t('form.field.certificate_storage_key.error.size', { size: formatFileSize(FILE_MAX_SIZE) }),
+            message: $t('form.field.certificate_storage_key.error.size', {
+                size: formatFileSize(FILE_MAX_SIZE),
+            }),
         })
         .refine((file) => FILE_ACCEPTED_TYPES.includes(file.type), {
             message: $t('form.field.certificate_storage_key.error.type'),

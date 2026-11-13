@@ -5,7 +5,9 @@ import { ACTIVITY_ICON_PREFIX } from './constants';
 export function normalizeActivityIcon(value: string) {
     const iconName = value.trim().toLowerCase();
 
-    return iconName.startsWith(ACTIVITY_ICON_PREFIX) ? iconName : `${ACTIVITY_ICON_PREFIX}${iconName}`;
+    return iconName.startsWith(ACTIVITY_ICON_PREFIX)
+        ? iconName
+        : `${ACTIVITY_ICON_PREFIX}${iconName}`;
 }
 
 export function isValidActivityIcon(value?: string) {

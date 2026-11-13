@@ -3,13 +3,17 @@ import type { SelectEnrollmentsForExport } from '~~/lib/db/schema';
 type CsvRow = Record<string, string | number | null | undefined>;
 
 function escape(value: string | number | null | undefined) {
-    let text = value === null || value === undefined ? '' : String(value);
+    let text = value === null || value === undefined
+        ? ''
+        : String(value);
 
     if (/^[=+\-@\t\r]/.test(text) && Number.isNaN(Number(text))) {
         text = `'${text}`;
     }
 
-    return /[";\n\r]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+    return /[";\n\r]/.test(text)
+        ? `"${text.replaceAll('"', '""')}"`
+        : text;
 }
 
 export function enrollmentCsv(enrollments: SelectEnrollmentsForExport[]) {

@@ -12,7 +12,9 @@ function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
         return undefined;
     }
 
-    return difference > 0 ? `+${percentage}` : percentage;
+    return difference > 0
+        ? `+${percentage}`
+        : percentage;
 }
 
 function getTotalEnrollmentsCard(stats: SelectDashboardStats): DashboardCard {
@@ -46,14 +48,18 @@ function getTotalPaymentsCard(stats: SelectDashboardStats): DashboardCard {
 
 function getCurrentSeasonEnrollmentsCard(stats: SelectDashboardStats, seasonId?: number): DashboardCard {
     const badgeLabel = getPercentageLabel(stats.currentEnrollments, stats.previousEnrollments);
-    const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
+    const badgeColorValue = badgeLabel
+        ? Number.parseFloat(badgeLabel)
+        : 0;
 
     return {
         icon: 'i-lucide-list',
         title: $t('card.dashboard.enrollments'),
         description: stats.currentEnrollments.toString(),
         badgeLabel,
-        badgeColor: badgeColorValue > 0 ? 'success' : 'error',
+        badgeColor: badgeColorValue > 0
+            ? 'success'
+            : 'error',
         link: {
             path: '/dashboard/enrollments',
             query: {
@@ -66,7 +72,9 @@ function getCurrentSeasonEnrollmentsCard(stats: SelectDashboardStats, seasonId?:
 
 function getCurrentSeasonPaymentsCard(stats: SelectDashboardStats, seasonId?: number): DashboardCard {
     const badgeLabel = getPercentageLabel(Number(stats.currentPayments), Number(stats.previousPayments));
-    const badgeColorValue = badgeLabel ? Number.parseFloat(badgeLabel) : 0;
+    const badgeColorValue = badgeLabel
+        ? Number.parseFloat(badgeLabel)
+        : 0;
 
     return {
         icon: 'i-lucide-badge-euro',
@@ -74,7 +82,9 @@ function getCurrentSeasonPaymentsCard(stats: SelectDashboardStats, seasonId?: nu
         title: $t('card.dashboard.payments'),
         description: formatPrice(stats.currentPayments),
         badgeLabel,
-        badgeColor: badgeColorValue > 0 ? 'success' : 'error',
+        badgeColor: badgeColorValue > 0
+            ? 'success'
+            : 'error',
         link: {
             path: '/dashboard/payments',
             query: {

@@ -464,12 +464,16 @@ export function useForm<K extends keyof FormTypes>(formType: K, formAction?: For
                         renderAs: 'input-file',
                         formFieldProps: {
                             name: 'certificateStorageKey',
-                            help: formAction === 'edit' ? $t('form.field.certificate_storage_key.help') : undefined,
+                            help: formAction === 'edit'
+                                ? $t('form.field.certificate_storage_key.help')
+                                : undefined,
                         },
                         fileUploadProps: {
                             description: $t(
                                 'form.field.certificate_storage_key.description',
-                                { size: formatFileSize(FILE_MAX_SIZE) },
+                                {
+                                    size: formatFileSize(FILE_MAX_SIZE),
+                                },
                             ),
                             accept: FILE_ACCEPTED_TYPES.join(','),
                             interactive: false,
@@ -484,7 +488,9 @@ export function useForm<K extends keyof FormTypes>(formType: K, formAction?: For
                         formFieldProps: {
                             label: $t('form.field.certificate_expiration_date.label'),
                             name: 'certificateExpirationDate',
-                            help: formAction === 'add' ? $t('form.field.certificate_expiration_date.help') : undefined,
+                            help: formAction === 'add'
+                                ? $t('form.field.certificate_expiration_date.help')
+                                : undefined,
                         },
                     },
                 ],

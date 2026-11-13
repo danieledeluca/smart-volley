@@ -67,7 +67,10 @@ export const InsertAthlete = createInsertSchema(athlete, {
     fiscalCode: FiscalCodeSchema,
     phoneNumber: PhoneNumberSchema,
     email: EmailSchema,
-    parentId: z.union([z.literal('').transform(() => undefined), z.coerce.number()]).optional(),
+    parentId: z.union([
+        z.literal('').transform(() => undefined),
+        z.coerce.number(),
+    ]).optional(),
 }).extend({
     birthplace: BirthplaceSchema,
     address: AddressSchema,

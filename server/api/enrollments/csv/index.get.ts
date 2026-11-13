@@ -3,7 +3,9 @@ import z from 'zod';
 
 const QuerySchema = z.object({
     ids: z.string()
-        .transform((value) => [...new Set(value.split(',').map(Number))])
+        .transform((value) => [
+            ...new Set(value.split(',').map(Number)),
+        ])
         .pipe(z.array(z.number().int().positive())),
 });
 
@@ -24,7 +26,9 @@ export default defineAuthenticatedEventHandler(async (event) => {
     }
 
     const csv = toCsv(enrollmentCsv(enrollments));
-    const fileName = enrollments.length > 1 ? 'iscrizioni.csv' : `iscrizione-${enrollments?.[0]?.id}.csv`;
+    const fileName = enrollments.length > 1
+        ? 'iscrizioni.csv'
+        : `iscrizione-${enrollments?.[0]?.id}.csv`;
 
     setHeader(event, 'Content-Type', 'text/csv; charset=utf-8');
     setHeader(event, 'Content-Disposition', `attachment; filename="${fileName}"`);

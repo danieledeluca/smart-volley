@@ -46,7 +46,13 @@ function generateBirthplace() {
     const city = faker.location.city();
     const region = faker.location.state();
     const country = faker.location.country();
-    const formattedAddress = [postalCode, province, city, region, country].filter(String).join(', ');
+    const formattedAddress = [
+        postalCode,
+        province,
+        city,
+        region,
+        country,
+    ].filter(String).join(', ');
 
     return {
         postalCode,
@@ -66,7 +72,14 @@ function generateAddress() {
     const city = faker.location.city();
     const region = faker.location.state();
     const country = faker.location.country();
-    const formattedAddress = [street, postalCode, province, city, region, country].filter(String).join(', ');
+    const formattedAddress = [
+        street,
+        postalCode,
+        province,
+        city,
+        region,
+        country,
+    ].filter(String).join(', ');
 
     return {
         street,

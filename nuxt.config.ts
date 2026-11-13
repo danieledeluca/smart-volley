@@ -6,7 +6,13 @@ export default defineNuxtConfig({
     devtools: {
         enabled: true,
     },
-    modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui', '@pinia/nuxt', 'nuxt-csurf'],
+    modules: [
+        '@nuxt/eslint',
+        '@nuxt/image',
+        '@nuxt/ui',
+        '@pinia/nuxt',
+        'nuxt-csurf',
+    ],
     eslint: {
         config: {
             standalone: false,
