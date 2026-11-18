@@ -43,6 +43,16 @@ export default withNuxt(
             },
         },
         {
+            files: ['**/*.md'],
+            rules: {
+                'format/prettier': [
+                    'error',
+                    { parser: 'markdown', tabWidth: 2 },
+                ],
+            },
+
+        },
+        {
             rules: {
                 'better-tailwindcss/enforce-consistent-line-wrapping': ['off'],
                 'better-tailwindcss/no-unknown-classes': [

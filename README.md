@@ -43,8 +43,8 @@ Management platform for the **Vis et Virtus** sports club. Handles athlete regis
 - Node.js **22.19+** (required by Nuxt 4.5)
 - A PostgreSQL database (e.g. [Neon](https://neon.tech))
 - A Google Cloud project with:
-    - OAuth 2.0 credentials. Authorized redirect URI: `<BETTER_AUTH_URL>/api/auth/callback/google`
-    - A Maps JavaScript API key with the Places API enabled. The key is exposed to the browser, so **restrict it by HTTP referrer and by API**.
+  - OAuth 2.0 credentials. Authorized redirect URI: `<BETTER_AUTH_URL>/api/auth/callback/google`
+  - A Maps JavaScript API key with the Places API enabled. The key is exposed to the browser, so **restrict it by HTTP referrer and by API**.
 - A Cloudflare R2 bucket for certificate storage
 
 ### Setup
