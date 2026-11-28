@@ -4,6 +4,10 @@ export function useQuery() {
     const router = useRouter();
     const route = useRoute();
 
+    function getQuery() {
+        return route.query;
+    }
+
     function getQueryValue<T = string>(key: string) {
         return route.query[key]?.toString() as T || undefined;
     }
@@ -27,6 +31,7 @@ export function useQuery() {
     }
 
     return {
+        getQuery,
         getQueryValue,
         setQueryValue,
         setQueryValues,

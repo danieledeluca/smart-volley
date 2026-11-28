@@ -46,6 +46,7 @@ const athletesTableColumns = getParentAthletesTableColumns(['name', 'fiscalCode'
                             :tableData="parent.athletes"
                             :tableColumns="athletesTableColumns"
                             :showPagination="true"
+                            :enableSorting="false"
                             @select="(_event, row) => navigateTo(`/dashboard/athletes/${row.original.id}`)"
                         />
                     </ItemCard>

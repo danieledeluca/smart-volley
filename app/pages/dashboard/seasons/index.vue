@@ -42,6 +42,7 @@ tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ seasonId: ro
             :isLoading="seasonsPending"
             :error="seasonsError"
             :showFilter="true"
+            sortField="startYear"
         />
     </DashboardPanel>
 </template>

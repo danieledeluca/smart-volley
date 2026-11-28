@@ -49,11 +49,12 @@ tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ parentId: ro
             :isLoading="parentsPending"
             :error="parentsError"
             :showFilter="true"
+            @select="(_event, row) => navigateTo(`/dashboard/parents/${row.original.id}`)"
         >
             <template #default>
                 <div class="ml-auto">
                     <ParentListActions
-                        :selectedRows="parentTableRef?.selectRows()"
+                        :selectedRows="parentTableRef?.selectedRows()"
                         :isLoading="parentsPending"
                         @deleteSuccess="parentTableRef?.toggleAllPageRowsSelected(false)"
                     />

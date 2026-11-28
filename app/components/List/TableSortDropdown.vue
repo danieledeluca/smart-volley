@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
-import type { Column, SortDirection } from '@tanstack/vue-table';
+import type { Column } from '@tanstack/vue-table';
 
-const { column, label, defaultSort } = defineProps<{
+const { column, label } = defineProps<{
     column: Column<any>;
     label: string;
-    defaultSort?: SortDirection;
 }>();
 
 const isSorted = computed(() => column.getIsSorted());
-
 const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
     return [
         {
@@ -17,33 +15,21 @@ const dropdownMenuItems = computed<DropdownMenuItem[]>(() => {
             type: 'checkbox',
             icon: 'i-lucide-arrow-up-narrow-wide',
             checked: isSorted.value === 'asc',
-            onSelect: () => {
-                if (isSorted.value === 'asc') {
-                    column.clearSorting();
-                } else {
-                    column.toggleSorting(false);
-                }
-            },
+            onSelect: () => isSorted.value === 'asc'
+                ? column.clearSorting()
+                : column.toggleSorting(false),
         },
         {
             label: $t('table.sort.desc'),
             icon: 'i-lucide-arrow-down-wide-narrow',
             type: 'checkbox',
             checked: isSorted.value === 'desc',
-            onSelect: () => {
-                if (isSorted.value === 'desc') {
-                    column.clearSorting();
-                } else {
-                    column.toggleSorting(true);
-                }
-            },
+            onSelect: () => isSorted.value === 'desc'
+                ? column.clearSorting()
+                : column.toggleSorting(true),
         },
     ];
 });
-
-if (defaultSort) {
-    column.toggleSorting(defaultSort !== 'asc');
-}
 </script>
 
 <template>

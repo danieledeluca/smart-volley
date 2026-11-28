@@ -61,6 +61,7 @@ const enrollmentsTableColumns = getAthleteEnrollmentsTableColumns(['season', 'ac
                             :tableData="athlete.enrollments"
                             :tableColumns="enrollmentsTableColumns"
                             :showPagination="true"
+                            :enableSorting="false"
                             @select="(_event, row) => navigateTo(`/dashboard/enrollments/${row.original.id}`)"
                         />
                     </ItemCard>

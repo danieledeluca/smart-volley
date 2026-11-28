@@ -63,7 +63,7 @@ tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ enrollmentId
                     @update="enrollmentTableRef?.toggleAllPageRowsSelected(false)"
                 >
                     <EnrollmentListActions
-                        :selectedRows="enrollmentTableRef?.selectRows()"
+                        :selectedRows="enrollmentTableRef?.selectedRows()"
                         :isLoading="enrollmentsPending"
                         @deleteSuccess="enrollmentTableRef?.toggleAllPageRowsSelected(false)"
                     />

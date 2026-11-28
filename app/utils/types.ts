@@ -12,6 +12,7 @@ import type {
     SelectMenuProps,
     SelectProps,
 } from '@nuxt/ui';
+import type { SortDirection } from '@tanstack/vue-table';
 import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from 'vue-router';
 
 type InputField = {
@@ -89,6 +90,11 @@ export type DashboardCard = {
     badgeLabel?: string;
     badgeColor?: BadgeProps['color'];
     link?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric;
+};
+
+export type TableSorting<T = Record<string, unknown>> = {
+    'sort:field'?: keyof T & string;
+    'sort:order'?: SortDirection;
 };
 
 export type ParsedAddress = {

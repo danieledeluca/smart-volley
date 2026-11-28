@@ -55,7 +55,7 @@ tableColumns.push(getActionsTableColumn(DetailsActions, (row) => ({ athleteId: r
             <template #default>
                 <div class="ml-auto">
                     <AthleteListActions
-                        :selectedRows="athleteTableRef?.selectRows()"
+                        :selectedRows="athleteTableRef?.selectedRows()"
                         :isLoading="athletesPending"
                         @deleteSuccess="athleteTableRef?.toggleAllPageRowsSelected(false)"
                     />

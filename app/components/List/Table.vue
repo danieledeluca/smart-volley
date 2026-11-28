@@ -1,9 +1,9 @@
 <script setup lang="ts" generic="T">
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import type { PaginationState, TableMeta } from '@tanstack/vue-table';
+import type { SortDirection, TableMeta } from '@tanstack/vue-table';
 
 import { getPaginationRowModel } from '@tanstack/vue-table';
-import { refDebounced } from '@vueuse/core';
+import { useDebounceFn } from '@vueuse/core';
 
 import type { NuxtError } from '#app';
 
@@ -13,47 +13,39 @@ const {
     tableMeta,
     isLoading,
     error,
-    showPagination = false,
     showFilter = false,
+    showPagination = false,
+    enableSorting = true,
+    sortField,
+    sortOrder,
 } = defineProps<{
     tableData?: T[];
     tableColumns?: TableColumn<T>[];
     tableMeta?: TableMeta<T>;
     isLoading?: boolean;
-    error?: NuxtError<unknown>;
-    showPagination?: boolean;
+    error?: NuxtError;
     showFilter?: boolean;
-}> ();
-
+    showPagination?: boolean;
+    enableSorting?: boolean;
+    sortField?: keyof T;
+    sortOrder?: SortDirection;
+}>();
 const emit = defineEmits<{
     select: [event: Event, row: TableRow<T>];
 }>();
-
 const slots = defineSlots<{
     default?: (props?: object) => VNode[];
 }>();
 
-const { getQueryValue, setQueryValue } = useQuery();
+const { setQueryValue } = useQuery();
+const {
+    globalFilter,
+    globalFilterDebounced,
+    pagination,
+    currentPage,
+    sorting,
+} = useTableStates(() => tableData, tableColumns, sortField, sortOrder, enableSorting);
 const tableRef = useTemplateRef('tableRef');
-
-const globalFilter = ref();
-const globalFilterDebounced = refDebounced(globalFilter, 300);
-const pagination = ref<PaginationState>({
-    pageIndex: 0,
-    pageSize: 5,
-});
-
-const currentPage = computed(() => {
-    return {
-        start: tableData && tableData.length > 0
-            ? pagination.value.pageIndex * pagination.value.pageSize + 1
-            : 0,
-        end: Math.min(
-            pagination.value.pageIndex * pagination.value.pageSize + pagination.value.pageSize,
-            tableData?.length || 0,
-        ),
-    };
-});
 
 const hasSelectColumn = computed(() => Boolean(tableColumns?.find((column) => column.id === 'select')));
 
@@ -63,13 +55,13 @@ function handleSelect(_event: Event, row: TableRow<T>) {
         : emit('select', _event, row);
 }
 
-defineExpose({
-    selectRows: () => tableRef.value?.tableApi.getFilteredSelectedRowModel().rows,
-    toggleAllPageRowsSelected: (value?: boolean) => tableRef.value?.tableApi.toggleAllPageRowsSelected(value),
-});
+const handleUpdate = useDebounceFn((value?: string) => {
+    setQueryValue('filter', value);
+}, 300);
 
-onMounted(() => {
-    globalFilter.value = getQueryValue('filter');
+defineExpose({
+    selectedRows: () => tableRef.value?.tableApi.getFilteredSelectedRowModel().rows,
+    toggleAllPageRowsSelected: (value?: boolean) => tableRef.value?.tableApi.toggleAllPageRowsSelected(value),
 });
 </script>
 
@@ -89,7 +81,7 @@ onMounted(() => {
                 class="max-sm:flex-1"
                 :placeholder="$t('table.global_filter.placeholder')"
                 icon="i-lucide-search"
-                @update:modelValue="setQueryValue('filter', $event)"
+                @update:modelValue="handleUpdate"
             />
             <slot />
         </div>
@@ -97,20 +89,18 @@ onMounted(() => {
             ref="tableRef"
             v-model:globalFilter="globalFilterDebounced"
             v-model:pagination="pagination"
+            v-model:sorting="sorting"
             :data="tableData"
             :columns="tableColumns"
             :meta="tableMeta"
             :loading="isLoading"
             :sticky="!showPagination"
             :virtualize="!showPagination"
-            class="rounded-md border border-accented **:[thead]:bg-elevated **:[thead]:text-nowrap"
+            class="rounded-lg border border-accented **:[thead]:bg-elevated **:[thead]:text-nowrap"
             :class="{
                 'rounded-b-none': showPagination || hasSelectColumn,
                 '**:[thead]:bg-elevated/75': !showPagination && hasSelectColumn,
             }"
-            :paginationOptions="showPagination ? {
-                getPaginationRowModel: getPaginationRowModel(),
-            } : undefined"
             :globalFilterOptions="showFilter ? {
                 getColumnCanGlobalFilter: (column) => {
                     if (column.id === 'id') {
@@ -119,6 +109,9 @@ onMounted(() => {
 
                     return true
                 },
+            } : undefined"
+            :paginationOptions="showPagination ? {
+                getPaginationRowModel: getPaginationRowModel(),
             } : undefined"
             @select="handleSelect"
         />

@@ -1,4 +1,5 @@
 import type { SelectDashboardStats } from '~~/lib/db/queries/dashboard';
+import type { SelectEnrollmentsWithRelations } from '~~/lib/db/schema';
 
 function getPercentageLabel(firstValue: number = 0, secondValue: number = 0) {
     if (secondValue === 0) {
@@ -109,10 +110,12 @@ function getCurrentSeasonExpiringCertificateCard(stats: SelectDashboardStats, se
         link: {
             path: '/dashboard/certificates',
             query: {
-                seasonId,
-                activityId: stats.activityId,
-                certificateStatus: ['valid'],
-            } satisfies EnrollmentsFilters,
+                'seasonId': seasonId,
+                'activityId': stats.activityId,
+                'certificateStatus': ['valid'],
+                'sort:field': 'certificateExpirationDate',
+                'sort:order': 'asc',
+            } satisfies EnrollmentsFilters & TableSorting<SelectEnrollmentsWithRelations>,
         },
     };
 }

@@ -9,7 +9,7 @@ const emit = defineEmits<{
 
 const state = defineModel<Partial<T>>('state', { required: true });
 
-const { setQueryValue, clearQuery } = useQuery();
+const { setQueryValue, setQueryValues } = useQuery();
 const activeFiltersRef = useTemplateRef('activeFiltersRef');
 
 const openFilters = ref(false);
@@ -25,7 +25,13 @@ function handleUpdate(key: string, value?: Partial<T>[keyof T]) {
 
 function handleCancel() {
     if ((activeFiltersRef.value?.activeFilters().length || 0) > 0) {
-        clearQuery();
+        const queryValues = fields.value.reduce<Record<string, string | undefined>>((values, field) => {
+            values[field.formFieldProps.name] = undefined;
+
+            return values;
+        }, { });
+
+        setQueryValues(queryValues);
     }
 }
 

@@ -45,7 +45,11 @@ const enrollmentPaymentsTableColumns = getEnrollmentPaymentsTableColumns(['name'
             <div class="details-grid">
                 <div class="details-col details-col-main">
                     <ItemCard :title="$t('card.payments.title')" icon="i-lucide-badge-euro">
-                        <ListTable :tableData="enrollment.payments" :tableColumns="enrollmentPaymentsTableColumns" />
+                        <ListTable
+                            :tableData="enrollment.payments"
+                            :tableColumns="enrollmentPaymentsTableColumns"
+                            :enableSorting="false"
+                        />
                     </ItemCard>
 
                     <ItemCard :title="$t('card.certificate.title')" icon="i-lucide-briefcase-medical">
