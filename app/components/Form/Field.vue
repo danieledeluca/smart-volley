@@ -91,7 +91,7 @@ function showField(field: FormField<T>) {
                 />
                 <FormNoData v-else />
             </template>
-            <div v-else-if="field.renderAs === 'select'" class="flex gap-2">
+            <div v-else-if="field.renderAs === 'select'">
                 <USelect
                     v-if="showField(field)"
                     v-model="model"
@@ -99,18 +99,17 @@ function showField(field: FormField<T>) {
                     class="w-full"
                 />
                 <FormNoData v-else />
-                <FormDeleteButton v-if="showDeleteButton && model" v-model="model" />
             </div>
-            <div v-else-if="field.renderAs === 'select-menu'" class="flex gap-2">
+            <div v-else-if="field.renderAs === 'select-menu'">
                 <USelectMenu
                     v-if="showField(field)"
                     v-model="model"
                     v-bind="field.selectProps"
                     class="w-full"
                     valueKey="value"
+                    clear
                 />
                 <FormNoData v-else />
-                <FormDeleteButton v-if="showDeleteButton && model" v-model="model" />
             </div>
             <template v-if="showDeleteButton && field.renderAs === 'radio-group' && model" #hint>
                 <UButton
