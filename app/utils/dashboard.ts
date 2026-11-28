@@ -110,11 +110,11 @@ function getCurrentSeasonExpiringCertificateCard(stats: SelectDashboardStats, se
         link: {
             path: '/dashboard/certificates',
             query: {
-                'seasonId': seasonId,
-                'activityId': stats.activityId,
-                'certificateStatus': ['valid'],
-                'sort:field': 'certificateExpirationDate',
-                'sort:order': 'asc',
+                seasonId,
+                activityId: stats.activityId,
+                certificateStatus: ['valid'],
+                sortField: 'certificateExpirationDate',
+                sortOrder: 'asc',
             } satisfies EnrollmentsFilters & TableSorting<SelectEnrollmentsWithRelations>,
         },
     };

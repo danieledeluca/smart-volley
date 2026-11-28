@@ -93,8 +93,8 @@ export type DashboardCard = {
 };
 
 export type TableSorting<T = Record<string, unknown>> = {
-    'sort:field'?: keyof T & string;
-    'sort:order'?: SortDirection;
+    sortField?: keyof T & string;
+    sortOrder?: SortDirection;
 };
 
 export type ParsedAddress = {

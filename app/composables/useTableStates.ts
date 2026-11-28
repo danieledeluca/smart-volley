@@ -51,16 +51,16 @@ export function useTableStates<T>(
             desc: (sortOrder || DEFAULT_SORT_ORDER) === 'desc',
         };
         const SortQuerySchema = z.object({
-            'sort:field': z.string()
+            sortField: z.string()
                 .refine((sortFieldQuery) => tableColumns?.some((column) => column.id === sortFieldQuery))
                 .optional(),
-            'sort:order': z.enum<SortDirection[]>(['asc', 'desc']).optional(),
+            sortOrder: z.enum<SortDirection[]>(['asc', 'desc']).optional(),
         });
         const sortQueryResult = SortQuerySchema.safeParse(getQuery());
 
         if (sortQueryResult.success) {
-            const sortFieldQuery = sortQueryResult.data['sort:field'];
-            const sortOrderQuery = sortQueryResult.data['sort:order'];
+            const sortFieldQuery = sortQueryResult.data.sortField;
+            const sortOrderQuery = sortQueryResult.data.sortOrder;
 
             if (sortFieldQuery !== undefined || sortOrderQuery !== undefined) {
                 initialSort.id = sortFieldQuery ?? DEFAULT_SORT_FIELD;
@@ -76,8 +76,8 @@ export function useTableStates<T>(
             watch(sorting, ([sort]) => {
                 if (!sort) {
                     setQueryValues({
-                        'sort:field': undefined,
-                        'sort:order': undefined,
+                        sortField: undefined,
+                        sortOrder: undefined,
                     });
 
                     return;
@@ -85,10 +85,10 @@ export function useTableStates<T>(
 
                 const sortDirection: SortDirection = sort.desc ? 'desc' : 'asc';
                 const queryValues: TableSorting = {
-                    'sort:field': sort.id === DEFAULT_SORT_FIELD
+                    sortField: sort.id === DEFAULT_SORT_FIELD
                         ? undefined
                         : sort.id,
-                    'sort:order': sortDirection === DEFAULT_SORT_ORDER
+                    sortOrder: sortDirection === DEFAULT_SORT_ORDER
                         ? undefined
                         : sortDirection,
                 };
